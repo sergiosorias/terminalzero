@@ -1,0 +1,3 @@
+﻿ALTER TABLE [status].[Log]
+	ADD CONSTRAINT [PK_Log]
+	PRIMARY KEY (Code)

@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TZero_ConfigModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="TZero_ConfigModelStoreContainer">
+          <EntitySet Name="Connection" EntityType="TZero_ConfigModel.Store.Connection" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Pack" EntityType="TZero_ConfigModel.Store.Pack" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PackStatus" EntityType="TZero_ConfigModel.Store.PackStatus" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_ConnectionCode_Pack_Connection" Association="TZero_ConfigModel.Store.FK_ConnectionCode_Pack_Connection">
+            <End Role="Connection" EntitySet="Connection" />
+            <End Role="Pack" EntitySet="Pack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackStatusCode_Pack_PackStatus" Association="TZero_ConfigModel.Store.FK_PackStatusCode_Pack_PackStatus">
+            <End Role="PackStatus" EntitySet="PackStatus" />
+            <End Role="Pack" EntitySet="Pack" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Connection">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="40" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" Nullable="false" />
+          <Property Name="StatusCode" Type="int" />
+        </EntityType>
+        <EntityType Name="Pack">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Data" Type="image" />
+          <Property Name="PackStatusCode" Type="int" />
+          <Property Name="ConnectionCode" Type="varchar" MaxLength="40" />
+          <Property Name="IsMasterData" Type="bit" />
+        </EntityType>
+        <EntityType Name="PackStatus">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_ConnectionCode_Pack_Connection">
+          <End Role="Connection" Type="TZero_ConfigModel.Store.Connection" Multiplicity="0..1" />
+          <End Role="Pack" Type="TZero_ConfigModel.Store.Pack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Connection">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Pack">
+              <PropertyRef Name="ConnectionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackStatusCode_Pack_PackStatus">
+          <End Role="PackStatus" Type="TZero_ConfigModel.Store.PackStatus" Multiplicity="0..1" />
+          <End Role="Pack" Type="TZero_ConfigModel.Store.Pack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PackStatus">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Pack">
+              <PropertyRef Name="PackStatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TZero_ConfigModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Packs" EntityType="TZero_ConfigModel.Pack" />
+          <EntitySet Name="PackStatus" EntityType="TZero_ConfigModel.PackStatu" />
+          <AssociationSet Name="FK_PackStatusCode_Pack_PackStatus" Association="TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus">
+            <End Role="PackStatus" EntitySet="PackStatus" />
+            <End Role="Pack" EntitySet="Packs" />
+          </AssociationSet>
+          <EntitySet Name="Connections" EntityType="TZero_ConfigModel.Connection" />
+          <AssociationSet Name="FK_ConnectionCode_Pack_Connection" Association="TZero_ConfigModel.FK_ConnectionCode_Pack_Connection">
+            <End Role="Connection" EntitySet="Connections" />
+            <End Role="Pack" EntitySet="Packs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Pack">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="PackStatusCode" Type="Int32" />
+          <Property Name="ConnectionCode" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="PackStatu" Relationship="TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus" FromRole="Pack" ToRole="PackStatus" />
+          <Property Type="Boolean" Name="IsMasterData" />
+          <NavigationProperty Name="Connection" Relationship="TZero_ConfigModel.FK_ConnectionCode_Pack_Connection" FromRole="Pack" ToRole="Connection" />
+        </EntityType>
+        <EntityType Name="PackStatu">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Packs" Relationship="TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus" FromRole="PackStatus" ToRole="Pack" />
+        </EntityType>
+        <Association Name="FK_PackStatusCode_Pack_PackStatus">
+          <End Role="PackStatus" Type="TZero_ConfigModel.PackStatu" Multiplicity="0..1" />
+          <End Role="Pack" Type="TZero_ConfigModel.Pack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PackStatus">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Pack">
+              <PropertyRef Name="PackStatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Connection">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="TerminalCode" Nullable="false" />
+          <Property Type="DateTime" Name="Stamp" Nullable="false" />
+          <Property Type="Int32" Name="StatusCode" />
+          <NavigationProperty Name="Packs" Relationship="TZero_ConfigModel.FK_ConnectionCode_Pack_Connection" FromRole="Connection" ToRole="Pack" />
+        </EntityType>
+        <Association Name="FK_ConnectionCode_Pack_Connection">
+          <End Type="TZero_ConfigModel.Connection" Role="Connection" Multiplicity="0..1" />
+          <End Type="TZero_ConfigModel.Pack" Role="Pack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Connection">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Pack">
+              <PropertyRef Name="ConnectionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TZero_ConfigModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Packs"><EntityTypeMapping TypeName="TZero_ConfigModel.Pack"><MappingFragment StoreEntitySet="Pack">
+            <ScalarProperty Name="IsMasterData" ColumnName="IsMasterData" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Data" ColumnName="Data" />
+            <ScalarProperty Name="PackStatusCode" ColumnName="PackStatusCode" />
+            <ScalarProperty Name="ConnectionCode" ColumnName="ConnectionCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="PackStatus"><EntityTypeMapping TypeName="TZero_ConfigModel.PackStatu"><MappingFragment StoreEntitySet="PackStatus">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Connections">
+            <EntityTypeMapping TypeName="TZero_ConfigModel.Connection">
+              <MappingFragment StoreEntitySet="Connection">
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="DBCommonTables">
+        <EntityTypeShape EntityType="TZero_ConfigModel.Pack" Width="1.5" PointX="3" PointY="1" Height="2.5571907552083335" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.PackStatu" Width="1.5" PointX="0.75" PointY="1.375" Height="1.5956835937499996" IsExpanded="true" />
+        <AssociationConnector Association="TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.172841796875" />
+          <ConnectorPoint PointX="3" PointY="2.172841796875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="TZero_ConfigModel.Connection" Width="1.5" PointX="0.75" PointY="4.875" Height="1.9802864583333335" />
+        <AssociationConnector Association="TZero_ConfigModel.FK_ConnectionCode_Pack_Connection" >
+          <ConnectorPoint PointX="2.25" PointY="5.8651432291666667" />
+          <ConnectorPoint PointX="3.75" PointY="5.8651432291666667" />
+          <ConnectorPoint PointX="3.75" PointY="3.9417936197916661" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

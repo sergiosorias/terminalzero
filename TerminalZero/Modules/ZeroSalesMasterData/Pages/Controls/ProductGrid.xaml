@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ZeroMasterData.Pages.Controls.ProductGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+    <Grid Loaded="Grid_Loaded">
+        <DataGrid IsReadOnly="True" x:Name="productsListView2" FrozenColumnCount="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn MinWidth="80" Header="Código" Binding="{Binding Path=MasterCode, Mode=OneWay}"/>
+                <DataGridTextColumn MinWidth="150" MaxWidth="200" Width="170" Header="Nombre" Binding="{Binding Path=Name, Mode=OneWay}"/>
+                <DataGridTextColumn MinWidth="250" MaxWidth="500" Width="1*" Header="Descripción" CanUserSort="False" Binding="{Binding Path=Description, Mode=OneWay}"/>
+                <DataGridTextColumn Width="150" Header="Nombre Ticket" Binding="{Binding Path=ShortDescription, Mode=OneWay}"/>
+                <DataGridTextColumn MinWidth="60" Header="Precio" Binding="{Binding Path=Price1.Value, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" CanUserResize="False"/>
+                <DataGridCheckBoxColumn MinWidth="55" Header="Activo" Binding="{Binding Path=Enable, Mode=TwoWay}" IsReadOnly="False" CanUserResize="False" CanUserReorder="False" x:Name="activeProductcollumn">
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTemplateColumn CanUserResize="False" CanUserReorder="False" x:Name="editItemCollum">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button DataContext="{Binding Path= Code}" Name="btnEditProduct" Click="btnEditProduct_Click" Style="{StaticResource editRowButton}"/>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridCell},Path=IsSelected}" Value="True">
+                                    <Setter TargetName="btnEditProduct" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn >
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Label Content="Detalle" Foreground="{Binding}"/>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+    </Grid>
+</UserControl>

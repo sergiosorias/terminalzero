@@ -1,0 +1,26 @@
+﻿<Window x:Class="ZeroGUI.ZeroMessageBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Title="Información" WindowStartupLocation="CenterOwner"
+             WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="40" MaxHeight="500" MaxWidth="800"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="current_MouseLeftButtonDown">
+    <Grid Background="{DynamicResource mainBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ContentPresenter Margin="4" x:Name="contentpress">
+    
+            </ContentPresenter>
+        </ScrollViewer>
+        
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2">
+            <Button Content="Aceptar" Style="{DynamicResource buttonTextStyle}" Foreground="#FF42C742" Click="Button_Click" IsTabStop="False" />
+            <Button Content="Cancelar" Style="{DynamicResource buttonTextStyle}" Foreground="#FFC42626" Click="Button_Click_1" IsTabStop="False"/>
+        </WrapPanel>
+    </Grid>
+</Window>

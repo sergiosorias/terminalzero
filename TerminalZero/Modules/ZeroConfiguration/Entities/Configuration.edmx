@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TZero_ConfigModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="TZero_ConfigModelStoreContainer">
+          <EntitySet Name="Connection" EntityType="TZero_ConfigModel.Store.Connection" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ConnectionStatus" EntityType="TZero_ConfigModel.Store.ConnectionStatus" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Module" EntityType="TZero_ConfigModel.Store.Module" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SystemProperty" EntityType="TZero_ConfigModel.Store.SystemProperty" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Terminal" EntityType="TZero_ConfigModel.Store.Terminal" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Terminal_Module" EntityType="TZero_ConfigModel.Store.Terminal_Module" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TerminalProperty" EntityType="TZero_ConfigModel.Store.TerminalProperty" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Connection_connectionState" Association="TZero_ConfigModel.Store.FK_Connection_connectionState">
+            <End Role="ConnectionStatus" EntitySet="ConnectionStatus" />
+            <End Role="Connection" EntitySet="Connection" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Connection_Terminal" Association="TZero_ConfigModel.Store.FK_Connection_Terminal">
+            <End Role="Terminal" EntitySet="Terminal" />
+            <End Role="Connection" EntitySet="Connection" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Terminal_Module_Module" Association="TZero_ConfigModel.Store.FK_Terminal_Module_Module">
+            <End Role="Module" EntitySet="Module" />
+            <End Role="Terminal_Module" EntitySet="Terminal_Module" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Terminal_Module_Terminal" Association="TZero_ConfigModel.Store.FK_Terminal_Module_Terminal">
+            <End Role="Terminal" EntitySet="Terminal" />
+            <End Role="Terminal_Module" EntitySet="Terminal_Module" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TerminalProperty_Terminal" Association="TZero_ConfigModel.Store.FK_TerminalProperty_Terminal">
+            <End Role="Terminal" EntitySet="Terminal" />
+            <End Role="TerminalProperty" EntitySet="TerminalProperty" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Connection">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="40" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" Nullable="false" />
+          <Property Name="StatusCode" Type="int" />
+        </EntityType>
+        <EntityType Name="ConnectionStatus">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Module">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="SystemProperty">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Value" Type="varchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Terminal">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="ConnectionRequired" Type="bit" />
+          <Property Name="ExistsConfigData" Type="bit" />
+          <Property Name="ExistsMasterData" Type="bit" />
+          <Property Name="LastSync" Type="datetime" />
+          <Property Name="IsSyncronized" Type="bit" />
+        </EntityType>
+        <EntityType Name="Terminal_Module">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="ModuleCode" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="ModuleCode" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TerminalProperty">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+          </Key>
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="LargeValue" Type="text" />
+        </EntityType>
+        <Association Name="FK_Connection_connectionState">
+          <End Role="ConnectionStatus" Type="TZero_ConfigModel.Store.ConnectionStatus" Multiplicity="0..1" />
+          <End Role="Connection" Type="TZero_ConfigModel.Store.Connection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConnectionStatus">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Connection">
+              <PropertyRef Name="StatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Connection_Terminal">
+          <End Role="Terminal" Type="TZero_ConfigModel.Store.Terminal" Multiplicity="1" />
+          <End Role="Connection" Type="TZero_ConfigModel.Store.Connection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terminal">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Connection">
+              <PropertyRef Name="TerminalCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Terminal_Module_Module">
+          <End Role="Module" Type="TZero_ConfigModel.Store.Module" Multiplicity="1" />
+          <End Role="Terminal_Module" Type="TZero_ConfigModel.Store.Terminal_Module" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Module">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Terminal_Module">
+              <PropertyRef Name="ModuleCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Terminal_Module_Terminal">
+          <End Role="Terminal" Type="TZero_ConfigModel.Store.Terminal" Multiplicity="1" />
+          <End Role="Terminal_Module" Type="TZero_ConfigModel.Store.Terminal_Module" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terminal">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Terminal_Module">
+              <PropertyRef Name="TerminalCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TerminalProperty_Terminal">
+          <End Role="Terminal" Type="TZero_ConfigModel.Store.Terminal" Multiplicity="1" />
+          <End Role="TerminalProperty" Type="TZero_ConfigModel.Store.TerminalProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terminal">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="TerminalProperty">
+              <PropertyRef Name="TerminalCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Clean_ConfigurationsByModule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ModuleCode" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ValidateConnection" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TZero_ConfigModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Connections" EntityType="TZero_ConfigModel.Connection" />
+          <EntitySet Name="ConnectionStatus" EntityType="TZero_ConfigModel.ConnectionStatu" />
+          <EntitySet Name="Modules" EntityType="TZero_ConfigModel.Module" />
+          <EntitySet Name="SystemProperties" EntityType="TZero_ConfigModel.SystemProperty" />
+          <EntitySet Name="Terminals" EntityType="TZero_ConfigModel.Terminal" />
+          <EntitySet Name="TerminalProperties" EntityType="TZero_ConfigModel.TerminalProperty" />
+          <AssociationSet Name="FK_Connection_connectionState" Association="TZero_ConfigModel.FK_Connection_connectionState">
+            <End Role="ConnectionStatus" EntitySet="ConnectionStatus" />
+            <End Role="Connection" EntitySet="Connections" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Connection_Terminal" Association="TZero_ConfigModel.FK_Connection_Terminal">
+            <End Role="Terminal" EntitySet="Terminals" />
+            <End Role="Connection" EntitySet="Connections" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TerminalProperty_Terminal" Association="TZero_ConfigModel.FK_TerminalProperty_Terminal">
+            <End Role="Terminal" EntitySet="Terminals" />
+            <End Role="TerminalProperty" EntitySet="TerminalProperties" />
+          </AssociationSet>
+          <AssociationSet Name="Terminal_Module" Association="TZero_ConfigModel.Terminal_Module">
+            <End Role="Module" EntitySet="Modules" />
+            <End Role="Terminal" EntitySet="Terminals" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Connection">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" Nullable="false" />
+          <Property Name="StatusCode" Type="Int32" />
+          <NavigationProperty Name="ConnectionStatu" Relationship="TZero_ConfigModel.FK_Connection_connectionState" FromRole="Connection" ToRole="ConnectionStatus" />
+          <NavigationProperty Name="Terminal" Relationship="TZero_ConfigModel.FK_Connection_Terminal" FromRole="Connection" ToRole="Terminal" />
+        </EntityType>
+        <EntityType Name="ConnectionStatu">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Connections" Relationship="TZero_ConfigModel.FK_Connection_connectionState" FromRole="ConnectionStatus" ToRole="Connection" />
+        </EntityType>
+        <EntityType Name="Module">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Terminals" Relationship="TZero_ConfigModel.Terminal_Module" FromRole="Module" ToRole="Terminal" />
+        </EntityType>
+        <EntityType Name="SystemProperty">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Value" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Terminal">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="ConnectionRequired" Type="Boolean" />
+          <Property Name="ExistsConfigData" Type="Boolean" />
+          <Property Name="ExistsMasterData" Type="Boolean" />
+          <Property Name="LastSync" Type="DateTime" />
+          <Property Name="IsSyncronized" Type="Boolean" />
+          <NavigationProperty Name="Connections" Relationship="TZero_ConfigModel.FK_Connection_Terminal" FromRole="Terminal" ToRole="Connection" />
+          <NavigationProperty Name="TerminalProperties" Relationship="TZero_ConfigModel.FK_TerminalProperty_Terminal" FromRole="Terminal" ToRole="TerminalProperty" />
+          <NavigationProperty Name="Modules" Relationship="TZero_ConfigModel.Terminal_Module" FromRole="Terminal" ToRole="Module" />
+        </EntityType>
+        <EntityType Name="TerminalProperty">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+          </Key>
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Terminal" Relationship="TZero_ConfigModel.FK_TerminalProperty_Terminal" FromRole="TerminalProperty" ToRole="Terminal" />
+          <Property Type="String" Name="LargeValue" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Connection_connectionState">
+          <End Role="ConnectionStatus" Type="TZero_ConfigModel.ConnectionStatu" Multiplicity="0..1" />
+          <End Role="Connection" Type="TZero_ConfigModel.Connection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConnectionStatus">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Connection">
+              <PropertyRef Name="StatusCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Connection_Terminal">
+          <End Role="Terminal" Type="TZero_ConfigModel.Terminal" Multiplicity="1" />
+          <End Role="Connection" Type="TZero_ConfigModel.Connection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terminal">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Connection">
+              <PropertyRef Name="TerminalCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TerminalProperty_Terminal">
+          <End Role="Terminal" Type="TZero_ConfigModel.Terminal" Multiplicity="1" />
+          <End Role="TerminalProperty" Type="TZero_ConfigModel.TerminalProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terminal">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="TerminalProperty">
+              <PropertyRef Name="TerminalCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Terminal_Module">
+          <End Role="Module" Type="TZero_ConfigModel.Module" Multiplicity="*" />
+          <End Role="Terminal" Type="TZero_ConfigModel.Terminal" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TZero_ConfigModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Connections"><EntityTypeMapping TypeName="TZero_ConfigModel.Connection"><MappingFragment StoreEntitySet="Connection">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ConnectionStatus"><EntityTypeMapping TypeName="TZero_ConfigModel.ConnectionStatu"><MappingFragment StoreEntitySet="ConnectionStatus">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Modules"><EntityTypeMapping TypeName="TZero_ConfigModel.Module"><MappingFragment StoreEntitySet="Module">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Active" ColumnName="Active" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SystemProperties"><EntityTypeMapping TypeName="TZero_ConfigModel.SystemProperty"><MappingFragment StoreEntitySet="SystemProperty">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Terminals"><EntityTypeMapping TypeName="TZero_ConfigModel.Terminal"><MappingFragment StoreEntitySet="Terminal">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Active" ColumnName="Active" />
+            <ScalarProperty Name="ConnectionRequired" ColumnName="ConnectionRequired" />
+            <ScalarProperty Name="ExistsConfigData" ColumnName="ExistsConfigData" />
+            <ScalarProperty Name="ExistsMasterData" ColumnName="ExistsMasterData" />
+            <ScalarProperty Name="LastSync" ColumnName="LastSync" />
+            <ScalarProperty Name="IsSyncronized" ColumnName="IsSyncronized" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="TerminalProperties"><EntityTypeMapping TypeName="TZero_ConfigModel.TerminalProperty"><MappingFragment StoreEntitySet="TerminalProperty">
+            <ScalarProperty Name="LargeValue" ColumnName="LargeValue" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <AssociationSetMapping Name="Terminal_Module" TypeName="TZero_ConfigModel.Terminal_Module" StoreEntitySet="Terminal_Module">
+            <EndProperty Name="Module">
+              <ScalarProperty Name="Code" ColumnName="ModuleCode" />
+            </EndProperty>
+            <EndProperty Name="Terminal">
+              <ScalarProperty Name="Code" ColumnName="TerminalCode" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Configuration">
+        <EntityTypeShape EntityType="TZero_ConfigModel.Connection" Width="1.5" PointX="4.5" PointY="0.5" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.ConnectionStatu" Width="1.5" PointX="4.375" PointY="3.25" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.Module" Width="1.5" PointX="2.5" PointY="0.5" Height="1.9802864583333339" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.SystemProperty" Width="1.5" PointX="0.5" PointY="6.5" Height="1.5956835937499987" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.Terminal" Width="1.5" PointX="0.625" PointY="0.5" Height="2.7494921875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.TerminalProperty" Width="1.5" PointX="0.625" PointY="4.375" Height="1.9802864583333308" IsExpanded="true" />
+        <AssociationConnector Association="TZero_ConfigModel.FK_Connection_connectionState" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.1875" PointY="3.25" />
+          <ConnectorPoint PointX="5.1875" PointY="2.8648893229166674" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZero_ConfigModel.FK_Connection_Terminal" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.125" PointY="2.7038378906250005" />
+          <ConnectorPoint PointX="4.5" PointY="2.7038378906250005" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZero_ConfigModel.FK_TerminalProperty_Terminal" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.375" PointY="3.826396484375" />
+          <ConnectorPoint PointX="1.375" PointY="4.375" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZero_ConfigModel.Terminal_Module" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.5" PointY="1.4901432291666668" />
+          <ConnectorPoint PointX="2.125" PointY="1.4901432291666668" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
