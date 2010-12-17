@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TZeroHost.Classes.IncomingPackManager" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAgQEAAAAACCCAAAAQAgAAAAAAAA=</HashCode>
+      <FileName>Classes\IncomingPackManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost.Classes.PackManagerBuilder" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\PackManagerBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost._Default" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Default.aspx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost.Global" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAEAAAAACAAAAECIBQAAAAAAAAA=</HashCode>
+      <FileName>Global.asax.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost.Handlers.IncomingPackEventArgs" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAQAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Handlers\IncomingPackHandle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost.Helpers.AppDirectories" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAEAAAAAABgAAAACAAAAACA=</HashCode>
+      <FileName>Helpers\AppDirectories.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost.Properties.Settings" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAgAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TZeroHost.Services.FileTransfer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAgAAgAA=</HashCode>
+      <FileName>Services\FileTransfer.svc.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
