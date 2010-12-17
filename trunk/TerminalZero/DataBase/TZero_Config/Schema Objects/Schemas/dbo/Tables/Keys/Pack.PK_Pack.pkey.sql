@@ -1,0 +1,3 @@
+﻿ALTER TABLE [dbo].[Pack]
+	ADD CONSTRAINT [PK_Pack]
+	PRIMARY KEY (Code)

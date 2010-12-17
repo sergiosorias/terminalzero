@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="ZeroMasterData.Pages.ProductsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:myControls="clr-namespace:ZeroMasterData.Pages.Controls"
+             xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+             mc:Ignorable="d">
+    <Grid Loaded="Grid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Productos:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" Width="150" VerticalAlignment="Center"/>
+                <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
+            </StackPanel>
+            <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
+                <Button x:Name="btnNewProduct" Content="Nuevo" HorizontalAlignment="Right" Style="{DynamicResource buttonTextStyle}" Click="Button_Click"/>
+            </WrapPanel>
+        </Grid>
+        <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
+            <ContentPresenter.Content>
+                <myControls:ProductGrid x:Name="productList"/>
+            </ContentPresenter.Content>
+        </ContentPresenter>
+    </Grid>
+</UserControl>

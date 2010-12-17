@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0">
+  <Operation Name="Rename Refactor" Key="411404b7-1953-418c-8071-24af8f22ffce" ChangeDateTime="11/20/2010 20:07:41">
+    <Property Name="ElementName" Value="[dbo].[Connection].[StateCode]" />
+    <Property Name="ElementType" Value="ISqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Connection]" />
+    <Property Name="ParentElementType" Value="ISql90Table" />
+    <Property Name="NewName" Value="[StatusCode]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="443f32b2-5c9e-4b33-98ec-ab6d62f2ce0e" ChangeDateTime="11/20/2010 20:08:04">
+    <Property Name="ElementName" Value="[dbo].[ConnectionState]" />
+    <Property Name="ElementType" Value="ISql90Table" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="ISql90Schema" />
+    <Property Name="NewName" Value="[ConnectionStatus]" />
+  </Operation>
+</Operations>

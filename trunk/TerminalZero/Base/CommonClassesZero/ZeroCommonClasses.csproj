@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2AC599DD-4010-49A3-B595-715FE549C6B9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZeroCommonClasses</RootNamespace>
+    <AssemblyName>ZeroCommonClasses</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Context\ContextBuilder.cs" />
+    <Compile Include="Context\EntitiesContext.cs" />
+    <Compile Include="Entities\CommonEntities.cs" />
+    <Compile Include="Entities\DBCommonTables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBCommonTables.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
+    <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
+    <Compile Include="Interfaces\ITerminalInitializer.cs" />
+    <Compile Include="PackClasses\ExportEntitiesPackInfo.cs" />
+    <Compile Include="PackClasses\PackInfoBase.cs" />
+    <Compile Include="Interfaces\IZeroPage.cs" />
+    <Compile Include="PackClasses\PackProcessesHandlers.cs" />
+    <Compile Include="GlobalObjects\RemoteFilesInfo.cs" />
+    <Compile Include="GlobalObjects\ServerFileInfo.cs" />
+    <Compile Include="Helpers\IEnumerableExtentions.cs" />
+    <Compile Include="Interfaces\ILogBuilder.cs" />
+    <Compile Include="Interfaces\IProgressNotifier.cs" />
+    <Compile Include="ZeroModule.cs" />
+    <Compile Include="Interfaces\Services\ISyncService.cs" />
+    <Compile Include="Interfaces\Services\IFileService.cs" />
+    <Compile Include="Interfaces\ITerminal.cs" />
+    <Compile Include="GlobalObjects\ZeroAction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalObjects\ZeroActionParameter.cs" />
+    <Compile Include="PackClasses\PackManager.cs" />
+    <Compile Include="GlobalObjects\ZeroResponse.cs" />
+    <Compile Include="GlobalObjects\ZeroRule.cs" />
+    <Compile Include="ZeroSession.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entities\DBCommonTables.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DBCommonTables.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Extras\SharpZipLib\SharpZipLib.csproj">
+      <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
+      <Name>SharpZipLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,22 @@
+﻿CREATE TABLE [data].[Supplier]
+(
+	Code int NOT NULL,
+	[Stamp] datetime NULL DEFAULT (Getdate()),
+	[Enable] bit NOT NULL DEFAULT (1),
+	[Name1] nvarchar(100) NULL,
+	[Name2] nvarchar(300) NULL,
+	[Country] nvarchar(250) NULL,
+	[State] nvarchar(100) NULL,
+	[City] nvarchar(250) NULL,
+	[Street] nvarchar(100) NULL,
+	[Number] nvarchar(50) NULL,
+	[E-Mail1] varchar(250) NULL,
+	[E-Mail2] varchar(250) NULL,
+	[WebSite] varchar(250) NULL,
+	[Telephone1] varchar(50) NULL,
+	[Telephone2] varchar(50) NULL,
+	[Telephone3] varchar(50) NULL,
+	[TaxPositionCode] int NULL,
+	[PaymentInstrumentCode] int NULL,
+	[LegalCode] varchar(15) NULL,
+)

@@ -1,0 +1,26 @@
+﻿CREATE PROCEDURE [dbo].[ValidateConnection]
+	@Code varchar(32)
+AS
+	DECLARE @RET INT, 
+			@DUE_MIN INT
+
+	DECLARE @VALUE VARCHAR(20)
+
+	SET @RET = 0
+
+	SET @VALUE = (SELECT TOP 1 value FROM dbo.SystemProperty WHERE Code = 'CONNECTION_MAX_TIME')
+	
+	IF(@VALUE IS NULL)
+		SET @DUE_MIN = 10;
+	ELSE
+		SET @DUE_MIN = CONVERT(INT,@VALUE);
+
+	IF EXISTS(SELECT TOP 1 1 FROM Connection WHERE Code = @Code)
+	BEGIN
+		DECLARE @DATE_VALUE DATETIME
+		SET @DATE_VALUE = (SELECT TOP 1 Stamp FROM Connection WHERE Code = @Code);
+		
+		SET @RET = 1;
+	END
+
+RETURN @RET
