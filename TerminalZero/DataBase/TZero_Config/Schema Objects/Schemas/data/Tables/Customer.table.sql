@@ -2,8 +2,8 @@
 (
 	Code int NOT NULL, 
 	TerminalCode int NOT NULL DEFAULT(0),
-	[Stamp] datetime NULL DEFAULT (Getdate()),
-	[Enable] bit NOT NULL DEFAULT (1),
+	[Stamp] datetime NULL CONSTRAINT DF_Customer_Stamp DEFAULT (Getdate()),
+	[Enable] bit NOT NULL CONSTRAINT DF_Customer_Enable DEFAULT (1),
 	[Name1] nvarchar(100) NULL,
 	[Name2] nvarchar(300) NULL,
 	[Country] nvarchar(250) NULL,

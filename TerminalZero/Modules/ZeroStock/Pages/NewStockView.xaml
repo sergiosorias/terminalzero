@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Código:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" Width="150" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Width="200" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
+                <baseControls:BarCodeTextBox Width="200" FontSize="20" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
                                              BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="MMDDPPPQQQQQQ" />
             </StackPanel>
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right">

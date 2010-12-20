@@ -89,7 +89,7 @@ namespace ZeroGUI
                 Text.Length == Composition.Length
                 && !Validation.GetHasError(barCode))
             {
-                OnBarcodeReceived(new BarCodeEventArgs(Text, null));
+                OnBarcodeReceived(new BarCodeEventArgs(Text, BarCodePart.BuildComposition(Composition,Text)));
                 Text = "";
             }
         }

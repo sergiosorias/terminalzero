@@ -6,13 +6,15 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroStock.Pages;
+using ZeroCommonClasses.PackClasses;
+using ZeroStock.Entities;
 
 namespace ZeroStock
 {
     public class ZeroStockModule : ZeroModule
     {
         public ZeroStockModule(ITerminal currentTerminal)
-            :base(currentTerminal,3,"Operaciones referentes al stock de productos")
+            :base(currentTerminal,4,"Operaciones referentes al stock de productos")
         {
 
         }
@@ -30,9 +32,51 @@ namespace ZeroStock
 
         public override string[] GetFilesToSend()
         {
-            return new string[] { };
+            TryExportStockDataPack();
+            return PackManager.GetPacks(WorkingDirectory);
         }
 
+        private void TryExportStockDataPack()
+        {
+            try
+            {
+                using (StockEntities ent = new StockEntities())
+                {
+                    IEnumerable<StockHeader> headers = ent.StockHeaders.Where(h => h.Status == (int)StockEntities.EntitiesStatus.New);
+                    if (headers.Count() > 0)
+                    {
+                        IEnumerable<StockItem> stockItems = ent.StockItems.Where(it => it.Status == (int)StockEntities.EntitiesStatus.New);
+                        ZeroCommonClasses.PackClasses.ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
+                        info.AddTable(stockItems);
+                        info.AddTable(headers);
+                        
+                        using (ZeroStockPackMaganer manager = new ZeroStockPackMaganer(info))
+                        {
+                            if (manager.Process())
+                            {
+                                foreach (var item in headers)
+                                {
+                                    item.Stamp = DateTime.Now;
+                                    item.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                }
+                                foreach (var sitem in stockItems)
+                                {
+                                    sitem.Stamp = DateTime.Now;
+                                    sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                }
+                                ent.SaveChanges();
+                            }
+                        }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Session.Notifier.SetUserMessage(true, ex.ToString());
+            }
+        }
+        
         public override void Init()
         {
             
@@ -42,12 +86,13 @@ namespace ZeroStock
 
         private void openStockView(ZeroRule rule)
         {
-            
+            CurrentStockView view = new CurrentStockView();
+            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openNewStockView(ZeroRule rule)
         {
-            NewStockView view = new NewStockView();
+            NewStockView view = new NewStockView(ICurrentTerminal);
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 

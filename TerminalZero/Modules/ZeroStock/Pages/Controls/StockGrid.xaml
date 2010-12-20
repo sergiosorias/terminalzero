@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              xmlns:r="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI"
-             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded" xmlns:my="clr-namespace:ZeroStock.Entities">
     <Grid>
-        <DataGrid x:Name="barcodeList"  CanUserDeleteRows="False" CanUserSortColumns="False">
+        <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Name="stockItemsDataGrid">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Code}" Header="Code"/>
-                <DataGridTextColumn Binding="{Binding Path=Product}" Header="Product"/>
+                <DataGridTextColumn x:Name="productNameColumn" MinWidth="210" IsReadOnly="True" Binding="{Binding Path=Product.Name}" Header="Nombre" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="productMasterCodeColumn" IsReadOnly="True" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="priceValueColumn" IsReadOnly="True" Binding="{Binding Path=PriceValue}" Header="Precio Unitario" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="quantityColumn" IsReadOnly="True" Binding="{Binding Path=Quantity}" Header="Cantidad" Width="SizeToHeader" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

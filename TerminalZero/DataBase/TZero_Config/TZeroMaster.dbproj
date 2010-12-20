@@ -399,6 +399,39 @@
     <Build Include="Schema Objects\Schemas\data\Tables\StockHeader.table.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\StockItem.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockHeader.PK_StockHeader.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockItem.PK_StockItem.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockItem.FK_StockItem_Product.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockItem.FK_StockItem_StockHeader.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\ReturnReason.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\Reason.PK_Reason.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\StockType.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockType.PK_StockType.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockHeader.FK_StockHeader_StockType.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Indexes\Product.IX_Product_MasterCode.index.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Scripts\Post-Deployment\InitData\status\Type.sql">
@@ -425,10 +458,8 @@
     <NotInBuild Include="Scripts\Post-Deployment\InitData\dbo\PackStatus.sql">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <DeploymentExtensionConfiguration Include="TZero_Config.refactorlog">
-      <SubType>DeploymentExtensionConfiguration</SubType>
-    </DeploymentExtensionConfiguration>
+    <NotInBuild Include="Scripts\Post-Deployment\InitData\data\StockType.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
   </ItemGroup>
 </Project>
