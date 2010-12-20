@@ -11,6 +11,7 @@ namespace TZeroHost.Classes
         private class IncomingPack
         {
             public string ConnID { get; set; }
+            public bool IsFromDB { get; set; }
             public string PackPath { get; set; }
         }
         private System.Threading.Thread ImportProcessThread = null;
@@ -43,12 +44,15 @@ namespace TZeroHost.Classes
                 System.Threading.Thread.Sleep(1000);
                 IncomingPack data = PacksToImport.Dequeue();
                 var a = PackManagerBuilder.GetManager(data.PackPath);
-                a.ConnectionID = data.ConnID;
-                a.Imported += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(a_Imported);
-                a.Process();
+                if (a != null)
+                {
+                    a.ConnectionID = data.ConnID;
+                    a.Imported += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(a_Imported);
+                    a.Process();
+                    System.Threading.Thread.Sleep(2000);
+                    System.IO.File.Delete(data.PackPath);
+                }
                 
-                System.Threading.Thread.Sleep(2000);
-                System.IO.File.Delete(data.PackPath);
             }
         }
 
