@@ -158,8 +158,8 @@ namespace ZeroCommonClasses.PackClasses
                 OnExporting(args);
                 AddPackageData();
                 CreateZip();
-                OnExported(args);
                 Clean();
+                OnExported(args);
             }
             catch (Exception ex)
             {

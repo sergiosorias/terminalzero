@@ -36,27 +36,42 @@ namespace ZeroStock.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                
+                switch (Mode)
+                {
+                    case Mode.New:
+                        break;
+                    case Mode.Update:
+                        break;
+                    case Mode.Delete:
+                        break;
+                    case Mode.ReadOnly:
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        public void Add(string code)
+        public void Add(Entities.StockItem item)
         {
-            barcodeList.Items.Add(new Barcode{Code = code, Product = code.Substring(4,3)});
+            if (!item.ProductReference.IsLoaded)
+            {
+                item.ProductReference.Load();
+            }
+            stockItemsDataGrid.Items.Add(item);    
         }
-
-
+        
         #region IZeroPage Members
-
+        private Mode _Mode = Mode.New;
         public Mode Mode
         {
             get
             {
-                throw new NotImplementedException();
+                return _Mode;
             }
             set
             {
-                throw new NotImplementedException();
+                _Mode = value;
             }
         }
 

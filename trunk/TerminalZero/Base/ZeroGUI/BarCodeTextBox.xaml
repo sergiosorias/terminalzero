@@ -8,8 +8,8 @@
              mc:Ignorable="d" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ControlTemplate x:Key="validationTemplate">
-            <DockPanel>
-                <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="16" Margin="1,2,0,0" 
+            <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="16" Margin="1,2,0,0" VerticalAlignment="Center" 
                            Text="{Binding ElementName=MyAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
                 <AdornedElementPlaceholder Name="MyAdorner"/>
             </DockPanel>
