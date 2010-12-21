@@ -34,17 +34,6 @@ namespace TerminalZeroClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SEBAS-NOTE\\sqlexpress;Initial Catalog=TZero_Config;Persist Security I" +
-            "nfo=True;User ID=sa;Password=blanco")]
-        public string ConfigConn {
-            get {
-                return ((string)(this["ConfigConn"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool Debug {
             get {
@@ -58,6 +47,17 @@ namespace TerminalZeroClient.Properties {
         public string ApplicationName {
             get {
                 return ((string)(this["ApplicationName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SEBAS-NOTE\\sqlexpress;Initial Catalog=TZeroMaster;Persist Security In" +
+            "fo=True;User ID=sa;Password=blanco")]
+        public string ConfigConn {
+            get {
+                return ((string)(this["ConfigConn"]));
             }
         }
     }

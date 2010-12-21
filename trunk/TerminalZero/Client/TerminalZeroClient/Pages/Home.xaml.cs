@@ -32,7 +32,7 @@ namespace TerminalZeroClient.Pages
                 foreach (ZeroCommonClasses.GlobalObjects.ZeroAction item in App.Instance.CurrentClient.Manager.GetShorcutActions())
                 {
                     Button b = new Button();
-                    b.Content = item.Name.Substring(item.Name.LastIndexOf('@') + 1).Trim();
+                    b.Content = item.Alias;
                     b.Style = (Style)Resources["homeButtonStyle"];
                     b.DataContext = item;
                     b.Click += new RoutedEventHandler(btn_Click);

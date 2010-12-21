@@ -27,6 +27,7 @@ namespace ZeroCommonClasses.GlobalObjects
         public bool AlwaysVisible { get; set; }
         public bool Enabled { get { return CanExecute(null); } }
         public string Name { get; private set; }
+        public string Alias { get; set; }
         public string RuleToSatisfyName { get; private set; }
         public ZeroRule RuleToSatisfy { get; set; }
         public ZeroActionHandle ActionDelegate { get; private set; }

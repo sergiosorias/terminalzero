@@ -153,11 +153,11 @@ namespace ZeroConfiguration
                     Config.Notifier.SetProcess("Iniciando conexion");
                     bool finishState = false;
                     Config.Notifier.SetProgress(0);
-
                     int step = 0;
                     foreach (var item in Steps)
                     {
                         Config.Notifier.SetProgress(++step * 100 / Steps.Count);
+                        Config.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Executing {0}, step {1}", item.Method,step));
                         finishState = item(Config);
                         if (!finishState)
                             break;
@@ -171,7 +171,8 @@ namespace ZeroConfiguration
                 }
                 catch (Exception ex)
                 {
-                    Config.Notifier.SetUserMessage(true, "Sincronizacion Finalizada con error: " + ex.ToString());
+                    Config.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Sincronizacion Finalizada con error. {0}", ex));
+                    Config.Notifier.SetUserMessage(true, "Sincronizacion Finalizada con error: " + ex.Message);
                     Config.Notifier.SetProgress(100);
                     Config.Notifier.SetProcess("Error");
                 }
@@ -272,8 +273,8 @@ namespace ZeroConfiguration
                 catch (Exception exe)
                 {
                     ret = false;
+                    Config.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Error Al recibir archivo. {0} - error {1}",filePath, exe));
                     Config.Notifier.SetProcess("Error Recibiendo Paquetes de datos");
-                    Config.Notifier.SetProcess(exe.ToString());
                 }
                 finally
                 {
