@@ -63,6 +63,7 @@ namespace ZeroMasterData
             base.NewPackReceived(path);
             MasterDataPackManager mdpm = new MasterDataPackManager(WorkingDirectoryIn);
             mdpm.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { } };
+            Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose,"Starting Master Data pack import process");
             mdpm.Process();
 
             

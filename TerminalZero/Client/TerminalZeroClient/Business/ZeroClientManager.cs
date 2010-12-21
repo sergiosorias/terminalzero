@@ -31,14 +31,6 @@ namespace TerminalZeroClient.Business
 
         public void InitializeAppAsync()
         {
-            System.Threading.Thread worker = new System.Threading.Thread(
-                new System.Threading.ParameterizedThreadStart(InitializeApp));
-
-            worker.Start(null);
-        }
-
-        private void InitializeApp(object context)
-        {
             bool canContinue = false;
             Session.Notifier.SetProcess("Buscando Módulos");
             try
@@ -89,7 +81,7 @@ namespace TerminalZeroClient.Business
             if (!canContinue)
             {
                 IsAllOK = false;
-                Session.Notifier.SendUserMessage("Ocurrio algun error en el momento de iniciar el programa, por favor lea el detalle del proceso!");
+                Session.Notifier.SendNotification("Ocurrio algun error en el momento de iniciar el programa, por favor lea el detalle del proceso!");
                 Session.Notifier.SetUserMessage(true, "Error");
                 Session.Notifier.SetProcess("Error!");
             }
@@ -99,7 +91,6 @@ namespace TerminalZeroClient.Business
             }
 
             Session.Notifier.SetProgress(100);
-            Session.Notifier.NotifyExecutionFinished(this);
         }
 
         private bool InitializeTerminal()

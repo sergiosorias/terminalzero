@@ -68,7 +68,7 @@ namespace ZeroConfiguration
             if (Session.CanExecute(SyncAction, out msg))
                 SyncAction.Execute(null);
             else
-                Session.Notifier.SendUserMessage(msg);
+                Session.Notifier.SendNotification(msg);
         }
 
         private void Sync_SyncStarting(object sender, Synchronizer.SyncStartingEventArgs e)
@@ -177,10 +177,20 @@ namespace ZeroConfiguration
                     {
                         ret = prop.LargeValue.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         ZeroAction act = null;
+                        string[] actParts;
                         foreach (var item in ret)
                         {
-                            if (Session.ExistsAction(item.Trim(), out act))
+                            actParts = item.Split('|');
+                            if (Session.ExistsAction(actParts[0].Trim(), out act))
                             {
+                                if (actParts.Length > 1)
+                                {
+                                    act.Alias = actParts[1].Trim();
+                                }
+                                else
+                                {
+                                    act.Alias = actParts[0].Substring(actParts[0].LastIndexOf('@') + 1).Trim(); ;
+                                }
                                 actions.Add(act);
                             }
                         }

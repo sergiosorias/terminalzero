@@ -59,5 +59,12 @@ namespace TerminalZeroClient.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Icon ZeroAppIcon {
+            get {
+                object obj = ResourceManager.GetObject("ZeroAppIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

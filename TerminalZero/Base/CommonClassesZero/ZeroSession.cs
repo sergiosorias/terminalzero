@@ -132,11 +132,17 @@ namespace ZeroCommonClasses
                     SystemRules[ruleName].Rule.Check();
 
                 ret = SystemRules[ruleName].Rule.Satisfied.Value;
-
                 result = SystemRules[ruleName].Rule.Result;
+
+                if (Notifier != null)
+                    Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Rule {0} - Status: {1}, result {2}", ruleName,ret,result));
             }
             else
-                result = "No existe la regla con el nombre ''"+ruleName+"''";
+            {
+                if (Notifier != null)
+                    Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Rule {0} does not exists", ruleName));
+                result = "No existe la regla con el nombre ''" + ruleName + "''";
+            }
 
             return ret;
         }

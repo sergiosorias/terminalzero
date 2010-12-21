@@ -116,7 +116,8 @@ namespace ZeroCommonClasses
 
         public virtual void NewPackReceived(string path)
         {
-            
+            if(Session!=null && Session.Notifier!=null)
+                Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}",ModuleCode, Description,path));
         }
                 
     }

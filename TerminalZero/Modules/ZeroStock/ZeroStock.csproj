@@ -97,7 +97,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Stock.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="Properties\DataSources\ZeroStock.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

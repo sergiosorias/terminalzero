@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ZeroCommonClasses.Interfaces;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace TerminalZeroClient
 {
@@ -30,7 +31,27 @@ namespace TerminalZeroClient
         {
             appName.Content = Properties.Settings.Default.ApplicationName;
             App.Instance.CurrentClient.Session.Notifier = this;
+            BackgroundWorker work = new BackgroundWorker();
+            work.DoWork += new DoWorkEventHandler(work_DoWork);
+            work.RunWorkerCompleted += new RunWorkerCompletedEventHandler(work_RunWorkerCompleted);
+            work.RunWorkerAsync();
+        }
+        
+        void work_DoWork(object sender, DoWorkEventArgs e)
+        {
             App.Instance.CurrentClient.InitializeAppAsync();
+        }
+
+        void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (App.Instance.CurrentClient.IsAllOK && !App.Instance.IsOnDebugMode)
+            {
+                this.Dispatcher.Invoke(new MethodInvoker(delegate() { btnState_Click(null, null); }), null);
+            }
+            else
+            {
+                this.Dispatcher.Invoke(new MethodInvoker(delegate() { btnState.Visibility = System.Windows.Visibility.Visible; }), null);
+            }
         }
 
         #region IProgressNotifier Members
@@ -56,30 +77,15 @@ namespace TerminalZeroClient
             }), null);
         }
 
-        public void SendUserMessage(string message)
+        public void SendNotification(string message)
         {
             fullLog.AppendLine(message);
             this.Dispatcher.Invoke(new MethodInvoker(delegate() { System.Windows.Forms.MessageBox.Show(message, "Informacion importante", MessageBoxButtons.OK, MessageBoxIcon.Information); }), null);
         }
 
-        public event EventHandler ExecutionFinished;
-
-        private void OnExecutionFinished()
+        public void Log(System.Diagnostics.TraceLevel level, string message)
         {
-            if (ExecutionFinished != null)
-                ExecutionFinished(this, EventArgs.Empty);
-        }
 
-        public void NotifyExecutionFinished(object sender)
-        {
-            if (App.Instance.CurrentClient.IsAllOK && !App.Instance.IsOnDebugMode)
-            {
-                this.Dispatcher.Invoke(new MethodInvoker(delegate() { btnState_Click(null, null); }), null);
-            }
-            else
-            {
-                this.Dispatcher.Invoke(new MethodInvoker(delegate() { btnState.Visibility = System.Windows.Visibility.Visible; }), null);
-            }
         }
 
         #endregion
@@ -117,5 +123,9 @@ namespace TerminalZeroClient
         {
             this.DragMove();
         }
+
+        
+
+        
     }
 }

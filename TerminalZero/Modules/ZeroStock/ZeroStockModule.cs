@@ -95,8 +95,7 @@ namespace ZeroStock
             NewStockView view = new NewStockView(ICurrentTerminal);
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
-
-        
+                
         #endregion
     }
 }
