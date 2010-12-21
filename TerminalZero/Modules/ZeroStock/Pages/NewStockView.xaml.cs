@@ -79,16 +79,7 @@ namespace ZeroStock.Pages
                         break;
                     case MessageBoxResult.OK:
                     case MessageBoxResult.Yes:
-                        try
-                        {
-                            Context.SaveChanges();
-                            ret = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            ret = false;
-                            MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        ret = SaveData();
                         
                         break;
                 }
@@ -116,6 +107,22 @@ namespace ZeroStock.Pages
                     e.Error = "Producto Inexistente";
                 }
             }
+        }
+
+        private bool SaveData()
+        {
+            bool ret = false;
+            try
+            {
+                Context.SaveChanges();
+                ret = true;
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return ret;
         }
 
         private void BarCodeTextBox_BarcodeReceived(object sender, ZeroGUI.Classes.BarCodeEventArgs e)
@@ -157,6 +164,11 @@ namespace ZeroStock.Pages
                     stockGrid.Add(item);
                 }
             }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveData();
         }
     }
 }

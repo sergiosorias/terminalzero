@@ -44,7 +44,7 @@
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
     <TargetConnectionString>Data Source=SEBAS-NOTE\sqlexpress;Persist Security Info=True;User ID=SA;Pooling=False</TargetConnectionString>
-    <TargetDatabase>TZeroMaster</TargetDatabase>
+    <TargetDatabase>TZeroMaster_Client_2</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -430,6 +430,15 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\Indexes\Product.IX_Product_MasterCode.index.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Views\StockCreateSummary.view.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Views\StockModifySummary.view.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Views\StockSummary.view.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>

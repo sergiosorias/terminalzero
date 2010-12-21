@@ -171,6 +171,54 @@ namespace ZeroStock.Entities
             }
         }
         private ObjectSet<StockType> _StockTypes;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StockCreateSummary> StockCreateSummaries
+        {
+            get
+            {
+                if ((_StockCreateSummaries == null))
+                {
+                    _StockCreateSummaries = base.CreateObjectSet<StockCreateSummary>("StockCreateSummaries");
+                }
+                return _StockCreateSummaries;
+            }
+        }
+        private ObjectSet<StockCreateSummary> _StockCreateSummaries;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StockModifySummary> StockModifySummaries
+        {
+            get
+            {
+                if ((_StockModifySummaries == null))
+                {
+                    _StockModifySummaries = base.CreateObjectSet<StockModifySummary>("StockModifySummaries");
+                }
+                return _StockModifySummaries;
+            }
+        }
+        private ObjectSet<StockModifySummary> _StockModifySummaries;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StockSummary> StockSummaries
+        {
+            get
+            {
+                if ((_StockSummaries == null))
+                {
+                    _StockSummaries = base.CreateObjectSet<StockSummary>("StockSummaries");
+                }
+                return _StockSummaries;
+            }
+        }
+        private ObjectSet<StockSummary> _StockSummaries;
 
         #endregion
         #region AddTo Methods
@@ -221,6 +269,30 @@ namespace ZeroStock.Entities
         public void AddToStockTypes(StockType stockType)
         {
             base.AddObject("StockTypes", stockType);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StockCreateSummaries EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStockCreateSummaries(StockCreateSummary stockCreateSummary)
+        {
+            base.AddObject("StockCreateSummaries", stockCreateSummary);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StockModifySummaries EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStockModifySummaries(StockModifySummary stockModifySummary)
+        {
+            base.AddObject("StockModifySummaries", stockModifySummary);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StockSummaries EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStockSummaries(StockSummary stockSummary)
+        {
+            base.AddObject("StockSummaries", stockSummary);
         }
 
         #endregion
@@ -1058,6 +1130,157 @@ namespace ZeroStock.Entities
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="StockCreateSummary")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class StockCreateSummary : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new StockCreateSummary object.
+        /// </summary>
+        /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
+        public static StockCreateSummary CreateStockCreateSummary(global::System.Int32 productMasterCode)
+        {
+            StockCreateSummary stockCreateSummary = new StockCreateSummary();
+            stockCreateSummary.ProductMasterCode = productMasterCode;
+            return stockCreateSummary;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ProductMasterCode
+        {
+            get
+            {
+                return _ProductMasterCode;
+            }
+            set
+            {
+                if (_ProductMasterCode != value)
+                {
+                    OnProductMasterCodeChanging(value);
+                    ReportPropertyChanging("ProductMasterCode");
+                    _ProductMasterCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ProductMasterCode");
+                    OnProductMasterCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ProductMasterCode;
+        partial void OnProductMasterCodeChanging(global::System.Int32 value);
+        partial void OnProductMasterCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> NetWeight
+        {
+            get
+            {
+                return _NetWeight;
+            }
+            set
+            {
+                OnNetWeightChanging(value);
+                ReportPropertyChanging("NetWeight");
+                _NetWeight = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NetWeight");
+                OnNetWeightChanged();
+            }
+        }
+        private Nullable<global::System.Double> _NetWeight;
+        partial void OnNetWeightChanging(Nullable<global::System.Double> value);
+        partial void OnNetWeightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> QuantityKG
+        {
+            get
+            {
+                return _QuantityKG;
+            }
+            set
+            {
+                OnQuantityKGChanging(value);
+                ReportPropertyChanging("QuantityKG");
+                _QuantityKG = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QuantityKG");
+                OnQuantityKGChanged();
+            }
+        }
+        private Nullable<global::System.Double> _QuantityKG;
+        partial void OnQuantityKGChanging(Nullable<global::System.Double> value);
+        partial void OnQuantityKGChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ProductCount
+        {
+            get
+            {
+                return _ProductCount;
+            }
+            set
+            {
+                OnProductCountChanging(value);
+                ReportPropertyChanging("ProductCount");
+                _ProductCount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProductCount");
+                OnProductCountChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ProductCount;
+        partial void OnProductCountChanging(Nullable<global::System.Int32> value);
+        partial void OnProductCountChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="StockHeader")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -1793,6 +2016,308 @@ namespace ZeroStock.Entities
         }
 
         #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="StockModifySummary")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class StockModifySummary : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new StockModifySummary object.
+        /// </summary>
+        /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
+        public static StockModifySummary CreateStockModifySummary(global::System.Int32 productMasterCode)
+        {
+            StockModifySummary stockModifySummary = new StockModifySummary();
+            stockModifySummary.ProductMasterCode = productMasterCode;
+            return stockModifySummary;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ProductMasterCode
+        {
+            get
+            {
+                return _ProductMasterCode;
+            }
+            set
+            {
+                if (_ProductMasterCode != value)
+                {
+                    OnProductMasterCodeChanging(value);
+                    ReportPropertyChanging("ProductMasterCode");
+                    _ProductMasterCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ProductMasterCode");
+                    OnProductMasterCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ProductMasterCode;
+        partial void OnProductMasterCodeChanging(global::System.Int32 value);
+        partial void OnProductMasterCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> NetWeight
+        {
+            get
+            {
+                return _NetWeight;
+            }
+            set
+            {
+                OnNetWeightChanging(value);
+                ReportPropertyChanging("NetWeight");
+                _NetWeight = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NetWeight");
+                OnNetWeightChanged();
+            }
+        }
+        private Nullable<global::System.Double> _NetWeight;
+        partial void OnNetWeightChanging(Nullable<global::System.Double> value);
+        partial void OnNetWeightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> QuantityKG
+        {
+            get
+            {
+                return _QuantityKG;
+            }
+            set
+            {
+                OnQuantityKGChanging(value);
+                ReportPropertyChanging("QuantityKG");
+                _QuantityKG = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QuantityKG");
+                OnQuantityKGChanged();
+            }
+        }
+        private Nullable<global::System.Double> _QuantityKG;
+        partial void OnQuantityKGChanging(Nullable<global::System.Double> value);
+        partial void OnQuantityKGChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ProductCount
+        {
+            get
+            {
+                return _ProductCount;
+            }
+            set
+            {
+                OnProductCountChanging(value);
+                ReportPropertyChanging("ProductCount");
+                _ProductCount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProductCount");
+                OnProductCountChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ProductCount;
+        partial void OnProductCountChanging(Nullable<global::System.Int32> value);
+        partial void OnProductCountChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="StockSummary")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class StockSummary : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new StockSummary object.
+        /// </summary>
+        /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
+        public static StockSummary CreateStockSummary(global::System.Int32 productMasterCode)
+        {
+            StockSummary stockSummary = new StockSummary();
+            stockSummary.ProductMasterCode = productMasterCode;
+            return stockSummary;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ProductMasterCode
+        {
+            get
+            {
+                return _ProductMasterCode;
+            }
+            set
+            {
+                if (_ProductMasterCode != value)
+                {
+                    OnProductMasterCodeChanging(value);
+                    ReportPropertyChanging("ProductMasterCode");
+                    _ProductMasterCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ProductMasterCode");
+                    OnProductMasterCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ProductMasterCode;
+        partial void OnProductMasterCodeChanging(global::System.Int32 value);
+        partial void OnProductMasterCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> NetWeight
+        {
+            get
+            {
+                return _NetWeight;
+            }
+            set
+            {
+                OnNetWeightChanging(value);
+                ReportPropertyChanging("NetWeight");
+                _NetWeight = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NetWeight");
+                OnNetWeightChanged();
+            }
+        }
+        private Nullable<global::System.Double> _NetWeight;
+        partial void OnNetWeightChanging(Nullable<global::System.Double> value);
+        partial void OnNetWeightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> QuantityKG
+        {
+            get
+            {
+                return _QuantityKG;
+            }
+            set
+            {
+                OnQuantityKGChanging(value);
+                ReportPropertyChanging("QuantityKG");
+                _QuantityKG = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QuantityKG");
+                OnQuantityKGChanged();
+            }
+        }
+        private Nullable<global::System.Double> _QuantityKG;
+        partial void OnQuantityKGChanging(Nullable<global::System.Double> value);
+        partial void OnQuantityKGChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ProductCount
+        {
+            get
+            {
+                return _ProductCount;
+            }
+            set
+            {
+                OnProductCountChanging(value);
+                ReportPropertyChanging("ProductCount");
+                _ProductCount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProductCount");
+                OnProductCountChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ProductCount;
+        partial void OnProductCountChanging(Nullable<global::System.Int32> value);
+        partial void OnProductCountChanged();
+
+        #endregion
+    
     }
     
     /// <summary>

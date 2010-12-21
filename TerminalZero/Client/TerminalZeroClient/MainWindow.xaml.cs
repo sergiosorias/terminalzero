@@ -81,6 +81,12 @@ namespace TerminalZeroClient
                     if(!item.Value.MenuAction.AlwaysVisible)
                         menuitem.SetBinding(MenuItem.IsEnabledProperty, "Enabled");
 
+                    if (item.Value.MenuAction.RuleToSatisfy != null && !item.Value.MenuAction.Enabled)
+                    {
+                        ToolTipService.SetToolTip(menuitem,item.Value.MenuAction.RuleToSatisfy.Result);
+                        ToolTipService.SetShowOnDisabled(menuitem, true);    
+                    }
+
                     menuitem.Click += new RoutedEventHandler(menuitemitem_Click);
                 }
                                 
@@ -93,7 +99,7 @@ namespace TerminalZeroClient
             mainBar.IsEnabled = false;
             MenuItem item = (MenuItem)sender;
             ZeroAction buttonAction = item.DataContext as ZeroAction;
-
+            
             if(buttonAction!=null)
             {
                 try
@@ -114,7 +120,7 @@ namespace TerminalZeroClient
                 }
                 
             }
-
+            
             mainBar.IsEnabled = true;
         }
 

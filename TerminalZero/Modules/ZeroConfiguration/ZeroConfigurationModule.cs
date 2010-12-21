@@ -35,9 +35,9 @@ namespace ZeroConfiguration
             SyncAction.Parameters.Add(new ZeroActionParameterBase("ExistingModules", true));
             actions.Add(SyncAction);
             actions.Add(new ZeroAction(ActionType.MenuItem, "Configuración@Propiedades", OpenConfiguration));
-            actions.Add(new ZeroAction(ActionType.MenuItem, "Configuración@Usuarios", OpenUsers, "ValidateTerminalZero"));
+            actions.Add(new ZeroAction(ActionType.MenuItem, "Configuración@Usuarios", OpenUsers, "ValidateUser"));
 
-            actions.Add(new ZeroAction(ActionType.BackgroudAction, "terminalZeroValidation", isTerminalZero, "ValidateUser"));
+            actions.Add(new ZeroAction(ActionType.BackgroudAction, "terminalZeroValidation", isTerminalZero));
             actions.Add(new ZeroAction(ActionType.BackgroudAction, "userAuthorization", CanOpenConfiguration));
         }
 
@@ -101,7 +101,7 @@ namespace ZeroConfiguration
 
         private void CanOpenConfiguration(ZeroRule rule)
         {
-            rule.Satisfied = true;
+            rule.Satisfied = false;
         }
 
         private void isTerminalZero(ZeroRule rule)
@@ -151,9 +151,14 @@ namespace ZeroConfiguration
                 }
                 catch (Exception ex)
                 {
-                    result = ex.ToString();             
+                    result = ex.ToString();
+                    ret = false;
                 }
-                
+
+            }
+            else
+            {
+                ret = false;
             }
 
             return ret;
