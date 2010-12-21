@@ -6,12 +6,15 @@
              mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroStock.Pages.Controls" 
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
              d:DesignHeight="300" d:DesignWidth="300">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch">
+        <Label Style="{StaticResource titleLabelStyle}" Content="Alta de Stock"/>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -19,15 +22,16 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Código:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" Width="150" VerticalAlignment="Center"/>
                 <baseControls:BarCodeTextBox Width="200" FontSize="20" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
-                                             BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="MMDDPPPQQQQQQ" />
+                                             BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="MMDDPPPQQQQQQ"/>
             </StackPanel>
-            <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
-                
+            <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Content="Guardar" x:Name="btnSave" Click="btnSave_Click"/>
             </WrapPanel>
         </Grid>
-        
-        <myControls:StockGrid Grid.Row="1" x:Name="stockGrid">
-            
+
+        <myControls:StockGrid Grid.Row="2" x:Name="stockGrid">
+
         </myControls:StockGrid>
     </Grid>
+
 </UserControl>

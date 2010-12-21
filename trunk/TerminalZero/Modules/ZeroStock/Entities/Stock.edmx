@@ -12,6 +12,33 @@
           <EntitySet Name="StockItem" EntityType="TZeroMasterModel.Store.StockItem" store:Type="Tables" Schema="data" />
           <EntitySet Name="StockType" EntityType="TZeroMasterModel.Store.StockType" store:Type="Tables" Schema="data" />
           <EntitySet Name="Weight" EntityType="TZeroMasterModel.Store.Weight" store:Type="Tables" Schema="data" />
+          <EntitySet Name="StockCreateSummary" EntityType="TZeroMasterModel.Store.StockCreateSummary" store:Type="Views" store:Schema="data" store:Name="StockCreateSummary">
+            <DefiningQuery>SELECT 
+      [StockCreateSummary].[Name] AS [Name], 
+      [StockCreateSummary].[ProductMasterCode] AS [ProductMasterCode], 
+      [StockCreateSummary].[NetWeight] AS [NetWeight], 
+      [StockCreateSummary].[QuantityKG] AS [QuantityKG], 
+      [StockCreateSummary].[ProductCount] AS [ProductCount]
+      FROM [data].[StockCreateSummary] AS [StockCreateSummary]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StockModifySummary" EntityType="TZeroMasterModel.Store.StockModifySummary" store:Type="Views" store:Schema="data" store:Name="StockModifySummary">
+            <DefiningQuery>SELECT 
+      [StockModifySummary].[Name] AS [Name], 
+      [StockModifySummary].[ProductMasterCode] AS [ProductMasterCode], 
+      [StockModifySummary].[NetWeight] AS [NetWeight], 
+      [StockModifySummary].[QuantityKG] AS [QuantityKG], 
+      [StockModifySummary].[ProductCount] AS [ProductCount]
+      FROM [data].[StockModifySummary] AS [StockModifySummary]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StockSummary" EntityType="TZeroMasterModel.Store.StockSummary" store:Type="Views" store:Schema="data" store:Name="StockSummary">
+            <DefiningQuery>SELECT 
+      [StockSummary].[Name] AS [Name], 
+      [StockSummary].[ProductMasterCode] AS [ProductMasterCode], 
+      [StockSummary].[NetWeight] AS [NetWeight], 
+      [StockSummary].[QuantityKG] AS [QuantityKG], 
+      [StockSummary].[ProductCount] AS [ProductCount]
+      FROM [data].[StockSummary] AS [StockSummary]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_PriceCost_Product_Price" Association="TZeroMasterModel.Store.FK_PriceCost_Product_Price">
             <End Role="Price" EntitySet="Price" />
             <End Role="Product" EntitySet="Product" />
@@ -126,6 +153,45 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
           <Property Name="Quantity" Type="float" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.StockCreateSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="StockCreateSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductMasterCode" Type="int" Nullable="false" />
+          <Property Name="NetWeight" Type="float" />
+          <Property Name="QuantityKG" Type="float" />
+          <Property Name="ProductCount" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.StockModifySummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="StockModifySummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductMasterCode" Type="int" Nullable="false" />
+          <Property Name="NetWeight" Type="float" />
+          <Property Name="QuantityKG" Type="float" />
+          <Property Name="ProductCount" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.StockSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="StockSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductMasterCode" Type="int" Nullable="false" />
+          <Property Name="NetWeight" Type="float" />
+          <Property Name="QuantityKG" Type="float" />
+          <Property Name="ProductCount" Type="int" />
         </EntityType>
         <Association Name="FK_PriceCost_Product_Price">
           <End Role="Price" Type="TZeroMasterModel.Store.Price" Multiplicity="0..1" />
@@ -252,6 +318,9 @@
             <End Role="StockType" EntitySet="StockTypes" />
             <End Role="StockHeader" EntitySet="StockHeaders" />
           </AssociationSet>
+          <EntitySet Name="StockCreateSummaries" EntityType="TZeroMasterModel.StockCreateSummary" />
+          <EntitySet Name="StockModifySummaries" EntityType="TZeroMasterModel.StockModifySummary" />
+          <EntitySet Name="StockSummaries" EntityType="TZeroMasterModel.StockSummary" />
         </EntityContainer>
         <EntityType Name="Price">
           <Key>
@@ -439,6 +508,36 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="StockCreateSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+          </Key>
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
+          <Property Type="Double" Name="NetWeight" />
+          <Property Type="Double" Name="QuantityKG" />
+          <Property Type="Int32" Name="ProductCount" />
+        </EntityType>
+        <EntityType Name="StockModifySummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+          </Key>
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
+          <Property Type="Double" Name="NetWeight" />
+          <Property Type="Double" Name="QuantityKG" />
+          <Property Type="Int32" Name="ProductCount" />
+        </EntityType>
+        <EntityType Name="StockSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+          </Key>
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
+          <Property Type="Double" Name="NetWeight" />
+          <Property Type="Double" Name="QuantityKG" />
+          <Property Type="Int32" Name="ProductCount" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -515,6 +614,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="StockCreateSummaries">
+            <EntityTypeMapping TypeName="TZeroMasterModel.StockCreateSummary">
+              <MappingFragment StoreEntitySet="StockCreateSummary">
+                <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+                <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
+                <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
+                <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockModifySummaries">
+            <EntityTypeMapping TypeName="TZeroMasterModel.StockModifySummary">
+              <MappingFragment StoreEntitySet="StockModifySummary">
+                <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+                <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
+                <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
+                <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockSummaries">
+            <EntityTypeMapping TypeName="TZeroMasterModel.StockSummary">
+              <MappingFragment StoreEntitySet="StockSummary">
+                <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+                <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
+                <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
+                <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -570,6 +702,9 @@
           <ConnectorPoint PointX="6" PointY="6.5862939453125" />
           <ConnectorPoint PointX="6.75" PointY="6.5862939453125" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="TZeroMasterModel.StockCreateSummary" Width="1.5" PointX="0.75" PointY="4.75" Height="1.9802864583333317" />
+        <EntityTypeShape EntityType="TZeroMasterModel.StockModifySummary" Width="1.5" PointX="0.75" PointY="7.25" Height="1.9802864583333335" />
+        <EntityTypeShape EntityType="TZeroMasterModel.StockSummary" Width="1.5" PointX="2.5" PointY="7.25" Height="1.9802864583333317" />
       </Diagram>
     </Diagrams>
   </Designer>

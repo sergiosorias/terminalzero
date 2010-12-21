@@ -95,6 +95,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DBCommonTables.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="Properties\DataSources\ZeroCommonClasses.Entities.Entities.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

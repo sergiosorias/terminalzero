@@ -31,12 +31,27 @@ namespace ZeroGUI
         public static readonly DependencyProperty ShowResultCountProperty =
             DependencyProperty.Register("ShowResultCount", typeof(bool), typeof(SearchBox), null);
 
+
+
+        public int MinCriteriaCharCount
+        {
+            get { return (int)GetValue(MinCriteriaCharCountProperty); }
+            set { SetValue(MinCriteriaCharCountProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MinCriteriaCharCount.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MinCriteriaCharCountProperty =
+            DependencyProperty.Register("MinCriteriaCharCount", typeof(int), typeof(SearchBox), new UIPropertyMetadata(0));
+
+
+
         private System.Timers.Timer searchTimer = null;
         private System.Timers.Timer cleanResTimer = null;
 
         public SearchBox()
         {
             InitializeComponent();
+            MinCriteriaCharCount = 3;
         }
 
         protected void OnSearch()
@@ -72,7 +87,7 @@ namespace ZeroGUI
             {
                 btnSearch_Click(null, null);
             }
-            else if (txtSearchCriteria.Text.Length > 2 || txtSearchCriteria.Text.Length == 0)
+            else if (txtSearchCriteria.Text.Length >= MinCriteriaCharCount || txtSearchCriteria.Text.Length == 0)
             {
                 searchTimer.Stop();
                 searchTimer.Start();

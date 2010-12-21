@@ -24,10 +24,12 @@
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
                     <Setter Property="Foreground" Value="{StaticResource DarkBlueBrushKey}"/>
+                    <Setter Property="Background" Value="White">
+                        
+                    </Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>

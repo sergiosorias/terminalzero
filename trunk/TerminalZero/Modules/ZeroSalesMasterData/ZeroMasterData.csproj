@@ -122,6 +122,7 @@
       <LastGenOutput>MasterData.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Properties\DataSources\MasterData.Entities.Entities.datasource" />
+    <None Include="Properties\DataSources\ZeroMasterData.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Pages\Controls\CustomerDetail.xaml">
