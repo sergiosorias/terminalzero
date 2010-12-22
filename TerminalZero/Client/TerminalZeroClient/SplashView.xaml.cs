@@ -30,7 +30,7 @@ namespace TerminalZeroClient
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             appName.Content = Properties.Settings.Default.ApplicationName;
-            App.Instance.CurrentClient.Session.Notifier = this;
+            App.Instance.Session.Notifier = this;
             BackgroundWorker work = new BackgroundWorker();
             work.DoWork += new DoWorkEventHandler(work_DoWork);
             work.RunWorkerCompleted += new RunWorkerCompletedEventHandler(work_RunWorkerCompleted);

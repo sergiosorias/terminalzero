@@ -34,8 +34,8 @@ namespace TerminalZeroClient
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             App.Instance.CurrentClient.Manager.ConfigurationRequired += new EventHandler(Manager_ConfigurationRequired);
-            App.Instance.CurrentClient.Session.Notifier = this;
-            App.Instance.CurrentClient.Session.ModuleList.ForEach(m => m.Notifing += new EventHandler<ModuleNotificationEventArgs>(m_Notifing));
+            App.Instance.Session.Notifier = this;
+            App.Instance.Session.ModuleList.ForEach(m => m.Notifing += new EventHandler<ModuleNotificationEventArgs>(m_Notifing));
             LoadConfigs();
             InitTryIcon();
         }
@@ -60,18 +60,22 @@ namespace TerminalZeroClient
 
         private void OpenHome(ZeroRule rule)
         {
-            PrimaryWindow.Content = new Pages.Home();
+            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
+            args.ControlToShow = new Pages.Home();
+            m_Notifing(null, args);
         }
 
         private void m_Notifing(object sender, ModuleNotificationEventArgs e)
         {
             if (e.SomethingToShow)
             {
-                if (PrimaryWindow.Content is IZeroPage)
+                if (PrimaryWindow.Content is IZeroPage && ((IZeroPage)PrimaryWindow.Content).CanAccept())
                 {
-                    ((IZeroPage)PrimaryWindow.Content).CanAccept();
+                    PrimaryWindow.Content = e.ControlToShow;
                 }
-                PrimaryWindow.Content = e.ControlToShow;
+                else
+                    PrimaryWindow.Content = e.ControlToShow;
+                
             }
         }
 
@@ -146,14 +150,14 @@ namespace TerminalZeroClient
 
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.MenuItem notifyIconMenuItem;
-        private System.Windows.Forms.MenuItem m_groupMenuItem;
+        
         private bool isNotifyIconOpen = false;
         private void InitTryIcon()
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.BalloonTipTitle = Properties.Settings.Default.ApplicationName;
             notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
-            notifyIcon.Text = "Terminal Zero";
+            notifyIcon.Text = App.Instance.Name;
             notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
             notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
             notifyIcon.Visible = true;
@@ -189,7 +193,7 @@ namespace TerminalZeroClient
             {
                 Hide();
                 WindowState = WindowState.Minimized;
-                PopUpNotify("Terminal Zero esta minimizado, Click para abrir.");
+                PopUpNotify("Aplicación minizada, Click para abrir.");
             }
         }
         

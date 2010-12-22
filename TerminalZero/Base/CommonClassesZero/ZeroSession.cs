@@ -50,7 +50,6 @@ namespace ZeroCommonClasses
             {
                 AddSessionRule(module.ModuleCode, rule);
             }
-            module.SetSession(this);
             ModuleList.Add(module);
         }
 

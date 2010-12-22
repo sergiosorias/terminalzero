@@ -63,7 +63,7 @@ namespace ZeroMasterData
             base.NewPackReceived(path);
             MasterDataPackManager mdpm = new MasterDataPackManager(WorkingDirectoryIn);
             mdpm.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { } };
-            Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose,"Starting Master Data pack import process");
+            Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose,"Starting Master Data pack import process");
             mdpm.Process();
 
             
@@ -74,7 +74,7 @@ namespace ZeroMasterData
         private void OpenProductView(ZeroRule rule)
         {
             ZeroMasterData.Pages.ProductsView P = new ZeroMasterData.Pages.ProductsView();
-            if (ICurrentTerminal.TerminalCode != 0)
+            if (Terminal.TerminalCode != 0)
                 P.Mode = Mode.ReadOnly;
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
             
@@ -102,7 +102,7 @@ namespace ZeroMasterData
         private void OpenCustomerView(ZeroRule rule)
         {
             ZeroMasterData.Pages.CustomerView P = new ZeroMasterData.Pages.CustomerView();
-            if (Session.ValidateRule("ValidateTerminalZero"))
+            if (Terminal.Session.ValidateRule("ValidateTerminalZero"))
                 P.Mode = Mode.Update;
 
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
@@ -130,8 +130,8 @@ namespace ZeroMasterData
         {
             using (ZeroMasterData.Entities.MasterDataEntities ent = new ZeroMasterData.Entities.MasterDataEntities())
             {
-                Session.Notifier.SetProcess("Armando paquete");
-                Session.Notifier.SetProgress(10);
+                Terminal.Session.Notifier.SetProcess("Armando paquete");
+                Terminal.Session.Notifier.SetProgress(10);
                 //TODO:
                 //Fijarse si se puede hacer dinamica la carga del paquete.
                 ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(this.ModuleCode, this.WorkingDirectory);
@@ -151,18 +151,18 @@ namespace ZeroMasterData
                     pack.Exported += new EventHandler<PackEventArgs>(pack_Exported);
                     try
                     {
-                        Session.Notifier.SetProcess("Creando paquete");
+                        Terminal.Session.Notifier.SetProcess("Creando paquete");
                         pack.Process();
                     }
                     catch (Exception ex)
                     {
-                        Session.Notifier.SetUserMessage(true, ex.ToString());
+                        Terminal.Session.Notifier.SetUserMessage(true, ex.ToString());
                     }
 
                 }
-                Session.Notifier.SetProcess("Listo");
-                Session.Notifier.SetUserMessage(true, "Terminado");
-                Session.Notifier.SetProgress(100);
+                Terminal.Session.Notifier.SetProcess("Listo");
+                Terminal.Session.Notifier.SetUserMessage(true, "Terminado");
+                Terminal.Session.Notifier.SetProgress(100);
             }
 
             
@@ -170,21 +170,21 @@ namespace ZeroMasterData
 
         private void pack_Exported(object sender, PackEventArgs e)
         {
-            Session.Notifier.SetProgress(60);
-            Session.Notifier.SetProcess("Datos Exportados");
-            Session.Notifier.SetUserMessage(false, "Datos Exportados al directorio: " + WorkingDirectory);
-            Session.Notifier.SetProgress(80);
+            Terminal.Session.Notifier.SetProgress(60);
+            Terminal.Session.Notifier.SetProcess("Datos Exportados");
+            Terminal.Session.Notifier.SetUserMessage(false, "Datos Exportados al directorio: " + WorkingDirectory);
+            Terminal.Session.Notifier.SetProgress(80);
         }
 
         private void NotifyEntityCreation(string entity, int rowCount)
         {
-            Session.Notifier.SetUserMessage(false, "Creando archivo de "+entity);
-            Session.Notifier.SetUserMessage(false, "Cantidad: "+rowCount.ToString());
+            Terminal.Session.Notifier.SetUserMessage(false, "Creando archivo de "+entity);
+            Terminal.Session.Notifier.SetUserMessage(false, "Cantidad: "+rowCount.ToString());
         }
 
         private void ImportPackEntryPoint(object o)
         {
-            Session.Notifier.SetProcess("Importando Datos");
+            Terminal.Session.Notifier.SetProcess("Importando Datos");
 
             using (MasterDataPackManager manager = new MasterDataPackManager(WorkingDirectory))
             {
@@ -195,8 +195,8 @@ namespace ZeroMasterData
 
         private void manager_Imported(object sender, PackEventArgs e)
         {
-            Session.Notifier.SetProcess("Listo");
-            Session.Notifier.SetProgress(100);
+            Terminal.Session.Notifier.SetProcess("Listo");
+            Terminal.Session.Notifier.SetProgress(100);
         }
 
         #endregion

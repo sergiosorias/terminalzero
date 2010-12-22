@@ -9,6 +9,8 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
 using TerminalZeroClient.Business;
+using System.IO;
+using ZeroCommonClasses.GlobalObjects;
 
 namespace TerminalZeroClient
 {
@@ -17,24 +19,54 @@ namespace TerminalZeroClient
     /// </summary>
     public partial class App : Application, ITerminal
     {
-        public static string K_ModulesFolder = "Modules";
-        public App() 
-            :base()
+        internal class Directories
+        {
+            static Directories()
+            {
+                try
+                {
+                    if (!Directory.Exists(ModulesFolder))
+                        Directory.CreateDirectory(ModulesFolder);
+                    if (!Directory.Exists(UpgradeFolder))
+                        Directory.CreateDirectory(UpgradeFolder);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
+
+            public static string ModulesFolder
+            {
+                get { return Path.Combine(Environment.CurrentDirectory, "Modules"); }
+            }
+
+            public static string UpgradeFolder
+            {
+                get { return Path.Combine(Environment.CurrentDirectory, "Upgrade"); }
+            }
+
+            public const string WorkingDirSubfix = ".WD";
+        }
+
+        public App()
+            : base()
         {
             AppDomain currentDomain = AppDomain.CurrentDomain;
             AppDomainSetup set = new AppDomainSetup();
-            set.PrivateBinPath = System.IO.Path.Combine(Environment.CurrentDirectory,"Modules");
-            AppDomain.CreateDomain("Modules folder",null,set);
+            set.PrivateBinPath = Directories.ModulesFolder;
+            AppDomain.CreateDomain("Modules folder", null, set);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
-        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            
+            System.Diagnostics.EventLog.WriteEntry(Name, e.ToString());
         }
 
         private static App _CurrentApp = null;
-        public static App Instance 
+        public static App Instance
         {
             get
             {
@@ -50,12 +82,13 @@ namespace TerminalZeroClient
 
         private void LoadParams()
         {
-            CurrentClient = new ZeroClientManager();
+            CurrentClient = new ZeroClient();
+            SetSession(new ZeroSession());
             _TerminalCode = TerminalZeroClient.Properties.Settings.Default.TerminalCode;
         }
 
         private ISyncService _ClientConn;
-        internal ISyncService ClientSyncServiceReference
+        private ISyncService ClientSyncServiceReference
         {
             get
             {
@@ -67,29 +100,45 @@ namespace TerminalZeroClient
                 //    _ClientConn = ZeroCommonClasses.Context.ContextBuilder.CreateConfigConnection(System.IO.Path.Combine(Environment.CurrentDirectory, "TerminalZeroClient.exe.config"));
                 //    times--;
                 //}
-                
+
                 return _ClientConn;
             }
         }
-        internal ZeroClientManager CurrentClient { get; private set; }
 
+        internal ZeroClient CurrentClient { get; private set; }
+
+        public string Name { get { return "Terminal Zero"; } }
         #region ITerminal Members
         private int _TerminalCode = -1;
+        
         public int TerminalCode
         {
             get { return _TerminalCode; }
         }
-        
+
         public string TerminalName
         {
             get { return Environment.MachineName; }
         }
 
+        private ZeroSession _Session = null;
+        public ZeroSession Session
+        {
+            get { return _Session; }
+        }
+
         #endregion
-        
+
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            
+
+        }
+        
+        internal void SetSession(ZeroSession zeroSession)
+        {
+            _Session = zeroSession;
+            Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ClientSyncServiceReference, false));
+            Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false, ZeroCommonClasses.Context.ContextBuilder.CreateFileTranferConnection(), false));    
         }
     }
 }
