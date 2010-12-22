@@ -44,14 +44,17 @@ namespace TerminalZeroClient
 
         void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (App.Instance.CurrentClient.IsAllOK && !App.Instance.IsOnDebugMode)
+            Action action;
+            if (App.Instance.CurrentClient.IsAllOK && !App.Instance.CurrentClient.LogLevel.TraceVerbose)
             {
-                this.Dispatcher.Invoke(new MethodInvoker(delegate() { btnState_Click(null, null); }), null);
+                action = delegate() { btnState_Click(null, null); };
             }
             else
             {
-                this.Dispatcher.Invoke(new MethodInvoker(delegate() { btnState.Visibility = System.Windows.Visibility.Visible; }), null);
+                action = delegate() { btnState.Visibility = System.Windows.Visibility.Visible; };
             }
+
+            this.Dispatcher.Invoke(action, null);
         }
 
         #region IProgressNotifier Members

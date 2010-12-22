@@ -144,32 +144,41 @@ namespace TerminalZeroClient
 
         #region TryIcon
 
-        private System.Windows.Forms.NotifyIcon m_notifyIcon;
-        private System.Windows.Forms.MenuItem m_notifyIconMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.MenuItem notifyIconMenuItem;
         private System.Windows.Forms.MenuItem m_groupMenuItem;
+        private bool isNotifyIconOpen = false;
         private void InitTryIcon()
         {
-            m_notifyIcon = new System.Windows.Forms.NotifyIcon();
-            m_notifyIcon.BalloonTipTitle = Properties.Settings.Default.ApplicationName;
-            m_notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
-            m_notifyIcon.Text = "Terminal Zero";
-            m_notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
-            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-            m_notifyIcon.Visible = true;
-            m_notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
-            m_notifyIconMenuItem = new System.Windows.Forms.MenuItem("Mostrar Notificaciones", (o, e) => { m_notifyIconMenuItem.Checked = !m_notifyIconMenuItem.Checked; });
-            m_notifyIconMenuItem.Checked = true;
-            m_notifyIcon.ContextMenu.MenuItems.Add(m_notifyIconMenuItem);
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.BalloonTipTitle = Properties.Settings.Default.ApplicationName;
+            notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
+            notifyIcon.Text = "Terminal Zero";
+            notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
+            notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            notifyIcon.Visible = true;
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
+            notifyIcon.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
+            notifyIconMenuItem = new System.Windows.Forms.MenuItem("Mostrar Notificaciones", (o, e) => { notifyIconMenuItem.Checked = !notifyIconMenuItem.Checked; });
+            notifyIconMenuItem.Checked = true;
+            notifyIcon.ContextMenu.MenuItems.Add(notifyIconMenuItem);
 
         }
 
-        void m_notifyIcon_Click(object sender, EventArgs e)
+        private void ContextMenu_Popup(object sender, EventArgs e)
         {
-            if (WindowState == WindowState.Minimized)
+            isNotifyIconOpen = !isNotifyIconOpen;
+        }
+
+        private void m_notifyIcon_Click(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized && !isNotifyIconOpen)
             {
                 WindowState = System.Windows.WindowState.Maximized;
                 Show();
             }
+            if(isNotifyIconOpen)
+                isNotifyIconOpen = false;
 
             Activate();
         }
@@ -186,22 +195,40 @@ namespace TerminalZeroClient
         
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            m_notifyIcon.Dispose();
-            m_notifyIcon = null;
+            var res = MessageBox.Show("¿Esta seguro que desea salir de la aplicacion?","Cerrando",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
+            switch (res)
+            {
+                case MessageBoxResult.Cancel:
+                    e.Cancel = true;
+                    break;
+                case MessageBoxResult.No:
+                    e.Cancel = true;
+                    WindowState = WindowState.Minimized;
+                    break;
+                case MessageBoxResult.None:
+                    break;
+                case MessageBoxResult.OK:
+                case MessageBoxResult.Yes:
+                    notifyIcon.Dispose();
+                    notifyIcon = null;
+                    break;
+                default:
+                    break;
+            }
+            
         }
 
         #endregion
 
         private void PopUpNotify(string text)
         {
-            if (m_notifyIcon != null && m_notifyIconMenuItem != null && m_notifyIconMenuItem.Checked)
+            if (notifyIcon != null && notifyIconMenuItem != null && notifyIconMenuItem.Checked)
             {
-                m_notifyIcon.BalloonTipText = text;
-                m_notifyIcon.ShowBalloonTip(2000);
+                notifyIcon.BalloonTipText = text;
+                notifyIcon.ShowBalloonTip(2000);
             }
         }
 
-        private static TraceSwitch ZeroLogLevel = new TraceSwitch("ZeroLogLevelSwitch", "Zero Log Level Switch", "Error");
         public string LastMessage { get; set; }
         public StringBuilder Messages { get; private set; }
 
@@ -237,7 +264,7 @@ namespace TerminalZeroClient
 
             LastMessage = message;
             this.Messages.AppendLine(GetStamp() + LastMessage);
-            System.Diagnostics.Trace.WriteLineIf(ZeroLogLevel.TraceVerbose, GetStamp() + LastMessage);
+            Log(TraceLevel.Verbose, GetStamp() + LastMessage);
         }
 
         public void SendNotification(string message)
@@ -254,20 +281,12 @@ namespace TerminalZeroClient
                     }
                 }
                 ), null);
-            System.Diagnostics.Trace.WriteLineIf(ZeroLogLevel.TraceInfo, GetStamp() + message);
-        }
-
-        public event EventHandler ExecutionFinished;
-
-        public void NotifyExecutionFinished(object sender)
-        {
-            if (ExecutionFinished != null)
-                ExecutionFinished(sender, EventArgs.Empty);
+            Log(TraceLevel.Info, GetStamp() + message);
         }
 
         public void Log(TraceLevel level, string message)
         {
-            System.Diagnostics.Trace.WriteLineIf(ZeroLogLevel.Level >= level, GetStamp() + message);
+            System.Diagnostics.Trace.WriteLineIf(App.Instance.CurrentClient.LogLevel.Level >= level, GetStamp() + message);
         }
 
         #endregion
