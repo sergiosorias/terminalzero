@@ -13,6 +13,9 @@ namespace ZeroCommonClasses.PackClasses
         {
             
         }
+
+        [DataMember]
+        public int Flags { get; set; }
         
         [DataMember]
         public int ModuleCode { get; set; }

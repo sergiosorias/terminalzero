@@ -50,7 +50,7 @@ namespace ZeroMasterData
 
         public override string[] GetFilesToSend()
         {
-            return PackManager.GetPacks(WorkingDirectory);
+            return PackManager.GetPacks(ModuleCode, WorkingDirectory);
         }
 
         public override void Init()
@@ -135,6 +135,7 @@ namespace ZeroMasterData
                 //TODO:
                 //Fijarse si se puede hacer dinamica la carga del paquete.
                 ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(this.ModuleCode, this.WorkingDirectory);
+                info.Flags |= (int)ZeroCommonClasses.PackClasses.PackManager.PackFlags.MasterData;
                 info.AddTable(ent.Prices);
                 info.AddTable(ent.Weights);
                 info.AddTable(ent.PaymentInstruments);
@@ -144,7 +145,7 @@ namespace ZeroMasterData
                 info.AddTable(ent.Suppliers);
                 info.AddTable(ent.Products);
                 info.AddTable(ent.Customers);
-
+                
                 using (MasterDataPackManager pack = new MasterDataPackManager(info))
                 {
                     pack.Exported += new EventHandler<PackEventArgs>(pack_Exported);

@@ -22,7 +22,8 @@ namespace ZeroStock
         public override void BuildPosibleActions(List<ZeroAction> actions)
         {
             actions.Add(new ZeroAction(ActionType.MenuItem,"Operaciones@Stock@Actual",openStockView));
-            actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Nuevo", openNewStockView));
+            actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
+            actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
         }
 
         public override void BuildRulesActions(List<ZeroRule> rules)
@@ -33,7 +34,7 @@ namespace ZeroStock
         public override string[] GetFilesToSend()
         {
             TryExportStockDataPack();
-            return PackManager.GetPacks(WorkingDirectory);
+            return PackManager.GetPacks(ModuleCode, WorkingDirectory);
         }
 
         private void TryExportStockDataPack()
@@ -92,10 +93,16 @@ namespace ZeroStock
 
         private void openNewStockView(ZeroRule rule)
         {
-            NewStockView view = new NewStockView(ICurrentTerminal);
+            StockView view = new StockView(ICurrentTerminal,0);
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
-                
+
+        private void openModifyStockView(ZeroRule rule)
+        {
+            StockView view = new StockView(ICurrentTerminal, 1);
+            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+        }
+
         #endregion
     }
 }

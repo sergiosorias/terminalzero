@@ -16,6 +16,12 @@ namespace ZeroCommonClasses.PackClasses
     public abstract class PackManager : IDisposable
     {
         private const string kPackExtention = ".zpack";
+        
+        [Flags()]
+        public enum PackFlags
+        {
+            MasterData = 1
+        }
 
         private enum Mode
         {
@@ -29,11 +35,44 @@ namespace ZeroCommonClasses.PackClasses
             return null;
         }
 
-        public static string[] GetPacks(string workingDirectory)
+        public static string[] GetPacks(int moduleCode, string workingDirectory)
         {
             List<string> res = new List<string>();
-            res.AddRange(Directory.GetFiles(workingDirectory, "*" + kPackExtention));
+            res.AddRange(Directory.GetFiles(workingDirectory, moduleCode.ToString()+"*"+ kPackExtention));
             return res.ToArray();
+        }
+
+        public static bool ContainsFlag(PackFlags packFlag, string name)
+        {
+            bool ret = false;
+            try
+            {
+                string[] values = name.Split('_');
+                if (values.Length > 2)
+                {
+                    int sFlags = int.Parse(values.ElementAt(1));
+                    ret = ((int)packFlag & sFlags) != 0;
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return ret;
+        }
+
+        public static int GetModule(string name)
+        {
+            string[] args = name.Split('_');
+
+            int moduleCode = 0;
+            if (args.Length > 1)
+                int.TryParse(args[0], out moduleCode);
+
+            return moduleCode;
+            
         }
 
         #endregion
@@ -171,7 +210,7 @@ namespace ZeroCommonClasses.PackClasses
         {
             FastZipEvents events = new FastZipEvents();
             FastZip zip = new FastZip(events);
-            zip.CreateZip(Path.Combine(PackInfo.Path, PackInfo.ModuleCode.ToString() + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + kPackExtention), CurrentDirectory, true, "");
+            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format("{0}_{1}_{2}{3}",PackInfo.ModuleCode,PackInfo.Flags,PackInfo.Stamp.ToString("yyyyMMddhhmmss"), kPackExtention)), CurrentDirectory, true, "");
         }
 
         private void ImportProcess()
@@ -218,8 +257,6 @@ namespace ZeroCommonClasses.PackClasses
                     dbent.Dispose();
                 }
             }
-
-
         }
 
         private static void UpdatePackStatus(Pack aPack, CommonEntities dbent, int newStatus)
@@ -241,6 +278,7 @@ namespace ZeroCommonClasses.PackClasses
                 P.Data = File.ReadAllBytes(packFilePath);
                 if (!string.IsNullOrWhiteSpace(ConnectionID))
                     P.ConnectionCode = ConnectionID;
+                P.IsMasterData = ContainsFlag(PackFlags.MasterData, name);
                 dbent.AddToPacks(P);
                 dbent.SaveChanges();
             }
