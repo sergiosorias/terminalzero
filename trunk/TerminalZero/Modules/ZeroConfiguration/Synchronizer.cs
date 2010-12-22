@@ -233,7 +233,7 @@ namespace ZeroConfiguration
                             }
                         }
                     }
-
+                    Config.Notifier.SendNotification("Se descargaron datos del servidor!");
                 }
                 else
                     ret = true;

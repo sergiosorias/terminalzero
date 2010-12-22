@@ -52,7 +52,6 @@ namespace TerminalZeroClient
         {
             CurrentClient = new ZeroClientManager();
             _TerminalCode = TerminalZeroClient.Properties.Settings.Default.TerminalCode;
-            IsOnDebugMode = TerminalZeroClient.Properties.Settings.Default.Debug;
         }
 
         private ISyncService _ClientConn;
@@ -87,10 +86,7 @@ namespace TerminalZeroClient
         }
 
         #endregion
-
-
-        public bool IsOnDebugMode { get; set; }
-
+        
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             

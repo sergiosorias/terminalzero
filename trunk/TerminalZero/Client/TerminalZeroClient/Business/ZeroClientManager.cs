@@ -10,6 +10,7 @@ using ZeroCommonClasses.Interfaces.Services;
 using ZeroCommonClasses;
 using TerminalZeroClient.Helpers;
 using ZeroCommonClasses.GlobalObjects;
+using System.Diagnostics;
 
 
 namespace TerminalZeroClient.Business
@@ -20,10 +21,12 @@ namespace TerminalZeroClient.Business
         public ZeroSession Session {get; private set;}
         private ILogBuilder Logger = null;
         internal ITerminalClientManager Manager { get; private set; }
+        public TraceSwitch LogLevel { get; private set; }
 
         internal ZeroClientManager()
         {
             IsAllOK = true;
+            LogLevel = new TraceSwitch("ZeroLogLevelSwitch", "Zero Log Level Switch", "Error");
             Session = new ZeroSession();
             Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, App.Instance.ClientSyncServiceReference,false));
             Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false, ZeroCommonClasses.Context.ContextBuilder.CreateFileTranferConnection(), false));
