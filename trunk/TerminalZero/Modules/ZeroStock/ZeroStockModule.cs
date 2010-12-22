@@ -74,7 +74,7 @@ namespace ZeroStock
             }
             catch (Exception ex)
             {
-                Session.Notifier.SetUserMessage(true, ex.ToString());
+                Terminal.Session.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
         
@@ -93,13 +93,13 @@ namespace ZeroStock
 
         private void openNewStockView(ZeroRule rule)
         {
-            StockView view = new StockView(ICurrentTerminal,0);
+            StockView view = new StockView(Terminal,0);
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openModifyStockView(ZeroRule rule)
         {
-            StockView view = new StockView(ICurrentTerminal, 1);
+            StockView view = new StockView(Terminal, 1);
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 

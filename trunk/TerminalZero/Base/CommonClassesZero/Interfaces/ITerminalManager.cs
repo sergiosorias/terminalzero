@@ -6,7 +6,7 @@ using ZeroCommonClasses.GlobalObjects;
 
 namespace ZeroCommonClasses.Interfaces
 {
-    public interface ITerminalClientManager
+    public interface ITerminalManager
     {
         event EventHandler ConfigurationRequired;
         void InitializeTerminal();

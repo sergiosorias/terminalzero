@@ -8,66 +8,59 @@ using System.Windows.Controls;
 using TerminalZeroClient.Extras;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroCommonClasses;
-using TerminalZeroClient.Helpers;
 using ZeroCommonClasses.GlobalObjects;
 using System.Diagnostics;
 
 
 namespace TerminalZeroClient.Business
 {
-    internal partial class ZeroClientManager
+    internal partial class ZeroClient
     {
         public bool IsAllOK { get; private set; }
-        public ZeroSession Session {get; private set;}
         private ILogBuilder Logger = null;
-        internal ITerminalClientManager Manager { get; private set; }
+        internal ITerminalManager Manager { get; private set; }
         public TraceSwitch LogLevel { get; private set; }
 
-        internal ZeroClientManager()
+        internal ZeroClient()
         {
             IsAllOK = true;
             LogLevel = new TraceSwitch("ZeroLogLevelSwitch", "Zero Log Level Switch", "Error");
-            Session = new ZeroSession();
-            Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, App.Instance.ClientSyncServiceReference,false));
-            Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false, ZeroCommonClasses.Context.ContextBuilder.CreateFileTranferConnection(), false));
         }
 
         public void InitializeAppAsync()
         {
             bool canContinue = false;
-            Session.Notifier.SetProcess("Buscando Módulos");
+            App.Instance.Session.Notifier.SetProcess("Buscando Módulos");
             try
             {
-                Session.Notifier.SetProgress(5);
-
-
-                string[] Modules = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, App.K_ModulesFolder), "*.dll");
-                Session.Notifier.SetProgress(10);
+                App.Instance.Session.Notifier.SetProgress(5);
+                string[] Modules = Directory.GetFiles(App.Directories.ModulesFolder, "*.dll");
+                App.Instance.Session.Notifier.SetProgress(10);
                 canContinue = Modules.Length != 0;
                 if (!canContinue)
                 {
-                    Session.Notifier.SetProgress(20);
-                    Session.Notifier.SetUserMessage(false, "No se encontraron modulos para ejecutar!");
-                    Session.Notifier.SetUserMessage(false, "Finalizando proceso...");
+                    App.Instance.Session.Notifier.SetProgress(20);
+                    App.Instance.Session.Notifier.SetUserMessage(false, "No se encontraron modulos para ejecutar!");
+                    App.Instance.Session.Notifier.SetUserMessage(false, "Finalizando proceso...");
                 }
                 else
                 {
                     if (!GetModules(Modules))
                     {
                         canContinue = false;
-                        Session.Notifier.SetUserMessage(true, "No se encontró inicializador, el sistema no puede ser utilizado sin el mismo.");
+                        App.Instance.Session.Notifier.SetUserMessage(true, "No se encontró inicializador, el sistema no puede ser utilizado sin el mismo.");
                     }
                     else
                     {
 
-                        Session.Notifier.SetProgress(50);
+                        App.Instance.Session.Notifier.SetProgress(50);
                         canContinue = InitializeTerminal();
 
-                        Session.Notifier.SetProgress(60);
+                        App.Instance.Session.Notifier.SetProgress(60);
                         if (!canContinue)
-                            Session.Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación con algunos problemas encontrados.");
+                            App.Instance.Session.Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación con algunos problemas encontrados.");
                         else
-                            Session.Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación correctamente!.");
+                            App.Instance.Session.Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación correctamente!.");
 
 
 
@@ -76,44 +69,44 @@ namespace TerminalZeroClient.Business
             }
             catch (Exception ex)
             {
-                Session.Notifier.SetProcess("Error!");
-                Session.Notifier.SetUserMessage(true, ex.ToString());
+                App.Instance.Session.Notifier.SetProcess("Error!");
+                App.Instance.Session.Notifier.SetUserMessage(true, ex.ToString());
                 canContinue = false;
             }
 
             if (!canContinue)
             {
                 IsAllOK = false;
-                Session.Notifier.SendNotification("Ocurrio algun error en el momento de iniciar el programa, por favor lea el detalle del proceso!");
-                Session.Notifier.SetUserMessage(true, "Error");
-                Session.Notifier.SetProcess("Error!");
+                App.Instance.Session.Notifier.SendNotification("Ocurrio algun error en el momento de iniciar el programa, por favor lea el detalle del proceso!");
+                App.Instance.Session.Notifier.SetUserMessage(true, "Error");
+                App.Instance.Session.Notifier.SetProcess("Error!");
             }
             else
             {
-                Session.Notifier.SetProcess("Listo");
+                App.Instance.Session.Notifier.SetProcess("Listo");
             }
 
-            Session.Notifier.SetProgress(100);
+            App.Instance.Session.Notifier.SetProgress(100);
         }
 
         private bool InitializeTerminal()
         {
-            Session.Notifier.SetProcess("Validando Módulos");
+            App.Instance.Session.Notifier.SetProcess("Validando Módulos");
             bool ret = true;
             try
             {
                 Manager.InitializeTerminal();
-                Session.ModuleList.ForEach(c => c.TerminalStatus = Manager.GetModuleStatus(c));
-                if (Session.ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
+                App.Instance.Session.ModuleList.ForEach(c => c.TerminalStatus = Manager.GetModuleStatus(c));
+                if (App.Instance.Session.ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
                 {
                     IsAllOK = false;
-                    Session.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
+                    App.Instance.Session.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
                                                     + "por favor conectese con la central lo antes posible!");
                 }
             }
             catch (Exception ex)
             {
-                Session.Notifier.SetUserMessage(false, "ERROR: " + ex.ToString());
+                App.Instance.Session.Notifier.SetUserMessage(false, "ERROR: " + ex.ToString());
                 ret = false;
             }
 
@@ -123,7 +116,7 @@ namespace TerminalZeroClient.Business
 
         private bool GetModules(string[] Modules)
         {
-            Session.Notifier.SetProcess("Cargando Módulos");
+            App.Instance.Session.Notifier.SetProcess("Cargando Módulos");
             string aux = "";
 
             foreach (var item in Modules)
@@ -131,7 +124,7 @@ namespace TerminalZeroClient.Business
                 try
                 {
                     aux = Path.GetFileNameWithoutExtension(item);
-                    Session.Notifier.SetUserMessage(false, "Inicializando " + aux);
+                    App.Instance.Session.Notifier.SetUserMessage(false, "Inicializando " + aux);
                     System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFrom(item);
                     Type ty = ass.GetExportedTypes().FirstOrDefault(t => t.BaseType == typeof(ZeroCommonClasses.ZeroModule));
                     
@@ -143,10 +136,10 @@ namespace TerminalZeroClient.Business
                 }
                 catch (Exception ex)
                 {
-                    Session.Notifier.SetUserMessage(false, "Assembly '" + item + "' no es un modulo válido, error: " + ex.ToString());
+                    App.Instance.Session.Notifier.SetUserMessage(false, "Assembly '" + item + "' no es un modulo válido, error: " + ex.ToString());
                 }
             }
-            Session.Notifier.SetProgress(30);
+            App.Instance.Session.Notifier.SetProgress(30);
             return Manager != null;
         }
 
@@ -158,12 +151,12 @@ namespace TerminalZeroClient.Business
                 ZeroModule mod = obj as ZeroModule;
                 mod.TerminalStatus = ModuleStatus.Unknown;
                 mod.UserStatus = ModuleStatus.Unknown;
-                mod.WorkingDirectory = path + AppDirectories.WorkingDirSubfix;
-                Session.AddModule(mod);
-                Session.Notifier.SetUserMessage(false, "Módulo ensamblado --> ''" + mod.Description + "''");
+                mod.WorkingDirectory = path + App.Directories.WorkingDirSubfix;
+                App.Instance.Session.AddModule(mod);
+                App.Instance.Session.Notifier.SetUserMessage(false, "Módulo ensamblado --> ''" + mod.Description + "''");
 
-                if (Manager == null && obj is ITerminalClientManager)
-                    Manager = obj as ITerminalClientManager;
+                if (Manager == null && obj is ITerminalManager)
+                    Manager = obj as ITerminalManager;
 
                 if (Logger == null && obj is ILogBuilder)
                     Logger = obj as ILogBuilder;
@@ -171,15 +164,15 @@ namespace TerminalZeroClient.Business
             }
             else
             {
-                Session.Notifier.SetUserMessage(false, "Módulo invalido --> ''''");
+                App.Instance.Session.Notifier.SetUserMessage(false, "Módulo invalido --> ''''");
             }
         }
 
         public ZeroMenu BuildMenu()
         {
-            List<ZeroAction> validActions = Session.BuilSessionActions();
+            List<ZeroAction> validActions = App.Instance.Session.BuilSessionActions();
 
-            Session.ModuleList.ForEach(m => m.Init());
+            App.Instance.Session.ModuleList.ForEach(m => m.Init());
 
             ZeroMenu menu = new ZeroMenu();
 

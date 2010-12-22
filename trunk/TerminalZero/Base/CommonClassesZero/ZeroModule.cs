@@ -24,7 +24,7 @@ namespace ZeroCommonClasses
 
         public ZeroModule(ITerminal iCurrentTerminal,int code, string description)
         {
-            ICurrentTerminal = iCurrentTerminal;
+            Terminal = iCurrentTerminal;
             ModuleCode = code;
             Description = description;
         }
@@ -94,14 +94,7 @@ namespace ZeroCommonClasses
             }
         }
 
-        protected ZeroSession Session {get; private set;}
-
-        protected ITerminal ICurrentTerminal { get; private set; }
-
-        public void SetSession(ZeroSession session)
-        {
-            Session = session;
-        }
+        protected ITerminal Terminal { get; private set; }
 
         public abstract void BuildPosibleActions(List<ZeroAction> actions);
 
@@ -116,8 +109,8 @@ namespace ZeroCommonClasses
 
         public virtual void NewPackReceived(string path)
         {
-            if(Session!=null && Session.Notifier!=null)
-                Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}",ModuleCode, Description,path));
+            if (Terminal.Session != null && Terminal.Session.Notifier != null)
+                Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
         }
                 
     }

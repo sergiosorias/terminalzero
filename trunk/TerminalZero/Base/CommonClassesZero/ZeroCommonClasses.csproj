@@ -63,7 +63,7 @@
     </Compile>
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
-    <Compile Include="Interfaces\ITerminalInitializer.cs" />
+    <Compile Include="Interfaces\ITerminalManager.cs" />
     <Compile Include="PackClasses\ExportEntitiesPackInfo.cs" />
     <Compile Include="PackClasses\PackInfoBase.cs" />
     <Compile Include="Interfaces\IZeroPage.cs" />

@@ -15,7 +15,7 @@ using ZeroCommonClasses.GlobalObjects;
 
 namespace ZeroConfiguration
 {
-    public partial class ZeroConfigurationModule : ZeroModule, ITerminalClientManager
+    public partial class ZeroConfigurationModule : ZeroModule, ITerminalManager
     {
         private Synchronizer Sync = null;
         public ZeroAction SyncAction = null;
@@ -60,23 +60,23 @@ namespace ZeroConfiguration
         private void StartSyncronizer()
         {
             Sync = new Synchronizer();
-            double milsec = Sync.LoadConfiguration(ICurrentTerminal, new ConfigurationEntities(), Session);
-            Session.Notifier.SetUserMessage(false,string.Format("Sincronizando cada {0} minutos",(milsec/1000)/60));
+            double milsec = Sync.LoadConfiguration(Terminal, new ConfigurationEntities(), Terminal.Session);
+            Terminal.Session.Notifier.SetUserMessage(false,string.Format("Sincronizando cada {0} minutos",(milsec/1000)/60));
             Sync.SyncStarting += new EventHandler<Synchronizer.SyncStartingEventArgs>(Sync_SyncStarting);
             string msg = "";
             ZeroModule module = this;
-            if (Session.CanExecute(SyncAction, out msg))
+            if (Terminal.Session.CanExecute(SyncAction, out msg))
                 SyncAction.Execute(null);
             else
-                Session.Notifier.SendNotification(msg);
+                Terminal.Session.Notifier.SendNotification(msg);
         }
 
         private void Sync_SyncStarting(object sender, Synchronizer.SyncStartingEventArgs e)
         {
-            e.Notifier = Session.Notifier;
-            e.SyncService = Session.GetParameter<ISyncService>().Value;
-            e.FileTransferService = Session.GetParameter<IFileTransfer>().Value;
-            e.Modules = Session.GetParameter<List<ZeroModule>>().Value;
+            e.Notifier = Terminal.Session.Notifier;
+            e.SyncService = Terminal.Session.GetParameter<ISyncService>().Value;
+            e.FileTransferService = Terminal.Session.GetParameter<IFileTransfer>().Value;
+            e.Modules = Terminal.Session.GetParameter<List<ZeroModule>>().Value;
         }
 
         private void StartSync(ZeroRule rule)
@@ -91,9 +91,9 @@ namespace ZeroConfiguration
 
         private void OpenConfiguration(ZeroRule rule)
         {
-            Properties P = new Properties(ICurrentTerminal);
+            Properties P = new Properties(Terminal);
             P.UpdateTimeRemaining(Sync);
-            if (Session.ValidateRule("ValidateTerminalZero"))
+            if (Terminal.Session.ValidateRule("ValidateTerminalZero"))
                 P.Mode = Mode.Update;
 
             OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
@@ -106,7 +106,7 @@ namespace ZeroConfiguration
 
         private void isTerminalZero(ZeroRule rule)
         {
-            if (ICurrentTerminal != null && ConfigurationEntities.IsTerminalZero(new ConfigurationEntities(), ICurrentTerminal.TerminalCode))
+            if (Terminal != null && ConfigurationEntities.IsTerminalZero(new ConfigurationEntities(), Terminal.TerminalCode))
                 rule.Satisfied = (TerminalStatus == ModuleStatus.Valid || TerminalStatus == ModuleStatus.NeedsSync);
             else
                 rule.Satisfied = false;
@@ -124,17 +124,17 @@ namespace ZeroConfiguration
 
         public ModuleStatus GetModuleStatus(ZeroModule c)
         {
-            return ConfigurationEntities.GetTerminalModuleStatus(new ConfigurationEntities(), ICurrentTerminal.TerminalCode,c);
+            return ConfigurationEntities.GetTerminalModuleStatus(new ConfigurationEntities(), Terminal.TerminalCode,c);
         }
         
         public void InitializeTerminal()
         {
             using (ConfigurationEntities conf = new ConfigurationEntities())
             {
-                if (conf.Terminals.FirstOrDefault(t => t.Code == ICurrentTerminal.TerminalCode) == null)
-                    ConfigurationEntities.AddNewTerminal(conf, ICurrentTerminal.TerminalCode, ICurrentTerminal.TerminalName);
+                if (conf.Terminals.FirstOrDefault(t => t.Code == Terminal.TerminalCode) == null)
+                    ConfigurationEntities.AddNewTerminal(conf, Terminal.TerminalCode, Terminal.TerminalName);
 
-                ConfigurationEntities.CreateTerminalProperties(conf, ICurrentTerminal.TerminalCode);
+                ConfigurationEntities.CreateTerminalProperties(conf, Terminal.TerminalCode);
             }
             
         }
@@ -143,7 +143,7 @@ namespace ZeroConfiguration
         {
             bool ret = true;
             result = "";
-            if (Session.CanExecute(Action, out result))
+            if (Terminal.Session.CanExecute(Action, out result))
             {
                 try
                 {
@@ -170,7 +170,7 @@ namespace ZeroConfiguration
             string[] ret = new string[] { };
             using (ConfigurationEntities conf = new ConfigurationEntities())
             {
-                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == ICurrentTerminal.TerminalCode && tp.Code == Namespace.Properties.HomeShorcuts);
+                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == Terminal.TerminalCode && tp.Code == Namespace.Properties.HomeShorcuts);
                 if (prop != null)
                 {
                     if (prop.LargeValue != null)
@@ -181,7 +181,7 @@ namespace ZeroConfiguration
                         foreach (var item in ret)
                         {
                             actParts = item.Split('|');
-                            if (Session.ExistsAction(actParts[0].Trim(), out act))
+                            if (Terminal.Session.ExistsAction(actParts[0].Trim(), out act))
                             {
                                 if (actParts.Length > 1)
                                 {
