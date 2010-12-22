@@ -19,27 +19,28 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for NewStockView.xaml
     /// </summary>
-    public partial class NewStockView : UserControl, IZeroPage
+    public partial class StockView : UserControl, IZeroPage
     {
         ITerminal Terminal;
         Entities.StockHeader Header;
         Entities.StockEntities Context;
-        public NewStockView(ITerminal terminal)
+        public StockView(ITerminal terminal, int stockType)
         {
             InitializeComponent();
             Terminal = terminal;
             Context = new Entities.StockEntities();
-            LoadHeader();
+            LoadHeader(stockType);
         }
 
-        private void LoadHeader()
+        private void LoadHeader(int stockType)
         {
             Header = Entities.StockHeader.CreateStockHeader(
                 Terminal.TerminalCode,
                 0,
                 true,
                 0);
-
+            Header.StockType = Context.StockTypes.FirstOrDefault(st => st.Code == stockType);
+            lblStockType.Content = Header.StockType != null ? Header.StockType.Description : "Stock";
             Context.AddToStockHeaders(Header);
 
 
@@ -80,7 +81,7 @@ namespace ZeroStock.Pages
                     case MessageBoxResult.OK:
                     case MessageBoxResult.Yes:
                         ret = SaveData();
-                        
+
                         break;
                 }
             }
@@ -127,7 +128,7 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeReceived(object sender, ZeroGUI.Classes.BarCodeEventArgs e)
         {
-            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto" );
+            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
             if (Part != null)
             {
                 ZeroStock.Entities.Product prod = Context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
@@ -141,7 +142,7 @@ namespace ZeroStock.Pages
                     {
                         prod.PriceReference.Load();
                     }
-                    
+
                     BarCodePart PartQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
                     BarCodePart PartDay = e.Parts.FirstOrDefault(p => p.Name == "Día");
                     BarCodePart PartMonth = e.Parts.FirstOrDefault(p => p.Name == "Mes");
@@ -155,8 +156,8 @@ namespace ZeroStock.Pages
                         prod.Code,
                         prod.MasterCode,
                         prod.ByWeight,
-                        prod.Price1!=null? prod.Price1.Value:0,
-                        prod.ByWeight?PartQty.Code:1
+                        prod.Price1 != null ? prod.Price1.Value : 0,
+                        prod.ByWeight ? PartQty.Code : 1
                         );
 
                     Header.StockItems.Add(item);

@@ -59,8 +59,8 @@
     <Compile Include="Pages\CurrentStockView.xaml.cs">
       <DependentUpon>CurrentStockView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewStockView.xaml.cs">
-      <DependentUpon>NewStockView.xaml</DependentUpon>
+    <Compile Include="Pages\StockView.xaml.cs">
+      <DependentUpon>StockView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ZeroStockModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,7 +87,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewStockView.xaml">
+    <Page Include="Pages\StockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
