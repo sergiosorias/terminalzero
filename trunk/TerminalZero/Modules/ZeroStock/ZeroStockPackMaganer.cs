@@ -14,6 +14,11 @@ namespace ZeroStock
         public ZeroStockPackMaganer(string packPath)
             :base(packPath)
         {
+            Importing += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(ZeroStockPackMaganer_Importing);
+        }
+
+        void ZeroStockPackMaganer_Importing(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
+        {
             
         }
         

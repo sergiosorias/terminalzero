@@ -14,12 +14,15 @@ namespace ZeroCommonClasses.Context
     {
         public static System.Configuration.ConnectionStringSettings ServerConnectionString { get; private set; }
         public static System.Configuration.ConnectionStringSettings ClientConnectionString { get; private set; }
+        public static System.Configuration.ConnectionStringSettings IncomingConnectionString { get; private set; }
 
         static ContextBuilder()
         {
             ServerConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.ConfigConn"];
+            IncomingConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.IncomingConn"];
             ClientConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TerminalZeroClient.Properties.Settings.ConfigConn"];
         }
+
         public static EntityConnection GetConnectionForCurrentEnvironment(string modelName)
         {
             System.Configuration.ConnectionStringSettings set;

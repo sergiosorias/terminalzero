@@ -8,7 +8,6 @@ namespace ZeroCommonClasses.Interfaces
 {
     public interface ILogBuilder
     {
-        void SetState();
         void Add(string log);
         void Add(Exception ex);
     }
