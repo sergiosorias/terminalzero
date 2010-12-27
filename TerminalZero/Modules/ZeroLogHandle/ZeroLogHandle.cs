@@ -62,11 +62,6 @@ namespace ZeroLogHandle
 
         #region ILogBuilder Members
 
-        public void SetState()
-        {
-
-        }
-
         public void Add(string log)
         {
 
