@@ -163,9 +163,6 @@
     <Build Include="Schema Objects\Database Level Objects\Security\Schemas\data.schema.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\data\Tables\Tezt.table.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\StockHeader.table.sql">
       <SubType>Code</SubType>
     </Build>
