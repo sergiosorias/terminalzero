@@ -40,8 +40,8 @@ namespace TZeroHost.Services
                 System.IO.FileInfo fileInfo = new System.IO.FileInfo(filePath);
                 length = fileInfo.Length;
                 // report start
-                Console.WriteLine("Sending stream " + request.FileName + " to client");
-                Console.WriteLine("Size " + fileInfo.Length);
+                System.Diagnostics.Trace.Write("Sending stream " + request.FileName + " to client");
+                System.Diagnostics.Trace.Write("Size " + fileInfo.Length);
 
                 // check if exists
                 if (!fileInfo.Exists) throw new System.IO.FileNotFoundException("File not found", request.FileName);
@@ -72,8 +72,8 @@ namespace TZeroHost.Services
         {
             // report start
 
-            Console.WriteLine("Start uploading " + request.FileName, "Verbose");
-            Console.WriteLine("Size " + request.Length, "Verbose");
+            System.Diagnostics.Trace.WriteLine("Start uploading " + request.FileName, "Verbose");
+            System.Diagnostics.Trace.WriteLine("Size " + request.Length, "Verbose");
 
             string filePath = System.IO.Path.Combine(Helpers.AppDirectories.UploadFolder, System.IO.Path.GetFileName(request.FileName));
             if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
@@ -98,7 +98,7 @@ namespace TZeroHost.Services
                     } while (true);
 
                     // report end
-                    Console.WriteLine("Done!", "Verbose");
+                    System.Diagnostics.Trace.WriteLine("Done!", "Verbose");
                     ret = new ServerFileInfo { FileName = filePath };
 
                     OnPackReceived(filePath,request.ConnectionID);

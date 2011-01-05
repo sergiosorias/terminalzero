@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="fbf29635-ff09-4425-b166-f7ab168e73c3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/TZeroHost/Services/ServiceHelper.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ServiceHelper.disco" MetadataType="Disco" ID="5d0bc85a-468a-4305-98bd-edfe9d163732" SourceId="1" SourceUrl="http://localhost/TZeroHost/Services/ServiceHelper.svc?disco" />
+    <MetadataFile FileName="ServiceHelper1.xsd" MetadataType="Schema" ID="ce8d896c-3dcc-4740-8427-0379c05e80a2" SourceId="1" SourceUrl="http://localhost/TZeroHost/Services/ServiceHelper.svc?xsd=xsd1" />
+    <MetadataFile FileName="ServiceHelper2.xsd" MetadataType="Schema" ID="ca380adf-c43e-42ca-a3a6-824d28296f28" SourceId="1" SourceUrl="http://localhost/TZeroHost/Services/ServiceHelper.svc?xsd=xsd0" />
+    <MetadataFile FileName="ServiceHelper.wsdl" MetadataType="Wsdl" ID="9a63a41b-0fce-4cea-b6e6-c0f7ba29e2a0" SourceId="1" SourceUrl="http://localhost/TZeroHost/Services/ServiceHelper.svc?wsdl" />
+    <MetadataFile FileName="ServiceHelper.xsd" MetadataType="Schema" ID="8db4821e-1456-4a9f-87d2-c7e9e64a6764" SourceId="1" SourceUrl="http://localhost/TZeroHost/Services/ServiceHelper.svc?xsd=xsd2" />
+    <MetadataFile FileName="ServiceHelper31.xsd" MetadataType="Schema" ID="bdaffd71-9b03-445b-82a9-e777d8849055" SourceId="1" SourceUrl="http://localhost/TZeroHost/Services/ServiceHelper.svc?xsd=xsd3" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

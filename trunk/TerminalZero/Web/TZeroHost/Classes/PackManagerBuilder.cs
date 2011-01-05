@@ -19,7 +19,7 @@ namespace TZeroHost.Classes
             if (args.Length > 1)
                 int.TryParse(args[0], out moduleCode);
 
-            switch (moduleCode)
+            switch (PackManager.GetModule(Path.GetFileName(packPath)))
             {
                 case 1:
                     break;
@@ -27,6 +27,9 @@ namespace TZeroHost.Classes
                     break;
                 case 3:
                     manager = new MasterDataPackManager(Path.GetDirectoryName(packPath));
+                    break;
+                case 4:
+                    manager = new ZeroStock.ZeroStockPackMaganer(Path.GetDirectoryName(packPath));
                     break;
                 default:
                     manager = PackManager.GetDefaultManager();
