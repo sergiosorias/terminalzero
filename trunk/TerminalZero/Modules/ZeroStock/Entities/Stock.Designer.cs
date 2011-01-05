@@ -23,8 +23,11 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_SaleWeight_Price_Weight", "Weight", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Weight), "Price", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.Price), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_UnitWeight_Price_Weight", "Weight", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Weight), "Price", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.Price), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_Product", "Product", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.Product), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
-[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.StockHeader), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockHeader_StockType", "StockType", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.StockType), "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockHeader), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.StockHeader), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_DeliveryDocumentHeader_Supplier", "Supplier", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Supplier), "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.DeliveryDocumentHeader), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.DeliveryDocumentHeader), "DeliveryDocumentItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.DeliveryDocumentItem), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.DeliveryDocumentHeader), "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockHeader), true)]
 
 #endregion
 
@@ -111,38 +114,6 @@ namespace ZeroStock.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<StockHeader> StockHeaders
-        {
-            get
-            {
-                if ((_StockHeaders == null))
-                {
-                    _StockHeaders = base.CreateObjectSet<StockHeader>("StockHeaders");
-                }
-                return _StockHeaders;
-            }
-        }
-        private ObjectSet<StockHeader> _StockHeaders;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<StockItem> StockItems
-        {
-            get
-            {
-                if ((_StockItems == null))
-                {
-                    _StockItems = base.CreateObjectSet<StockItem>("StockItems");
-                }
-                return _StockItems;
-            }
-        }
-        private ObjectSet<StockItem> _StockItems;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<Weight> Weights
         {
             get
@@ -219,6 +190,86 @@ namespace ZeroStock.Entities
             }
         }
         private ObjectSet<StockSummary> _StockSummaries;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StockHeader> StockHeaders
+        {
+            get
+            {
+                if ((_StockHeaders == null))
+                {
+                    _StockHeaders = base.CreateObjectSet<StockHeader>("StockHeaders");
+                }
+                return _StockHeaders;
+            }
+        }
+        private ObjectSet<StockHeader> _StockHeaders;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StockItem> StockItems
+        {
+            get
+            {
+                if ((_StockItems == null))
+                {
+                    _StockItems = base.CreateObjectSet<StockItem>("StockItems");
+                }
+                return _StockItems;
+            }
+        }
+        private ObjectSet<StockItem> _StockItems;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Supplier> Suppliers
+        {
+            get
+            {
+                if ((_Suppliers == null))
+                {
+                    _Suppliers = base.CreateObjectSet<Supplier>("Suppliers");
+                }
+                return _Suppliers;
+            }
+        }
+        private ObjectSet<Supplier> _Suppliers;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DeliveryDocumentHeader> DeliveryDocumentHeaders
+        {
+            get
+            {
+                if ((_DeliveryDocumentHeaders == null))
+                {
+                    _DeliveryDocumentHeaders = base.CreateObjectSet<DeliveryDocumentHeader>("DeliveryDocumentHeaders");
+                }
+                return _DeliveryDocumentHeaders;
+            }
+        }
+        private ObjectSet<DeliveryDocumentHeader> _DeliveryDocumentHeaders;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<DeliveryDocumentItem> DeliveryDocumentItems
+        {
+            get
+            {
+                if ((_DeliveryDocumentItems == null))
+                {
+                    _DeliveryDocumentItems = base.CreateObjectSet<DeliveryDocumentItem>("DeliveryDocumentItems");
+                }
+                return _DeliveryDocumentItems;
+            }
+        }
+        private ObjectSet<DeliveryDocumentItem> _DeliveryDocumentItems;
 
         #endregion
         #region AddTo Methods
@@ -237,22 +288,6 @@ namespace ZeroStock.Entities
         public void AddToProducts(Product product)
         {
             base.AddObject("Products", product);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the StockHeaders EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToStockHeaders(StockHeader stockHeader)
-        {
-            base.AddObject("StockHeaders", stockHeader);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the StockItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToStockItems(StockItem stockItem)
-        {
-            base.AddObject("StockItems", stockItem);
         }
     
         /// <summary>
@@ -294,6 +329,46 @@ namespace ZeroStock.Entities
         {
             base.AddObject("StockSummaries", stockSummary);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StockHeaders EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStockHeaders(StockHeader stockHeader)
+        {
+            base.AddObject("StockHeaders", stockHeader);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StockItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStockItems(StockItem stockItem)
+        {
+            base.AddObject("StockItems", stockItem);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Suppliers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSuppliers(Supplier supplier)
+        {
+            base.AddObject("Suppliers", supplier);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the DeliveryDocumentHeaders EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToDeliveryDocumentHeaders(DeliveryDocumentHeader deliveryDocumentHeader)
+        {
+            base.AddObject("DeliveryDocumentHeaders", deliveryDocumentHeader);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the DeliveryDocumentItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToDeliveryDocumentItems(DeliveryDocumentItem deliveryDocumentItem)
+        {
+            base.AddObject("DeliveryDocumentItems", deliveryDocumentItem);
+        }
 
         #endregion
     }
@@ -302,6 +377,780 @@ namespace ZeroStock.Entities
     #endregion
     
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="DeliveryDocumentHeader")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DeliveryDocumentHeader : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DeliveryDocumentHeader object.
+        /// </summary>
+        /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="enable">Initial value of the Enable property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="date">Initial value of the Date property.</param>
+        public static DeliveryDocumentHeader CreateDeliveryDocumentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date)
+        {
+            DeliveryDocumentHeader deliveryDocumentHeader = new DeliveryDocumentHeader();
+            deliveryDocumentHeader.TerminalCode = terminalCode;
+            deliveryDocumentHeader.Code = code;
+            deliveryDocumentHeader.Enable = enable;
+            deliveryDocumentHeader.Status = status;
+            deliveryDocumentHeader.Date = date;
+            return deliveryDocumentHeader;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalCode
+        {
+            get
+            {
+                return _TerminalCode;
+            }
+            set
+            {
+                if (_TerminalCode != value)
+                {
+                    OnTerminalCodeChanging(value);
+                    ReportPropertyChanging("TerminalCode");
+                    _TerminalCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalCode");
+                    OnTerminalCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalCode;
+        partial void OnTerminalCodeChanging(global::System.Int32 value);
+        partial void OnTerminalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Date
+        {
+            get
+            {
+                return _Date;
+            }
+            set
+            {
+                OnDateChanging(value);
+                ReportPropertyChanging("Date");
+                _Date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Date");
+                OnDateChanged();
+            }
+        }
+        private global::System.DateTime _Date;
+        partial void OnDateChanging(global::System.DateTime value);
+        partial void OnDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Guid> UserCode
+        {
+            get
+            {
+                return _UserCode;
+            }
+            set
+            {
+                OnUserCodeChanging(value);
+                ReportPropertyChanging("UserCode");
+                _UserCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserCode");
+                OnUserCodeChanged();
+            }
+        }
+        private Nullable<global::System.Guid> _UserCode;
+        partial void OnUserCodeChanging(Nullable<global::System.Guid> value);
+        partial void OnUserCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> SupplierCode
+        {
+            get
+            {
+                return _SupplierCode;
+            }
+            set
+            {
+                OnSupplierCodeChanging(value);
+                ReportPropertyChanging("SupplierCode");
+                _SupplierCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SupplierCode");
+                OnSupplierCodeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _SupplierCode;
+        partial void OnSupplierCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnSupplierCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Note
+        {
+            get
+            {
+                return _Note;
+            }
+            set
+            {
+                OnNoteChanging(value);
+                ReportPropertyChanging("Note");
+                _Note = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Note");
+                OnNoteChanged();
+            }
+        }
+        private global::System.String _Note;
+        partial void OnNoteChanging(global::System.String value);
+        partial void OnNoteChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_DeliveryDocumentHeader_Supplier", "Supplier")]
+        public Supplier Supplier
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Supplier>("TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier", "Supplier").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Supplier>("TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier", "Supplier").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Supplier> SupplierReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Supplier>("TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier", "Supplier");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Supplier>("TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier", "Supplier", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem")]
+        public EntityCollection<DeliveryDocumentItem> DeliveryDocumentItems
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DeliveryDocumentItem>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DeliveryDocumentItem>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_DeliveryDocumentHeader", "StockHeader")]
+        public EntityCollection<StockHeader> StockHeaders
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<StockHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "StockHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "StockHeader", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="DeliveryDocumentItem")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DeliveryDocumentItem : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new DeliveryDocumentItem object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
+        /// <param name="deliveryDocumentHeaderCode">Initial value of the DeliveryDocumentHeaderCode property.</param>
+        /// <param name="enable">Initial value of the Enable property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="batch">Initial value of the Batch property.</param>
+        /// <param name="productCode">Initial value of the ProductCode property.</param>
+        /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
+        /// <param name="productByWeight">Initial value of the ProductByWeight property.</param>
+        /// <param name="priceValue">Initial value of the PriceValue property.</param>
+        /// <param name="quantity">Initial value of the Quantity property.</param>
+        public static DeliveryDocumentItem CreateDeliveryDocumentItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 deliveryDocumentHeaderCode, global::System.Boolean enable, global::System.Int16 status, global::System.String batch, global::System.Int32 productCode, global::System.Int32 productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity)
+        {
+            DeliveryDocumentItem deliveryDocumentItem = new DeliveryDocumentItem();
+            deliveryDocumentItem.Code = code;
+            deliveryDocumentItem.TerminalCode = terminalCode;
+            deliveryDocumentItem.DeliveryDocumentHeaderCode = deliveryDocumentHeaderCode;
+            deliveryDocumentItem.Enable = enable;
+            deliveryDocumentItem.Status = status;
+            deliveryDocumentItem.Batch = batch;
+            deliveryDocumentItem.ProductCode = productCode;
+            deliveryDocumentItem.ProductMasterCode = productMasterCode;
+            deliveryDocumentItem.ProductByWeight = productByWeight;
+            deliveryDocumentItem.PriceValue = priceValue;
+            deliveryDocumentItem.Quantity = quantity;
+            return deliveryDocumentItem;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalCode
+        {
+            get
+            {
+                return _TerminalCode;
+            }
+            set
+            {
+                OnTerminalCodeChanging(value);
+                ReportPropertyChanging("TerminalCode");
+                _TerminalCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TerminalCode");
+                OnTerminalCodeChanged();
+            }
+        }
+        private global::System.Int32 _TerminalCode;
+        partial void OnTerminalCodeChanging(global::System.Int32 value);
+        partial void OnTerminalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 DeliveryDocumentHeaderCode
+        {
+            get
+            {
+                return _DeliveryDocumentHeaderCode;
+            }
+            set
+            {
+                if (_DeliveryDocumentHeaderCode != value)
+                {
+                    OnDeliveryDocumentHeaderCodeChanging(value);
+                    ReportPropertyChanging("DeliveryDocumentHeaderCode");
+                    _DeliveryDocumentHeaderCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("DeliveryDocumentHeaderCode");
+                    OnDeliveryDocumentHeaderCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _DeliveryDocumentHeaderCode;
+        partial void OnDeliveryDocumentHeaderCodeChanging(global::System.Int32 value);
+        partial void OnDeliveryDocumentHeaderCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Batch
+        {
+            get
+            {
+                return _Batch;
+            }
+            set
+            {
+                OnBatchChanging(value);
+                ReportPropertyChanging("Batch");
+                _Batch = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Batch");
+                OnBatchChanged();
+            }
+        }
+        private global::System.String _Batch;
+        partial void OnBatchChanging(global::System.String value);
+        partial void OnBatchChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ProductCode
+        {
+            get
+            {
+                return _ProductCode;
+            }
+            set
+            {
+                OnProductCodeChanging(value);
+                ReportPropertyChanging("ProductCode");
+                _ProductCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProductCode");
+                OnProductCodeChanged();
+            }
+        }
+        private global::System.Int32 _ProductCode;
+        partial void OnProductCodeChanging(global::System.Int32 value);
+        partial void OnProductCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ProductMasterCode
+        {
+            get
+            {
+                return _ProductMasterCode;
+            }
+            set
+            {
+                OnProductMasterCodeChanging(value);
+                ReportPropertyChanging("ProductMasterCode");
+                _ProductMasterCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProductMasterCode");
+                OnProductMasterCodeChanged();
+            }
+        }
+        private global::System.Int32 _ProductMasterCode;
+        partial void OnProductMasterCodeChanging(global::System.Int32 value);
+        partial void OnProductMasterCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ProductByWeight
+        {
+            get
+            {
+                return _ProductByWeight;
+            }
+            set
+            {
+                OnProductByWeightChanging(value);
+                ReportPropertyChanging("ProductByWeight");
+                _ProductByWeight = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProductByWeight");
+                OnProductByWeightChanged();
+            }
+        }
+        private global::System.Boolean _ProductByWeight;
+        partial void OnProductByWeightChanging(global::System.Boolean value);
+        partial void OnProductByWeightChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double PriceValue
+        {
+            get
+            {
+                return _PriceValue;
+            }
+            set
+            {
+                OnPriceValueChanging(value);
+                ReportPropertyChanging("PriceValue");
+                _PriceValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PriceValue");
+                OnPriceValueChanged();
+            }
+        }
+        private global::System.Double _PriceValue;
+        partial void OnPriceValueChanging(global::System.Double value);
+        partial void OnPriceValueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> UnitWeightQuantity
+        {
+            get
+            {
+                return _UnitWeightQuantity;
+            }
+            set
+            {
+                OnUnitWeightQuantityChanging(value);
+                ReportPropertyChanging("UnitWeightQuantity");
+                _UnitWeightQuantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UnitWeightQuantity");
+                OnUnitWeightQuantityChanged();
+            }
+        }
+        private Nullable<global::System.Double> _UnitWeightQuantity;
+        partial void OnUnitWeightQuantityChanging(Nullable<global::System.Double> value);
+        partial void OnUnitWeightQuantityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> SaleWeightQuantity
+        {
+            get
+            {
+                return _SaleWeightQuantity;
+            }
+            set
+            {
+                OnSaleWeightQuantityChanging(value);
+                ReportPropertyChanging("SaleWeightQuantity");
+                _SaleWeightQuantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SaleWeightQuantity");
+                OnSaleWeightQuantityChanged();
+            }
+        }
+        private Nullable<global::System.Double> _SaleWeightQuantity;
+        partial void OnSaleWeightQuantityChanging(Nullable<global::System.Double> value);
+        partial void OnSaleWeightQuantityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Quantity
+        {
+            get
+            {
+                return _Quantity;
+            }
+            set
+            {
+                OnQuantityChanging(value);
+                ReportPropertyChanging("Quantity");
+                _Quantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Quantity");
+                OnQuantityChanged();
+            }
+        }
+        private global::System.Double _Quantity;
+        partial void OnQuantityChanging(global::System.Double value);
+        partial void OnQuantityChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader")]
+        public DeliveryDocumentHeader DeliveryDocumentHeader
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<DeliveryDocumentHeader> DeliveryDocumentHeaderReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader", value);
+                }
+            }
+        }
+
+        #endregion
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -1295,13 +2144,15 @@ namespace ZeroStock.Entities
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="status">Initial value of the Status property.</param>
-        public static StockHeader CreateStockHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status)
+        /// <param name="date">Initial value of the Date property.</param>
+        public static StockHeader CreateStockHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date)
         {
             StockHeader stockHeader = new StockHeader();
             stockHeader.TerminalCode = terminalCode;
             stockHeader.Code = code;
             stockHeader.Enable = enable;
             stockHeader.Status = status;
+            stockHeader.Date = date;
             return stockHeader;
         }
 
@@ -1437,6 +2288,30 @@ namespace ZeroStock.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Date
+        {
+            get
+            {
+                return _Date;
+            }
+            set
+            {
+                OnDateChanging(value);
+                ReportPropertyChanging("Date");
+                _Date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Date");
+                OnDateChanged();
+            }
+        }
+        private global::System.DateTime _Date;
+        partial void OnDateChanging(global::System.DateTime value);
+        partial void OnDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Guid> UserCode
@@ -1481,32 +2356,58 @@ namespace ZeroStock.Entities
         private Nullable<global::System.Int32> _StockTypeCode;
         partial void OnStockTypeCodeChanging(Nullable<global::System.Int32> value);
         partial void OnStockTypeCodeChanged();
-
-        #endregion
-    
-        #region Navigation Properties
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockItem")]
-        public EntityCollection<StockItem> StockItems
+        public Nullable<global::System.Int32> DeliveryDocumentHeaderTerminalCode
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem");
+                return _DeliveryDocumentHeaderTerminalCode;
             }
             set
             {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem", value);
-                }
+                OnDeliveryDocumentHeaderTerminalCodeChanging(value);
+                ReportPropertyChanging("DeliveryDocumentHeaderTerminalCode");
+                _DeliveryDocumentHeaderTerminalCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DeliveryDocumentHeaderTerminalCode");
+                OnDeliveryDocumentHeaderTerminalCodeChanged();
             }
         }
+        private Nullable<global::System.Int32> _DeliveryDocumentHeaderTerminalCode;
+        partial void OnDeliveryDocumentHeaderTerminalCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnDeliveryDocumentHeaderTerminalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> DeliveryDocumentHeaderCode
+        {
+            get
+            {
+                return _DeliveryDocumentHeaderCode;
+            }
+            set
+            {
+                OnDeliveryDocumentHeaderCodeChanging(value);
+                ReportPropertyChanging("DeliveryDocumentHeaderCode");
+                _DeliveryDocumentHeaderCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DeliveryDocumentHeaderCode");
+                OnDeliveryDocumentHeaderCodeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _DeliveryDocumentHeaderCode;
+        partial void OnDeliveryDocumentHeaderCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnDeliveryDocumentHeaderCodeChanged();
+
+        #endregion
+    
+        #region Navigation Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1542,6 +2443,66 @@ namespace ZeroStock.Entities
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<StockType>("TZeroMasterModel.FK_StockHeader_StockType", "StockType", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockItem")]
+        public EntityCollection<StockItem> StockItems
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader")]
+        public DeliveryDocumentHeader DeliveryDocumentHeader
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<DeliveryDocumentHeader> DeliveryDocumentHeaderReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader", value);
                 }
             }
         }
@@ -2491,6 +3452,520 @@ namespace ZeroStock.Entities
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockHeader>("TZeroMasterModel.FK_StockHeader_StockType", "StockHeader", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="Supplier")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Supplier : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Supplier object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="enable">Initial value of the Enable property.</param>
+        public static Supplier CreateSupplier(global::System.Int32 code, global::System.Boolean enable)
+        {
+            Supplier supplier = new Supplier();
+            supplier.Code = code;
+            supplier.Enable = enable;
+            return supplier;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name1
+        {
+            get
+            {
+                return _Name1;
+            }
+            set
+            {
+                OnName1Changing(value);
+                ReportPropertyChanging("Name1");
+                _Name1 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name1");
+                OnName1Changed();
+            }
+        }
+        private global::System.String _Name1;
+        partial void OnName1Changing(global::System.String value);
+        partial void OnName1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name2
+        {
+            get
+            {
+                return _Name2;
+            }
+            set
+            {
+                OnName2Changing(value);
+                ReportPropertyChanging("Name2");
+                _Name2 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name2");
+                OnName2Changed();
+            }
+        }
+        private global::System.String _Name2;
+        partial void OnName2Changing(global::System.String value);
+        partial void OnName2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Country
+        {
+            get
+            {
+                return _Country;
+            }
+            set
+            {
+                OnCountryChanging(value);
+                ReportPropertyChanging("Country");
+                _Country = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Country");
+                OnCountryChanged();
+            }
+        }
+        private global::System.String _Country;
+        partial void OnCountryChanging(global::System.String value);
+        partial void OnCountryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                OnStateChanging(value);
+                ReportPropertyChanging("State");
+                _State = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("State");
+                OnStateChanged();
+            }
+        }
+        private global::System.String _State;
+        partial void OnStateChanging(global::System.String value);
+        partial void OnStateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String City
+        {
+            get
+            {
+                return _City;
+            }
+            set
+            {
+                OnCityChanging(value);
+                ReportPropertyChanging("City");
+                _City = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("City");
+                OnCityChanged();
+            }
+        }
+        private global::System.String _City;
+        partial void OnCityChanging(global::System.String value);
+        partial void OnCityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Street
+        {
+            get
+            {
+                return _Street;
+            }
+            set
+            {
+                OnStreetChanging(value);
+                ReportPropertyChanging("Street");
+                _Street = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Street");
+                OnStreetChanged();
+            }
+        }
+        private global::System.String _Street;
+        partial void OnStreetChanging(global::System.String value);
+        partial void OnStreetChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Number
+        {
+            get
+            {
+                return _Number;
+            }
+            set
+            {
+                OnNumberChanging(value);
+                ReportPropertyChanging("Number");
+                _Number = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Number");
+                OnNumberChanged();
+            }
+        }
+        private global::System.String _Number;
+        partial void OnNumberChanging(global::System.String value);
+        partial void OnNumberChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String E_Mail1
+        {
+            get
+            {
+                return _E_Mail1;
+            }
+            set
+            {
+                OnE_Mail1Changing(value);
+                ReportPropertyChanging("E_Mail1");
+                _E_Mail1 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("E_Mail1");
+                OnE_Mail1Changed();
+            }
+        }
+        private global::System.String _E_Mail1;
+        partial void OnE_Mail1Changing(global::System.String value);
+        partial void OnE_Mail1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String E_Mail2
+        {
+            get
+            {
+                return _E_Mail2;
+            }
+            set
+            {
+                OnE_Mail2Changing(value);
+                ReportPropertyChanging("E_Mail2");
+                _E_Mail2 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("E_Mail2");
+                OnE_Mail2Changed();
+            }
+        }
+        private global::System.String _E_Mail2;
+        partial void OnE_Mail2Changing(global::System.String value);
+        partial void OnE_Mail2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String WebSite
+        {
+            get
+            {
+                return _WebSite;
+            }
+            set
+            {
+                OnWebSiteChanging(value);
+                ReportPropertyChanging("WebSite");
+                _WebSite = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("WebSite");
+                OnWebSiteChanged();
+            }
+        }
+        private global::System.String _WebSite;
+        partial void OnWebSiteChanging(global::System.String value);
+        partial void OnWebSiteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Telephone1
+        {
+            get
+            {
+                return _Telephone1;
+            }
+            set
+            {
+                OnTelephone1Changing(value);
+                ReportPropertyChanging("Telephone1");
+                _Telephone1 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Telephone1");
+                OnTelephone1Changed();
+            }
+        }
+        private global::System.String _Telephone1;
+        partial void OnTelephone1Changing(global::System.String value);
+        partial void OnTelephone1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Telephone2
+        {
+            get
+            {
+                return _Telephone2;
+            }
+            set
+            {
+                OnTelephone2Changing(value);
+                ReportPropertyChanging("Telephone2");
+                _Telephone2 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Telephone2");
+                OnTelephone2Changed();
+            }
+        }
+        private global::System.String _Telephone2;
+        partial void OnTelephone2Changing(global::System.String value);
+        partial void OnTelephone2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Telephone3
+        {
+            get
+            {
+                return _Telephone3;
+            }
+            set
+            {
+                OnTelephone3Changing(value);
+                ReportPropertyChanging("Telephone3");
+                _Telephone3 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Telephone3");
+                OnTelephone3Changed();
+            }
+        }
+        private global::System.String _Telephone3;
+        partial void OnTelephone3Changing(global::System.String value);
+        partial void OnTelephone3Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> TaxPositionCode
+        {
+            get
+            {
+                return _TaxPositionCode;
+            }
+            set
+            {
+                OnTaxPositionCodeChanging(value);
+                ReportPropertyChanging("TaxPositionCode");
+                _TaxPositionCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TaxPositionCode");
+                OnTaxPositionCodeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _TaxPositionCode;
+        partial void OnTaxPositionCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnTaxPositionCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> PaymentInstrumentCode
+        {
+            get
+            {
+                return _PaymentInstrumentCode;
+            }
+            set
+            {
+                OnPaymentInstrumentCodeChanging(value);
+                ReportPropertyChanging("PaymentInstrumentCode");
+                _PaymentInstrumentCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PaymentInstrumentCode");
+                OnPaymentInstrumentCodeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _PaymentInstrumentCode;
+        partial void OnPaymentInstrumentCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnPaymentInstrumentCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LegalCode
+        {
+            get
+            {
+                return _LegalCode;
+            }
+            set
+            {
+                OnLegalCodeChanging(value);
+                ReportPropertyChanging("LegalCode");
+                _LegalCode = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LegalCode");
+                OnLegalCodeChanged();
+            }
+        }
+        private global::System.String _LegalCode;
+        partial void OnLegalCodeChanging(global::System.String value);
+        partial void OnLegalCodeChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_DeliveryDocumentHeader_Supplier", "DeliveryDocumentHeader")]
+        public EntityCollection<DeliveryDocumentHeader> DeliveryDocumentHeaders
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DeliveryDocumentHeader>("TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier", "DeliveryDocumentHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DeliveryDocumentHeader>("TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier", "DeliveryDocumentHeader", value);
                 }
             }
         }

@@ -66,19 +66,32 @@ namespace ZeroCommonClasses.PackClasses
             {
                 file.Close();
             }
-            
+
 
             return ret;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj.GetType() == typeof(string))
+            {
+                return RowTypeName == (string)obj;
+            }
+            else if (obj.GetType() == typeof(Type))
+            {
+                return Equals(obj.GetType().ToString());
+            }
+            return base.Equals(obj);
         }
     }
 
     [DataContract]
     public class ExportEntitiesPackInfo : PackInfoBase
     {
-        private ExportEntitiesPackInfo ()
-	    {
+        private ExportEntitiesPackInfo()
+        {
 
-	    }
+        }
 
         public ExportEntitiesPackInfo(int moduleCode, string workingDir)
         {

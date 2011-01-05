@@ -134,6 +134,11 @@
       <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
       <Name>SharpZipLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Modules\ZeroLogHandle\ZeroLogHandle.csproj">
+      <Project>{577D6AFF-3DBA-48C2-9A55-56980822D236}</Project>
+      <Name>ZeroLogHandle</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="clock_refresh.ico" />

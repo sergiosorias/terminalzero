@@ -44,7 +44,7 @@
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
     <TargetConnectionString>Data Source=SEBAS-NOTE\sqlexpress;Persist Security Info=True;User ID=SA;Pooling=False</TargetConnectionString>
-    <TargetDatabase>TZeroMaster_Client_2</TargetDatabase>
+    <TargetDatabase>TZeroMaster</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -439,6 +439,30 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Views\StockSummary.view.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Programmability\Stored Procedures\StockClean.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\DeliveryDocumentHeader.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\DeliveryDocumentHeader.PK_DeliveryDocumentHeader.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\DeliveryDocumentHeader.FK_DeliveryDocumentHeader_Supplier.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\DeliveryDocumentItem.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\DeliveryDocumentItem.PK_DeliveryDocumentItem.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockHeader.FK_StockHeader_DeliveryDocumentHeader.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\DeliveryDocumentItem.FK_DeliveryDocumentItem_DeliveryDocumentHeader.fkey.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>

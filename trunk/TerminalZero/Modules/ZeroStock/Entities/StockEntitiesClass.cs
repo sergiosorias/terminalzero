@@ -19,5 +19,10 @@ namespace ZeroStock.Entities
             Exported = 1,
             Imported = 2,
         }
+
+        internal int GetNextStockHeaderCode()
+        {
+            return StockHeaders.Max(sh => sh.Code) + 1;
+        }
     }
 }

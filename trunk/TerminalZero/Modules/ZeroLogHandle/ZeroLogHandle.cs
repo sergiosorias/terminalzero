@@ -9,9 +9,9 @@ using ZeroCommonClasses.GlobalObjects;
 
 namespace ZeroLogHandle
 {
-    public class ZeroLogHandle : ZeroModule, ILogBuilder
+    public class ZeroLogHandleModule : ZeroModule, ILogBuilder
     {
-        public ZeroLogHandle(ITerminal iCurrentTerminal)
+        public ZeroLogHandleModule(ITerminal iCurrentTerminal)
             : base(iCurrentTerminal, 1, "Guarda un log detallado de las operaciones")
         {
             
@@ -75,4 +75,6 @@ namespace ZeroLogHandle
         #endregion
 
     }
+
+    
 }

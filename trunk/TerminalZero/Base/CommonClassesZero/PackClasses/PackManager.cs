@@ -130,10 +130,10 @@ namespace ZeroCommonClasses.PackClasses
 
         private PackInfoBase PackInfo { get; set; }
 
-        public PackManager(string packPath)
+        public PackManager(string packsDirectory)
         {
             RunMode = Mode.Import;
-            CurrentDirectory = packPath;
+            CurrentDirectory = packsDirectory;
         }
 
         public PackManager(PackInfoBase info)
@@ -180,7 +180,7 @@ namespace ZeroCommonClasses.PackClasses
 
         public void Dispose()
         {
-            Clean();
+            Clean(null);
         }
 
         #endregion
@@ -197,7 +197,7 @@ namespace ZeroCommonClasses.PackClasses
                 OnExporting(args);
                 AddPackageData();
                 CreateZip();
-                Clean();
+                Clean(null);
                 OnExported(args);
             }
             catch (Exception ex)
@@ -239,7 +239,7 @@ namespace ZeroCommonClasses.PackClasses
                     UpdatePackStatus(aPack, dbent, 2);
                     OnImported(args);
                     
-                    Clean();
+                    Clean(item);
                 }
             }
             catch (Exception ex)
@@ -311,10 +311,13 @@ namespace ZeroCommonClasses.PackClasses
             }
         }
 
-        private void Clean()
+        private void Clean(string file)
         {
             if (Directory.Exists(CurrentDirectory))
                 Directory.Delete(CurrentDirectory, true);
+
+            if(!string.IsNullOrEmpty(file))
+                File.Delete(file);
         }
 
     }
