@@ -15,6 +15,13 @@
                 </p>
             </td>
         </tr>
+        <tr>
+        <td>
+            <asp:HyperLink NavigateUrl="./TerminalZeroWebClientTestPage.aspx" runat="server">
+                Terminal Zero Test
+            </asp:HyperLink>
+        </td>
+        </tr>
     </table>
     </form>
 </body>

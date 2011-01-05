@@ -47,10 +47,10 @@ namespace TZeroHost.Classes
                 if (a != null)
                 {
                     a.ConnectionID = data.ConnID;
-                    a.Imported += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(a_Imported);
+                    a.Imported += a_Imported;
                     a.Process();
+                    a.Imported -= a_Imported;
                     System.Threading.Thread.Sleep(2000);
-                    System.IO.File.Delete(data.PackPath);
                 }
                 
             }
