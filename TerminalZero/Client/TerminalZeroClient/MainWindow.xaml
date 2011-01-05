@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Terminal Zero" MinHeight="300" MinWidth="300"
         xmlns:my="clr-namespace:TerminalZeroClient.Pages" StateChanged="Window_StateChanged" Closing="Window_Closing"
-        Background="Transparent" Loaded="Window_Loaded" WindowState="Maximized">
+        Background="Gray" Loaded="Window_Loaded" WindowState="Normal">
     <Window.Resources>
         <ContextMenu x:Key="NotifierContextMenu"
                     Placement="MousePoint">
@@ -22,7 +22,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Background="{DynamicResource mainBackground}">
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="23"/>
             <RowDefinition Height="*"/>
@@ -42,7 +42,7 @@
                 </MenuItem>
             </MenuItem>-->
         </Menu>
-        <Border Grid.Row="1" Margin="3" BorderBrush="{StaticResource titleBackground}" BorderThickness="2" Padding="2,0,2,0" CornerRadius="3">
+        <Border Grid.Row="1" Margin="3" BorderBrush="{StaticResource titleBackground}" Background="{DynamicResource mainBackground}" BorderThickness="2" Padding="2,0,2,0" CornerRadius="3">
             <ContentControl  x:Name="PrimaryWindow">
                 <my:Home/>
             </ContentControl>
@@ -68,7 +68,7 @@
                 <ContentControl Name="statusMsg" Content="Listo" IsTabStop="False"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <Button Visibility="Hidden" IsTabStop="False" Background="LightSalmon" x:Name="btnGetMoreStatusInfo" FontSize="10" Padding="0" Click="btnGetMoreStatusInfo_Click">Go!</Button>
+                <Button Visibility="Hidden" IsTabStop="False" Style="{DynamicResource homeButtonStyle}" x:Name="btnGetMoreStatusInfo" FontSize="10" Padding="0" Click="btnGetMoreStatusInfo_Click">Info</Button>
             </StatusBarItem>
             <StatusBarItem Grid.Column="3">
                 <ProgressBar Name="statusBar" Value="0" Width="100" Height="18"/>

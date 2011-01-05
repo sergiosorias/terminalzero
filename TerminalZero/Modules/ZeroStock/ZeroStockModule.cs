@@ -43,27 +43,57 @@ namespace ZeroStock
             {
                 using (StockEntities ent = new StockEntities())
                 {
+                    ZeroCommonClasses.PackClasses.ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
                     IEnumerable<StockHeader> headers = ent.StockHeaders.Where(h => h.Status == (int)StockEntities.EntitiesStatus.New);
+                    IEnumerable<StockItem> stockItems = null;
                     if (headers.Count() > 0)
                     {
-                        IEnumerable<StockItem> stockItems = ent.StockItems.Where(it => it.Status == (int)StockEntities.EntitiesStatus.New);
-                        ZeroCommonClasses.PackClasses.ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
+                        stockItems = ent.StockItems.Where(it => it.Status == (int)StockEntities.EntitiesStatus.New);
                         info.AddTable(stockItems);
                         info.AddTable(headers);
-                        
+                    }
+
+                    IEnumerable<DeliveryDocumentHeader> Delheaders = ent.DeliveryDocumentHeaders.Where(h => h.Status == (int)StockEntities.EntitiesStatus.New);
+                    IEnumerable<DeliveryDocumentItem> DelItems = null;
+                    if (Delheaders.Count() > 0)
+                    {
+                        DelItems = ent.DeliveryDocumentItems.Where(it => it.Status == (int)StockEntities.EntitiesStatus.New);
+                        info.AddTable(Delheaders);
+                        info.AddTable(DelItems);
+                    }
+
+                    if (info.TableCount > 0)
+                    {
                         using (ZeroStockPackMaganer manager = new ZeroStockPackMaganer(info))
                         {
                             if (manager.Process())
                             {
-                                foreach (var item in headers)
+                                if (info.Tables.Exists(t=>t.Equals(typeof(StockHeader))))
                                 {
-                                    item.Stamp = DateTime.Now;
-                                    item.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                    foreach (var header in headers)
+                                    {
+                                        header.Stamp = DateTime.Now;
+                                        header.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                    }
+                                    foreach (var sitem in stockItems)
+                                    {
+                                        sitem.Stamp = DateTime.Now;
+                                        sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                    }
                                 }
-                                foreach (var sitem in stockItems)
+
+                                if (info.Tables.Exists(t => t.Equals(typeof(DeliveryDocumentHeader))))
                                 {
-                                    sitem.Stamp = DateTime.Now;
-                                    sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                    foreach (var header in headers)
+                                    {
+                                        header.Stamp = DateTime.Now;
+                                        header.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                    }
+                                    foreach (var sitem in stockItems)
+                                    {
+                                        sitem.Stamp = DateTime.Now;
+                                        sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
+                                    }
                                 }
                                 ent.SaveChanges();
                             }

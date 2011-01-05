@@ -55,7 +55,7 @@ namespace ZeroMasterData.Pages.Controls
                 {
                     case Mode.New:
                         _CustomerNew = Entities.Customer.CreateCustomer(
-                            DataProvider.Customers.Count(),0
+                            DataProvider.GetNextCustomerCode() ,0
                             , true);
                         paymentInstrumentCodeComboBox.SelectedIndex = 0;
                         break;

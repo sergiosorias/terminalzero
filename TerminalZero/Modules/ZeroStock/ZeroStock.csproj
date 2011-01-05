@@ -59,6 +59,9 @@
     <Compile Include="Pages\CurrentStockView.xaml.cs">
       <DependentUpon>CurrentStockView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\DeliveryDocumentView.xaml.cs">
+      <DependentUpon>DeliveryDocumentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\StockView.xaml.cs">
       <DependentUpon>StockView.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CurrentStockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DeliveryDocumentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

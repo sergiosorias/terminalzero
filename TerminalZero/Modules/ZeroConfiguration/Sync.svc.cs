@@ -19,6 +19,8 @@ namespace ZeroConfiguration
 
         public ZeroResponse<string> SayHello(string name, int terminal)
         {
+            System.Diagnostics.Trace.WriteLine(string.Format("Name: {0}, Code: {1}",name,terminal), "SayHello");
+            System.Diagnostics.Trace.Indent();
             ZeroResponse<string> ret = new ZeroResponse<string>();
             ZeroServerConfiguration Config = new ZeroServerConfiguration();
             string msg = "";
@@ -28,7 +30,8 @@ namespace ZeroConfiguration
                 ret.Result = Config.CreateConnection(terminal);
                 msg += " OK";
             }
-
+            System.Diagnostics.Trace.Unindent();
+            System.Diagnostics.Trace.WriteLine(string.Format("Name: {0}, Code: {1}, Message: {2}", name, terminal, ret), "SayHello");
             ret.Status = msg;
             return ret;
         }

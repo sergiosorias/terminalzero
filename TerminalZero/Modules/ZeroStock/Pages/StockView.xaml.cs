@@ -24,21 +24,23 @@ namespace ZeroStock.Pages
         ITerminal Terminal;
         Entities.StockHeader Header;
         Entities.StockEntities Context;
+        int StockType = -1;
         public StockView(ITerminal terminal, int stockType)
         {
             InitializeComponent();
             Terminal = terminal;
+            StockType = stockType;
             Context = new Entities.StockEntities();
-            LoadHeader(stockType);
+            LoadHeader(StockType, Context.StockHeaders.Count()>0 ? Context.GetNextStockHeaderCode() : 1);
         }
 
-        private void LoadHeader(int stockType)
+        private void LoadHeader(int stockType, int code)
         {
             Header = Entities.StockHeader.CreateStockHeader(
                 Terminal.TerminalCode,
-                0,
+                code,
                 true,
-                0);
+                0,DateTime.Now.Date);
             Header.StockType = Context.StockTypes.FirstOrDefault(st => st.Code == stockType);
             lblStockType.Content = Header.StockType != null ? Header.StockType.Description : "Stock";
             Context.AddToStockHeaders(Header);
@@ -122,6 +124,7 @@ namespace ZeroStock.Pages
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+                
             }
             return ret;
         }
@@ -170,6 +173,12 @@ namespace ZeroStock.Pages
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveData();
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Context = new Entities.StockEntities();
+            LoadHeader(StockType, Context.StockHeaders.Count() > 0 ? Context.GetNextStockHeaderCode() : 1);
         }
     }
 }

@@ -40,6 +40,7 @@ namespace ZeroConfiguration
         {
             bool ret = true;
             msg = "";
+            System.Diagnostics.Trace.WriteLine(string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
             Terminal T = CurrentContext.Context.Terminals.FirstOrDefault(C => C.Code == tcode);
             if (T == default(Terminal))
             {
@@ -109,7 +110,6 @@ namespace ZeroConfiguration
             }
             else
                 msg = "La conexión no fue inicializada";
-
 
             return ret;
         }

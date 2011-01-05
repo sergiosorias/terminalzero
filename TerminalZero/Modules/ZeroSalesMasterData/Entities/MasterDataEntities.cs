@@ -13,5 +13,10 @@ namespace ZeroMasterData.Entities
 
                 
         }
+
+        internal int GetNextCustomerCode()
+        {
+            return Customers.Count()+1;
+        }
     }
 }
