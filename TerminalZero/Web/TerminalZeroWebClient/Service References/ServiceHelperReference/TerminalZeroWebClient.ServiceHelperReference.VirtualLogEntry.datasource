@@ -10,11 +10,9 @@
    <TypeUISetting>
       <PropertyUISettings>
          <PropertyUISetting Name="Stamp">
-            <ControlSettings>
-               <ControlSetting ArtifactName="Microsoft:System.Windows:Silverlight">
+            <ControlSettings><ControlSetting ArtifactName="Microsoft:System.Windows:Silverlight" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
                   <BindableControlInfo Name="TextBlock" Type="System.Windows.Controls.TextBlock" AssemblyName="System.Windows, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" AssemblyCodeBase="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v3.0\System.Windows.dll" />
-               </ControlSetting>
-            </ControlSettings>
+               </ControlSetting></ControlSettings>
          </PropertyUISetting>
       </PropertyUISettings>
    </TypeUISetting>

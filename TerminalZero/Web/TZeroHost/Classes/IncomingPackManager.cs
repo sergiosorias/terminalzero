@@ -43,21 +43,46 @@ namespace TZeroHost.Classes
             {
                 System.Threading.Thread.Sleep(1000);
                 IncomingPack data = PacksToImport.Dequeue();
-                var a = PackManagerBuilder.GetManager(data.PackPath);
-                if (a != null)
+                using (var a = PackManagerBuilder.GetManager(data.PackPath))
                 {
-                    a.ConnectionID = data.ConnID;
-                    a.Imported += a_Imported;
-                    a.Process();
-                    a.Imported -= a_Imported;
-                    System.Threading.Thread.Sleep(2000);
+                    if (a != null)
+                    {
+                        System.Diagnostics.Trace.Write(string.Format("Starting import: ConnID = {0}", data.ConnID), "");
+                        a.ConnectionID = data.ConnID;
+                        a.Imported += a_Imported;
+                        a.Error += new System.IO.ErrorEventHandler(a_Error);
+                        try
+                        {
+
+                            a.Process();
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Trace.Write(string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnID, ex), "EXCEPTION");
+                        }
+                        finally
+                        {
+                            a.Imported -= a_Imported;
+                            a.Error -= a_Error;
+                        }
+
+                        System.Threading.Thread.Sleep(500);
+                    }
                 }
                 
             }
         }
 
+        void a_Error(object sender, System.IO.ErrorEventArgs e)
+        {
+            ZeroCommonClasses.PackClasses.PackManager pack = sender as ZeroCommonClasses.PackClasses.PackManager;
+            System.Diagnostics.Trace.Write(string.Format("Import ERROR: ConnID = {0}, ERROR = {1}", pack.ConnectionID, e.GetException()),"ERROR");
+        }
+
         void a_Imported(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
         {
+            System.Diagnostics.Trace.Write(string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}", e.ConnectionID, e.Pack.Code,e.PackInfo.ModuleCode, e.Pack.PackStatusCode), "Information");
+
             if (e.Pack.PackStatusCode == 2 && e.Pack.IsMasterData.HasValue && e.Pack.IsMasterData.Value)
             {
                 using (ZeroConfiguration.Entities.ConfigurationEntities ent = new ZeroConfiguration.Entities.ConfigurationEntities())
