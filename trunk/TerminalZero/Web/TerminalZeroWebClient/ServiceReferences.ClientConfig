@@ -9,7 +9,7 @@
             </basicHttpBinding>
         </bindings>
         <client>
-            <endpoint address="http://Sebas-Note/TZeroHost/Services/ServiceHelper.svc"
+            <endpoint address="http://SEBAS-NOTE/TZeroHost/Services/ServiceHelper.svc"
                 binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ServiceHelper"
                 contract="ServiceHelperReference.ServiceHelper" name="BasicHttpBinding_ServiceHelper" />
         </client>

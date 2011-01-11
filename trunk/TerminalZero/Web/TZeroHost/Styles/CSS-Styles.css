@@ -1,0 +1,776 @@
+﻿
+
+/*
+#9ef7dd
+#77bfb8
+#5c8091
+#364c63
+#232042
+
+*/
+
+
+body 
+{
+	scrollbar-3dlight-color:#232042;
+	scrollbar-arrow-color:#9ef7dd;
+	scrollbar-base-color:#364c63;
+	scrollbar-darkshadow-color:#232042;
+	scrollbar-face-color:#5c8091;
+	scrollbar-highlight-color:#77bfb8;
+	scrollbar-shadow-color:#364c63;
+} 
+
+
+.cssAppMain
+{
+	border:Solid 1px #E6E2D8;
+    font-family:Tahoma, Arial; 
+    Font-Size:0.8em; 
+    color:#626b6a;
+}
+
+.cssLoginTitle
+{
+	color:#364c63;
+	Height:1px;
+	background:;
+	font-weight:bold;
+	font-size:0.9em;
+}
+
+.cssLoginButton
+{
+	background:#FFFBFF; 
+	border:Solid 1 px #CCCCCC;
+    font-family:Tahoma, Arial; 
+    font-size:0.8em;
+    color:#9ef7dd;
+}
+
+.cssLoginTextBox
+{
+	font-family:Tahoma, Arial; 
+    font-size:0.8em;
+    Width:300px;
+    margin:5px 5px;
+}
+
+
+.cssGrid 
+{ 
+	white-space:nowrap;
+	border: none;
+	padding:0;
+	margin:0;
+	background-color:Transparent;
+	background-image:url('../Images/table_header_background.jpg');
+}
+
+.cssGrid td
+{
+	white-space:nowrap;
+	border-bottom: solid 1px #7996a6;
+    margin: 1px 1px 1px 1px;
+    font-family:Tahoma, Arial; 
+    padding: 1px 2px 1px 2px;
+    
+}
+
+.cssGridHeader
+{
+	white-space:nowrap;
+	font-family:Tahoma, Arial; 
+	border:Solid 1 px #77bfb8;
+	color:White;
+    font-weight: bold;
+    background-repeat:repeat-x;
+	height:34px;
+	text-align:center;
+	background-image:url('../Images/table_header_background.jpg');
+    padding: 4px 2px 4px 2px;
+}
+
+.cssGridHeader a:hover
+{
+    text-decoration: underline;
+}
+
+.cssGridItem, .cssGridAltItem
+{
+    font-size: smaller;
+    text-align:left;
+}
+
+.cssGridItem
+{
+    background-color: #e8f4f4;
+    color:#626b6a;
+}
+
+.cssGridAltItem
+{
+    background-color: #eff8f7;
+    color:#626b6a;
+}
+
+.cssAppHeaderLeft
+{
+	color:White;
+	font-weight:bold;
+	height:81px;
+	width:13px;
+	font-size:0.9em;
+	background-image:url('../Images/header_firstPart.jpg');
+	background-repeat:no-repeat;
+	background-position:right;
+	
+}
+.cssAppHeader
+{
+	color:White;
+	font-weight:bold;
+	height:81px;
+	font-size:0.9em;
+	background-image:url('../Images/header_background.jpg');
+	background-repeat:repeat-x;
+	background-position:center;
+	
+}
+.cssAppHeaderRight
+{
+	color:White;
+	font-weight:bold;
+	height:81px;
+	width:13px;
+	font-size:0.9em;
+	background-image:url('../Images/header_lastPart.jpg');
+	background-repeat:no-repeat;
+	background-position:left;
+	
+}
+
+.cssAppHeaderInfo
+{
+	color:White;
+	height: 19px; 
+	width: 100%; 
+	vertical-align: middle;
+	background-image:url('../Images/header_infoBakground.png');
+	background-repeat:repeat-x;
+	background-position:center;
+	
+}
+
+.cssButtonNormal
+{
+    width: 42px;
+    height: 42px;
+    display: block;
+    text-decoration:none;
+    text-transform:uppercase;
+    text-align:center;
+    color:Black;
+    vertical-align:middle;
+    
+    font-size: 10px;
+    font-style:normal;
+    border:none;
+    background-color: Transparent;
+    background-image: url('../Images/Button1.png');
+    background-position:center;
+    
+    background-repeat: no-repeat;
+    
+}
+
+.cssButtonNormalOver
+{
+	width: 42px;
+    height: 42px;
+    display: block;
+    text-decoration:none;
+    text-transform:uppercase;
+    text-align:center;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	
+	font-size: 10px;
+    font-weight:bold;
+    font-style:normal;
+    border:none;
+    background-position:center;
+    background-image: url('../Images/Button2.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonExport
+{
+    width: 31px;
+    height: 35px;
+    display: block;
+    color:Black;
+    vertical-align:middle;
+    font-size: 10px;
+    font-style:normal;
+    border:none;
+    background-color: Transparent;
+    background-image: url('../Images/icon_export_inac.jpg');
+    background-position:center;
+    
+    background-repeat: no-repeat;
+    
+}
+.cssButtonExportOver
+{
+	width: 31px;
+    height: 35px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	
+	border:none;
+    background-position:center;
+    background-image: url('../Images/icon_export_active.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonImport
+{
+    width: 31px;
+    height: 35px;
+    display: block;
+    color:Black;
+    vertical-align:middle;
+    
+    border:none;
+    background-color: Transparent;
+    background-image: url('../Images/icon_import_inac.jpg');
+    background-position:center;
+    
+    background-repeat: no-repeat;
+    
+}
+.cssButtonImportOver
+{
+	width: 31px;
+    height: 35px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    
+    background-position:center;
+    
+    background-image: url('../Images/icon_import_active.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonDelete
+{
+    width: 31px;
+    height: 35px;
+    display: block;
+    color:Black;
+    vertical-align:middle;
+    border:none;
+    background-color: Transparent;
+    background-image: url('../Images/icon_delete_inac.jpg');
+    background-position:center;
+    
+    background-repeat: no-repeat;
+    
+}
+.cssButtonDeleteOver
+{
+	width: 31px;
+    height: 35px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_delete_active.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonRefresh
+{
+    width: 31px;
+    height: 35px;
+    display: block;
+    color:Black;
+    vertical-align:middle;
+    border:none;
+    background-color: Transparent;
+    background-image: url('../Images/icon_refresh_inac.jpg');
+    background-position:center;
+    
+    background-repeat: no-repeat;
+    
+}
+.cssButtonRefreshOver
+{
+	width: 31px;
+    height: 35px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_refresh_active.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonYes
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_ok_inac.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonYesOver
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_ok_active.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonNo
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_noOk_inac.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonNoOver
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_noOk_active.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonClose
+{
+	width: 18px;
+    height: 18px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_close_inac.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonCloseOver
+{
+	width: 18px;
+    height: 18px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_close_active.png');
+    background-repeat: no-repeat;
+}
+.cssButtonSearch
+{
+	display: block;
+    color:Black;
+    vertical-align:middle;
+	background-color: White;
+	border:solid 1px  #364c63;
+	/*background-image: url('../Images/popUp2_searchIcon_act.jpg');*/
+    
+}
+
+.cssButtonSearch button
+{
+	background-color:Red;
+}
+
+.cssButtonSearchOver
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/popUp2_searchIcon_inact.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonTemplate
+{
+	display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:6px bottom;
+    
+    background-image: url('../Images/icon_template_inac.png');
+    background-repeat:no-repeat;
+    
+}
+
+.cssButtonTemplateOver
+{
+	display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:6px bottom;
+    background-image: url('../Images/icon_template_active.png');
+    background-repeat: no-repeat;
+}
+
+.cssButtonCloseSession
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_close_inac.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonCloseSessionOver
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_close_active.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonUsers
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_user_inac.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonUsersOver
+{
+	width: 35px;
+    height: 31px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    background-image: url('../Images/icon_user_active.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonAddUser
+{
+	width: 102px;
+    height: 106px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_addUser_inac.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonAddUserOver
+{
+	width: 102px;
+    height: 106px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_addUser_act.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonDeleteUser
+{
+	width: 102px;
+    height: 106px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_deleteUser_inac.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonDeleteUserOver
+{
+	width: 102px;
+    height: 106px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_deleteUser_act.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonEditUser
+{
+	width: 102px;
+    height: 106px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_searchUser_inac.jpg');
+    background-repeat: no-repeat;
+}
+
+.cssButtonEditUserOver
+{
+	width: 102px;
+    height: 106px;
+    display: block;
+    color:#F7F6F3;
+    vertical-align:middle;
+	background-color: Transparent;
+	cursor:hand;
+	border:none;
+    background-position:center;
+    
+    background-image: url('../Images/icon_searchUser_act.jpg');
+    background-repeat: no-repeat;
+}
+
+
+
+.cssMenuBackgroundLeft
+{
+	color:White;
+	font-weight:bold;
+	font-size:0.9em;
+	height:36px;
+	width:4px;
+	background-image:url('../Images/background_icons.jpg');
+	background-repeat:no-repeat;
+	background-position:right;
+	
+	
+}
+
+.cssMenuBackground
+{
+	color:White;
+	font-weight:bold;
+	font-size:0.9em;
+	height:36px;
+	background-image:url('../Images/background_icons.jpg');
+	background-repeat:repeat-x;
+	background-position:center;
+	
+	
+}
+
+.cssMenuBackgroundRight
+{
+	color:White;
+	font-weight:bold;
+	font-size:0.9em;
+	height:38px;
+	width:4px;
+	background-image:url('../Images/background_icons.jpg');
+	background-repeat:no-repeat;
+	background-position:left;
+	
+	
+}
+
+.cssFiltersBackground
+{
+	color:White;
+	height:30px;
+	width: 100%;
+	font-weight:bold;
+	font-size:0.9em;
+	background-image:url('../Images/FiltersBack.png');
+	background-repeat:repeat-x;
+	background-position:center;
+	
+	
+}
+
+.cssSubMenuTopBackgroundLeft
+{
+	height:40px;
+	width:118px;
+	background-image:url('../Images/solapa_top_begin.jpg');
+	background-repeat:no-repeat;
+	background-position:left;
+	
+}
+
+.cssSubMenuTopBackground
+{
+	height:40px;
+	width:100%;
+	background-image:url('../Images/solapa_top_background.jpg');
+	background-repeat:repeat-x;
+	background-position:right;
+	
+}
+
+.cssPage
+{
+	color: #77bfb8;
+    background-color: #364c63;
+    background-image:url('../Images/popUp_background.jpg');
+    background-position:center top;
+    background-repeat:repeat-x;
+    border: none;
+}
+        
+.cssNormalDiv
+{
+	display:none;
+	position:absolute;
+	background-color:Transparent;
+	height:300px; 
+	width:100%; 
+	overflow:hidden;
+	z-index:100;
+}
+
+.cssOpacityDiv
+{
+	overflow:auto;
+	display:none;
+	position:absolute;
+	width:100%;
+	background-color:#364c63;
+	border:solid 2px black;
+	height:100%;
+    opacity: 0.5;
+    z-index:99;
+    filter: alpha(opacity=50); /**//* older IE */
+}
+
+.cssResizeGrip
+{
+	width:5px;
+	height:100%;
+	cursor:e-resize;
+	background-color:#5c8091;
+}
+/*
+#9ef7dd
+#77bfb8
+#5c8091
+#364c63
+#232042
+
+*/

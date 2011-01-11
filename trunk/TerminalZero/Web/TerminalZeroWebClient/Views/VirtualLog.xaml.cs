@@ -11,15 +11,15 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
 using System.Threading;
+using System.Windows.Data;
 
 namespace TerminalZeroWebClient.Views
 {
     public partial class VirtualLog : Page
     {
-        const int k_timerTick = 50;
+
         ServiceHelperReference.ServiceHelperClient client;
-        Timer timer;
-        int timerTick = 0;
+        
         public VirtualLog()
         {
             InitializeComponent();
@@ -28,53 +28,96 @@ namespace TerminalZeroWebClient.Views
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            remainingTime.Maximum = k_timerTick;
-            timer = new Timer(new TimerCallback(Refresh), null, 1000, 500);
             client = new ServiceHelperReference.ServiceHelperClient();
             client.GetLogsCompleted += new EventHandler<ServiceHelperReference.GetLogsCompletedEventArgs>(client_GetLogsCompleted);
-            
-        }
-
-        private void Refresh(object obj)
-        {
-            timerTick++;
-            if (timerTick == k_timerTick)
-            {
-                timerTick = 0;
-                client.GetLogsAsync(DateTime.Now);
-            }
-            Dispatcher.BeginInvoke(() =>
-                {
-                    remainingTime.Value = timerTick;
-                });
-            
         }
 
         void client_GetLogsCompleted(object sender, ServiceHelperReference.GetLogsCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke(() =>
                 {
-                    logEntryEventArgsDataGrid.ItemsSource = e.Result;
+                    PagedCollectionView taskListView = new PagedCollectionView(e.Result);
+                    if (taskListView.CanGroup)
+                    {
+                        if (cbGroupByIndend.IsChecked.HasValue && cbGroupByIndend.IsChecked.Value)
+                        {
+                            PropertyGroupDescription group = new PropertyGroupDescription();
+                            group.PropertyName = "IndentLevel";
+                            taskListView.GroupDescriptions.Add(group);
+                        }
+
+                        if (cbGroupByMessage.IsChecked.HasValue && cbGroupByMessage.IsChecked.Value)
+                        {
+                            PropertyGroupDescription group = new PropertyGroupDescription();
+                            group.PropertyName = "Message";
+                            taskListView.GroupDescriptions.Add(group);
+                        }
+                        
+                    }
+                    
+                    logEntryEventArgsDataGrid.ItemsSource = taskListView;
+                    if(!string.IsNullOrWhiteSpace(searchBox.txtSearchCriteria.Text))
+                    {
+                        SearchBox_Search(null, new ZeroGUI.SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
+                    }
                 });
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        
+        private void RefreshTimer_Tick(object sender, EventArgs e)
         {
             client.GetLogsAsync(DateTime.Now);
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
         {
+            PagedCollectionView taskListView = logEntryEventArgsDataGrid.ItemsSource as PagedCollectionView;
 
-            // Do not load your data at design time.
-            // if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            // {
-            // 	//Load your data here and assign the result to the CollectionViewSource.
-            // 	System.Windows.Data.CollectionViewSource myCollectionViewSource = (System.Windows.Data.CollectionViewSource)this.Resources["Resource Key for CollectionViewSource"];
-            // 	myCollectionViewSource.Source = your data
-            // }
+            if (taskListView!=null)
+            {
+                if (taskListView.CanFilter)
+                {
+                    taskListView.Filter = new Predicate<object>(i =>
+                    {
+                        ServiceHelperReference.VirtualLogEntry entry = i as ServiceHelperReference.VirtualLogEntry;
+                        return (entry != null && entry.Message.ToUpper().Contains(e.Criteria.ToUpper()));
+                    });
+
+                    e.Matches = taskListView.ItemCount;
+                }
+            }
         }
 
-        
     }
+
+    public class DoubleFormatter : IValueConverter
+    {
+        // This converts the DateTime object to the string to display.
+        public object Convert(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            // Retrieve the format string and use it to format the value.
+            try
+            {
+                double d = double.Parse(value.ToString());
+                return (int)d;
+            }
+            catch (Exception)
+            {
+
+            }
+            return value;
+
+            // If the format string is null or empty, simply call ToString()
+            // on the value.
+
+        }
+
+        // No need to implement converting back on a one-way binding 
+        public object ConvertBack(object value, Type targetType,
+            object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

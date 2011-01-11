@@ -6,16 +6,38 @@
            mc:Ignorable="d"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
            d:DesignWidth="640" d:DesignHeight="480"
-           Title="VirtualLog Page" xmlns:my="clr-namespace:TerminalZeroWebClient.ServiceHelperReference" xmlns:data="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data" xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls" Loaded="Page_Loaded">
+           Title="Log" xmlns:my="clr-namespace:TerminalZeroWebClient.ServiceHelperReference" 
+           xmlns:data="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data"
+           xmlns:group="clr-namespace:System.Windows.Data;assembly=System.Windows.Data"
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+                 xmlns:Mycontrols="clr-namespace:ZeroGUI"
+                 xmlns:local="clr-namespace:TerminalZeroWebClient.Views">
+    <navigation:Page.Resources>
+        <local:DoubleFormatter x:Key="FormatConverter"/>
+    </navigation:Page.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-            <ProgressBar Height="25" x:Name="remainingTime" MinWidth="250" Maximum="15" Minimum="0"/>
-            <Button Content="Refresh" Click="Button_Click"/>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2">
+            <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
+                <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,2,2,0">
+                    <Mycontrols:RefreshTimer Tick="RefreshTimer_Tick" RefreshEvery="20"/>
+                </StackPanel>
+            </Border>
+            <Line Width="5" />
+            <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Group by level" Margin="2" x:Name="cbGroupByIndend" VerticalAlignment="Center"/>
+                    <CheckBox Content="Group by Message" Margin="2" x:Name="cbGroupByMessage" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+            <Line Width="5" />
+            <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
+                <Mycontrols:SearchBox Search="SearchBox_Search" ShowResultCount="True" x:Name="searchBox" />    
+            </Border>
         </StackPanel>
         <data:DataGrid AutoGenerateColumns="False" Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Stretch" IsReadOnly="True"
                        ItemsSource="{Binding}" Name="logEntryEventArgsDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" VerticalAlignment="Top">
@@ -27,10 +49,8 @@
                         </DataTemplate>
                     </data:DataGridTemplateColumn.CellTemplate>
                 </data:DataGridTemplateColumn>
-                <data:DataGridTextColumn x:Name="indentLevelColumn" Binding="{Binding Path=IndentLevel}" Header="Indent Level" Width="20" />
-                <data:DataGridTextColumn x:Name="messageColumn" Binding="{Binding Path=Message}" Header="Message" Width="300" MinWidth="150" />
+                <data:DataGridTextColumn x:Name="messageColumn" Binding="{Binding Path=Message}" Header="Message" Width="Auto" MinWidth="150" />
             </data:DataGrid.Columns>
         </data:DataGrid>
-        
     </Grid>
 </navigation:Page>

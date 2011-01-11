@@ -12,7 +12,7 @@
     <RootNamespace>TerminalZeroWebClient</RootNamespace>
     <AssemblyName>TerminalZeroWebClient</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>true</SilverlightApplication>
     <SupportedCultures>
@@ -31,6 +31,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <LinkedServerProject>
     </LinkedServerProject>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -77,6 +78,17 @@
     <Reference Include="System.Windows.Controls.Navigation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Base\ZeroGUI\Delegates.cs">
+      <Link>Controls\Delegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Base\ZeroGUI\RefreshTimer.xaml.cs">
+      <Link>Controls\RefreshTimer.xaml.cs</Link>
+      <DependentUpon>RefreshTimer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Base\ZeroGUI\SearchBox.xaml.cs">
+      <Link>Controls\SearchBox.xaml.cs</Link>
+      <DependentUpon>SearchBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -107,6 +119,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="..\..\Base\ZeroGUI\RefreshTimer.xaml">
+      <Link>Controls\RefreshTimer.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Base\ZeroGUI\SearchBox.xaml">
+      <Link>Controls\SearchBox.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\VirtualLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -173,6 +195,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -81,15 +81,83 @@
     <Content Include="ClientBin\TerminalZeroWebClient.xap" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\background_icons.jpg" />
+    <Content Include="Images\background_icons_begin.jpg" />
+    <Content Include="Images\background_icons_end.jpg" />
+    <Content Include="Images\Button1.png" />
+    <Content Include="Images\Button2.png" />
+    <Content Include="Images\Button3.png" />
+    <Content Include="Images\FiltersBack.png" />
+    <Content Include="Images\header_background.jpg" />
+    <Content Include="Images\header_firstPart.jpg" />
+    <Content Include="Images\header_infoBakground.png" />
+    <Content Include="Images\header_lastPart.jpg" />
+    <Content Include="Images\icon_addUser_act.jpg" />
+    <Content Include="Images\icon_addUser_inac.jpg" />
+    <Content Include="Images\icon_close_active.jpg" />
+    <Content Include="Images\icon_close_active.png" />
+    <Content Include="Images\icon_close_inac.jpg" />
+    <Content Include="Images\icon_close_inac.png" />
+    <Content Include="Images\icon_coding_act.jpg" />
+    <Content Include="Images\icon_coding_inac.jpg" />
+    <Content Include="Images\icon_deleteUser_act.jpg" />
+    <Content Include="Images\icon_deleteUser_inac.jpg" />
+    <Content Include="Images\icon_delete_active.jpg" />
+    <Content Include="Images\icon_delete_inac.jpg" />
+    <Content Include="Images\icon_export_active.jpg" />
+    <Content Include="Images\icon_export_inac.jpg" />
+    <Content Include="Images\icon_import_active.jpg" />
+    <Content Include="Images\icon_import_inac.jpg" />
+    <Content Include="Images\icon_noOk_active.png" />
+    <Content Include="Images\icon_noOk_inac.png" />
+    <Content Include="Images\icon_ok_active.png" />
+    <Content Include="Images\icon_ok_inac.png" />
+    <Content Include="Images\icon_refresh_active.jpg" />
+    <Content Include="Images\icon_refresh_inac.jpg" />
+    <Content Include="Images\icon_searchUser_act.jpg" />
+    <Content Include="Images\icon_searchUser_inac.jpg" />
+    <Content Include="Images\icon_search_active.png" />
+    <Content Include="Images\icon_search_inac.png" />
+    <Content Include="Images\icon_template_active.png" />
+    <Content Include="Images\icon_template_inac.png" />
+    <Content Include="Images\icon_user_active.jpg" />
+    <Content Include="Images\icon_user_inac.jpg" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\logoLogIn.jpg" />
+    <Content Include="Images\MenuBack.png" />
+    <Content Include="Images\OpacityColor.png" />
+    <Content Include="Images\pant1.jpg" />
+    <Content Include="Images\pant2.jpg" />
+    <Content Include="Images\pant3.jpg" />
+    <Content Include="Images\pant4_iconos-activos.jpg" />
+    <Content Include="Images\popUp2_background.jpg" />
+    <Content Include="Images\popUp2_enter_search.jpg" />
+    <Content Include="Images\popUp_background.jpg" />
+    <Content Include="Images\scroll.jpg" />
+    <Content Include="Images\scroll_arrow_1.jpg" />
+    <Content Include="Images\scroll_arrow_2.jpg" />
+    <Content Include="Images\semaforo_amarillo.png" />
+    <Content Include="Images\semaforo_blanco.png" />
+    <Content Include="Images\semaforo_rojo.png" />
+    <Content Include="Images\semaforo_verde.png" />
+    <Content Include="Images\solapa_bottom_background.jpg" />
+    <Content Include="Images\solapa_bottom_begin.jpg" />
+    <Content Include="Images\solapa_top_background.jpg" />
+    <Content Include="Images\solapa_top_begin.jpg" />
+    <Content Include="Images\table_header_background.jpg" />
+    <Content Include="Images\table_header_background_begin.jpg" />
+    <Content Include="Images\table_header_background_ending.jpg" />
+    <Content Include="Pages\DownloadFile.aspx" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Scripts\JScripts.js" />
     <Content Include="Services\ServiceHelper.svc" />
     <Content Include="Services\Sync.svc" />
     <Content Include="Services\FileTransfer.svc" />
     <Content Include="Silverlight.js" />
+    <Content Include="Styles\CSS-Styles.css" />
     <Content Include="TerminalZeroWebClientTestPage.aspx" />
-    <Content Include="TerminalZeroWebClientTestPage.html" />
     <Content Include="Users\Login.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -116,6 +184,13 @@
     </Compile>
     <Compile Include="Handlers\IncomingPackEventArgs.cs" />
     <Compile Include="Helpers\AppDirectories.cs" />
+    <Compile Include="Pages\DownloadFile.aspx.cs">
+      <DependentUpon>DownloadFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\DownloadFile.aspx.designer.cs">
+      <DependentUpon>DownloadFile.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -140,6 +215,7 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\Button1.design" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -155,7 +231,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1212</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/TZeroHost</IISUrl>
+          <IISUrl>http://sebas-note/TZeroHost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
