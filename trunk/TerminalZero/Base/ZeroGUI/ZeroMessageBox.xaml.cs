@@ -27,6 +27,36 @@ namespace ZeroGUI
             Owner = Application.Current.Windows[0];
         }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            if (Content is UIElement)
+            {
+                UIElement elem = Content as UIElement;
+                elem.KeyDown -= new KeyEventHandler(elem_KeyDown);
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            elem_KeyDown(null, e);
+            base.OnKeyDown(e);
+        }
+
+        private void elem_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                Cancel_Button_Click(null, null);
+            }
+            else if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                Accept_Button_Click(null, null);
+            }
+        }
+
         public new object Content
         {
             get
@@ -37,10 +67,15 @@ namespace ZeroGUI
             set
             {
                 contentpress.Content = value;
+                if (Content is UIElement)
+                {
+                    UIElement elem = Content as UIElement;
+                    elem.PreviewKeyDown += new KeyEventHandler(elem_KeyDown);
+                }
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Accept_Button_Click(object sender, RoutedEventArgs e)
         {
             bool exit = true;
 
@@ -63,7 +98,7 @@ namespace ZeroGUI
             this.DragMove();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
             bool exit = true;
 
@@ -93,6 +128,10 @@ namespace ZeroGUI
         {
             ZeroMessageBox MB = new ZeroMessageBox();
             MB.Content = content;
+            if (content is UIElement)
+            {
+                ((UIElement)content).Focus();
+            }
             MB.Title = title;
             MB.SizeToContent = sizeToContent;
             MB.isDialog = true;

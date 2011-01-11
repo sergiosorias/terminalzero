@@ -77,11 +77,12 @@ namespace ZeroCommonClasses.PackClasses
             {
                 return RowTypeName == (string)obj;
             }
-            else if (obj.GetType() == typeof(Type))
-            {
-                return Equals(obj.GetType().ToString());
-            }
             return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 

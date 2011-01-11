@@ -14,21 +14,21 @@ namespace ZeroStock
     public class ZeroStockModule : ZeroModule
     {
         public ZeroStockModule(ITerminal currentTerminal)
-            :base(currentTerminal,4,"Operaciones referentes al stock de productos")
+            : base(currentTerminal, 4, "Operaciones referentes al stock de productos")
         {
 
         }
 
         public override void BuildPosibleActions(List<ZeroAction> actions)
         {
-            actions.Add(new ZeroAction(ActionType.MenuItem,"Operaciones@Stock@Actual",openStockView));
+            actions.Add(new ZeroAction(ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
             actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
             actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
         }
 
         public override void BuildRulesActions(List<ZeroRule> rules)
         {
-            
+
         }
 
         public override string[] GetFilesToSend()
@@ -68,49 +68,62 @@ namespace ZeroStock
                         {
                             if (manager.Process())
                             {
-                                if (info.Tables.Exists(t=>t.Equals(typeof(StockHeader))))
+                                if (info.Tables.Exists(t=>t.RowType ==  typeof(DeliveryDocumentHeader)))
                                 {
-                                    foreach (var header in headers)
-                                    {
-                                        header.Stamp = DateTime.Now;
-                                        header.Status = (int)StockEntities.EntitiesStatus.Exported;
-                                    }
-                                    foreach (var sitem in stockItems)
-                                    {
-                                        sitem.Stamp = DateTime.Now;
-                                        sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
-                                    }
+                                    UpdatteDeliveryDocumentStatus(Delheaders, DelItems);
+                                    
                                 }
-
-                                if (info.Tables.Exists(t => t.Equals(typeof(DeliveryDocumentHeader))))
+                                if (info.Tables.Exists(t => t.RowType == typeof(StockHeader)))
                                 {
-                                    foreach (var header in headers)
-                                    {
-                                        header.Stamp = DateTime.Now;
-                                        header.Status = (int)StockEntities.EntitiesStatus.Exported;
-                                    }
-                                    foreach (var sitem in stockItems)
-                                    {
-                                        sitem.Stamp = DateTime.Now;
-                                        sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
-                                    }
+                                    UpdateStockStatus(headers, stockItems);
                                 }
                                 ent.SaveChanges();
                             }
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
                 Terminal.Session.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
-        
+
+        private static void UpdatteDeliveryDocumentStatus(IEnumerable<DeliveryDocumentHeader> Delheaders, IEnumerable<DeliveryDocumentItem> DelItems)
+        {
+
+            foreach (var header in Delheaders)
+            {
+                header.Stamp = DateTime.Now;
+                header.Status = (int)StockEntities.EntitiesStatus.Exported;
+            }
+            foreach (var sitem in DelItems)
+            {
+                sitem.Stamp = DateTime.Now;
+                sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
+            }
+
+        }
+
+        private static void UpdateStockStatus(IEnumerable<StockHeader> headers, IEnumerable<StockItem> stockItems)
+        {
+            foreach (var header in headers)
+            {
+                header.Stamp = DateTime.Now;
+                header.Status = (int)StockEntities.EntitiesStatus.Exported;
+            }
+            foreach (var sitem in stockItems)
+            {
+                sitem.Stamp = DateTime.Now;
+                sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
+            }
+
+        }
+
         public override void Init()
         {
-            
+
         }
 
         #region Handlers
@@ -118,19 +131,19 @@ namespace ZeroStock
         private void openStockView(ZeroRule rule)
         {
             CurrentStockView view = new CurrentStockView();
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openNewStockView(ZeroRule rule)
         {
-            StockView view = new StockView(Terminal,0);
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            StockView view = new StockView(Terminal, 0);
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openModifyStockView(ZeroRule rule)
         {
             StockView view = new StockView(Terminal, 1);
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         #endregion

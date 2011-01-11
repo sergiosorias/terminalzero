@@ -19,8 +19,8 @@
         </ScrollViewer>
         
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2">
-            <Button Content="Aceptar" Style="{DynamicResource buttonTextStyle}" Foreground="#FF42C742" Click="Button_Click" IsTabStop="False" />
-            <Button Content="Cancelar" Style="{DynamicResource buttonTextStyle}" Foreground="#FFC42626" Click="Button_Click_1" IsTabStop="False"/>
+            <Button Content="Aceptar" Style="{DynamicResource buttonTextStyle}" Foreground="#FF42C742" Click="Accept_Button_Click" />
+            <Button Content="Cancelar" Style="{DynamicResource buttonTextStyle}" Foreground="#FFC42626" Click="Cancel_Button_Click"/>
         </WrapPanel>
     </Grid>
 </Window>

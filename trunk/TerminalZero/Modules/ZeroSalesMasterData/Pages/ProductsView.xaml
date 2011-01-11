@@ -17,7 +17,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Productos:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" Width="150" VerticalAlignment="Center"/>
+                <Label Content="Productos:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
                 <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
             </StackPanel>
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right">

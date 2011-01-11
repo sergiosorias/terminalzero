@@ -76,7 +76,7 @@ namespace ZeroMasterData
             ZeroMasterData.Pages.ProductsView P = new ZeroMasterData.Pages.ProductsView();
             if (Terminal.TerminalCode != 0)
                 P.Mode = Mode.ReadOnly;
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
             
         }
 
@@ -95,7 +95,7 @@ namespace ZeroMasterData
         private void OpenSupplierView(ZeroRule rule)
         {
             ZeroMasterData.Pages.SupplierView P = new ZeroMasterData.Pages.SupplierView();
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
             
         }
 
@@ -105,7 +105,7 @@ namespace ZeroMasterData
             if (Terminal.Session.ValidateRule("ValidateTerminalZero"))
                 P.Mode = Mode.Update;
 
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
         }
 
         private void ExportMasterDataPack(ZeroRule rule)
@@ -119,7 +119,7 @@ namespace ZeroMasterData
         private void ImportMasterDataPack(ZeroRule rule)
         {
             ZeroMasterData.Pages.ImportView o = new Pages.ImportView();
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = o });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = o });
             //System.Threading.Thread th = new System.Threading.Thread(
             //    new System.Threading.ParameterizedThreadStart(ImportPackEntryPoint));
 

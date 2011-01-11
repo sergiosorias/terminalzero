@@ -86,7 +86,7 @@ namespace ZeroConfiguration
 
         private void OpenUsers(ZeroRule rule)
         {
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = new Controls.Users() });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = new Controls.Users() });
         }
 
         private void OpenConfiguration(ZeroRule rule)
@@ -96,7 +96,7 @@ namespace ZeroConfiguration
             if (Terminal.Session.ValidateRule("ValidateTerminalZero"))
                 P.Mode = Mode.Update;
 
-            OnNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
         }
 
         private void CanOpenConfiguration(ZeroRule rule)

@@ -43,8 +43,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TargetConnectionString>Data Source=SEBAS-NOTE\sqlexpress;Persist Security Info=True;User ID=SA;Pooling=False</TargetConnectionString>
-    <TargetDatabase>TZeroMaster</TargetDatabase>
+    <TargetConnectionString>Data Source=SEBAS-NOTE\SQLEXPRESS;Persist Security Info=True;User ID=SA;Pooling=False</TargetConnectionString>
+    <TargetDatabase>TZeroMaster_Client</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -432,16 +432,10 @@
     <Build Include="Schema Objects\Schemas\data\Tables\Indexes\Product.IX_Product_MasterCode.index.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Views\StockCreateSummary.view.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Views\StockModifySummary.view.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\data\Views\StockSummary.view.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\data\Programmability\Stored Procedures\StockClean.proc.sql">
+    <Build Include="Schema Objects\Schemas\data\Programmability\Stored Procedures\Clean_Stock.proc.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\DeliveryDocumentHeader.table.sql">
@@ -463,6 +457,18 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\Keys\DeliveryDocumentItem.FK_DeliveryDocumentItem_DeliveryDocumentHeader.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\Clean_Connection.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Programmability\Stored Procedures\Get_StockSummaryByTerminal.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Views\StockModifySummary.view.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Views\StockCreateSummary.view.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>

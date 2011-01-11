@@ -22,12 +22,12 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_Product_Price", "Price", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Price), "Product", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.Product), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_SaleWeight_Price_Weight", "Weight", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Weight), "Price", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.Price), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_UnitWeight_Price_Weight", "Weight", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Weight), "Price", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.Price), true)]
-[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_Product", "Product", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.Product), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockHeader_StockType", "StockType", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.StockType), "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockHeader), true)]
-[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.StockHeader), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_DeliveryDocumentHeader_Supplier", "Supplier", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.Supplier), "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.DeliveryDocumentHeader), true)]
-[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.DeliveryDocumentHeader), "DeliveryDocumentItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.DeliveryDocumentItem), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroStock.Entities.DeliveryDocumentHeader), "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockHeader), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.DeliveryDocumentHeader), "DeliveryDocumentItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.DeliveryDocumentItem), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_Product", "Product", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.Product), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroStock.Entities.StockHeader), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroStock.Entities.StockItem), true)]
 
 #endregion
 
@@ -210,22 +210,6 @@ namespace ZeroStock.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<StockItem> StockItems
-        {
-            get
-            {
-                if ((_StockItems == null))
-                {
-                    _StockItems = base.CreateObjectSet<StockItem>("StockItems");
-                }
-                return _StockItems;
-            }
-        }
-        private ObjectSet<StockItem> _StockItems;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<Supplier> Suppliers
         {
             get
@@ -270,6 +254,22 @@ namespace ZeroStock.Entities
             }
         }
         private ObjectSet<DeliveryDocumentItem> _DeliveryDocumentItems;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StockItem> StockItems
+        {
+            get
+            {
+                if ((_StockItems == null))
+                {
+                    _StockItems = base.CreateObjectSet<StockItem>("StockItems");
+                }
+                return _StockItems;
+            }
+        }
+        private ObjectSet<StockItem> _StockItems;
 
         #endregion
         #region AddTo Methods
@@ -339,14 +339,6 @@ namespace ZeroStock.Entities
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the StockItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToStockItems(StockItem stockItem)
-        {
-            base.AddObject("StockItems", stockItem);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the Suppliers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSuppliers(Supplier supplier)
@@ -368,6 +360,14 @@ namespace ZeroStock.Entities
         public void AddToDeliveryDocumentItems(DeliveryDocumentItem deliveryDocumentItem)
         {
             base.AddObject("DeliveryDocumentItems", deliveryDocumentItem);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StockItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStockItems(StockItem stockItem)
+        {
+            base.AddObject("StockItems", stockItem);
         }
 
         #endregion
@@ -680,28 +680,6 @@ namespace ZeroStock.Entities
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem")]
-        public EntityCollection<DeliveryDocumentItem> DeliveryDocumentItems
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DeliveryDocumentItem>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DeliveryDocumentItem>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_DeliveryDocumentHeader", "StockHeader")]
         public EntityCollection<StockHeader> StockHeaders
         {
@@ -714,6 +692,28 @@ namespace ZeroStock.Entities
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "StockHeader", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem")]
+        public EntityCollection<DeliveryDocumentItem> DeliveryDocumentItems
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<DeliveryDocumentItem>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<DeliveryDocumentItem>("TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader", "DeliveryDocumentItem", value);
                 }
             }
         }
@@ -795,7 +795,7 @@ namespace ZeroStock.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 TerminalCode
         {
@@ -805,11 +805,14 @@ namespace ZeroStock.Entities
             }
             set
             {
-                OnTerminalCodeChanging(value);
-                ReportPropertyChanging("TerminalCode");
-                _TerminalCode = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("TerminalCode");
-                OnTerminalCodeChanged();
+                if (_TerminalCode != value)
+                {
+                    OnTerminalCodeChanging(value);
+                    ReportPropertyChanging("TerminalCode");
+                    _TerminalCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalCode");
+                    OnTerminalCodeChanged();
+                }
             }
         }
         private global::System.Int32 _TerminalCode;
@@ -2453,28 +2456,6 @@ namespace ZeroStock.Entities
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockItem")]
-        public EntityCollection<StockItem> StockItems
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader")]
         public DeliveryDocumentHeader DeliveryDocumentHeader
         {
@@ -2503,6 +2484,28 @@ namespace ZeroStock.Entities
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<DeliveryDocumentHeader>("TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader", "DeliveryDocumentHeader", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockItem_StockHeader", "StockItem")]
+        public EntityCollection<StockItem> StockItems
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockItem>("TZeroMasterModel.FK_StockItem_StockHeader", "StockItem", value);
                 }
             }
         }
@@ -2584,7 +2587,7 @@ namespace ZeroStock.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 TerminalCode
         {
@@ -2594,11 +2597,14 @@ namespace ZeroStock.Entities
             }
             set
             {
-                OnTerminalCodeChanging(value);
-                ReportPropertyChanging("TerminalCode");
-                _TerminalCode = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("TerminalCode");
-                OnTerminalCodeChanged();
+                if (_TerminalCode != value)
+                {
+                    OnTerminalCodeChanging(value);
+                    ReportPropertyChanging("TerminalCode");
+                    _TerminalCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalCode");
+                    OnTerminalCodeChanged();
+                }
             }
         }
         private global::System.Int32 _TerminalCode;

@@ -6,18 +6,18 @@
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <TextBox Height="23" Width="200" Margin="2,2,5,2" x:Name="txtSearchCriteria" KeyUp="txtSearchCriteria_KeyUp"/>
+            <TextBox Height="23" Width="200" Margin="2,2,5,2" Name="txtSearchCriteria" KeyUp="txtSearchCriteria_KeyUp"/>
             <Button Margin="2" x:Name="btnSearch" Click="btnSearch_Click">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Buscar"/>
+                    <TextBlock Text="Buscar" VerticalAlignment="Center"/>
                     <Image Grid.Column="1" Source="/ZeroGUI;component/Resources/search.png" Height="20"/>
                 </Grid>
             </Button>
-            <Label x:Name="quantity" VerticalAlignment="Center"/>
+            <TextBlock x:Name="quantity" VerticalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

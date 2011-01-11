@@ -1,4 +1,4 @@
-﻿CREATE VIEW [data].[StockCreateSummary]
+﻿CREATE VIEW [data].[StockModifySummary]
 	AS 
 	SELECT 
 		P.Name, 
@@ -10,8 +10,8 @@
 			ELSE
 				0
 		END AS QuantityKG,
-		COUNT(SI.ProductByWeight) AS ProductCount
-		
+		COUNT(SI.ProductByWeight) AS ProductCount,
+		SH.TerminalCode
 	FROM
 		Data.StockHeader SH
 	INNER JOIN
@@ -24,9 +24,9 @@
 	ON
 		P.Code = SI.ProductCode
 	WHERE
-		SH.StockTypeCode IS NULL
-		OR SH.StockTypeCode = 0
+		SH.StockTypeCode = 1
 	GROUP BY
+		SH.TerminalCode,
 		SI.ProductMasterCode, 
 		P.Name,
 		SI.ProductByWeight
