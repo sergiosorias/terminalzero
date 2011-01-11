@@ -26,10 +26,11 @@ namespace ZeroStock.Pages
         Entities.StockEntities MyEntities;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            MyEntities = new Entities.StockEntities();
+
             // Do not load your data at design time.
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
+                MyEntities = new Entities.StockEntities();
                 stockSummariesDataGrid.ItemsSource = MyEntities.StockSummaries;
                 stockCreateSummariesDataGrid.ItemsSource = MyEntities.StockCreateSummaries;
                 stockModifySummariesDataGrid.ItemsSource = MyEntities.StockModifySummaries;
@@ -38,9 +39,9 @@ namespace ZeroStock.Pages
 
         private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
         {
-            stockSummariesDataGrid.ItemsSource = MyEntities.StockSummaries.Where(s=>s.Name.Contains(e.Criteria) );
-            stockCreateSummariesDataGrid.ItemsSource = MyEntities.StockCreateSummaries.Where(s => s.Name.Contains(e.Criteria) );
-            stockModifySummariesDataGrid.ItemsSource = MyEntities.StockModifySummaries.Where(s => s.Name.Contains(e.Criteria) );
+            stockSummariesDataGrid.ItemsSource = MyEntities.StockSummaries.Where(s => s.Name.Contains(e.Criteria));
+            stockCreateSummariesDataGrid.ItemsSource = MyEntities.StockCreateSummaries.Where(s => s.Name.Contains(e.Criteria));
+            
         }
     }
 }

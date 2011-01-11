@@ -43,7 +43,7 @@ namespace ZeroCommonClasses
         public bool? IsActive { get; set; }
 
         public event EventHandler<ModuleNotificationEventArgs> Notifing;
-        protected void OnNotifing(ModuleNotificationEventArgs args)
+        protected void OnModuleNotifing(ModuleNotificationEventArgs args)
         {
             if (Notifing != null)
                 Notifing(this, args);

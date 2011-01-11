@@ -30,8 +30,27 @@ namespace ZeroStock.Pages
             InitializeComponent();
             Terminal = terminal;
             StockType = stockType;
-            Context = new Entities.StockEntities();
-            LoadHeader(StockType, Context.StockHeaders.Count()>0 ? Context.GetNextStockHeaderCode() : 1);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            {
+                DeliveryDocumentView view = new DeliveryDocumentView(Terminal);
+                view.Mode = ZeroCommonClasses.Interfaces.Mode.Selection;
+                bool? res = ZeroGUI.ZeroMessageBox.Show(view);
+                if (res.HasValue && res.Value)
+                {
+                    Context = new Entities.StockEntities();
+                    LoadHeader(StockType, Context.StockHeaders.Count() > 0 ? Context.GetNextStockHeaderCode() : 1);
+                    Header.DeliveryDocumentHeaderCode = view.SelectedDeliveryDocumentHeader.Code;
+                }
+                else
+                {
+                    this.IsEnabled = false;
+                    MessageBox.Show("Tiene que seleccionar un Lote para poder continuar!");
+                }
+            }
         }
 
         private void LoadHeader(int stockType, int code)
@@ -65,8 +84,8 @@ namespace ZeroStock.Pages
 
         public bool CanAccept()
         {
-            bool ret = false;
-            if (Header.StockItems != null && Header.StockItems.Count > 0)
+            bool ret = true;
+            if (Header!=null && Header.StockItems != null && Header.StockItems.Count > 0)
             {
                 MessageBoxResult quest = MessageBox.Show("¿Desea guardar los datos ingresados?", "Importante",
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -87,7 +106,7 @@ namespace ZeroStock.Pages
                         break;
                 }
             }
-            return false;
+            return ret;
         }
 
         public bool CanCancel()
@@ -177,8 +196,9 @@ namespace ZeroStock.Pages
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Context = new Entities.StockEntities();
-            LoadHeader(StockType, Context.StockHeaders.Count() > 0 ? Context.GetNextStockHeaderCode() : 1);
+            UserControl_Loaded(null, null);
         }
+
+        
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 namespace ZeroGUI
@@ -41,12 +39,10 @@ namespace ZeroGUI
 
         // Using a DependencyProperty as the backing store for MinCriteriaCharCount.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinCriteriaCharCountProperty =
-            DependencyProperty.Register("MinCriteriaCharCount", typeof(int), typeof(SearchBox), new UIPropertyMetadata(0));
+            DependencyProperty.Register("MinCriteriaCharCount", typeof(int), typeof(SearchBox), new PropertyMetadata(0));
 
-
-
-        private System.Timers.Timer searchTimer = null;
-        private System.Timers.Timer cleanResTimer = null;
+        private System.Threading.Timer searchTimer = null;
+        private System.Threading.Timer cleanResTimer = null;
 
         public SearchBox()
         {
@@ -65,20 +61,20 @@ namespace ZeroGUI
                 {
                     if (search.Matches > 0)
                     {
-                        quantity.Content = string.Format("{0} encontrados", search.Matches);
+                        quantity.Text = string.Format("{0} encontrados", search.Matches);
                     }
                     else
                     {
-                        quantity.Content = string.Format("No hay resultados", search.Matches);
+                        quantity.Text = string.Format("No hay resultados", search.Matches);
                     }
-                    cleanResTimer.Start();
+                    CreateResTimer();
                 }
             }
         }
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new System.Windows.Forms.MethodInvoker(OnSearch),null);
+            Dispatcher.BeginInvoke(new Update(OnSearch),null);
         }
         
         private void txtSearchCriteria_KeyUp(object sender, KeyEventArgs e)
@@ -87,33 +83,41 @@ namespace ZeroGUI
             {
                 btnSearch_Click(null, null);
             }
-            else if (txtSearchCriteria.Text.Length >= MinCriteriaCharCount || txtSearchCriteria.Text.Length == 0)
+            else if (e.Key != Key.Tab && (txtSearchCriteria.Text.Length >= MinCriteriaCharCount || txtSearchCriteria.Text.Length == 0))
             {
-                searchTimer.Stop();
-                searchTimer.Start();
+                if(searchTimer!=null)
+                    searchTimer.Dispose();
+                CreateSearchTimer();
             }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            searchTimer = new System.Timers.Timer(200);
-            cleanResTimer = new System.Timers.Timer(5000);
-            searchTimer.Elapsed += new System.Timers.ElapsedEventHandler(searchTimer_Elapsed);
-            cleanResTimer.Elapsed += new System.Timers.ElapsedEventHandler(cleanResTimer_Elapsed);
+            
         }
 
-        void cleanResTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void CreateResTimer()
         {
-            cleanResTimer.Stop();
-            Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(
-                () => { quantity.Content = "";}
+            cleanResTimer = new System.Threading.Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+        }
+
+        private void CreateSearchTimer()
+        {
+            searchTimer = new System.Threading.Timer(searchTimer_Elapsed, null, 10, 200);
+        }
+
+        void cleanResTimer_Elapsed(object o)
+        {
+            cleanResTimer.Dispose();
+            Dispatcher.BeginInvoke(new Update(
+                () => { quantity.Text = "";}
                 ), null);
             
         }
 
-        void searchTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        void searchTimer_Elapsed(object o)
         {
-            searchTimer.Stop();
+            searchTimer.Dispose();
             btnSearch_Click(null, null);
         }
     }

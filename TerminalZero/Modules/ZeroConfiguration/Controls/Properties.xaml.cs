@@ -80,7 +80,7 @@ namespace ZeroConfiguration.Controls
         }
 
         #region IZeroPage Members
-
+        
         public bool CanAccept()
         {
             DataProvider.SaveChanges();

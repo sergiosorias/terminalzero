@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroStock.Pages.Controls" 
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,8 +20,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Código:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" Width="150" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Width="200" FontSize="20" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
+                <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
+                <baseControls:BarCodeTextBox Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
                                              BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="MMDDPPPQQQQQQ"/>
             </StackPanel>
             <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">

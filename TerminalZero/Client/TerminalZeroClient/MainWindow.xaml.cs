@@ -69,13 +69,23 @@ namespace TerminalZeroClient
         {
             if (e.SomethingToShow)
             {
-                if (PrimaryWindow.Content is IZeroPage && ((IZeroPage)PrimaryWindow.Content).CanAccept())
+                if (!(PrimaryWindow.Content is IZeroPage))
                 {
-                    PrimaryWindow.Content = e.ControlToShow;
+                    ShowObject(e);
                 }
-                else
-                    PrimaryWindow.Content = e.ControlToShow;
-                
+                else if(((IZeroPage)PrimaryWindow.Content).CanAccept())
+                {
+                    ShowObject(e);
+                }
+            }
+        }
+
+        private void ShowObject(ModuleNotificationEventArgs e)
+        {
+            PrimaryWindow.Content = e.ControlToShow;
+            if (e.ControlToShow is UIElement)
+            {
+                ((UIElement)e.ControlToShow).Focus();
             }
         }
 

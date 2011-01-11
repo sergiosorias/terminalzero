@@ -79,6 +79,7 @@ namespace ZeroMasterData.Pages.Controls
         }
         
         #region IZeroPage Members
+        ZeroCommonClasses.GlobalObjects.ActionRequest Action;
 
         public bool CanAccept()
         {

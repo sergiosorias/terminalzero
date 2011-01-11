@@ -61,6 +61,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBCommonTables.edmx</DependentUpon>
     </Compile>
+    <Compile Include="GlobalObjects\ActionRequest.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
     <Compile Include="Interfaces\ITerminalManager.cs" />

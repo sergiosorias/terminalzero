@@ -101,6 +101,7 @@
         <EntityType Name="DeliveryDocumentItem">
           <Key>
             <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
             <PropertyRef Name="DeliveryDocumentHeaderCode" />
           </Key>
           <Property Name="Code" Type="int" Nullable="false" />
@@ -169,6 +170,7 @@
         <EntityType Name="StockItem">
           <Key>
             <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
             <PropertyRef Name="StockHeaderCode" />
           </Key>
           <Property Name="Code" Type="int" Nullable="false" />
@@ -425,33 +427,33 @@
           <EntitySet Name="StockModifySummaries" EntityType="TZeroMasterModel.StockModifySummary" />
           <EntitySet Name="StockSummaries" EntityType="TZeroMasterModel.StockSummary" />
           <EntitySet Name="StockHeaders" EntityType="TZeroMasterModel.StockHeader" />
-          <EntitySet Name="StockItems" EntityType="TZeroMasterModel.StockItem" />
-          <AssociationSet Name="FK_StockItem_Product" Association="TZeroMasterModel.FK_StockItem_Product">
-            <End Role="Product" EntitySet="Products" />
-            <End Role="StockItem" EntitySet="StockItems" />
-          </AssociationSet>
           <AssociationSet Name="FK_StockHeader_StockType" Association="TZeroMasterModel.FK_StockHeader_StockType">
             <End Role="StockType" EntitySet="StockTypes" />
             <End Role="StockHeader" EntitySet="StockHeaders" />
           </AssociationSet>
-          <AssociationSet Name="FK_StockItem_StockHeader" Association="TZeroMasterModel.FK_StockItem_StockHeader">
-            <End Role="StockHeader" EntitySet="StockHeaders" />
-            <End Role="StockItem" EntitySet="StockItems" />
-          </AssociationSet>
           <EntitySet Name="Suppliers" EntityType="TZeroMasterModel.Supplier" />
           <EntitySet Name="DeliveryDocumentHeaders" EntityType="TZeroMasterModel.DeliveryDocumentHeader" />
-          <EntitySet Name="DeliveryDocumentItems" EntityType="TZeroMasterModel.DeliveryDocumentItem" />
           <AssociationSet Name="FK_DeliveryDocumentHeader_Supplier" Association="TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier">
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_DeliveryDocumentHeader" Association="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader">
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
+            <End Role="StockHeader" EntitySet="StockHeaders" />
+          </AssociationSet>
+          <EntitySet Name="DeliveryDocumentItems" EntityType="TZeroMasterModel.DeliveryDocumentItem" />
+          <EntitySet Name="StockItems" EntityType="TZeroMasterModel.StockItem" />
           <AssociationSet Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader" Association="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader">
             <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
             <End Role="DeliveryDocumentItem" EntitySet="DeliveryDocumentItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_StockHeader_DeliveryDocumentHeader" Association="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader">
-            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
+          <AssociationSet Name="FK_StockItem_Product" Association="TZeroMasterModel.FK_StockItem_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="StockItem" EntitySet="StockItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockItem_StockHeader" Association="TZeroMasterModel.FK_StockItem_StockHeader">
             <End Role="StockHeader" EntitySet="StockHeaders" />
+            <End Role="StockItem" EntitySet="StockItems" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Price">
@@ -609,45 +611,11 @@
           <Property Type="Guid" Name="UserCode" />
           <Property Type="Int32" Name="StockTypeCode" />
           <NavigationProperty Name="StockType" Relationship="TZeroMasterModel.FK_StockHeader_StockType" FromRole="StockHeader" ToRole="StockType" />
-          <NavigationProperty Name="StockItems" Relationship="TZeroMasterModel.FK_StockItem_StockHeader" FromRole="StockHeader" ToRole="StockItem" />
           <Property Type="Int32" Name="DeliveryDocumentHeaderTerminalCode" />
           <Property Type="Int32" Name="DeliveryDocumentHeaderCode" />
           <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="StockHeader" ToRole="DeliveryDocumentHeader" />
+          <NavigationProperty Name="StockItems" Relationship="TZeroMasterModel.FK_StockItem_StockHeader" FromRole="StockHeader" ToRole="StockItem" />
         </EntityType>
-        <EntityType Name="StockItem">
-          <Key>
-            <PropertyRef Name="Code" />
-            <PropertyRef Name="StockHeaderCode" />
-          </Key>
-          <Property Type="Int32" Name="Code" Nullable="false" />
-          <Property Type="Int32" Name="TerminalCode" Nullable="false" />
-          <Property Type="Int32" Name="StockHeaderCode" Nullable="false" />
-          <Property Type="DateTime" Name="Stamp" />
-          <Property Type="Boolean" Name="Enable" Nullable="false" />
-          <Property Type="Int16" Name="Status" Nullable="false" />
-          <Property Type="String" Name="Batch" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="ProductCode" Nullable="false" />
-          <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
-          <Property Type="Boolean" Name="ProductByWeight" Nullable="false" />
-          <Property Type="Double" Name="PriceValue" Nullable="false" />
-          <Property Type="Double" Name="UnitWeightQuantity" />
-          <Property Type="Double" Name="SaleWeightQuantity" />
-          <Property Type="Double" Name="Quantity" Nullable="false" />
-          <NavigationProperty Name="Product" Relationship="TZeroMasterModel.FK_StockItem_Product" FromRole="StockItem" ToRole="Product" />
-          <NavigationProperty Name="StockHeader" Relationship="TZeroMasterModel.FK_StockItem_StockHeader" FromRole="StockItem" ToRole="StockHeader" />
-        </EntityType>
-        <Association Name="FK_StockItem_Product">
-          <End Type="TZeroMasterModel.Product" Role="Product" Multiplicity="1" />
-          <End Type="TZeroMasterModel.StockItem" Role="StockItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="Code" />
-            </Principal>
-            <Dependent Role="StockItem">
-              <PropertyRef Name="ProductCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_StockHeader_StockType">
           <End Type="TZeroMasterModel.StockType" Role="StockType" Multiplicity="0..1" />
           <End Type="TZeroMasterModel.StockHeader" Role="StockHeader" Multiplicity="*" />
@@ -657,20 +625,6 @@
             </Principal>
             <Dependent Role="StockHeader">
               <PropertyRef Name="StockTypeCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_StockItem_StockHeader">
-          <End Type="TZeroMasterModel.StockHeader" Role="StockHeader" Multiplicity="1" />
-          <End Type="TZeroMasterModel.StockItem" Role="StockItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="StockHeader">
-              <PropertyRef Name="TerminalCode" />
-              <PropertyRef Name="Code" />
-            </Principal>
-            <Dependent Role="StockItem">
-              <PropertyRef Name="TerminalCode" />
-              <PropertyRef Name="StockHeaderCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -714,12 +668,39 @@
           <Property Type="Int32" Name="SupplierCode" />
           <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Supplier" Relationship="TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier" FromRole="DeliveryDocumentHeader" ToRole="Supplier" />
-          <NavigationProperty Name="DeliveryDocumentItems" Relationship="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="DeliveryDocumentItem" />
           <NavigationProperty Name="StockHeaders" Relationship="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="StockHeader" />
+          <NavigationProperty Name="DeliveryDocumentItems" Relationship="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="DeliveryDocumentItem" />
         </EntityType>
+        <Association Name="FK_DeliveryDocumentHeader_Supplier">
+          <End Type="TZeroMasterModel.Supplier" Role="Supplier" Multiplicity="0..1" />
+          <End Type="TZeroMasterModel.DeliveryDocumentHeader" Role="DeliveryDocumentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="DeliveryDocumentHeader">
+              <PropertyRef Name="SupplierCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_DeliveryDocumentHeader">
+          <End Type="TZeroMasterModel.DeliveryDocumentHeader" Role="DeliveryDocumentHeader" Multiplicity="0..1" />
+          <End Type="TZeroMasterModel.StockHeader" Role="StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryDocumentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="DeliveryDocumentHeaderTerminalCode" />
+              <PropertyRef Name="DeliveryDocumentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="DeliveryDocumentItem">
           <Key>
             <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
             <PropertyRef Name="DeliveryDocumentHeaderCode" />
           </Key>
           <Property Type="Int32" Name="Code" Nullable="false" />
@@ -738,18 +719,29 @@
           <Property Type="Double" Name="Quantity" Nullable="false" />
           <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentItem" ToRole="DeliveryDocumentHeader" />
         </EntityType>
-        <Association Name="FK_DeliveryDocumentHeader_Supplier">
-          <End Type="TZeroMasterModel.Supplier" Role="Supplier" Multiplicity="0..1" />
-          <End Type="TZeroMasterModel.DeliveryDocumentHeader" Role="DeliveryDocumentHeader" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Supplier">
-              <PropertyRef Name="Code" />
-            </Principal>
-            <Dependent Role="DeliveryDocumentHeader">
-              <PropertyRef Name="SupplierCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="StockItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="StockHeaderCode" />
+          </Key>
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="Int32" Name="TerminalCode" Nullable="false" />
+          <Property Type="Int32" Name="StockHeaderCode" Nullable="false" />
+          <Property Type="DateTime" Name="Stamp" />
+          <Property Type="Boolean" Name="Enable" Nullable="false" />
+          <Property Type="Int16" Name="Status" Nullable="false" />
+          <Property Type="String" Name="Batch" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ProductCode" Nullable="false" />
+          <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
+          <Property Type="Boolean" Name="ProductByWeight" Nullable="false" />
+          <Property Type="Double" Name="PriceValue" Nullable="false" />
+          <Property Type="Double" Name="UnitWeightQuantity" />
+          <Property Type="Double" Name="SaleWeightQuantity" />
+          <Property Type="Double" Name="Quantity" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="TZeroMasterModel.FK_StockItem_Product" FromRole="StockItem" ToRole="Product" />
+          <NavigationProperty Name="StockHeader" Relationship="TZeroMasterModel.FK_StockItem_StockHeader" FromRole="StockItem" ToRole="StockHeader" />
+        </EntityType>
         <Association Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader">
           <End Type="TZeroMasterModel.DeliveryDocumentHeader" Role="DeliveryDocumentHeader" Multiplicity="1" />
           <End Type="TZeroMasterModel.DeliveryDocumentItem" Role="DeliveryDocumentItem" Multiplicity="*" />
@@ -764,17 +756,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_StockHeader_DeliveryDocumentHeader">
-          <End Type="TZeroMasterModel.DeliveryDocumentHeader" Role="DeliveryDocumentHeader" Multiplicity="0..1" />
-          <End Type="TZeroMasterModel.StockHeader" Role="StockHeader" Multiplicity="*" />
+        <Association Name="FK_StockItem_Product">
+          <End Type="TZeroMasterModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="TZeroMasterModel.StockItem" Role="StockItem" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="DeliveryDocumentHeader">
+            <Principal Role="Product">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockItem">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockItem_StockHeader">
+          <End Type="TZeroMasterModel.StockHeader" Role="StockHeader" Multiplicity="1" />
+          <End Type="TZeroMasterModel.StockItem" Role="StockItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockHeader">
               <PropertyRef Name="TerminalCode" />
               <PropertyRef Name="Code" />
             </Principal>
-            <Dependent Role="StockHeader">
-              <PropertyRef Name="DeliveryDocumentHeaderTerminalCode" />
-              <PropertyRef Name="DeliveryDocumentHeaderCode" />
+            <Dependent Role="StockItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="StockHeaderCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -878,26 +882,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="StockItems">
-            <EntityTypeMapping TypeName="TZeroMasterModel.StockItem">
-              <MappingFragment StoreEntitySet="StockItem">
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
-                <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
-                <ScalarProperty Name="PriceValue" ColumnName="PriceValue" />
-                <ScalarProperty Name="ProductByWeight" ColumnName="ProductByWeight" />
-                <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
-                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-                <ScalarProperty Name="Batch" ColumnName="Batch" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Enable" ColumnName="Enable" />
-                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
-                <ScalarProperty Name="StockHeaderCode" ColumnName="StockHeaderCode" />
-                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Suppliers">
             <EntityTypeMapping TypeName="TZeroMasterModel.Supplier">
               <MappingFragment StoreEntitySet="Supplier">
@@ -958,6 +942,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="StockItems">
+            <EntityTypeMapping TypeName="TZeroMasterModel.StockItem">
+              <MappingFragment StoreEntitySet="StockItem">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
+                <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
+                <ScalarProperty Name="PriceValue" ColumnName="PriceValue" />
+                <ScalarProperty Name="ProductByWeight" ColumnName="ProductByWeight" />
+                <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="Batch" ColumnName="Batch" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="StockHeaderCode" ColumnName="StockHeaderCode" />
+                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -983,12 +987,12 @@
         <EntityTypeShape EntityType="TZeroMasterModel.Product" Width="1.5" PointX="4.5" PointY="0.5" Height="4.2879036458333335" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.Weight" Width="1.5" PointX="0.5" PointY="0.5" Height="2.5571907552083339" IsExpanded="true" />
         <AssociationConnector Association="TZeroMasterModel.FK_PriceCost_Product_Price" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.875" PointY="2.7220101928710934" />
-          <ConnectorPoint PointX="4.5" PointY="2.7220101928710934" />
+          <ConnectorPoint PointX="3.875" PointY="2.7569359397888178" />
+          <ConnectorPoint PointX="4.5" PointY="2.7569359397888178" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_Product_Price" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.875" PointY="1.5485050964355467" />
-          <ConnectorPoint PointX="4.5" PointY="1.5485050964355467" />
+          <ConnectorPoint PointX="3.875" PointY="1.5659679698944089" />
+          <ConnectorPoint PointX="4.5" PointY="1.5659679698944089" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_SaleWeight_Price_Weight" ManuallyRouted="false">
           <ConnectorPoint PointX="2" PointY="1.7785953776041668" />
@@ -1003,35 +1007,35 @@
         <EntityTypeShape EntityType="TZeroMasterModel.StockModifySummary" Width="1.5" PointX="0.75" PointY="7.25" Height="1.9802864583333335" />
         <EntityTypeShape EntityType="TZeroMasterModel.StockSummary" Width="1.5" PointX="2.5" PointY="7.25" Height="1.9802864583333317" />
         <EntityTypeShape EntityType="TZeroMasterModel.StockHeader" Width="1.5" PointX="4.5" PointY="8.625" Height="3.5186979166666656" />
-        <EntityTypeShape EntityType="TZeroMasterModel.StockItem" Width="1.5" PointX="6.75" PointY="0.75" Height="4.0956022135416674" />
-        <AssociationConnector Association="TZeroMasterModel.FK_StockItem_Product" >
-          <ConnectorPoint PointX="6" PointY="2.7689518229166667" />
-          <ConnectorPoint PointX="6.75" PointY="2.7689518229166667" />
-        </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_StockHeader_StockType" >
           <ConnectorPoint PointX="5.25" PointY="7.672587890625" />
           <ConnectorPoint PointX="5.25" PointY="8.625" />
         </AssociationConnector>
-        <AssociationConnector Association="TZeroMasterModel.FK_StockItem_StockHeader" >
-          <ConnectorPoint PointX="6" PointY="10.384348958333334" />
-          <ConnectorPoint PointX="7.5" PointY="10.384348958333334" />
-          <ConnectorPoint PointX="7.5" PointY="4.8456022135416674" />
-        </AssociationConnector>
         <EntityTypeShape EntityType="TZeroMasterModel.Supplier" Width="1.5" PointX="0.75" PointY="10.75" Height="4.8648079427083317" />
         <EntityTypeShape EntityType="TZeroMasterModel.DeliveryDocumentHeader" Width="1.5" PointX="3" PointY="13.375" Height="3.3263964843750031" />
-        <EntityTypeShape EntityType="TZeroMasterModel.DeliveryDocumentItem" Width="1.5" PointX="5.25" PointY="13.25" Height="3.9033007812500031" />
         <AssociationConnector Association="TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier" >
           <ConnectorPoint PointX="2.25" PointY="14.494903971354166" />
           <ConnectorPoint PointX="3" PointY="14.494903971354166" />
-        </AssociationConnector>
-        <AssociationConnector Association="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" >
-          <ConnectorPoint PointX="4.5" PointY="15.038198242187502" />
-          <ConnectorPoint PointX="5.25" PointY="15.038198242187502" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" >
           <ConnectorPoint PointX="4.25" PointY="13.375" />
           <ConnectorPoint PointX="4.25" PointY="10.7182421875" />
           <ConnectorPoint PointX="4.5" PointY="10.7182421875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="TZeroMasterModel.DeliveryDocumentItem" Width="1.5" PointX="5.25" PointY="13.125" Height="3.9033007812500031" />
+        <EntityTypeShape EntityType="TZeroMasterModel.StockItem" Width="1.5" PointX="6.75" PointY="4.25" Height="4.0956022135416674" />
+        <AssociationConnector Association="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" >
+          <ConnectorPoint PointX="4.5" PointY="15.038198242187502" />
+          <ConnectorPoint PointX="5.25" PointY="15.038198242187502" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroMasterModel.FK_StockItem_Product" >
+          <ConnectorPoint PointX="6" PointY="4.5189518229166667" />
+          <ConnectorPoint PointX="6.75" PointY="4.5189518229166667" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroMasterModel.FK_StockItem_StockHeader" >
+          <ConnectorPoint PointX="6" PointY="10.384348958333334" />
+          <ConnectorPoint PointX="7.5" PointY="10.384348958333334" />
+          <ConnectorPoint PointX="7.5" PointY="8.3456022135416674" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

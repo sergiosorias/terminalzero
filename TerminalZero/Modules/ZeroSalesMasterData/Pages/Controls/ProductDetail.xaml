@@ -63,8 +63,8 @@
                                         <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},Path=ActualWidth}"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Name}" FontSize="13" Height="22" VerticalAlignment="Top" />
-                                    <Button Grid.Column="1" Height="22" Style="{StaticResource editRowButton}" DataContext="{Binding Code}" Name="ClickeableItemButton" Click="ClickeableItemButton_Click"/>
+                                    <TextBlock Text="{Binding Name}" FontSize="13" Height="20" VerticalAlignment="Top" />
+                                    <Button Grid.Column="1" Height="20" Style="{StaticResource editRowButton}" DataContext="{Binding Code}" Name="ClickeableItemButton" Click="ClickeableItemButton_Click"/>
                                 </Grid>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBoxItem},Path=IsMouseOver}" Value="True">
@@ -111,8 +111,8 @@
                                         <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},Path=ActualWidth}"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Name}" Height="22" FontSize="13" VerticalAlignment="Top" />
-                                    <Button Grid.Column="1" Height="22" DataContext="{Binding Code}" Content="..." Name="ClickeableItemButton" Click="weightBoxItemButton_Click" Style="{StaticResource editRowButton}"/>
+                                    <TextBlock Text="{Binding Name}" Height="20" FontSize="13" VerticalAlignment="Top" />
+                                    <Button Grid.Column="1" Height="20" DataContext="{Binding Code}" Content="..." Name="ClickeableItemButton" Click="weightBoxItemButton_Click" Style="{StaticResource editRowButton}"/>
                                 </Grid>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBoxItem},Path=IsMouseOver}" Value="True">
