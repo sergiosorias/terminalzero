@@ -26,10 +26,13 @@ namespace TZeroHost.Classes
                 case 2:
                     break;
                 case 3:
-                    manager = new MasterDataPackManager(Path.GetDirectoryName(packPath));
+                    manager = new MasterDataPackManager(packPath);
                     break;
                 case 4:
-                    manager = new ZeroStock.ZeroStockPackMaganer(Path.GetDirectoryName(packPath));
+                    manager = new ZeroStock.ZeroStockPackMaganer(packPath);
+                    break;
+                case 5:
+                    manager = new ZeroUpdateManager.UpdateManagerPackManager(packPath);
                     break;
                 default:
                     manager = PackManager.GetDefaultManager();

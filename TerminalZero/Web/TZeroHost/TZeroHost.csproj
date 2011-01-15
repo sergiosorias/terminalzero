@@ -75,6 +75,9 @@
     <Reference Include="ZeroStock">
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroStock.dll</HintPath>
     </Reference>
+    <Reference Include="ZeroUpdateManager">
+      <HintPath>..\..\..\Deploy_Debug\Modules\ZeroUpdateManager.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml" />
@@ -152,9 +155,10 @@
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\JScripts.js" />
+    <Content Include="Services\DatabaseDataService.svc" />
     <Content Include="Services\ServiceHelper.svc" />
-    <Content Include="Services\Sync.svc" />
     <Content Include="Services\FileTransfer.svc" />
+    <Content Include="Services\Sync.svc" />
     <Content Include="Silverlight.js" />
     <Content Include="Styles\CSS-Styles.css" />
     <Content Include="TerminalZeroWebClientTestPage.aspx" />
@@ -179,6 +183,9 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="filereceiver.ashx.cs">
+      <DependentUpon>filereceiver.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -197,11 +204,17 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\DatabaseDataService.svc.cs">
+      <DependentUpon>DatabaseDataService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Services\FileTransfer.svc.cs">
       <DependentUpon>FileTransfer.svc</DependentUpon>
     </Compile>
     <Compile Include="Services\ServiceHelper.svc.cs">
       <DependentUpon>ServiceHelper.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sync.svc.cs">
+      <DependentUpon>Sync.svc</DependentUpon>
     </Compile>
     <Compile Include="Users\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -215,6 +228,7 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="filereceiver.ashx" />
     <None Include="Images\Button1.design" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -53,9 +53,17 @@ namespace TZeroHost.Services
             {
                 using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
                 {
-                    ZeroCommonClasses.Entities.Pack P = ent.Packs.FirstOrDefault(p => p.Name == request.FileName);
-                    if(P!=null)
+
+                    ZeroCommonClasses.Entities.Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);
+                    if (P != null)
+                    {
+                        System.Diagnostics.Trace.Write("Sending pack " + request.Code + " to client");
                         stream = new System.IO.MemoryStream(P.Data);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.Write("Pack " + request.Code + " Not found");
+                    }
                 }
             }
             // return result
