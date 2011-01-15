@@ -17,6 +17,7 @@ using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using System.Drawing;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace TerminalZeroClient
 {
@@ -25,6 +26,7 @@ namespace TerminalZeroClient
     /// </summary>
     public partial class MainWindow : Window, IProgressNotifier
     {
+        private object LastViewShown = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +35,7 @@ namespace TerminalZeroClient
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            App.Instance.CurrentClient.Manager.ConfigurationRequired += new EventHandler(Manager_ConfigurationRequired);
+            App.Instance.Manager.ConfigurationRequired += new EventHandler(Manager_ConfigurationRequired);
             App.Instance.Session.Notifier = this;
             App.Instance.Session.ModuleList.ForEach(m => m.Notifing += new EventHandler<ModuleNotificationEventArgs>(m_Notifing));
             LoadConfigs();
@@ -52,16 +54,32 @@ namespace TerminalZeroClient
             item.Style = (Style)Resources["masterMenuItem"];
             item.Header = "Inicio";
             item.Click += menuitemitem_Click;
-            ZeroAction actionInit = new ZeroAction(ActionType.MenuItem, "Home", OpenHome);
+            ZeroAction actionInit = null;
+            
+            if (!App.Instance.Manager.ExistsAction(ApplicationActions.Home, out actionInit))
+            {
+                actionInit = new ZeroAction(ActionType.BackgroudAction, ApplicationActions.Home, OpenHome);
+                App.Instance.Session.AddAction(actionInit);
+                App.Instance.Session.AddAction(new ZeroAction(ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
+            }
+
             item.DataContext = actionInit;
             mainMenu.Items.Add(item);
             InternalBuildMenu(App.Instance.CurrentClient.BuildMenu(), mainMenu.Items);
+            App.Instance.Manager.ExecuteAction(actionInit);
         }
 
         private void OpenHome(ZeroRule rule)
         {
             ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
             args.ControlToShow = new Pages.Home();
+            m_Notifing(null, args);
+        }
+
+        private void GoBack(ZeroRule rule)
+        {
+            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
+            args.ControlToShow = LastViewShown;
             m_Notifing(null, args);
         }
 
@@ -82,6 +100,8 @@ namespace TerminalZeroClient
 
         private void ShowObject(ModuleNotificationEventArgs e)
         {
+            LastViewShown = PrimaryWindow.Content;
+
             PrimaryWindow.Content = e.ControlToShow;
             if (e.ControlToShow is UIElement)
             {
@@ -124,22 +144,7 @@ namespace TerminalZeroClient
 
             if (buttonAction != null)
             {
-                try
-                {
-                    string msg;
-                    if (!App.Instance.CurrentClient.Manager.Navigate(out msg, buttonAction) && !string.IsNullOrWhiteSpace(msg))
-                    {
-                        System.Windows.Forms.MessageBox.Show("No se ha podido realizar la acción deseada\n\nProblemas:\n" + msg, "Información", System.Windows.Forms.MessageBoxButtons.OK,
-                        System.Windows.Forms.MessageBoxIcon.Information);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Windows.Forms.MessageBox.Show(ex.ToString(), "Error inesperado",
-                        System.Windows.Forms.MessageBoxButtons.OK,
-                        System.Windows.Forms.MessageBoxIcon.Error);
-                }
-
+                App.Instance.Manager.ExecuteAction(buttonAction);
             }
 
             mainBar.IsEnabled = true;
@@ -283,6 +288,8 @@ namespace TerminalZeroClient
 
         public void SendNotification(string message)
         {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork+=(sender, args)=>{
             this.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate()
                 {
                     if (WindowState != System.Windows.WindowState.Minimized)
@@ -295,7 +302,10 @@ namespace TerminalZeroClient
                     }
                 }
                 ), null);
-            Log(TraceLevel.Info, GetStamp() + message);
+                Log(TraceLevel.Info, GetStamp() + message);
+            };
+
+            worker.RunWorkerAsync();
         }
 
         public void Log(TraceLevel level, string message)

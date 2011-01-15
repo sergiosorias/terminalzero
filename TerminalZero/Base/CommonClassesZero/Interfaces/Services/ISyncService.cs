@@ -35,12 +35,12 @@ namespace ZeroCommonClasses.Interfaces.Services
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", RequestFormat = WebMessageFormat.Xml, ResponseFormat = WebMessageFormat.Xml,
             UriTemplate = "/getExistingPacks?id={ID}")]
         [OperationContract]
-        ZeroResponse<string[]> GetExistingPacks(string ID);
+        ZeroResponse<Dictionary<int, int>> GetExistingPacks(string ID);
 
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "POST", RequestFormat = WebMessageFormat.Xml, ResponseFormat = WebMessageFormat.Xml,
-            UriTemplate = "/markPackReceived?id={ID}&pack={packName}")]
+            UriTemplate = "/markPackReceived?id={ID}&pack={packCode}")]
         [OperationContract]
-        ZeroResponse<bool> MarkPackReceived(string ID, string packName);
+        ZeroResponse<bool> MarkPackReceived(string ID, int packCode);
 
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", RequestFormat = WebMessageFormat.Xml, ResponseFormat = WebMessageFormat.Xml,
             UriTemplate = "/bye?id={ID}")]

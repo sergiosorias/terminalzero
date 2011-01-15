@@ -131,6 +131,7 @@
           <Property Name="Tax2Code" Type="int" />
           <Property Name="Group1" Type="int" />
           <Property Name="Group2" Type="int" />
+          <Property Name="DueDays" Type="int" />
         </EntityType>
         <EntityType Name="ProductGroup">
           <Key>
@@ -459,6 +460,7 @@
           <NavigationProperty Name="ProductGroup1" Relationship="TZero_ConfigModel.FK_Group2_Product_ProductGroup" FromRole="Product" ToRole="ProductGroup" />
           <NavigationProperty Name="Tax" Relationship="TZero_ConfigModel.FK_Tax1_Product_Tax" FromRole="Product" ToRole="Tax" />
           <NavigationProperty Name="Tax1" Relationship="TZero_ConfigModel.FK_Tax2_Product_Tax" FromRole="Product" ToRole="Tax" />
+          <Property Type="Int32" Name="DueDays" />
         </EntityType>
         <EntityType Name="ProductGroup">
           <Key>
@@ -733,7 +735,8 @@
             <ScalarProperty Name="Value" ColumnName="Value" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Products"><EntityTypeMapping TypeName="TZero_ConfigModel.Product"><MappingFragment StoreEntitySet="Product">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="DueDays" ColumnName="DueDays" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="MasterCode" ColumnName="MasterCode" />
@@ -849,10 +852,10 @@
       <Diagram Name="MasterData">
         <EntityTypeShape EntityType="TZero_ConfigModel.PaymentInstrument" Width="1.5" PointX="7.25" PointY="3.75" Height="2.3648893229166665" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.Price" Width="1.5" PointX="2.625" PointY="0.5" Height="3.3263964843749996" IsExpanded="true" />
-        <EntityTypeShape EntityType="TZero_ConfigModel.Product" Width="1.5" PointX="5" PointY="0.5" Height="0.4" IsExpanded="false" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.Product" Width="1.5" PointX="5" PointY="0.5" Height="5.057109375" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.ProductGroup" Width="1.5" PointX="8.875" PointY="0.5" Height="2.3648893229166656" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.Supplier" Width="1.5" PointX="10.75" PointY="3.625" Height="5.0571093749999978" IsExpanded="true" />
-        <EntityTypeShape EntityType="TZero_ConfigModel.Tax" Width="1.5" PointX="5.125" PointY="1.875" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.Tax" Width="1.5" PointX="2.875" PointY="4.25" Height="2.7494921874999996" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.TaxPosition" Width="1.5" PointX="10.75" PointY="9.75" Height="2.3648893229166674" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.Weight" Width="1.5" PointX="0.5" PointY="0.5" Height="2.5571907552083313" IsExpanded="true" />
         <AssociationConnector Association="TZero_ConfigModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" ManuallyRouted="false">
@@ -860,12 +863,12 @@
           <ConnectorPoint PointX="10.75" PointY="4.9324446614583328" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_PriceCost_Product_Price" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.125" PointY="0.7" />
-          <ConnectorPoint PointX="5" PointY="0.7" />
+          <ConnectorPoint PointX="4.125" PointY="2.6305603027343745" />
+          <ConnectorPoint PointX="5" PointY="2.6305603027343745" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_Product_Price" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.125" PointY="0.5375" />
-          <ConnectorPoint PointX="5" PointY="0.5375" />
+          <ConnectorPoint PointX="4.125" PointY="1.3097241210937498" />
+          <ConnectorPoint PointX="5" PointY="1.3097241210937498" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_SaleWeight_Price_Weight" ManuallyRouted="false">
           <ConnectorPoint PointX="2" PointY="1.7785953776041659" />
@@ -876,20 +879,20 @@
           <ConnectorPoint PointX="2.625" PointY="1.0767976888020829" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_Group1_Product_ProductGroup" ManuallyRouted="false">
-          <ConnectorPoint PointX="8.875" PointY="0.7" />
-          <ConnectorPoint PointX="6.5" PointY="0.7" />
+          <ConnectorPoint PointX="8.875" PointY="1.6824446614583328" />
+          <ConnectorPoint PointX="6.5" PointY="1.6824446614583328" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_Group2_Product_ProductGroup" ManuallyRouted="false">
-          <ConnectorPoint PointX="8.875" PointY="0.5375" />
-          <ConnectorPoint PointX="6.5" PointY="0.5375" />
+          <ConnectorPoint PointX="8.875" PointY="1.0287223307291664" />
+          <ConnectorPoint PointX="6.5" PointY="1.0287223307291664" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_Tax1_Product_Tax" ManuallyRouted="false">
-          <ConnectorPoint PointX="5.8125" PointY="1.875" />
-          <ConnectorPoint PointX="5.8125" PointY="0.9" />
+          <ConnectorPoint PointX="4.375" PointY="4.9035546875" />
+          <ConnectorPoint PointX="5" PointY="4.9035546875" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_Tax2_Product_Tax" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.21875" PointY="1.875" />
-          <ConnectorPoint PointX="6.21875" PointY="0.9" />
+          <ConnectorPoint PointX="4.375" PointY="4.51427734375" />
+          <ConnectorPoint PointX="5" PointY="4.51427734375" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_TaxPositionCode_Supplier_TaxPosition" ManuallyRouted="false">
           <ConnectorPoint PointX="11.5" PointY="9.75" />

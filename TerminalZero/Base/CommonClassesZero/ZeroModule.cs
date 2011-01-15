@@ -65,19 +65,11 @@ namespace ZeroCommonClasses
 
                 WorkingDirectoryIn = System.IO.Path.Combine(_WorkingDirectory, kInFolderName);
 
-                InitWatcher();
+                
             }
         }
 
-        private void InitWatcher()
-        {
-            FilesWatcher = new System.IO.FileSystemWatcher(WorkingDirectory);
-            FilesWatcher.IncludeSubdirectories = true;
-        }
-
         private string _WorkingDirectoryIn = "";
-
-        protected System.IO.FileSystemWatcher FilesWatcher { get; set; }
 
         [DataMember]
         public string WorkingDirectoryIn
@@ -95,10 +87,6 @@ namespace ZeroCommonClasses
         }
 
         protected ITerminal Terminal { get; private set; }
-
-        public abstract void BuildPosibleActions(List<ZeroAction> actions);
-
-        public abstract void BuildRulesActions(List<ZeroRule> rules);
 
         public abstract string[] GetFilesToSend();
 

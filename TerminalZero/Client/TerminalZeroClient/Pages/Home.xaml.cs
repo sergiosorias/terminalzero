@@ -23,13 +23,9 @@ namespace TerminalZeroClient.Pages
         public Home()
         {
             InitializeComponent();
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
-                foreach (ZeroCommonClasses.GlobalObjects.ZeroAction item in App.Instance.CurrentClient.Manager.GetShorcutActions())
+                foreach (ZeroCommonClasses.GlobalObjects.ZeroAction item in App.Instance.Manager.GetShorcutActions())
                 {
                     Button b = new Button();
                     b.Content = item.Alias;
@@ -42,6 +38,11 @@ namespace TerminalZeroClient.Pages
             }
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         private void btn_Click(object sender, RoutedEventArgs e)
         {
             FrameworkElement item = (FrameworkElement)sender;
@@ -49,23 +50,7 @@ namespace TerminalZeroClient.Pages
 
             if (buttonAction != null)
             {
-                try
-                {
-                    string msg;
-
-                    if (!App.Instance.CurrentClient.Manager.Navigate(out msg, buttonAction) && !string.IsNullOrWhiteSpace(msg))
-                    {
-                        System.Windows.Forms.MessageBox.Show("No se ha podido realizar la acción deseada\n\nProblemas:\n" + msg, "Información", System.Windows.Forms.MessageBoxButtons.OK,
-                        System.Windows.Forms.MessageBoxIcon.Information);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Windows.Forms.MessageBox.Show(ex.ToString(), "Error inesperado",
-                        System.Windows.Forms.MessageBoxButtons.OK,
-                        System.Windows.Forms.MessageBoxIcon.Error);
-                }
-
+                App.Instance.Manager.ExecuteAction(buttonAction);
             }
         }
     }

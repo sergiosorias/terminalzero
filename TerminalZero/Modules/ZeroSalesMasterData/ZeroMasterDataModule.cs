@@ -17,35 +17,28 @@ namespace ZeroMasterData
         public ZeroMasterDataModule(ITerminal iCurrentTerminal)
             :base(iCurrentTerminal, 3,"ABM de las estructuras necesarias para realizar operaciones diarias")
         {
-
+            BuildPosibleActions();
         }
 
-        public override void BuildPosibleActions(List<ZeroAction> actions)
+        private void BuildPosibleActions()
         {
             ZeroAction openProducList = new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Productos@Lista de Productos",
                 OpenProductView);
-            actions.Add(openProducList);
+            Terminal.Session.AddAction( openProducList);
 
-            actions.Add(new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Productos@Consulta",
+            Terminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Productos@Consulta",
                 OpenProductMessage));
 
-            actions.Add(new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Proveedores",
+            Terminal.Session.AddAction( new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Proveedores",
                 OpenSupplierView, "ValidateTerminalZero"));
 
-            actions.Add(new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Clientes",
+            Terminal.Session.AddAction( new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Clientes",
                 OpenCustomerView));
 
             //IFileTransfer
             ZeroAction ac = new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Exportar Datos", ExportMasterDataPack, "ValidateTerminalZero");
-            actions.Add(ac);
-
-            //ac = new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Importar Datos", ImportMasterDataPack, "ValidateUser");
-            //actions.Add(ac);
-        }
-
-        public override void BuildRulesActions(List<ZeroRule> rules)
-        {
-            
+            Terminal.Session.AddAction( ac);
+                        
         }
 
         public override string[] GetFilesToSend()
@@ -61,12 +54,25 @@ namespace ZeroMasterData
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            MasterDataPackManager mdpm = new MasterDataPackManager(WorkingDirectoryIn);
-            mdpm.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { } };
+            MasterDataPackManager PackReceived = new MasterDataPackManager(path);
+            PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { } };
             Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose,"Starting Master Data pack import process");
-            mdpm.Process();
-
+            PackReceived.Process();
+            PackReceived.Error += new System.IO.ErrorEventHandler(PackReceived_Error);
+            if (PackReceived.Process())
+            {
+                Terminal.Session.Notifier.SendNotification("Importacion de master data completada con éxito!");
+            }
+            else
+            {
+                Terminal.Session.Notifier.SendNotification("Ocurrio un error durante el proceso de importacion de master data!");
+            }
             
+        }
+
+        private void PackReceived_Error(object sender, System.IO.ErrorEventArgs e)
+        {
+            Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, e.GetException().ToString());
         }
 
         #region Actions Handle
@@ -102,7 +108,7 @@ namespace ZeroMasterData
         private void OpenCustomerView(ZeroRule rule)
         {
             ZeroMasterData.Pages.CustomerView P = new ZeroMasterData.Pages.CustomerView();
-            if (Terminal.Session.ValidateRule("ValidateTerminalZero"))
+            if (Terminal.Manager.ValidateRule("ValidateTerminalZero"))
                 P.Mode = Mode.Update;
 
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
@@ -116,16 +122,6 @@ namespace ZeroMasterData
             th.Start();
         }
 
-        private void ImportMasterDataPack(ZeroRule rule)
-        {
-            ZeroMasterData.Pages.ImportView o = new Pages.ImportView();
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = o });
-            //System.Threading.Thread th = new System.Threading.Thread(
-            //    new System.Threading.ParameterizedThreadStart(ImportPackEntryPoint));
-
-            //th.Start();
-        }
-
         private void ExportPackEntryPoint(object o)
         {
             using (ZeroMasterData.Entities.MasterDataEntities ent = new ZeroMasterData.Entities.MasterDataEntities())
@@ -135,7 +131,6 @@ namespace ZeroMasterData
                 //TODO:
                 //Fijarse si se puede hacer dinamica la carga del paquete.
                 ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(this.ModuleCode, this.WorkingDirectory);
-                info.Flags |= (int)ZeroCommonClasses.PackClasses.PackManager.PackFlags.MasterData;
                 info.AddTable(ent.Prices);
                 info.AddTable(ent.Weights);
                 info.AddTable(ent.PaymentInstruments);
@@ -180,23 +175,6 @@ namespace ZeroMasterData
         {
             Terminal.Session.Notifier.SetUserMessage(false, "Creando archivo de "+entity);
             Terminal.Session.Notifier.SetUserMessage(false, "Cantidad: "+rowCount.ToString());
-        }
-
-        private void ImportPackEntryPoint(object o)
-        {
-            Terminal.Session.Notifier.SetProcess("Importando Datos");
-
-            using (MasterDataPackManager manager = new MasterDataPackManager(WorkingDirectory))
-            {
-                manager.Imported += new EventHandler<PackEventArgs>(manager_Imported);
-                manager.Process();
-            }
-        }
-
-        private void manager_Imported(object sender, PackEventArgs e)
-        {
-            Terminal.Session.Notifier.SetProcess("Listo");
-            Terminal.Session.Notifier.SetProgress(100);
         }
 
         #endregion

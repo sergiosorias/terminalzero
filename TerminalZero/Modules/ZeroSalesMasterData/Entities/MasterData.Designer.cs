@@ -1823,6 +1823,30 @@ namespace ZeroMasterData.Entities
         private Nullable<global::System.Int32> _Group2;
         partial void OnGroup2Changing(Nullable<global::System.Int32> value);
         partial void OnGroup2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> DueDays
+        {
+            get
+            {
+                return _DueDays;
+            }
+            set
+            {
+                OnDueDaysChanging(value);
+                ReportPropertyChanging("DueDays");
+                _DueDays = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DueDays");
+                OnDueDaysChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _DueDays;
+        partial void OnDueDaysChanging(Nullable<global::System.Int32> value);
+        partial void OnDueDaysChanged();
 
         #endregion
     

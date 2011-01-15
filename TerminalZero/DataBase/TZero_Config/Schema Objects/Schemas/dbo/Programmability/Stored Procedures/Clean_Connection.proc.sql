@@ -2,22 +2,29 @@
 	@TerminalCode int,
 	@MinDate datetime
 AS
-	Delete 
-		dbo.Pack
-	FROM 
+	DELETE 
+		dbo.pack
+	FROM
+		dbo.Pack p
+	LEFT JOIN
+		dbo.PackPending pp
+	ON
+		p.Code = pp.PackCode
+	WHERE
+		pp.PackCode IS NULL
+		AND p.Stamp < @MinDate
+	
+	DELETE 
+		dbo.Connection
+	FROM
+		dbo.Connection C
+	LEFT JOIN
 		dbo.Pack P
-	INNER JOIN
-		dbo.[Connection] C
 	ON
 		P.ConnectionCode = C.Code
 	WHERE
-		C.TerminalCode = @TerminalCode AND
-		C.Stamp < @MinDate
+		P.Code IS NULL
+		and C.Stamp < @MinDate
 
-	Delete 
-		dbo.[Connection]
-	WHERE
-		TerminalCode = @TerminalCode AND
-		Stamp < @MinDate
 
 RETURN 0

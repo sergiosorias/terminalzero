@@ -75,9 +75,6 @@
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="200" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="ConnectionRequired" Type="bit" />
-          <Property Name="ExistsConfigData" Type="bit" />
-          <Property Name="ExistsMasterData" Type="bit" />
           <Property Name="LastSync" Type="datetime" />
           <Property Name="IsSyncronized" Type="bit" />
         </EntityType>
@@ -193,6 +190,9 @@
             <End Role="Module" EntitySet="Modules" />
             <End Role="Terminal" EntitySet="Terminals" />
           </AssociationSet>
+          <FunctionImport Name="GetPacksToSend">
+          <Parameter Name="TerminalCode" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Connection">
           <Key>
@@ -239,9 +239,6 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="ConnectionRequired" Type="Boolean" />
-          <Property Name="ExistsConfigData" Type="Boolean" />
-          <Property Name="ExistsMasterData" Type="Boolean" />
           <Property Name="LastSync" Type="DateTime" />
           <Property Name="IsSyncronized" Type="Boolean" />
           <NavigationProperty Name="Connections" Relationship="TZero_ConfigModel.FK_Connection_Terminal" FromRole="Terminal" ToRole="Connection" />
@@ -332,9 +329,6 @@
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="Description" ColumnName="Description" />
             <ScalarProperty Name="Active" ColumnName="Active" />
-            <ScalarProperty Name="ConnectionRequired" ColumnName="ConnectionRequired" />
-            <ScalarProperty Name="ExistsConfigData" ColumnName="ExistsConfigData" />
-            <ScalarProperty Name="ExistsMasterData" ColumnName="ExistsMasterData" />
             <ScalarProperty Name="LastSync" ColumnName="LastSync" />
             <ScalarProperty Name="IsSyncronized" ColumnName="IsSyncronized" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
@@ -385,11 +379,11 @@
           <ConnectorPoint PointX="5.1875" PointY="2.8648893229166674" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_Connection_Terminal" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.125" PointY="2.7038378906250005" />
-          <ConnectorPoint PointX="4.5" PointY="2.7038378906250005" />
+          <ConnectorPoint PointX="2.125" PointY="2.6076871744791665" />
+          <ConnectorPoint PointX="4.5" PointY="2.6076871744791665" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.FK_TerminalProperty_Terminal" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.375" PointY="3.826396484375" />
+          <ConnectorPoint PointX="1.375" PointY="3.2494921875" />
           <ConnectorPoint PointX="1.375" PointY="4.375" />
         </AssociationConnector>
         <AssociationConnector Association="TZero_ConfigModel.Terminal_Module" ManuallyRouted="false">

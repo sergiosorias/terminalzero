@@ -96,17 +96,13 @@ namespace ZeroGUI
 
         private void IsBarCodeRule_Validating(object sender, ValidationResultEventArgs e)
         {
-            BarCodeValidationEventArgs args = new BarCodeValidationEventArgs(BarCodePart.BuildComposition(Composition, e.Value.ToString()));
-            if (!(args.Parts[0].IsValid = args.Parts[0].Code > 0 && args.Parts[0].Code <= 12))
-                args.Error = "Mes incorrecto";
-            else if (!(args.Parts[1].IsValid = args.Parts[1].Code > 0 && args.Parts[1].Code <= 31))
-                args.Error = "Día incorrecto";
-            else
+            if (Composition.Length == e.Value.ToString().Length)
+            {
+                BarCodeValidationEventArgs args = new BarCodeValidationEventArgs(BarCodePart.BuildComposition(Composition, e.Value.ToString()));
                 OnBarcodeValidating(args);
-
-            e.IsValid = args.Parts.TrueForAll(p => p.IsValid);
-            e.ErrorContent = args.Error;
-
+                e.IsValid = args.Parts.TrueForAll(p => p.IsValid);
+                e.ErrorContent = args.Error;
+            }
         }
     }
 

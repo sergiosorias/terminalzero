@@ -71,7 +71,7 @@ namespace ZeroMasterData.Pages.Controls
         }
 
         #region IZeroPage Members
-        ZeroCommonClasses.GlobalObjects.ActionRequest Action;
+        
         private Mode _Mode = Mode.New;
         public Mode Mode
         {

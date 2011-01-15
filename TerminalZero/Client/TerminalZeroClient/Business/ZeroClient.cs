@@ -18,7 +18,7 @@ namespace TerminalZeroClient.Business
     {
         public bool IsAllOK { get; private set; }
         private ILogBuilder Logger = null;
-        internal ITerminalManager Manager { get; private set; }
+        private ITerminalManager Manager { get; set; }
         public TraceSwitch LogLevel { get; private set; }
 
         internal ZeroClient()
@@ -140,7 +140,12 @@ namespace TerminalZeroClient.Business
                 }
             }
             App.Instance.Session.Notifier.SetProgress(30);
-            return Manager != null;
+            if (Manager == null)
+            {
+                return false;
+            }
+            App.Instance.SetManager(Manager);
+            return true;
         }
 
         private void TryAddModule(object obj, string path)
@@ -157,7 +162,7 @@ namespace TerminalZeroClient.Business
 
                 if (Manager == null && obj is ITerminalManager)
                     Manager = obj as ITerminalManager;
-
+                
                 if (Logger == null && obj is ILogBuilder)
                     Logger = obj as ILogBuilder;
 
@@ -170,16 +175,13 @@ namespace TerminalZeroClient.Business
 
         public ZeroMenu BuildMenu()
         {
-            List<ZeroAction> validActions = App.Instance.Session.BuilSessionActions();
-
-            App.Instance.Session.ModuleList.ForEach(m => m.Init());
-
+            List<ZeroAction> validActions = App.Instance.Manager.BuilSessionActions();
+            App.Instance.Session.ModuleList.ForEach(m => { m.Init(); });
             ZeroMenu menu = new ZeroMenu();
-
             string aux = "", current = "";
             int pos = 0;
             ZeroMenu currentlevel;
-
+            
             #region build menu bar
             foreach (var item in validActions.Where(a => a.ActionType == ActionType.MenuItem || a.ActionType == ActionType.MainViewButton))
             {

@@ -68,12 +68,20 @@ namespace ZeroUpdateManager.Database
         /// y Luego ejecuta los comandos :setvar
         /// </summary>
         /// <returns>retorna codigo sql que entiende el server</returns>
-        public List<string> GetStatements()
+        public List<string> GetStatements(string currentDatabase)
         {
             List<string> ret = new List<string>();
             StringBuilder sb = new StringBuilder(text);
             foreach (var item in this.scriptLines)
             {
+                SetVarScriptLine sbsl = item as SetVarScriptLine;
+                if (sbsl != null)
+                {
+                    if (string.Compare(sbsl.Key, "DatabaseName", true) == 0)
+                    {
+                        sbsl.NewValue = currentDatabase;
+                    }
+                }
                 item.Execute(this,ref sb);
             }
             GetTextWithoutScriptLines(ref sb);

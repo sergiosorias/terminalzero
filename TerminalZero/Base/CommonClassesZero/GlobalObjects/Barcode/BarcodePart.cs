@@ -66,6 +66,7 @@ namespace ZeroCommonClasses.GlobalObjects.Barcode
         private BarCodePart(char compositionChar)
         {
             Name = ResolveName(compositionChar);
+            Composition = compositionChar;
             OriginalLength = 1;
             IsValid = true;
             Code = 0;
@@ -75,6 +76,7 @@ namespace ZeroCommonClasses.GlobalObjects.Barcode
 
         public int OriginalLength { get; set; }
         public string Name { get; set; }
+        public char Composition { get; set; }
         public int Code { get; set; }
     }
 }

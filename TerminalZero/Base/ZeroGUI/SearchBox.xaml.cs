@@ -67,6 +67,7 @@ namespace ZeroGUI
                     {
                         quantity.Text = string.Format("No hay resultados", search.Matches);
                     }
+                    quantityPopup.IsOpen = true;
                     CreateResTimer();
                 }
             }
@@ -110,7 +111,7 @@ namespace ZeroGUI
         {
             cleanResTimer.Dispose();
             Dispatcher.BeginInvoke(new Update(
-                () => { quantity.Text = "";}
+                () => { quantityPopup.IsOpen = false; quantity.Text = ""; }
                 ), null);
             
         }

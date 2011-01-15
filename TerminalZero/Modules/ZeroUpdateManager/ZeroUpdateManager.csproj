@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -47,6 +48,7 @@
     <Compile Include="Database\ScripLines\ScriptLine.cs" />
     <Compile Include="Database\ScripLines\ScriptLineCollection.cs" />
     <Compile Include="Database\ScripLines\SetVarScriptLine.cs" />
+    <Compile Include="UpdateManagerPackManager.cs" />
     <Compile Include="ZeroUpdateManagerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

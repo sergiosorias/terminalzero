@@ -5,8 +5,9 @@
     <AlwaysCreateNewDatabase>False</AlwaysCreateNewDatabase>
     <BlockIncrementalDeploymentIfDataLoss>False</BlockIncrementalDeploymentIfDataLoss>
     <DeployDatabaseProperties>True</DeployDatabaseProperties>
-    <DeploymentCollationPreference>UseSourceModelCollation</DeploymentCollationPreference>
+    <DeploymentCollationPreference>UseTargetModelCollation</DeploymentCollationPreference>
     <DoNotUseAlterAssemblyStatementsToUpdateCLRTypes>False</DoNotUseAlterAssemblyStatementsToUpdateCLRTypes>
+    <GenerateDeployStateChecks>False</GenerateDeployStateChecks>
     <GenerateDropsIfNotInProject>True</GenerateDropsIfNotInProject>
     <PerformDatabaseBackup>False</PerformDatabaseBackup>
     <SingleUserMode>False</SingleUserMode>
