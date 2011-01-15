@@ -40,6 +40,16 @@
                     <HyperlinkButton x:Name="Link1" Style="{StaticResource LinkStyle}" 
                                      NavigateUri="/Home" TargetName="ContentFrame" Content="home"/>
                     
+                    <Rectangle Style="{StaticResource DividerStyle}"/>
+
+                    <HyperlinkButton x:Name="Link4" Style="{StaticResource LinkStyle}" 
+                                     NavigateUri="/ScriptExecution" TargetName="ContentFrame" Content="database"/>
+                    
+                    <Rectangle Style="{StaticResource DividerStyle}"/>
+
+                    <HyperlinkButton x:Name="Link5" Style="{StaticResource LinkStyle}" 
+                                     NavigateUri="/ImportPage" TargetName="ContentFrame" Content="paks"/>
+                    
                     <Rectangle x:Name="Divider2" Style="{StaticResource DividerStyle}"/>
 
                     <HyperlinkButton x:Name="Link3" Style="{StaticResource LinkStyle}" 
