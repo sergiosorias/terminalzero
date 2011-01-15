@@ -69,30 +69,37 @@ namespace TZeroHost.Classes
                         System.Threading.Thread.Sleep(500);
                     }
                 }
-                
+
             }
         }
 
         void a_Error(object sender, System.IO.ErrorEventArgs e)
         {
             ZeroCommonClasses.PackClasses.PackManager pack = sender as ZeroCommonClasses.PackClasses.PackManager;
-            System.Diagnostics.Trace.Write(string.Format("Import ERROR: ConnID = {0}, ERROR = {1}", pack.ConnectionID, e.GetException()),"ERROR");
+            System.Diagnostics.Trace.Write(string.Format("Import ERROR: ConnID = {0}, ERROR = {1}", pack.ConnectionID, e.GetException()), "ERROR");
         }
 
         void a_Imported(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
         {
-            System.Diagnostics.Trace.Write(string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}", e.ConnectionID, e.Pack.Code,e.PackInfo.ModuleCode, e.Pack.PackStatusCode), "Information");
+            System.Diagnostics.Trace.Write(string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}", e.ConnectionID, e.Pack.Code, e.PackInfo != null ? e.PackInfo.ModuleCode : -1, e.Pack.PackStatusCode), "Information");
 
-            if (e.Pack.PackStatusCode == 2 && e.Pack.IsMasterData.HasValue && e.Pack.IsMasterData.Value)
+            if (e.Pack.PackStatusCode == 2 && 
+                    (
+                    (e.Pack.IsMasterData.HasValue && e.Pack.IsMasterData.Value)
+                    || (e.Pack.IsUpgrade.HasValue && e.Pack.IsUpgrade.Value)
+                    )
+                )
             {
-                using (ZeroConfiguration.Entities.ConfigurationEntities ent = new ZeroConfiguration.Entities.ConfigurationEntities())
+                using (ZeroCommonClasses.Entities.CommonEntities packEnt = new ZeroCommonClasses.Entities.CommonEntities())
                 {
-                    foreach (var item in ent.Terminals.Where(t=>t.Code !=0))
+                    using (ZeroConfiguration.Entities.ConfigurationEntities ent = new ZeroConfiguration.Entities.ConfigurationEntities())
                     {
-                        item.ConnectionRequired = item.ExistsMasterData = true;
+                        foreach (var item in ent.Terminals)
+                        {
+                            packEnt.PackPendings.AddObject(ZeroCommonClasses.Entities.PackPending.CreatePackPending(e.Pack.Code, item.Code));
+                        }
                     }
-
-                    ent.SaveChanges();
+                    packEnt.SaveChanges();
                 }
             }
         }
@@ -105,11 +112,11 @@ namespace TZeroHost.Classes
                 return _Instance ?? (_Instance = new IncomingPackManager());
             }
         }
-        
+
         internal void AddPack(string ConnectionID, string packName)
         {
-            PacksToImport.Enqueue(new IncomingPack {ConnID = ConnectionID, PackPath = packName });
-            
+            PacksToImport.Enqueue(new IncomingPack { ConnID = ConnectionID, PackPath = packName });
+
             switch (ImportProcessThread.ThreadState)
             {
                 case System.Threading.ThreadState.AbortRequested:

@@ -10,6 +10,7 @@
             height: 100%;
             width: 100%;
             margin: 0px;
+            overflow:auto;
         }
         .farsiLink:link
         {
@@ -42,7 +43,7 @@
         }
     </style>
 </head>
-<body style="height: 100%">
+<body>
     <form id="form1" runat="server" style="height: 100%">
     <table border="0" cellpadding="0" cellspacing="0" style="height: 100%">
         <tr>
@@ -54,8 +55,8 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 200px" valign="top" align="center">
-                <div style="width: 200px">
+            <td style="width: 130px" valign="top" align="center">
+                <div style="width: 130px">
                     <table class="cssGrid" style="width: 100%">
                         <tr>
                             <td align="center" class="cssGridHeader">
@@ -72,7 +73,7 @@
                         </tr>
                     </table>
                 </div>
-                <div style="width: 200px">
+                <div style="width: 130px">
                     <table class="cssGrid" style="width: 100%">
                         <tr>
                             <td class="cssGridHeader">
@@ -83,7 +84,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <asp:HyperLink ID="HyperLink2" CssClass="farsiLink" NavigateUrl="~/Downloads/Basics/Silverlight_4.exe"
+                                <asp:HyperLink ID="HyperLink2" CssClass="farsiLink" NavigateUrl="~/Upload/Silverlight_4.exe"
                                     runat="server">Silverlight 4</asp:HyperLink>
                             </td>
                         </tr>
