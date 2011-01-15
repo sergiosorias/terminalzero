@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" xmlns:my="clr-namespace:ZeroStock.Entities" Loaded="UserControl_Loaded">
     <Grid>
-        <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" 
+        <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" IsReadOnly="True"
                   ItemsSource="{Binding}" Name="deliveryDocumentHeadersDataGrid" SelectionChanged="deliveryDocumentHeadersDataGrid_SelectionChanged"
                   RowDetailsVisibilityMode="VisibleWhenSelected" VerticalAlignment="Stretch">
             <DataGrid.Columns>

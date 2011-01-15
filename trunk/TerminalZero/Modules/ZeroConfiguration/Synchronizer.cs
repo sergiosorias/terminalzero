@@ -77,7 +77,7 @@ namespace ZeroConfiguration
             SyncEvery = LoadSyncRecurrence(Context);
             Steps.Add(ExecuteHelloCommand);
 
-            if (Session.ValidateRule("ValidateTerminalZero"))
+            if (currentTerminal.Manager.ValidateRule("ValidateTerminalZero"))
             {
                 Steps.Add(SendTerminals);
                 Steps.Add(GetTerminals);
@@ -199,41 +199,37 @@ namespace ZeroConfiguration
             {
                 Config.Notifier.SetProcess("Recibiendo Paquetes de datos");
 
-                ZeroResponse<string[]> res = Config.SyncService.GetExistingPacks(CurrentConnectionID);
+                ZeroResponse<Dictionary<int, int>> res = Config.SyncService.GetExistingPacks(CurrentConnectionID);
 
-                if (res.Result.Length > 0)
+                if (res.Result.Count > 0)
                 {
-                    foreach (var packName in res.Result)
+                    foreach (var item in res.Result)
                     {
                         //esto es solo una validacion tonta de que los primeros caracteres sean un numero,
                         //el mismo tiene que pertenecer a los modulos existentes, sino se pasa al siguiente archivo
-                        int modCode = -1;
-                        if (int.TryParse(packName.Substring(0, packName.IndexOf('_')), out modCode))
+                        ZeroModule Mod = Config.Modules.FirstOrDefault(m => m.ModuleCode == item.Value);
+                        if (Mod != null)
                         {
-                            ZeroModule Mod = Config.Modules.FirstOrDefault(m => m.ModuleCode == modCode);
-                            if (Mod != null)
+
+                            ZeroCommonClasses.Files.ServerFileInfo aFile =
+                            new ZeroCommonClasses.Files.ServerFileInfo
                             {
+                                Code = item.Key,
+                                IsFromDB = true
+                            };
 
-                                ZeroCommonClasses.Files.ServerFileInfo aFile =
-                                new ZeroCommonClasses.Files.ServerFileInfo
-                                {
-                                    FileName = packName,
-                                    IsFromDB = true
-                                };
+                            ZeroCommonClasses.Files.RemoteFileInfo inf = Config.FileTransferService.DownloadFile(aFile);
 
-                                ZeroCommonClasses.Files.RemoteFileInfo inf = Config.FileTransferService.DownloadFile(aFile);
-
-                                string packPath = Path.Combine(Mod.WorkingDirectoryIn, packName);
-                                ret = DownloadFile(Config, packPath, inf);
-                                if (ret)
-                                {
-                                    Config.SyncService.MarkPackReceived(CurrentConnectionID, packName);
-                                    Mod.NewPackReceived(packPath);
-                                }
+                            string packPath = Path.Combine(Mod.WorkingDirectoryIn, string.Format(ZeroCommonClasses.PackClasses.PackManager.kPackNameFromat, item.Value, item.Key, DateTime.Now.ToString("yyyyMMddhhmmss"), ZeroCommonClasses.PackClasses.PackManager.kPackExtention));
+                            ret = DownloadFile(Config, packPath, inf);
+                            if (ret)
+                            {
+                                Config.SyncService.MarkPackReceived(CurrentConnectionID, item.Key);
+                                Mod.NewPackReceived(packPath);
                             }
                         }
+                        
                     }
-                    Config.Notifier.SendNotification("Se descargaron datos del servidor!");
                 }
                 else
                     ret = true;
@@ -377,7 +373,7 @@ namespace ZeroConfiguration
             Config.Notifier.SetProcess("Enviando datos");
             Config.Notifier.SetUserMessage(false, "Enviando datos sobre módulos actuales al servidor.");
             string modulesToSend;
-            if (Session.ValidateRule("ValidateTerminalZero"))
+            if (CurrentTerminal.Manager.ValidateRule("ValidateTerminalZero"))
             {
                 modulesToSend = IEnumerableExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Modules);
             }
@@ -426,12 +422,6 @@ namespace ZeroConfiguration
             Config.Notifier.SetProcess("Enviando Terminales");
             
             ZeroResponse<bool> res1 = Config.SyncService.SendClientTerminals(CurrentConnectionID, IEnumerableExtentions.GetEntitiesAsXMLObjectList<Entities.Terminal>(CurrentContext.Terminals));
-            foreach (var item in CurrentContext.Terminals)
-            {
-                if (item.ExistsMasterData.HasValue && item.ExistsMasterData.Value)
-                    item.ExistsMasterData = false;
-            }
-            CurrentContext.SaveChanges();
             if (!res1.IsValid)
             {
                 ret = true;

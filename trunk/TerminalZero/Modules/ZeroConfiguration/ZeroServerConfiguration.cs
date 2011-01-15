@@ -134,44 +134,39 @@ namespace ZeroConfiguration
             ConfigurationEntities.AddNewModule(CurrentContext.Context, terminalCode, module.ModuleCode, "", module.Description);
         }
 
-        public string[] GetPackNamesToSend(int terminalCode)
+        public Dictionary<int, int> GetPacksToSend(int terminalCode)
         {
-            List<string> ret = new List<string>();
-
+            Dictionary<int, int> ret = new Dictionary<int, int>();
             Terminal ter = CurrentContext.Context.Terminals.First(t => t.Code == terminalCode);
-            if (ter.ExistsMasterData.HasValue && ter.ExistsMasterData.Value)
+            
+            using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
             {
-                using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
+                var query = ent.GetPacksToSend(terminalCode);
+                int module = -1;
+                foreach (var item in query)
                 {
-                    var algo = from packs in
-                                   (from pack in ent.Packs
-                                    select new
-                                       {
-                                           Name = pack.Name,
-                                           Stamp = pack.Stamp,
-                                           ConnectionCode = pack.ConnectionCode,
-                                           IsOK = (pack.IsMasterData.HasValue && pack.IsMasterData.Value && pack.PackStatusCode == 2)
-                                       })
-                               join conns in ent.Connections
-                               on packs.ConnectionCode equals conns.Code
-                               where conns.TerminalCode != terminalCode
-                               orderby packs.Stamp descending
-                               select packs.Name;
-
-                    if (algo != null && algo.Count()>0)
-                        ret.Add(algo.First());
+                    if (int.TryParse(item.PackName.Substring(0, item.PackName.IndexOf('_')), out module))
+                    {
+                        ret.Add(item.PackCode, module);
+                    }
+                    else
+                    {
+                        module = -1;
+                    }
                 }
+                    
             }
+            
 
-            return ret.ToArray();
+            return ret;
         }
 
-        internal IEnumerable<Terminal> GetTerminals(int tCode)
+        public IEnumerable<Terminal> GetTerminals(int tCode)
         {
             return CurrentContext.Context.Terminals.Where(t => t.Code != tCode);
         }
 
-        internal IEnumerable<TerminalProperty> GetTerminalProperties(int tCode)
+        public IEnumerable<TerminalProperty> GetTerminalProperties(int tCode)
         {
             if (ConfigurationEntities.IsTerminalZero(CurrentContext.Context, tCode))
                 return CurrentContext.Context.TerminalProperties;
@@ -179,18 +174,30 @@ namespace ZeroConfiguration
                 return CurrentContext.Context.TerminalProperties.Where(tp => tp.TerminalCode == tCode);
         }
 
-        public void MarkPackReceived(int terminalCode,string packName)
+        public void MarkPackReceived(int terminalCode,int packCode)
         {
             using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
             {
-                ZeroCommonClasses.Entities.Pack P = ent.Packs.First(p => p.Name == packName);
-                if (P.IsMasterData.HasValue && P.IsMasterData.Value)
+                ZeroCommonClasses.Entities.PackPending P = ent.PackPendings.FirstOrDefault(PP => PP.PackCode == packCode && PP.TerminalCode == terminalCode);
+                if (P != null)
                 {
-                    Terminal ter = CurrentContext.Context.Terminals.First(t => t.Code == terminalCode);
-                    ter.ExistsMasterData = false;
-                    CurrentContext.Context.SaveChanges();
+                    ent.PackPendings.DeleteObject(P);
+                    ent.SaveChanges();
                 }
 
+                bool mark = true;
+                foreach (var item in ent.Packs.Where(p => p.Code == packCode))
+                {
+                    if (item.IsMasterData.HasValue && item.IsMasterData.Value)
+                    {
+                        mark = false;
+                        break;
+                    }    
+                }
+                if (!mark)
+                {
+                    
+                }
             }
         }
 
@@ -208,7 +215,7 @@ namespace ZeroConfiguration
             CurrentContext.Context.SaveChanges();
         }
 
-        internal void MergeTerminalProperties(int terminalCode, IEnumerable<TerminalProperty> terProp)
+        public void MergeTerminalProperties(int terminalCode, IEnumerable<TerminalProperty> terProp)
         {
             foreach (var item in terProp)
             {
@@ -231,7 +238,7 @@ namespace ZeroConfiguration
 
         #endregion
         
-        internal void MergeTerminal(int tCode, IEnumerable<Terminal> iEnumerable)
+        public void MergeTerminal(int tCode, IEnumerable<Terminal> iEnumerable)
         {
             Terminal tAux = null;
             foreach (var item in iEnumerable)
@@ -242,8 +249,6 @@ namespace ZeroConfiguration
                     tAux.Name = item.Name;
                     tAux.Description = item.Description;
                     tAux.Active = item.Active;
-                    if (item.ExistsMasterData.HasValue && item.ExistsMasterData.Value)
-                        tAux.ExistsMasterData = item.ExistsMasterData;
                 }
             }
 

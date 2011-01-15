@@ -17,17 +17,6 @@ namespace ZeroLogHandle
             
         }
 
-        public override void BuildPosibleActions(List<ZeroAction> actions)
-        {
-            //ZeroAction openLog = new ZeroCommonClasses.ZeroAction(ZeroCommonClasses.ActionType.MenuItem, "Log@Abrir..",OpenLog, "ValidateUser");
-            //actions.Add(openLog);
-        }
-
-        public override void BuildRulesActions(List<ZeroRule> rules)
-        {
-            
-        }
-
         public override string[] GetFilesToSend()
         {
             return new string[] { };

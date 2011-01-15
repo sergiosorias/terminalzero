@@ -15,12 +15,14 @@ namespace ZeroCommonClasses.PackClasses
 {
     public abstract class PackManager : IDisposable
     {
-        private const string kPackExtention = ".zpack";
-        
+        public const string kPackNameFromat = "{0}_{1}_{2}{3}";
+        public const string kPackExtention = ".zpack";
+
         [Flags()]
         public enum PackFlags
         {
-            MasterData = 1
+            MasterData = 2,
+            Upgrade = 4,
         }
 
         private enum Mode
@@ -38,29 +40,8 @@ namespace ZeroCommonClasses.PackClasses
         public static string[] GetPacks(int moduleCode, string workingDirectory)
         {
             List<string> res = new List<string>();
-            res.AddRange(Directory.GetFiles(workingDirectory, moduleCode.ToString()+"*"+ kPackExtention));
+            res.AddRange(Directory.GetFiles(workingDirectory, moduleCode.ToString() + "*" + kPackExtention));
             return res.ToArray();
-        }
-
-        public static bool ContainsFlag(PackFlags packFlag, string name)
-        {
-            bool ret = false;
-            try
-            {
-                string[] values = name.Split('_');
-                if (values.Length > 2)
-                {
-                    int sFlags = int.Parse(values.ElementAt(1));
-                    ret = ((int)packFlag & sFlags) != 0;
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
-
-            return ret;
         }
 
         public static int GetModule(string name)
@@ -72,7 +53,7 @@ namespace ZeroCommonClasses.PackClasses
                 int.TryParse(args[0], out moduleCode);
 
             return moduleCode;
-            
+
         }
 
         #endregion
@@ -125,15 +106,17 @@ namespace ZeroCommonClasses.PackClasses
         #endregion
 
         private Mode RunMode = Mode.Import;
-        private string CurrentDirectory = "";
+        private string WorkingDirectory = "";
+        private string ImportPackPath = "";
         public string ConnectionID { get; set; }
 
         private PackInfoBase PackInfo { get; set; }
 
-        public PackManager(string packsDirectory)
+        public PackManager(string packPath)
         {
             RunMode = Mode.Import;
-            CurrentDirectory = packsDirectory;
+            WorkingDirectory = Path.Combine(Path.GetDirectoryName(packPath), Path.GetFileNameWithoutExtension(packPath));
+            ImportPackPath = packPath;
         }
 
         public PackManager(PackInfoBase info)
@@ -168,6 +151,7 @@ namespace ZeroCommonClasses.PackClasses
             }
             catch (Exception ex)
             {
+                ret = false;
                 ErrorEventArgs e = new ErrorEventArgs(ex);
                 OnError(e);
             }
@@ -180,7 +164,7 @@ namespace ZeroCommonClasses.PackClasses
 
         public void Dispose()
         {
-            Clean(null);
+            Clean();
         }
 
         #endregion
@@ -190,65 +174,55 @@ namespace ZeroCommonClasses.PackClasses
         private void ExportProcess()
         {
             PackEventArgs args = new PackEventArgs();
-            try
-            {
-                args.PackInfo = PackInfo;
-                args.WorkingDirectory = CurrentDirectory;
-                OnExporting(args);
-                AddPackageData();
-                CreateZip();
-                Clean(null);
-                OnExported(args);
-            }
-            catch (Exception ex)
-            {
-                OnError(new ErrorEventArgs(ex));
-            }
+
+            args.PackInfo = PackInfo;
+            args.WorkingDirectory = WorkingDirectory;
+            OnExporting(args);
+            AddPackageData();
+            CreateZip();
+            Clean();
+            OnExported(args);
+
         }
 
         private void CreateZip()
         {
             FastZipEvents events = new FastZipEvents();
             FastZip zip = new FastZip(events);
-            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format("{0}_{1}_{2}{3}",PackInfo.ModuleCode,PackInfo.Flags,PackInfo.Stamp.ToString("yyyyMMddhhmmss"), kPackExtention)), CurrentDirectory, true, "");
+            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, PackInfo.Flags, PackInfo.Stamp.ToString("yyyyMMddhhmmss"), kPackExtention)), WorkingDirectory, true, "");
         }
 
         private void ImportProcess()
         {
-            string[] packs = Directory.GetFiles(CurrentDirectory, "*" + kPackExtention);
-            string dirAux = CurrentDirectory;
             Pack aPack = null;
             CommonEntities dbent = null;
             PackEventArgs args = new PackEventArgs();
             try
             {
                 dbent = new CommonEntities();
-                foreach (var item in packs)
-                {
-                    CurrentDirectory = Path.Combine(dirAux, Path.GetFileNameWithoutExtension(item));
-                    aPack = InsertPackInDB(item, dbent);
-                    args.WorkingDirectory = CurrentDirectory;
 
-                    UpdatePackStatus(aPack, dbent, 0);
-                    args.Pack = aPack;
-                    
-                    ExtractZip(item);
-                    
-                    UpdatePackStatus(aPack, dbent, 1);
-                    OnImporting(args);
-                    UpdatePackStatus(aPack, dbent, 2);
-                    OnImported(args);
-                    
-                    Clean(item);
-                }
+                aPack = InsertPackInDB(ImportPackPath, dbent);
+                args.WorkingDirectory = WorkingDirectory;
+
+                UpdatePackStatus(aPack, dbent, 0, null);
+                args.Pack = aPack;
+
+                ExtractZip(ImportPackPath);
+
+                UpdatePackStatus(aPack, dbent, 1, null);
+                OnImporting(args);
+                UpdatePackStatus(aPack, dbent, 2, null);
+                OnImported(args);
+
+                Clean();
+
             }
             catch (Exception ex)
             {
                 if (dbent != null && aPack != null)
-                    UpdatePackStatus(aPack, dbent, 3);
-                
-                ErrorEventArgs er = new ErrorEventArgs(ex);
-                OnError(er);
+                    UpdatePackStatus(aPack, dbent, 3, ex.ToString());
+
+                throw;
             }
             finally
             {
@@ -259,10 +233,11 @@ namespace ZeroCommonClasses.PackClasses
             }
         }
 
-        private static void UpdatePackStatus(Pack aPack, CommonEntities dbent, int newStatus)
+        private static void UpdatePackStatus(Pack aPack, CommonEntities dbent, int newStatus, string message)
         {
             aPack.Stamp = DateTime.Now;
             aPack.PackStatusCode = newStatus;
+            aPack.Result = message;
             dbent.SaveChanges();
         }
 
@@ -270,7 +245,7 @@ namespace ZeroCommonClasses.PackClasses
         {
 
             string name = Path.GetFileName(packFilePath);
-            Pack P = dbent.Packs.FirstOrDefault(p=>p.Name == name);
+            Pack P = dbent.Packs.FirstOrDefault(p => p.Name == name);
             if (default(Pack) == P)
             {
                 P = Pack.CreatePack(0, true);
@@ -278,7 +253,6 @@ namespace ZeroCommonClasses.PackClasses
                 P.Data = File.ReadAllBytes(packFilePath);
                 if (!string.IsNullOrWhiteSpace(ConnectionID))
                     P.ConnectionCode = ConnectionID;
-                P.IsMasterData = ContainsFlag(PackFlags.MasterData, name);
                 dbent.AddToPacks(P);
                 dbent.SaveChanges();
             }
@@ -291,33 +265,33 @@ namespace ZeroCommonClasses.PackClasses
         {
             FastZipEvents events = new FastZipEvents();
             FastZip zip = new FastZip(events);
-            zip.ExtractZip(packFilePath, CurrentDirectory, FastZip.Overwrite.Always, null, "", "", false);
+            zip.ExtractZip(packFilePath, WorkingDirectory, FastZip.Overwrite.Always, null, "", "", false);
         }
 
         private void SetCurrentDirectory()
         {
-            CurrentDirectory = Path.Combine(PackInfo.Path, Guid.NewGuid().ToString());
-            if (!Directory.Exists(CurrentDirectory))
-                Directory.CreateDirectory(CurrentDirectory);
+            WorkingDirectory = Path.Combine(PackInfo.Path, Guid.NewGuid().ToString());
+            if (!Directory.Exists(WorkingDirectory))
+                Directory.CreateDirectory(WorkingDirectory);
         }
 
         private void AddPackageData()
         {
             XmlSerializer writer = new XmlSerializer(PackInfo.GetType());
-            using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(CurrentDirectory, PackInfo.GetType().ToString())))
+            using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(WorkingDirectory, PackInfo.GetType().ToString())))
             {
                 writer.Serialize(xmlwriter, PackInfo);
                 xmlwriter.Close();
             }
         }
 
-        private void Clean(string file)
+        private void Clean()
         {
-            if (Directory.Exists(CurrentDirectory))
-                Directory.Delete(CurrentDirectory, true);
+            if (Directory.Exists(WorkingDirectory))
+                Directory.Delete(WorkingDirectory, true);
 
-            if(!string.IsNullOrEmpty(file))
-                File.Delete(file);
+            if (!string.IsNullOrEmpty(ImportPackPath) && File.Exists(ImportPackPath))
+                File.Delete(ImportPackPath);
         }
 
     }

@@ -471,6 +471,21 @@
     <Build Include="Schema Objects\Schemas\data\Views\StockCreateSummary.view.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\PackPending.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PackPending.PK_PackPending.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PackPending.FK_PackPending_Terminal.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PackPending.FK_PackPending_Pack.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPacksToSend.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Scripts\Post-Deployment\InitData\status\Type.sql">

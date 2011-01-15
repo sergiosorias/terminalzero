@@ -127,8 +127,14 @@ namespace TerminalZeroClient
             get { return _Session; }
         }
 
-        #endregion
+        ITerminalManager _Manager = null;
+        public ITerminalManager Manager
+        {
+            get { return _Manager; }
+        }
 
+        #endregion
+        
         private void Application_Exit(object sender, ExitEventArgs e)
         {
 
@@ -140,5 +146,12 @@ namespace TerminalZeroClient
             Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ClientSyncServiceReference, false));
             Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false, ZeroCommonClasses.Context.ContextBuilder.CreateFileTranferConnection(), false));    
         }
+
+        internal void SetManager(ITerminalManager zeroManager)
+        {
+            _Manager = zeroManager;
+        }
+        
+        
     }
 }

@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [data].[Supplier]
 (
 	Code int NOT NULL,
-	[Stamp] datetime NULL DEFAULT (Getdate()),
-	[Enable] bit NOT NULL DEFAULT (1),
+	[Stamp] DATETIME NULL CONSTRAINT DF_Supplier_Stamp DEFAULT (Getdate()),
+	[Enable] BIT NOT NULL CONSTRAINT DF_Supplier_Enable DEFAULT (1),
 	[Name1] nvarchar(100) NULL,
 	[Name2] nvarchar(300) NULL,
 	[Country] nvarchar(250) NULL,

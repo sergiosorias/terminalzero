@@ -56,8 +56,8 @@
     <Compile Include="Pages\Controls\DeliveryDocumentGrid.xaml.cs">
       <DependentUpon>DeliveryDocumentGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\DocumentDeliveryDetail.xaml.cs">
-      <DependentUpon>DocumentDeliveryDetail.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\DeliveryDocumentDetail.xaml.cs">
+      <DependentUpon>DeliveryDocumentDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Controls\StockGrid.xaml.cs">
       <DependentUpon>StockGrid.xaml</DependentUpon>
@@ -92,7 +92,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\DocumentDeliveryDetail.xaml">
+    <Page Include="Pages\Controls\DeliveryDocumentDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -118,7 +118,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Stock.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="Properties\DataSources\ZeroStock.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

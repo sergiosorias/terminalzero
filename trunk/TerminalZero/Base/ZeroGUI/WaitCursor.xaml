@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="ZeroGUI.WaitCursor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Visibility="Collapsed" Background="Transparent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Storyboard x:Key="rotation">
+            <DoubleAnimation To="1" Duration="0:0:1"
+                            Storyboard.TargetName="content"
+                            Storyboard.TargetProperty="Opacity"/>
+            <DoubleAnimation From="0" To="359" Duration="0:0:3" RepeatBehavior="Forever"
+                                                    Storyboard.TargetName="angle"
+                                                    Storyboard.TargetProperty="Angle"/>
+        </Storyboard>
+    </UserControl.Resources>
+    <Grid Background="Transparent">
+        <Border Grid.RowSpan="3">
+            <Border.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FFD1C7C7" Offset="0" />
+                    <GradientStop Color="Transparent" Offset="1" />
+                </RadialGradientBrush>
+            </Border.Background>
+            <Canvas Width="1" Height="1">
+                <Canvas.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform x:Name="angle" Angle="0" CenterX="0.5" CenterY="0.5"/>
+                        <TranslateTransform X="-0.5" Y="-0.5"/>
+                        <ScaleTransform ScaleX="100" ScaleY="100"/>
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+                <Canvas Name="content" Opacity="0">
+                    <Path Width="1" Height="1" Stretch="Fill" Stroke="#FF5C769B" StrokeThickness="0.1" StrokeStartLineCap="Round">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="1,0">
+                                    <ArcSegment Point="0,-1" RotationAngle="90" SweepDirection="Clockwise" IsLargeArc="True" Size="1,1"/>
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                    <Path Canvas.Left="0.49" Canvas.Top="-0.05" Width="0.2" Height="0.2" Stretch="Fill" Fill="#FF5C769B">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="0,-1.1">
+                                    <LineSegment Point="0.1,-1" />
+                                    <LineSegment Point="0,-0.9" />
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                </Canvas>
+            </Canvas>
+        </Border>
+    </Grid>
+</UserControl>

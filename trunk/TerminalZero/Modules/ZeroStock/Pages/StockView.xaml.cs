@@ -36,21 +36,44 @@ namespace ZeroStock.Pages
         {
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
-                DeliveryDocumentView view = new DeliveryDocumentView(Terminal);
-                view.Mode = ZeroCommonClasses.Interfaces.Mode.Selection;
-                bool? res = ZeroGUI.ZeroMessageBox.Show(view);
-                if (res.HasValue && res.Value)
+                Context = new Entities.StockEntities();
+                LoadHeader(StockType, Context.StockHeaders.Count() > 0 ? Context.GetNextStockHeaderCode() : 1);
+                lblStockType.Content = Header.StockType != null && !string.IsNullOrWhiteSpace(Header.StockType.Description) ? Header.StockType.Description : "Stock";
+                
+                if (IsDeliveryDocumentMandatory())
                 {
-                    Context = new Entities.StockEntities();
-                    LoadHeader(StockType, Context.StockHeaders.Count() > 0 ? Context.GetNextStockHeaderCode() : 1);
-                    Header.DeliveryDocumentHeaderCode = view.SelectedDeliveryDocumentHeader.Code;
-                }
-                else
-                {
-                    this.IsEnabled = false;
-                    MessageBox.Show("Tiene que seleccionar un Lote para poder continuar!");
+                    DeliveryDocumentView view = new DeliveryDocumentView(Terminal);
+                    view.Mode = ZeroCommonClasses.Interfaces.Mode.Selection;
+                    bool? res = ZeroGUI.ZeroMessageBox.Show(view);
+                    if (res.HasValue && res.Value)
+                    {
+                        Header.DeliveryDocumentHeaderCode = view.SelectedDeliveryDocumentHeader.Code;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tiene que seleccionar un Documento para poder continuar!");
+                        TryGoHome();
+                    }
                 }
             }
+        }
+
+        private void TryGoHome()
+        {
+            ZeroCommonClasses.GlobalObjects.ZeroAction action;
+            if (Terminal.Manager.ExistsAction(ZeroCommonClasses.GlobalObjects.ApplicationActions.Back, out action))
+            {
+                action.Execute(null);
+            }
+            else
+            {
+                this.IsEnabled = false;
+            }
+        }
+
+        private bool IsDeliveryDocumentMandatory()
+        {
+            return StockType == 0;
         }
 
         private void LoadHeader(int stockType, int code)
@@ -61,9 +84,7 @@ namespace ZeroStock.Pages
                 true,
                 0,DateTime.Now.Date);
             Header.StockType = Context.StockTypes.FirstOrDefault(st => st.Code == stockType);
-            lblStockType.Content = Header.StockType != null ? Header.StockType.Description : "Stock";
             Context.AddToStockHeaders(Header);
-
 
         }
 
@@ -119,16 +140,24 @@ namespace ZeroStock.Pages
         private int itemsCount = 0;
         private void BarCodeTextBox_BarcodeValidating(object sender, ZeroGUI.Classes.BarCodeValidationEventArgs e)
         {
-            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
-            if (Part != null)
+            if (!(e.Parts[0].IsValid = e.Parts[0].Code > 0 && e.Parts[0].Code <= 12))
+                e.Error = "Mes incorrecto";
+            else if (!(e.Parts[1].IsValid = e.Parts[1].Code > 0 && e.Parts[1].Code <= 31))
+                e.Error = "Día incorrecto";
+            else
             {
-                ZeroStock.Entities.Product prod = Context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
-                if (prod == null)
+                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
+                if (Part != null)
                 {
-                    Part.IsValid = false;
-                    e.Error = "Producto Inexistente";
+                    ZeroStock.Entities.Product prod = Context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
+                    if (prod == null)
+                    {
+                        Part.IsValid = false;
+                        e.Error = "Producto Inexistente";
+                    }
                 }
             }
+            
         }
 
         private bool SaveData()
@@ -137,13 +166,14 @@ namespace ZeroStock.Pages
             try
             {
                 Context.SaveChanges();
+                MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 ret = true;
             }
             catch (Exception ex)
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                
+                Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, ex.ToString());
             }
             return ret;
         }
@@ -192,6 +222,7 @@ namespace ZeroStock.Pages
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveData();
+            TryGoHome();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

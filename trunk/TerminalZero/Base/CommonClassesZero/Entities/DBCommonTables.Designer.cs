@@ -18,8 +18,9 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_PackStatusCode_Pack_PackStatus", "PackStatus", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroCommonClasses.Entities.PackStatu), "Pack", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroCommonClasses.Entities.Pack), true)]
 [assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_ConnectionCode_Pack_Connection", "Connection", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroCommonClasses.Entities.Connection), "Pack", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroCommonClasses.Entities.Pack), true)]
+[assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_PackStatusCode_Pack_PackStatus", "PackStatu", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroCommonClasses.Entities.PackStatu), "Pack", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroCommonClasses.Entities.Pack), true)]
+[assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_PackPending_Pack", "Pack", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroCommonClasses.Entities.Pack), "PackPending", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroCommonClasses.Entities.PackPending), true)]
 
 #endregion
 
@@ -74,22 +75,6 @@ namespace ZeroCommonClasses.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Pack> Packs
-        {
-            get
-            {
-                if ((_Packs == null))
-                {
-                    _Packs = base.CreateObjectSet<Pack>("Packs");
-                }
-                return _Packs;
-            }
-        }
-        private ObjectSet<Pack> _Packs;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<PackStatu> PackStatus
         {
             get
@@ -118,17 +103,41 @@ namespace ZeroCommonClasses.Entities
             }
         }
         private ObjectSet<Connection> _Connections;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Pack> Packs
+        {
+            get
+            {
+                if ((_Packs == null))
+                {
+                    _Packs = base.CreateObjectSet<Pack>("Packs");
+                }
+                return _Packs;
+            }
+        }
+        private ObjectSet<Pack> _Packs;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<PackPending> PackPendings
+        {
+            get
+            {
+                if ((_PackPendings == null))
+                {
+                    _PackPendings = base.CreateObjectSet<PackPending>("PackPendings");
+                }
+                return _PackPendings;
+            }
+        }
+        private ObjectSet<PackPending> _PackPendings;
 
         #endregion
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the Packs EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToPacks(Pack pack)
-        {
-            base.AddObject("Packs", pack);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the PackStatus EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -144,6 +153,44 @@ namespace ZeroCommonClasses.Entities
         public void AddToConnections(Connection connection)
         {
             base.AddObject("Connections", connection);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Packs EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPacks(Pack pack)
+        {
+            base.AddObject("Packs", pack);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PackPendings EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPackPendings(PackPending packPending)
+        {
+            base.AddObject("PackPendings", packPending);
+        }
+
+        #endregion
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="terminalCode">No Metadata Documentation available.</param>
+        public ObjectResult<PackToSend> GetPacksToSend(Nullable<global::System.Int32> terminalCode)
+        {
+            ObjectParameter terminalCodeParameter;
+            if (terminalCode.HasValue)
+            {
+                terminalCodeParameter = new ObjectParameter("TerminalCode", terminalCode);
+            }
+            else
+            {
+                terminalCodeParameter = new ObjectParameter("TerminalCode", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<PackToSend>("GetPacksToSend", terminalCodeParameter);
         }
 
         #endregion
@@ -512,6 +559,30 @@ namespace ZeroCommonClasses.Entities
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String Result
+        {
+            get
+            {
+                return _Result;
+            }
+            set
+            {
+                OnResultChanging(value);
+                ReportPropertyChanging("Result");
+                _Result = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Result");
+                OnResultChanged();
+            }
+        }
+        private global::System.String _Result;
+        partial void OnResultChanging(global::System.String value);
+        partial void OnResultChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public Nullable<global::System.Boolean> IsMasterData
         {
             get
@@ -530,48 +601,34 @@ namespace ZeroCommonClasses.Entities
         private Nullable<global::System.Boolean> _IsMasterData;
         partial void OnIsMasterDataChanging(Nullable<global::System.Boolean> value);
         partial void OnIsMasterDataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsUpgrade
+        {
+            get
+            {
+                return _IsUpgrade;
+            }
+            set
+            {
+                OnIsUpgradeChanging(value);
+                ReportPropertyChanging("IsUpgrade");
+                _IsUpgrade = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsUpgrade");
+                OnIsUpgradeChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsUpgrade;
+        partial void OnIsUpgradeChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsUpgradeChanged();
 
         #endregion
     
         #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TZero_ConfigModel", "FK_PackStatusCode_Pack_PackStatus", "PackStatus")]
-        public PackStatu PackStatu
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatus").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatus").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<PackStatu> PackStatuReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatus");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatus", value);
-                }
-            }
-        }
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -607,6 +664,215 @@ namespace ZeroCommonClasses.Entities
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Connection>("TZero_ConfigModel.FK_ConnectionCode_Pack_Connection", "Connection", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZero_ConfigModel", "FK_PackStatusCode_Pack_PackStatus", "PackStatu")]
+        public PackStatu PackStatu
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatu").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatu").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<PackStatu> PackStatuReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatu");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<PackStatu>("TZero_ConfigModel.FK_PackStatusCode_Pack_PackStatus", "PackStatu", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZero_ConfigModel", "FK_PackPending_Pack", "PackPending")]
+        public EntityCollection<PackPending> PackPendings
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<PackPending>("TZero_ConfigModel.FK_PackPending_Pack", "PackPending");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PackPending>("TZero_ConfigModel.FK_PackPending_Pack", "PackPending", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZero_ConfigModel", Name="PackPending")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class PackPending : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PackPending object.
+        /// </summary>
+        /// <param name="packCode">Initial value of the PackCode property.</param>
+        /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
+        public static PackPending CreatePackPending(global::System.Int32 packCode, global::System.Int32 terminalCode)
+        {
+            PackPending packPending = new PackPending();
+            packPending.PackCode = packCode;
+            packPending.TerminalCode = terminalCode;
+            return packPending;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 PackCode
+        {
+            get
+            {
+                return _PackCode;
+            }
+            set
+            {
+                if (_PackCode != value)
+                {
+                    OnPackCodeChanging(value);
+                    ReportPropertyChanging("PackCode");
+                    _PackCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("PackCode");
+                    OnPackCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _PackCode;
+        partial void OnPackCodeChanging(global::System.Int32 value);
+        partial void OnPackCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalCode
+        {
+            get
+            {
+                return _TerminalCode;
+            }
+            set
+            {
+                if (_TerminalCode != value)
+                {
+                    OnTerminalCodeChanging(value);
+                    ReportPropertyChanging("TerminalCode");
+                    _TerminalCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalCode");
+                    OnTerminalCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalCode;
+        partial void OnTerminalCodeChanging(global::System.Int32 value);
+        partial void OnTerminalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZero_ConfigModel", "FK_PackPending_Pack", "Pack")]
+        public Pack Pack
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Pack>("TZero_ConfigModel.FK_PackPending_Pack", "Pack").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Pack>("TZero_ConfigModel.FK_PackPending_Pack", "Pack").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Pack> PackReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Pack>("TZero_ConfigModel.FK_PackPending_Pack", "Pack");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Pack>("TZero_ConfigModel.FK_PackPending_Pack", "Pack", value);
                 }
             }
         }
@@ -714,6 +980,86 @@ namespace ZeroCommonClasses.Entities
                 }
             }
         }
+
+        #endregion
+    }
+
+    #endregion
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="TZero_ConfigModel", Name="PackToSend")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class PackToSend : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PackToSend object.
+        /// </summary>
+        /// <param name="packCode">Initial value of the PackCode property.</param>
+        /// <param name="packName">Initial value of the PackName property.</param>
+        public static PackToSend CreatePackToSend(global::System.Int32 packCode, global::System.String packName)
+        {
+            PackToSend packToSend = new PackToSend();
+            packToSend.PackCode = packCode;
+            packToSend.PackName = packName;
+            return packToSend;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 PackCode
+        {
+            get
+            {
+                return _PackCode;
+            }
+            set
+            {
+                OnPackCodeChanging(value);
+                ReportPropertyChanging("PackCode");
+                _PackCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PackCode");
+                OnPackCodeChanged();
+            }
+        }
+        private global::System.Int32 _PackCode;
+        partial void OnPackCodeChanging(global::System.Int32 value);
+        partial void OnPackCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PackName
+        {
+            get
+            {
+                return _PackName;
+            }
+            set
+            {
+                OnPackNameChanging(value);
+                ReportPropertyChanging("PackName");
+                _PackName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PackName");
+                OnPackNameChanged();
+            }
+        }
+        private global::System.String _PackName;
+        partial void OnPackNameChanging(global::System.String value);
+        partial void OnPackNameChanged();
 
         #endregion
     }

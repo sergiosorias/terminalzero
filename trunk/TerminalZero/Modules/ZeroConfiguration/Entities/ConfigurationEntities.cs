@@ -74,8 +74,6 @@ namespace ZeroConfiguration.Entities
         {
             Terminal T = Terminal.CreateTerminal(terminalCode, terminalName, true);
             T.IsSyncronized = false;
-            T.ExistsMasterData = true;
-            T.ConnectionRequired = true;
             configurationEntities.AddToTerminals(T);
             configurationEntities.SaveChanges();
 

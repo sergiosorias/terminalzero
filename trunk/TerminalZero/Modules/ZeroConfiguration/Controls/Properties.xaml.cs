@@ -47,7 +47,7 @@ namespace ZeroConfiguration.Controls
                         terminalPropertiesDataGrid.IsEnabled = false;
                         modulesListView.IsEnabled = false;
                         cbTerminalIsActive.IsEnabled = false;
-                        tbTerminal.IsReadOnly = tbTerminalDesc.IsReadOnly = true;
+                        tbTerminal.IsReadOnly = descriptionTextBox.IsReadOnly = true;
                         cbsendMasterData.Visibility = System.Windows.Visibility.Hidden;
                         break;
                     default:
@@ -89,6 +89,7 @@ namespace ZeroConfiguration.Controls
 
         public bool CanCancel()
         {
+            DataProvider.SaveChanges();
             return true;
         }
 
@@ -126,7 +127,7 @@ namespace ZeroConfiguration.Controls
             Dispatcher.Invoke(
                 new MethodInvoker(
                     () => {
-                        if (e.RemainingTime.Seconds == 0)
+                        if (e.RemainingTime.TotalSeconds < 1)
                         {
                             lblNextSync.Content = "Sincronizando!";
                         }
@@ -139,6 +140,13 @@ namespace ZeroConfiguration.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
 
+            // Do not load your data at design time.
+            // if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            // {
+            // 	//Load your data here and assign the result to the CollectionViewSource.
+            // 	System.Windows.Data.CollectionViewSource myCollectionViewSource = (System.Windows.Data.CollectionViewSource)this.Resources["Resource Key for CollectionViewSource"];
+            // 	myCollectionViewSource.Source = your data
+            // }
             // Do not load your data at design time.
             // if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             // {

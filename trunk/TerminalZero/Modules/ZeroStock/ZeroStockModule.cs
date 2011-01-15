@@ -16,19 +16,20 @@ namespace ZeroStock
         public ZeroStockModule(ITerminal currentTerminal)
             : base(currentTerminal, 4, "Operaciones referentes al stock de productos")
         {
-
+            BuildPosibleActions();
         }
 
-        public override void BuildPosibleActions(List<ZeroAction> actions)
+        private void BuildPosibleActions()
         {
-            actions.Add(new ZeroAction(ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
-            actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
-            actions.Add(new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
+            Terminal.Session.AddAction( new ZeroAction(ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
+            Terminal.Session.AddAction( new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
+            Terminal.Session.AddAction( new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
+            Terminal.Session.AddAction(new ZeroAction(ActionType.MainViewButton, "Operaciones@Remitos", openModifyStockView));
         }
 
-        public override void BuildRulesActions(List<ZeroRule> rules)
+        public override void Init()
         {
-
+            
         }
 
         public override string[] GetFilesToSend()
@@ -120,12 +121,7 @@ namespace ZeroStock
             }
 
         }
-
-        public override void Init()
-        {
-
-        }
-
+        
         #region Handlers
 
         private void openStockView(ZeroRule rule)

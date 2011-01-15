@@ -23,17 +23,26 @@ namespace ZeroCommonClasses.Context
             ClientConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TerminalZeroClient.Properties.Settings.ConfigConn"];
         }
 
-        public static EntityConnection GetConnectionForCurrentEnvironment(string modelName)
+        public static System.Configuration.ConnectionStringSettings GetConnectionForCurrentEnvironment()
         {
             System.Configuration.ConnectionStringSettings set;
 
-            if (ServerConnectionString !=null)
+            if (ServerConnectionString != null)
                 set = ServerConnectionString;
             else
                 set = ClientConnectionString;
             
             if (set == null)
                 throw new Exception("Connection String not found");
+
+            return set;
+        }
+
+        public static EntityConnection GetConnectionForCurrentEnvironment(string modelName)
+        {
+            System.Configuration.ConnectionStringSettings set = GetConnectionForCurrentEnvironment();
+            
+            
 
             EntityConnectionStringBuilder conStrIntegratedSecurity = new EntityConnectionStringBuilder()
             {

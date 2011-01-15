@@ -221,6 +221,28 @@ namespace ZeroConfiguration.Entities
         }
 
         #endregion
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="terminalCode">No Metadata Documentation available.</param>
+        public int GetPacksToSend(Nullable<global::System.Int32> terminalCode)
+        {
+            ObjectParameter terminalCodeParameter;
+            if (terminalCode.HasValue)
+            {
+                terminalCodeParameter = new ObjectParameter("TerminalCode", terminalCode);
+            }
+            else
+            {
+                terminalCodeParameter = new ObjectParameter("TerminalCode", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("GetPacksToSend", terminalCodeParameter);
+        }
+
+        #endregion
     }
     
 
@@ -925,78 +947,6 @@ namespace ZeroConfiguration.Entities
         private global::System.Boolean _Active;
         partial void OnActiveChanging(global::System.Boolean value);
         partial void OnActiveChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> ConnectionRequired
-        {
-            get
-            {
-                return _ConnectionRequired;
-            }
-            set
-            {
-                OnConnectionRequiredChanging(value);
-                ReportPropertyChanging("ConnectionRequired");
-                _ConnectionRequired = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ConnectionRequired");
-                OnConnectionRequiredChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _ConnectionRequired;
-        partial void OnConnectionRequiredChanging(Nullable<global::System.Boolean> value);
-        partial void OnConnectionRequiredChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> ExistsConfigData
-        {
-            get
-            {
-                return _ExistsConfigData;
-            }
-            set
-            {
-                OnExistsConfigDataChanging(value);
-                ReportPropertyChanging("ExistsConfigData");
-                _ExistsConfigData = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ExistsConfigData");
-                OnExistsConfigDataChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _ExistsConfigData;
-        partial void OnExistsConfigDataChanging(Nullable<global::System.Boolean> value);
-        partial void OnExistsConfigDataChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> ExistsMasterData
-        {
-            get
-            {
-                return _ExistsMasterData;
-            }
-            set
-            {
-                OnExistsMasterDataChanging(value);
-                ReportPropertyChanging("ExistsMasterData");
-                _ExistsMasterData = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ExistsMasterData");
-                OnExistsMasterDataChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _ExistsMasterData;
-        partial void OnExistsMasterDataChanging(Nullable<global::System.Boolean> value);
-        partial void OnExistsMasterDataChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

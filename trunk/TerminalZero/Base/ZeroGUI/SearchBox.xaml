@@ -17,7 +17,22 @@
                     <Image Grid.Column="1" Source="/ZeroGUI;component/Resources/search.png" Height="20"/>
                 </Grid>
             </Button>
-            <TextBlock x:Name="quantity" VerticalAlignment="Center"/>
         </StackPanel>
+        <Popup Name="quantityPopup"  HorizontalAlignment="Right" HorizontalOffset="10">
+            <Popup.Child>
+                <Border Padding="3" CornerRadius="4" BorderThickness="0">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF4A95BE" Offset="0" />
+                            <GradientStop Color="White" Offset="1" />
+                            <GradientStop Color="#FFA3A3A3" Offset="0.778" />
+                            <GradientStop Color="#FFB8B8BA" Offset="0.253" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock x:Name="quantity" VerticalAlignment="Center" Foreground="White"/>
+                </Border>
+
+            </Popup.Child>
+        </Popup>
     </Grid>
 </UserControl>

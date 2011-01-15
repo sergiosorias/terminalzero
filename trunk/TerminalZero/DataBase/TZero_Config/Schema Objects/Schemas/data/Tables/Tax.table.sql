@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [data].[Tax]
 (
 	Code int NOT NULL, 
-	[Stamp] datetime NULL DEFAULT (Getdate()),
-	[Enable] bit NOT NULL DEFAULT (1),
+	[Stamp] DATETIME NULL CONSTRAINT DF_Tax_Stamp DEFAULT (Getdate()),
+	[Enable] BIT NOT NULL CONSTRAINT DF_Tax_Enable DEFAULT (1),
 	Name nvarchar(100) NULL,
 	[Description] nvarchar(300) NULL,
 	[Value] float NOT NULL,
