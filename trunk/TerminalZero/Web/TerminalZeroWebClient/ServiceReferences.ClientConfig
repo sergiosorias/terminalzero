@@ -2,16 +2,14 @@
     <system.serviceModel>
         <bindings>
             <basicHttpBinding>
-                <binding name="BasicHttpBinding_ServiceHelper" maxBufferSize="2147483647"
-                    maxReceivedMessageSize="2147483647">
+                <binding name="myBindingForBigArrays" closeTimeout="00:01:00"
+                    openTimeout="00:59:00" receiveTimeout="00:59:00" sendTimeout="00:59:00"
+                    maxBufferSize="67108864" maxReceivedMessageSize="2147483647"
+                    textEncoding="utf-8" transferMode="StreamedResponse">
                     <security mode="None" />
                 </binding>
             </basicHttpBinding>
         </bindings>
-        <client>
-            <endpoint address="http://SEBAS-NOTE/TZeroHost/Services/ServiceHelper.svc"
-                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ServiceHelper"
-                contract="ServiceHelperReference.ServiceHelper" name="BasicHttpBinding_ServiceHelper" />
-        </client>
+        <client />
     </system.serviceModel>
 </configuration>
