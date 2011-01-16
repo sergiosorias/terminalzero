@@ -32,6 +32,7 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Content="Group by level" Margin="2" x:Name="cbGroupByIndend" VerticalAlignment="Center"/>
                     <CheckBox Content="Group by Message" Margin="2" x:Name="cbGroupByMessage" VerticalAlignment="Center"/>
+                    <Button Content="Print" Height="22" Name="btnPrint" Click="btnPrint_Click"/>
                 </StackPanel>
             </Border>
             <Line Width="5" />
