@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Navigation;
 using System.Threading;
 using System.Windows.Data;
+using System.Windows.Printing;
 
 namespace TerminalZeroWebClient.Views
 {
@@ -85,6 +86,18 @@ namespace TerminalZeroWebClient.Views
                     e.Matches = taskListView.ItemCount;
                 }
             }
+        }
+
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += (s, args) => 
+            {
+                args.PageVisual = logEntryEventArgsDataGrid;
+            };
+
+            pd.Print("Logs TZero");
+
         }
 
     }

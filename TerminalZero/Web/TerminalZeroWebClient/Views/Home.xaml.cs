@@ -15,6 +15,7 @@ namespace TerminalZeroWebClient
 {
     public partial class Home : Page
     {
+        ServiceHelperReference.ServiceHelperClient client;
         public Home()
         {
             InitializeComponent();
@@ -23,6 +24,28 @@ namespace TerminalZeroWebClient
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            client = new ServiceHelperReference.ServiceHelperClient();
+            client.GetTerminalsStatusCompleted += new EventHandler<ServiceHelperReference.GetTerminalsStatusCompletedEventArgs>(client_GetTerminalsStatusCompleted);
+            client.GetTerminalsStatusAsync();
+            waitCursorHome.Start();
+        }
+
+        void client_GetTerminalsStatusCompleted(object sender, ServiceHelperReference.GetTerminalsStatusCompletedEventArgs e)
+        {
+            if (e.Result.IsValid)
+            {
+                terminalContent.Children.Clear();
+                foreach (var item in e.Result.Result)
+                {
+                    Controls.TerminalStatus T = new Controls.TerminalStatus();
+                    T.Margin = new Thickness(3);
+                    T.DataContext = item;
+                    T.MaxWidth = 280;
+                    terminalContent.Children.Add(T);
+                }
+                
+            }
+            waitCursorHome.Stop();
         }
     }
 }

@@ -4,21 +4,26 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
+    xmlns:myControls="clr-namespace:ZeroGUI"
     Title="Home"
     Style="{StaticResource PageStyle}">
 
     <Grid x:Name="LayoutRoot">
         <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
+            <Grid>
+                <StackPanel x:Name="ContentStackPanel">
 
-            <StackPanel x:Name="ContentStackPanel">
-
-                <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
+                    <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
                                    Text="Home"/>
-                <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" 
-                                   Text="Home page content"/>
+                    <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" 
+                                   Text="Este sitio le permitira administrar remotamente las Terminales."/>
+                    <StackPanel Name="terminalContent" HorizontalAlignment="Left">
 
-            </StackPanel>
-
+                    </StackPanel>
+                </StackPanel>
+                <myControls:WaitCursor x:Name="waitCursorHome"/>
+            </Grid>
+            
         </ScrollViewer>
     </Grid>
 
