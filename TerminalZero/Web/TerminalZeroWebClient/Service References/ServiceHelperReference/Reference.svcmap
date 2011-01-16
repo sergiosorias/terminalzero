@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d0ecb9fc-98c0-4fb0-b0b9-4a4dde0ac2f7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://sebas-note/TZeroHost/Services/ServiceHelper.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ServiceHelper.xsd" MetadataType="Schema" ID="c785a639-2476-4448-b8e7-87ffaa45fa27" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd1" />
+    <MetadataFile FileName="ServiceHelper1.xsd" MetadataType="Schema" ID="119b0a52-f52e-4091-91be-3d3cdff88011" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd6" />
+    <MetadataFile FileName="ServiceHelper2.xsd" MetadataType="Schema" ID="bc87cebc-24ed-4aaf-bef0-f54cf193ca5c" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd7" />
+    <MetadataFile FileName="ServiceHelper3.xsd" MetadataType="Schema" ID="7442d2c8-ef9d-4660-a6db-9986a555ab24" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd2" />
+    <MetadataFile FileName="ServiceHelper.disco" MetadataType="Disco" ID="551ee308-50a9-423f-b9a9-001dc3f6d209" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?disco" />
+    <MetadataFile FileName="ServiceHelper.wsdl" MetadataType="Wsdl" ID="c38a8a75-5930-4eca-baa1-cb6cc37324e6" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?wsdl" />
+    <MetadataFile FileName="ServiceHelper4.xsd" MetadataType="Schema" ID="cc689932-8528-48e8-8fb9-50522f43be1b" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd3" />
+    <MetadataFile FileName="ServiceHelper5.xsd" MetadataType="Schema" ID="202cea0e-5e95-418a-9e47-b90a1c1a699f" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd5" />
+    <MetadataFile FileName="ServiceHelper6.xsd" MetadataType="Schema" ID="fc5d2a34-ca37-48e2-8281-dc0ab0d3f72c" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd4" />
+    <MetadataFile FileName="ServiceHelper7.xsd" MetadataType="Schema" ID="f2cfc216-af4f-4b59-8773-310bcf653375" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd0" />
+    <MetadataFile FileName="ServiceHelper8.xsd" MetadataType="Schema" ID="69325014-07f0-4180-94ac-d4cecec12fad" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd8" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

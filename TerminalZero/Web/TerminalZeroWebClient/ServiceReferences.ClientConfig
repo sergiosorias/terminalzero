@@ -10,6 +10,10 @@
                 </binding>
             </basicHttpBinding>
         </bindings>
-        <client />
+        <client>
+            <endpoint address="http://sebas-note/TZeroHost/Services/ServiceHelper.svc"
+                binding="basicHttpBinding" bindingConfiguration="myBindingForBigArrays"
+                contract="ServiceHelperReference.ServiceHelper" name="BasicHttpBinding_ServiceHelper" />
+        </client>
     </system.serviceModel>
 </configuration>

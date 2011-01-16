@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" />
+  <xs:complexType name="ArrayOfTerminal">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Terminal" nillable="true" type="tns:Terminal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTerminal" nillable="true" type="tns:ArrayOfTerminal" />
+  <xs:complexType name="Terminal">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q1:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Active" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Code" type="xs:int" />
+          <xs:element minOccurs="0" name="Connections" nillable="true" type="tns:ArrayOfConnection" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="IsSyncronized" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LastSync" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Modules" nillable="true" type="tns:ArrayOfModule" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TerminalProperties" nillable="true" type="tns:ArrayOfTerminalProperty" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Terminal" nillable="true" type="tns:Terminal" />
+  <xs:complexType name="ArrayOfConnection">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Connection" nillable="true" type="tns:Connection" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConnection" nillable="true" type="tns:ArrayOfConnection" />
+  <xs:complexType name="Connection">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q2:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ConnectionStatu" nillable="true" type="tns:ConnectionStatu" />
+          <xs:element minOccurs="0" name="ConnectionStatuReference" nillable="true" type="q2:EntityReferenceOfConnectionStatunM6hmTEN" />
+          <xs:element minOccurs="0" name="Stamp" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StatusCode" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Terminal" nillable="true" type="tns:Terminal" />
+          <xs:element minOccurs="0" name="TerminalCode" type="xs:int" />
+          <xs:element minOccurs="0" name="TerminalReference" nillable="true" type="q2:EntityReferenceOfTerminalnM6hmTEN" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Connection" nillable="true" type="tns:Connection" />
+  <xs:complexType name="ConnectionStatu">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q3:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" type="xs:int" />
+          <xs:element minOccurs="0" name="Connections" nillable="true" type="tns:ArrayOfConnection" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ConnectionStatu" nillable="true" type="tns:ConnectionStatu" />
+  <xs:complexType name="ArrayOfModule">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Module" nillable="true" type="tns:Module" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfModule" nillable="true" type="tns:ArrayOfModule" />
+  <xs:complexType name="Module">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q4:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Code" type="xs:int" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Terminals" nillable="true" type="tns:ArrayOfTerminal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Module" nillable="true" type="tns:Module" />
+  <xs:complexType name="ArrayOfTerminalProperty">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminalProperty" nillable="true" type="tns:TerminalProperty" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTerminalProperty" nillable="true" type="tns:ArrayOfTerminalProperty" />
+  <xs:complexType name="TerminalProperty">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q5:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LargeValue" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Terminal" nillable="true" type="tns:Terminal" />
+          <xs:element minOccurs="0" name="TerminalCode" type="xs:int" />
+          <xs:element minOccurs="0" name="TerminalReference" nillable="true" type="q5:EntityReferenceOfTerminalnM6hmTEN" />
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TerminalProperty" nillable="true" type="tns:TerminalProperty" />
+</xs:schema>
