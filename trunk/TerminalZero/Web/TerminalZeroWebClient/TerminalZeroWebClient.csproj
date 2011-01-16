@@ -105,6 +105,16 @@
     <Compile Include="Controls\TerminalStatus.xaml.cs">
       <DependentUpon>TerminalStatus.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service References\DataService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.datasvcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ServiceHelperReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -187,10 +197,70 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
+    <None Include="Service References\DataService\Reference.datasvcmap">
+      <Generator>DataServiceClientGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper.disco" />
+    <None Include="Service References\ServiceHelperReference\configuration91.svcinfo" />
+    <None Include="Service References\ServiceHelperReference\configuration.svcinfo" />
+    <None Include="Service References\ServiceHelperReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ServiceReferences.ClientConfig" />
+    <None Include="Service References\DataService\service.edmx" />
+    <None Include="Service References\ServiceHelperReference\ServiceHelper.wsdl" />
+    <None Include="Service References\ServiceHelperReference\ServiceHelper.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.Pack.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.VirtualLogEntry.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ServiceReferenceMetadataStorage Include="Service References\DataService\">
+      <Type>datasvcmap</Type>
+    </ServiceReferenceMetadataStorage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServiceHelperReference\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
