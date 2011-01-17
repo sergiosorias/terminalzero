@@ -11,16 +11,13 @@
         <Color x:Key="invalidRed">#FFB46161</Color>
     </UserControl.Resources>
     <Grid x:Name="LayoutRoot" MouseEnter="LayoutRoot_MouseEnter" MouseLeave="LayoutRoot_MouseLeave">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-       <Border CornerRadius="10,0,10,0" Padding="5" Name="BackBorder" BorderThickness="2" BorderBrush="Transparent">
+        <Border CornerRadius="10,0,10,0" Padding="5" Name="BackBorder" BorderThickness="2" BorderBrush="Transparent">
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF4A95BE" Offset="0" />
-                    <GradientStop Color="White" Offset="1" />
-                    <GradientStop Color="#FF727C49" Offset="0.778" />
+                    <GradientStop Color="#FFEFEFEF" Offset="0" />
                     <GradientStop Color="#FFB8B8BA" Offset="0.253" />
+                    <GradientStop Color="#FF727C49" Offset="0.778" />
+                    <GradientStop Color="#FFEFEFEF" Offset="1" />
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
@@ -35,14 +32,14 @@
                 </Grid.RowDefinitions>
                 <!--<TextBlock Text="Terminal:" FontWeight="Bold" Foreground="White" Height="21" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" />-->
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <TextBlock Grid.Column="1" Foreground="White" Grid.Row="1" Height="21" HorizontalAlignment="Stretch" Name="codeTextBox" Text="{Binding Path=Code, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
-                    <TextBlock Text=" - " Foreground="White" Height="21" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                    <TextBlock Foreground="White"  Height="21" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
-                    <TextBlock Text=" - " Foreground="White" Height="21" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                    <TextBlock Foreground="White"  Height="21" HorizontalAlignment="Stretch" Margin="3" Name="DescriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Foreground="White" FontWeight="Bold" Grid.Row="1" Height="21" HorizontalAlignment="Stretch" Name="codeTextBox" Text="{Binding Path=Code, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
+                    <TextBlock Text=" - " Foreground="White" FontWeight="Bold" Height="21" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                    <TextBlock Foreground="White"  Height="21" FontWeight="Bold" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
+                    <TextBlock Text=" - " Foreground="White" Height="21" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                    <TextBlock Foreground="White"  Height="21" FontWeight="Bold" HorizontalAlignment="Stretch" Margin="3" Name="DescriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
                 </StackPanel>
                 <TextBlock Text="Última conexión: " FontWeight="Bold" Height="21" Foreground="White" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Foreground="White" Grid.Row="7" Height="21" HorizontalAlignment="Stretch" Name="lastSyncDatePicker" Text="{Binding Path=LastSync, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Foreground="White" Grid.Row="1" Height="21" HorizontalAlignment="Stretch" Name="lastSyncDatePicker" Text="{Binding Path=LastSync, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
                 <Button Style="{StaticResource MoreButtonStyle}" Name="btnMore" Background="#FF727C49" Height="22" Width="22" Grid.Column="2" Grid.RowSpan="2" Click="Button_Click"/>
                 
                 <Popup Name="popUpMoreInfo" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" IsOpen="True" HorizontalOffset="30">

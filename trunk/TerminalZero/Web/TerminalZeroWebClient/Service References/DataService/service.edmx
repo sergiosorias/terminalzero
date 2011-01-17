@@ -1,0 +1,324 @@
+﻿<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
+    <Schema Namespace="TZero_ConfigModel" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityType Name="Price">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <Property Name="UnitWeightCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="SaleWeightCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Value" Type="Edm.Double" Nullable="false" />
+        <NavigationProperty Name="Products" Relationship="TZero_ConfigModel.FK_PriceCost_Product_Price" FromRole="Price" ToRole="Product" />
+        <NavigationProperty Name="Products1" Relationship="TZero_ConfigModel.FK_Product_Price" FromRole="Price" ToRole="Product" />
+        <NavigationProperty Name="Weight" Relationship="TZero_ConfigModel.FK_SaleWeight_Price_Weight" FromRole="Price" ToRole="Weight" />
+        <NavigationProperty Name="Weight1" Relationship="TZero_ConfigModel.FK_UnitWeight_Price_Weight" FromRole="Price" ToRole="Weight" />
+      </EntityType>
+      <EntityType Name="Product">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="MasterCode" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <Property Name="ShortDescription" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="PriceCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="PriceCostCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="ByWeight" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Tax1Code" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Tax2Code" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Group1" Type="Edm.Int32" Nullable="true" />
+        <Property Name="Group2" Type="Edm.Int32" Nullable="true" />
+        <Property Name="DueDays" Type="Edm.Int32" Nullable="true" />
+        <NavigationProperty Name="Price" Relationship="TZero_ConfigModel.FK_PriceCost_Product_Price" FromRole="Product" ToRole="Price" />
+        <NavigationProperty Name="Price1" Relationship="TZero_ConfigModel.FK_Product_Price" FromRole="Product" ToRole="Price" />
+        <NavigationProperty Name="ProductGroup" Relationship="TZero_ConfigModel.FK_Group1_Product_ProductGroup" FromRole="Product" ToRole="ProductGroup" />
+        <NavigationProperty Name="ProductGroup1" Relationship="TZero_ConfigModel.FK_Group2_Product_ProductGroup" FromRole="Product" ToRole="ProductGroup" />
+        <NavigationProperty Name="Tax" Relationship="TZero_ConfigModel.FK_Tax1_Product_Tax" FromRole="Product" ToRole="Tax" />
+        <NavigationProperty Name="Tax1" Relationship="TZero_ConfigModel.FK_Tax2_Product_Tax" FromRole="Product" ToRole="Tax" />
+      </EntityType>
+      <EntityType Name="ProductGroup">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <NavigationProperty Name="Products" Relationship="TZero_ConfigModel.FK_Group1_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
+        <NavigationProperty Name="Products1" Relationship="TZero_ConfigModel.FK_Group2_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
+      </EntityType>
+      <EntityType Name="Supplier">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name1" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Name2" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <Property Name="Country" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="true" FixedLength="false" />
+        <Property Name="State" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="City" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="true" FixedLength="false" />
+        <Property Name="Street" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Number" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        <Property Name="E_Mail1" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="false" FixedLength="false" />
+        <Property Name="E_Mail2" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="false" FixedLength="false" />
+        <Property Name="WebSite" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="false" FixedLength="false" />
+        <Property Name="Telephone1" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="false" FixedLength="false" />
+        <Property Name="Telephone2" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="false" FixedLength="false" />
+        <Property Name="Telephone3" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="false" FixedLength="false" />
+        <Property Name="TaxPositionCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="PaymentInstrumentCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="LegalCode" Type="Edm.String" Nullable="true" MaxLength="15" Unicode="false" FixedLength="false" />
+        <NavigationProperty Name="TaxPosition" Relationship="TZero_ConfigModel.FK_TaxPositionCode_Supplier_TaxPosition" FromRole="Supplier" ToRole="TaxPosition" />
+      </EntityType>
+      <EntityType Name="Tax">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <Property Name="Value" Type="Edm.Double" Nullable="false" />
+        <Property Name="ProductDefault" Type="Edm.Boolean" Nullable="true" />
+        <NavigationProperty Name="Products" Relationship="TZero_ConfigModel.FK_Tax1_Product_Tax" FromRole="Tax" ToRole="Product" />
+        <NavigationProperty Name="Products1" Relationship="TZero_ConfigModel.FK_Tax2_Product_Tax" FromRole="Tax" ToRole="Product" />
+      </EntityType>
+      <EntityType Name="TaxPosition">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <NavigationProperty Name="Suppliers" Relationship="TZero_ConfigModel.FK_TaxPositionCode_Supplier_TaxPosition" FromRole="TaxPosition" ToRole="Supplier" />
+        <NavigationProperty Name="Customers" Relationship="TZero_ConfigModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="TaxPosition" ToRole="Customer" />
+      </EntityType>
+      <EntityType Name="Weight">
+        <Key>
+          <PropertyRef Name="Code" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Description" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <Property Name="Quantity" Type="Edm.Double" Nullable="false" />
+        <NavigationProperty Name="Prices" Relationship="TZero_ConfigModel.FK_SaleWeight_Price_Weight" FromRole="Weight" ToRole="Price" />
+        <NavigationProperty Name="Prices1" Relationship="TZero_ConfigModel.FK_UnitWeight_Price_Weight" FromRole="Weight" ToRole="Price" />
+      </EntityType>
+      <EntityType Name="Customer">
+        <Key>
+          <PropertyRef Name="Code" />
+          <PropertyRef Name="TerminalCode" />
+        </Key>
+        <Property Name="Code" Type="Edm.Int32" Nullable="false" />
+        <Property Name="TerminalCode" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Stamp" Type="Edm.DateTime" Nullable="true" />
+        <Property Name="Enable" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="Name1" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Name2" Type="Edm.String" Nullable="true" MaxLength="300" Unicode="true" FixedLength="false" />
+        <Property Name="Country" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="true" FixedLength="false" />
+        <Property Name="State" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="City" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="true" FixedLength="false" />
+        <Property Name="Street" Type="Edm.String" Nullable="true" MaxLength="100" Unicode="true" FixedLength="false" />
+        <Property Name="Number" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        <Property Name="E_Mail1" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="false" FixedLength="false" />
+        <Property Name="E_Mail2" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="false" FixedLength="false" />
+        <Property Name="WebSite" Type="Edm.String" Nullable="true" MaxLength="250" Unicode="false" FixedLength="false" />
+        <Property Name="Telephone1" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="false" FixedLength="false" />
+        <Property Name="Telephone2" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="false" FixedLength="false" />
+        <Property Name="Telephone3" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="false" FixedLength="false" />
+        <Property Name="TaxPositionCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="PaymentInstrumentCode" Type="Edm.Int32" Nullable="true" />
+        <Property Name="LegalCode" Type="Edm.String" Nullable="true" MaxLength="15" Unicode="false" FixedLength="false" />
+        <NavigationProperty Name="TaxPosition" Relationship="TZero_ConfigModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="Customer" ToRole="TaxPosition" />
+      </EntityType>
+      <Association Name="FK_PriceCost_Product_Price">
+        <End Role="Price" Type="TZero_ConfigModel.Price" Multiplicity="0..1" />
+        <End Role="Product" Type="TZero_ConfigModel.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Price">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Product">
+            <PropertyRef Name="PriceCostCode" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_Product_Price">
+        <End Role="Price" Type="TZero_ConfigModel.Price" Multiplicity="0..1" />
+        <End Role="Product" Type="TZero_ConfigModel.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Price">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Product">
+            <PropertyRef Name="PriceCode" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_SaleWeight_Price_Weight">
+        <End Role="Weight" Type="TZero_ConfigModel.Weight" Multiplicity="0..1" />
+        <End Role="Price" Type="TZero_ConfigModel.Price" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Weight">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Price">
+            <PropertyRef Name="SaleWeightCode" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_UnitWeight_Price_Weight">
+        <End Role="Weight" Type="TZero_ConfigModel.Weight" Multiplicity="0..1" />
+        <End Role="Price" Type="TZero_ConfigModel.Price" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Weight">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Price">
+            <PropertyRef Name="UnitWeightCode" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_Group1_Product_ProductGroup">
+        <End Role="ProductGroup" Type="TZero_ConfigModel.ProductGroup" Multiplicity="0..1" />
+        <End Role="Product" Type="TZero_ConfigModel.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="ProductGroup">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Product">
+            <PropertyRef Name="Group1" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_Group2_Product_ProductGroup">
+        <End Role="ProductGroup" Type="TZero_ConfigModel.ProductGroup" Multiplicity="0..1" />
+        <End Role="Product" Type="TZero_ConfigModel.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="ProductGroup">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Product">
+            <PropertyRef Name="Group2" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_Tax1_Product_Tax">
+        <End Role="Tax" Type="TZero_ConfigModel.Tax" Multiplicity="0..1" />
+        <End Role="Product" Type="TZero_ConfigModel.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Tax">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Product">
+            <PropertyRef Name="Tax1Code" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_Tax2_Product_Tax">
+        <End Role="Tax" Type="TZero_ConfigModel.Tax" Multiplicity="0..1" />
+        <End Role="Product" Type="TZero_ConfigModel.Product" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Tax">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Product">
+            <PropertyRef Name="Tax2Code" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_TaxPositionCode_Supplier_TaxPosition">
+        <End Role="TaxPosition" Type="TZero_ConfigModel.TaxPosition" Multiplicity="0..1" />
+        <End Role="Supplier" Type="TZero_ConfigModel.Supplier" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="TaxPosition">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Supplier">
+            <PropertyRef Name="TaxPositionCode" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_TaxPositionCode_Customer_TaxPosition">
+        <End Role="TaxPosition" Type="TZero_ConfigModel.TaxPosition" Multiplicity="0..1" />
+        <End Role="Customer" Type="TZero_ConfigModel.Customer" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="TaxPosition">
+            <PropertyRef Name="Code" />
+          </Principal>
+          <Dependent Role="Customer">
+            <PropertyRef Name="TaxPositionCode" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+    </Schema>
+    <Schema Namespace="ZeroMasterData.Entities" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="Entities" p7:LazyLoadingEnabled="true" m:IsDefaultEntityContainer="true" xmlns:p7="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntitySet Name="Prices" EntityType="TZero_ConfigModel.Price" />
+        <EntitySet Name="Products" EntityType="TZero_ConfigModel.Product" />
+        <EntitySet Name="ProductGroups" EntityType="TZero_ConfigModel.ProductGroup" />
+        <EntitySet Name="Suppliers" EntityType="TZero_ConfigModel.Supplier" />
+        <EntitySet Name="Taxes" EntityType="TZero_ConfigModel.Tax" />
+        <EntitySet Name="TaxPositions" EntityType="TZero_ConfigModel.TaxPosition" />
+        <EntitySet Name="Weights" EntityType="TZero_ConfigModel.Weight" />
+        <EntitySet Name="Customers" EntityType="TZero_ConfigModel.Customer" />
+        <AssociationSet Name="FK_PriceCost_Product_Price" Association="TZero_ConfigModel.FK_PriceCost_Product_Price">
+          <End Role="Price" EntitySet="Prices" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+        <AssociationSet Name="FK_Product_Price" Association="TZero_ConfigModel.FK_Product_Price">
+          <End Role="Price" EntitySet="Prices" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+        <AssociationSet Name="FK_SaleWeight_Price_Weight" Association="TZero_ConfigModel.FK_SaleWeight_Price_Weight">
+          <End Role="Weight" EntitySet="Weights" />
+          <End Role="Price" EntitySet="Prices" />
+        </AssociationSet>
+        <AssociationSet Name="FK_UnitWeight_Price_Weight" Association="TZero_ConfigModel.FK_UnitWeight_Price_Weight">
+          <End Role="Weight" EntitySet="Weights" />
+          <End Role="Price" EntitySet="Prices" />
+        </AssociationSet>
+        <AssociationSet Name="FK_Group1_Product_ProductGroup" Association="TZero_ConfigModel.FK_Group1_Product_ProductGroup">
+          <End Role="ProductGroup" EntitySet="ProductGroups" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+        <AssociationSet Name="FK_Group2_Product_ProductGroup" Association="TZero_ConfigModel.FK_Group2_Product_ProductGroup">
+          <End Role="ProductGroup" EntitySet="ProductGroups" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+        <AssociationSet Name="FK_Tax1_Product_Tax" Association="TZero_ConfigModel.FK_Tax1_Product_Tax">
+          <End Role="Tax" EntitySet="Taxes" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+        <AssociationSet Name="FK_Tax2_Product_Tax" Association="TZero_ConfigModel.FK_Tax2_Product_Tax">
+          <End Role="Tax" EntitySet="Taxes" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+        <AssociationSet Name="FK_TaxPositionCode_Supplier_TaxPosition" Association="TZero_ConfigModel.FK_TaxPositionCode_Supplier_TaxPosition">
+          <End Role="TaxPosition" EntitySet="TaxPositions" />
+          <End Role="Supplier" EntitySet="Suppliers" />
+        </AssociationSet>
+        <AssociationSet Name="FK_TaxPositionCode_Customer_TaxPosition" Association="TZero_ConfigModel.FK_TaxPositionCode_Customer_TaxPosition">
+          <End Role="TaxPosition" EntitySet="TaxPositions" />
+          <End Role="Customer" EntitySet="Customers" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

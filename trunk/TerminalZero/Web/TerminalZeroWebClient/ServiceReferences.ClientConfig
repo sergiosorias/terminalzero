@@ -1,19 +1,18 @@
 ﻿<configuration>
     <system.serviceModel>
         <bindings>
-            <basicHttpBinding>
-                <binding name="myBindingForBigArrays" closeTimeout="00:01:00"
-                    openTimeout="00:59:00" receiveTimeout="00:59:00" sendTimeout="00:59:00"
-                    maxBufferSize="67108864" maxReceivedMessageSize="2147483647"
-                    textEncoding="utf-8" transferMode="StreamedResponse">
-                    <security mode="None" />
+            <customBinding>
+                <binding name="WSHttpBinding_ServiceHelper" closeTimeout="00:01:00"
+                    openTimeout="00:59:00" receiveTimeout="00:59:00" sendTimeout="00:59:00">
+                    <textMessageEncoding messageVersion="Default" writeEncoding="utf-8" />
+                    <httpTransport maxReceivedMessageSize="2147483647" maxBufferSize="2147483647" />
                 </binding>
-            </basicHttpBinding>
+            </customBinding>
         </bindings>
         <client>
-            <endpoint address="http://sebas-note/TZeroHost/Services/ServiceHelper.svc"
-                binding="basicHttpBinding" bindingConfiguration="myBindingForBigArrays"
-                contract="ServiceHelperReference.ServiceHelper" name="BasicHttpBinding_ServiceHelper" />
+            <endpoint address="http://sebas-note/TZeroHost/services/ServiceHelper.svc"
+                binding="customBinding" bindingConfiguration="WSHttpBinding_ServiceHelper"
+                contract="ServiceHelperReference.ServiceHelper" name="WSHttpBinding_ServiceHelper" />
         </client>
     </system.serviceModel>
 </configuration>
