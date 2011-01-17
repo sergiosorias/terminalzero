@@ -20,68 +20,84 @@ namespace TZeroHost.Services
 
         public ZeroResponse<string> SayHello(string name, int terminal)
         {
-            System.Diagnostics.Trace.WriteLine(string.Format("Name: {0}, Code: {1}",name,terminal), "SayHello");
-            System.Diagnostics.Trace.Indent();
             ZeroResponse<string> ret = new ZeroResponse<string>();
-            ZeroServerConfiguration Config = new ZeroServerConfiguration();
-            string msg = "";
-            ret.IsValid = Config.ValidateTerminal(terminal, name, out msg);
-            if (ret.IsValid)
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SayHello", "", name, terminal))
             {
-                ret.Result = Config.CreateConnection(terminal);
-                msg += " OK";
+                hlp.TerminalCode = terminal;
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateTerminal(terminal, name, out hlp.StatusMessage))
+                            {
+                                ret.Result = Config.CreateConnection(terminal);
+                                System.Diagnostics.Trace.WriteLine(string.Format("Iniciando Conexión con terminal {0} - ID {1} - ConnID {2}", name, terminal, ret.Result));
+                            }
+                        }
+                    });
+
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             }
-            System.Diagnostics.Trace.Unindent();
-            System.Diagnostics.Trace.WriteLine(string.Format("Name: {0}, Code: {1}, Message: {2}", name, terminal, ret), "SayHello");
-            ret.Status = msg;
+
             return ret;
         }
 
         public ZeroResponse<DateTime> SayBye(string ID)
         {
             ZeroResponse<DateTime> ret = new ZeroResponse<DateTime>();
-            ret.IsValid = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SayBye", ID))
             {
-                string msg;
-                int tCode = -1;
-                if (Config.ValidateConnection(ID, out tCode, out msg))
-                {
-                    Config.UpdateConnectionStatus(ID, ZeroServerConfiguration.ConnectionState.Ended);
-                    ret.Result = DateTime.Now;
-                }
-                else
-                {
-                    if (tCode >= 0)
-                        Config.UpdateConnectionStatus(ID, ZeroServerConfiguration.ConnectionState.Error);
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                Config.UpdateConnectionStatus(ID, ZeroServerConfiguration.ConnectionState.Ended);
+                                ret.Result = DateTime.Now;
+                                System.Diagnostics.Trace.WriteLine(string.Format("Finalizando Conexión con terminal ID {0} - ConnID {1}", hlp.TerminalCode, ID));
+                            }
+                            else
+                            {
+                                if (hlp.TerminalCode >= 0)
+                                    Config.UpdateConnectionStatus(ID, ZeroServerConfiguration.ConnectionState.Error);
 
-                    ret.Result = DateTime.MinValue;
-                    ret.Status = msg;
-                }
+                                ret.Result = DateTime.MinValue;
+                            }
+                        }
+                    });
+
+                ret.Message = hlp.StatusMessage;
+                ret.IsValid = hlp.IsValid;
             }
+
 
             return ret;
         }
 
         public ZeroResponse<bool> SendClientModules(string ID, string modules)
         {
-            int TCode = 0;
-            string msg = "";
-            bool stat = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+            ZeroResponse<bool> ret = new ZeroResponse<bool>();
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SendClientModules", ID, modules))
             {
-                stat = Config.ValidateConnection(ID, out TCode, out msg);
-                if (stat)
-                {
-                    IEnumerable<Module> mods = IEnumerableExtentions.GetEntitiesFromXMLObjectList<Module>(modules);
-                    Config.MergeModules(mods, TCode);
-                }
-            }
-            ZeroResponse<bool> ret = new ZeroResponse<bool>
-            {
-                IsValid = stat,
-                Result = stat,
-                Status = (stat) ? "OK" : msg
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                IEnumerable<Module> mods = IEnumerableExtentions.GetEntitiesFromXMLObjectList<Module>(modules);
+                                Config.MergeModules(mods, hlp.TerminalCode);
+                                ret.Result = true;
+                            }
+                        }
+
+                        
+                    });
+
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             };
 
             return ret;
@@ -90,19 +106,27 @@ namespace TZeroHost.Services
         public ZeroResponse<bool> SendClientProperties(string ID, string properties)
         {
             ZeroResponse<bool> ret = new ZeroResponse<bool>();
-            ret.IsValid = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SendClientProperties", ID, properties))
             {
-                string msg;
-                int tCode = -1;
-                if (Config.ValidateConnection(ID, out tCode, out msg))
-                {
-                    ret.Result = true;
-                    Config.MergeTerminalProperties(tCode,IEnumerableExtentions.GetEntitiesFromXMLObjectList<TerminalProperty>(properties));
-                }
-                
-                ret.Result = false;
-                ret.Status = msg;
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                ret.Result = true;
+                                Config.MergeTerminalProperties(hlp.TerminalCode, IEnumerableExtentions.GetEntitiesFromXMLObjectList<TerminalProperty>(properties));
+                            }
+                            else
+                            {
+                                ret.Result = false;
+                            }
+                        }
+                    });
+
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             }
 
             return ret;
@@ -111,65 +135,78 @@ namespace TZeroHost.Services
         public ZeroResponse<string> GetServerProperties(string ID)
         {
             ZeroResponse<string> ret = new ZeroResponse<string>();
-            ret.IsValid = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("GetServerProperties", ID))
             {
-                string msg;
-                int tCode = -1;
-                if (Config.ValidateConnection(ID, out tCode, out msg))
-                {
-                    IEnumerable<TerminalProperty> list = Config.GetTerminalProperties(tCode);
-                    ret.Result = ZeroCommonClasses.Helpers.IEnumerableExtentions.GetEntitiesAsXMLObjectList<TerminalProperty>(list);
-                }
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                IEnumerable<TerminalProperty> list = Config.GetTerminalProperties(hlp.TerminalCode);
+                                ret.Result = ZeroCommonClasses.Helpers.IEnumerableExtentions.GetEntitiesAsXMLObjectList<TerminalProperty>(list);
+                            }
+                        }
+                    });
 
-                ret.Status = msg;
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             }
             return ret;
         }
 
         public ZeroResponse<Dictionary<int, int>> GetExistingPacks(string ID)
         {
-            ZeroResponse<Dictionary<int, int>> ret = new ZeroResponse<Dictionary<int, int>>
+            ZeroResponse<Dictionary<int, int>> ret = new ZeroResponse<Dictionary<int, int>>();
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("GetExistingPacks", ID))
             {
-                IsValid = true,
-            };
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                ret.Result = Config.GetPacksToSend(hlp.TerminalCode);
+                            }
+                            else
+                            {
+                                if (hlp.TerminalCode >= 0)
+                                    Config.UpdateConnectionStatus(ID, ZeroServerConfiguration.ConnectionState.Error);
+                            }
+                        }
+                    });
 
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
-            {
-                int TCode = 0;
-                string msg = "";
-                bool stat = Config.ValidateConnection(ID, out TCode, out msg);
-                if (stat)
-                {
-                    ret.Result = Config.GetPacksToSend(TCode);
-                }
-                else
-                {
-                    if (TCode > 0)
-                        Config.UpdateConnectionStatus(ID, ZeroServerConfiguration.ConnectionState.Error);
-                }
-                ret.Status = msg;
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             }
-            
+
             return ret;
         }
 
         public ZeroResponse<bool> MarkPackReceived(string ID, int packCode)
         {
             ZeroResponse<bool> ret = new ZeroResponse<bool>();
-            ret.IsValid = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("MarkPackReceived", ID, packCode))
             {
-                string msg;
-                int tCode = -1;
-                if (Config.ValidateConnection(ID, out tCode, out msg))
-                {
-                    Config.MarkPackReceived(tCode, packCode);
-                    ret.Result = true;
-                }
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                Config.MarkPackReceived(hlp.TerminalCode, packCode);
+                                ret.Result = true;
+                            }
+                            else
+                            {
+                                ret.Result = false;
+                            }
+                        }
+                    });
 
-                ret.Result = false;
-                ret.Status = msg;
+                ret.Message = hlp.StatusMessage;
+                ret.IsValid = hlp.IsValid;
+
             }
 
             return ret;
@@ -178,20 +215,25 @@ namespace TZeroHost.Services
         public ZeroResponse<bool> SendClientTerminals(string ID, string terminals)
         {
             ZeroResponse<bool> ret = new ZeroResponse<bool>();
-            ret.IsValid = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
-            {
-                string msg;
-                int tCode = -1;
-                if (Config.ValidateConnection(ID, out tCode, out msg))
-                {
-                    ret.Result = true;
-                    Config.MergeTerminal(tCode, IEnumerableExtentions.GetEntitiesFromXMLObjectList<Terminal>(terminals));
-                }
 
-                ret.Result = false;
-                ret.Status = msg;
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SendClientTerminals", ID, terminals))
+            {
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                ret.Result = true;
+                                Config.MergeTerminal(hlp.TerminalCode, IEnumerableExtentions.GetEntitiesFromXMLObjectList<Terminal>(terminals));
+                            }
+                        }
+                    });
+
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             }
+
 
             return ret;
         }
@@ -199,22 +241,30 @@ namespace TZeroHost.Services
         public ZeroResponse<string> GetTerminals(string ID)
         {
             ZeroResponse<string> ret = new ZeroResponse<string>();
-            ret.IsValid = true;
-            using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+            ret.IsValid = false;
+            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("GetTerminals", ID))
             {
-                string msg;
-                int tCode = -1;
-                if (Config.ValidateConnection(ID, out tCode, out msg))
-                {
-                    IEnumerable<Terminal> list = Config.GetTerminals(tCode);
-                    ret.Result = ZeroCommonClasses.Helpers.IEnumerableExtentions.GetEntitiesAsXMLObjectList<Terminal>(list);
-                }
+                hlp.Handle(() =>
+                    {
+                        using (ZeroServerConfiguration Config = new ZeroServerConfiguration())
+                        {
+                            int tCode = -1;
+                            if (Config.ValidateConnection(ID, out hlp.TerminalCode, out hlp.StatusMessage))
+                            {
+                                IEnumerable<Terminal> list = Config.GetTerminals(tCode);
+                                ret.Result = ZeroCommonClasses.Helpers.IEnumerableExtentions.GetEntitiesAsXMLObjectList<Terminal>(list);
+                            }
 
-                ret.Status = msg;
+                        }
+                    });
+
+                ret.IsValid = hlp.IsValid;
+                ret.Message = hlp.StatusMessage;
             }
+
             return ret;
         }
-        
+
 
         #endregion
     }

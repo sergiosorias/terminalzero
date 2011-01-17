@@ -191,6 +191,7 @@
     </Compile>
     <Compile Include="Handlers\IncomingPackEventArgs.cs" />
     <Compile Include="Helpers\AppDirectories.cs" />
+    <Compile Include="Helpers\ServiceLogHelper.cs" />
     <Compile Include="Pages\DownloadFile.aspx.cs">
       <DependentUpon>DownloadFile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

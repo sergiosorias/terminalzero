@@ -20,7 +20,6 @@ namespace TZeroHost.Services
         public List<string> GetLogsStr(DateTime lastStamp)
         {
             List<string> res = new List<string>();
-
             List<ZeroLogHandle.Classes.VirtualLogEntry> algo = GetLogs(lastStamp);
             if (algo != null)
                 res.AddRange(algo.Select(l => string.Format("{1}{0} {2}", l.Stamp.ToString("yyyy/MM/dd hh:mm:ss"), ("".PadLeft(l.IndentLevel, '\t')), l.Message)));
@@ -85,7 +84,7 @@ namespace TZeroHost.Services
             catch (Exception ex)
             {
                 ret.IsValid = false;
-                ret.Status = ex.ToString();
+                ret.Message = ex.ToString();
             }
 
             return ret;

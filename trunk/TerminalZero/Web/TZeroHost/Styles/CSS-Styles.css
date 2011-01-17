@@ -7,6 +7,8 @@
 #364c63
 #232042
 
+mios
+#51758a
 */
 
 
@@ -24,10 +26,10 @@ body
 
 .cssAppMain
 {
-	border:Solid 1px #E6E2D8;
+	/*border:Solid 1px #E6E2D8;*/
     font-family:Tahoma, Arial; 
     Font-Size:0.8em; 
-    color:#626b6a;
+    color:White;
 }
 
 .cssLoginTitle
@@ -52,7 +54,7 @@ body
 {
 	font-family:Tahoma, Arial; 
     font-size:0.8em;
-    Width:300px;
+    Width:250px;
     margin:5px 5px;
 }
 

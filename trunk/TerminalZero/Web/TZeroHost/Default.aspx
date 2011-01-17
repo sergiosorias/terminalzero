@@ -10,23 +10,23 @@
             height: 100%;
             width: 100%;
             margin: 0px;
-            overflow:auto;
+            overflow: auto;
         }
-        .farsiLink:link
+        .menuLink:link
         {
             font-family: Tahoma;
             font-size: 12px;
-            color: #485B85;
+            color: #a4cde5;
             text-decoration: none;
         }
-        .farsiLink:visited
+        .menuLink:visited
         {
             font-family: Tahoma;
             font-size: 12px;
-            color: #0066FF;
+            color: #a4cde5;
             text-decoration: none;
         }
-        .farsiLink:hover
+        .menuLink:hover
         {
             font-family: Tahoma;
             font-size: 13px;
@@ -34,7 +34,7 @@
             text-decoration: none;
             font-weight: bold;
         }
-        .farsiLink:active
+        .menuLink:active
         {
             font-family: Tahoma;
             font-size: 13px;
@@ -47,11 +47,20 @@
     <form id="form1" runat="server" style="height: 100%">
     <table border="0" cellpadding="0" cellspacing="0" style="height: 100%">
         <tr>
-            <td style="height: 42px; padding-left: 30px; font-size; 18px; background-color: #4E4F52;
-                color: White" valign="middle" align="left" colspan="3" class="cssLoginTitle">
-                <p>
-                    Terminal Zero Web
-                </p>
+            <td colspan="3" class="cssLoginTitle" style="background-color: #4E4F52; height: 42px;">
+                <table>
+                    <tr>
+                        <td style="padding-left: 15px; width: 200px; font-size: 18px; color: White" valign="middle"
+                            align="left">
+                             <img src="images/logo.png" height="40" width=" 200px" alt="Terminal Zero" />
+                        </td>
+                        <td style="width: 100%;" align="right">
+                            <div style="font-size: 0.5em;" class="cssAppMain">
+                                Version 1.0.0.1</div>
+                            <asp:LoginName ID="LoginName" runat="server" FormatString="Bienvenido, {0}" CssClass="cssAppMain" />
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
@@ -67,7 +76,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <asp:HyperLink ID="HyperLink1" CssClass="farsiLink" NavigateUrl="./TerminalZeroWebClientTestPage.aspx"
+                                <asp:HyperLink ID="HyperLink1" CssClass="menuLink" NavigateUrl="./TerminalZeroWebClientTestPage.aspx"
                                     runat="server">Terminal Zero</asp:HyperLink>
                             </td>
                         </tr>
@@ -84,7 +93,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <asp:HyperLink ID="HyperLink2" CssClass="farsiLink" NavigateUrl="~/Upload/Silverlight_4.exe"
+                                <asp:HyperLink ID="HyperLink2" CssClass="menuLink" NavigateUrl="~/Upload/Silverlight_4.exe"
                                     runat="server">Silverlight 4</asp:HyperLink>
                             </td>
                         </tr>
