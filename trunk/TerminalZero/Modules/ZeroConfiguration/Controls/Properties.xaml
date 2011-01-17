@@ -5,9 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Unloaded="UserControl_Unloaded"
              d:DesignHeight="300" d:DesignWidth="300" xmlns:my="clr-namespace:ZeroConfiguration.Entities" Loaded="UserControl_Loaded">
-    <UserControl.Resources>
-        <CollectionViewSource x:Key="terminalsViewSource" d:DesignSource="{d:DesignInstance my:Terminal, CreateList=True}" />
-    </UserControl.Resources>
     <Grid Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -55,9 +52,9 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Label>Nombre</Label>
-                        <TextBox x:Name="tbTerminal" Grid.Row="0" Grid.Column="1"  Text="{Binding Path=Name, Mode=TwoWay}" />
+                        <TextBox x:Name="tbTerminal" Height="23" Grid.Row="0" Grid.Column="1"  Text="{Binding Path=Name, Mode=TwoWay}" />
                         <Label Grid.Column="2">Descripcion:</Label>
-                        <TextBox Grid.Column="3" Grid.Row="0" Height="23" HorizontalAlignment="Left" Margin="3" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" Width="120"/>
+                        <TextBox Grid.Column="3" Grid.Row="0" Height="23" HorizontalAlignment="Left" Margin="3" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" Width="200"/>
                         <CheckBox x:Name="cbTerminalIsActive" Grid.Column="4" IsChecked="{Binding Path=Active, Mode=TwoWay}" Content="Activa" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Grid.Column="5" x:Name="lblLastSynclabel" Visibility="Hidden" HorizontalAlignment="Right" VerticalAlignment="Center">Ultima sync: </Label>
                         <Label Grid.Column="6" x:Name="lblLastSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>

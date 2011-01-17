@@ -73,6 +73,7 @@ namespace ZeroConfiguration.Controls
 
             cbTerminalIsActive.DataContext = T;
             cbsendMasterData.DataContext = T;
+            descriptionTextBox.DataContext = T;
             terminalPropertiesDataGrid.ItemsSource = T.TerminalProperties;
             if (!T.Modules.IsLoaded)
                 T.Modules.Load();

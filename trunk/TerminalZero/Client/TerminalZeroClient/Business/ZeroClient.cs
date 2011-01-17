@@ -19,12 +19,10 @@ namespace TerminalZeroClient.Business
         public bool IsAllOK { get; private set; }
         private ILogBuilder Logger = null;
         private ITerminalManager Manager { get; set; }
-        public TraceSwitch LogLevel { get; private set; }
-
+        
         internal ZeroClient()
         {
             IsAllOK = true;
-            LogLevel = new TraceSwitch("ZeroLogLevelSwitch", "Zero Log Level Switch", "Error");
         }
 
         public void InitializeAppAsync()

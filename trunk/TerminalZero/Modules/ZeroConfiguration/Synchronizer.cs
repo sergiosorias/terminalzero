@@ -334,7 +334,7 @@ namespace ZeroConfiguration
             Config.Notifier.SetUserMessage(false, "Enviando 'hola'");
 
             ZeroResponse<string> r = Config.SyncService.SayHello(CurrentTerminal.TerminalName, CurrentTerminal.TerminalCode);
-            msg = r.Status;
+            msg = r.Message;
             if (r.IsValid)
                 CurrentConnectionID = r.Result;
 
@@ -352,7 +352,7 @@ namespace ZeroConfiguration
             Config.Notifier.SetUserMessage(false, "Enviando 'bye'");
 
             ZeroResponse<DateTime> r = Config.SyncService.SayBye(CurrentConnectionID);
-            msg = r.Status;
+            msg = r.Message;
             if (r.IsValid && r.Result != DateTime.MinValue)
             {
                 CurrentContext.Terminals.First(t => t.Code == CurrentTerminal.TerminalCode).LastSync = DateTime.Now;
@@ -393,7 +393,7 @@ namespace ZeroConfiguration
             {
                 ret = false;
                 Config.Notifier.SetProcess("Error");
-                Config.Notifier.SetUserMessage(false, rest.Status);
+                Config.Notifier.SetUserMessage(false, rest.Message);
             }
 
 
@@ -425,7 +425,7 @@ namespace ZeroConfiguration
             if (!res1.IsValid)
             {
                 ret = true;
-                Config.Notifier.SetUserMessage(false, res1.Status);
+                Config.Notifier.SetUserMessage(false, res1.Message);
             }
 
             return ret;
@@ -440,7 +440,7 @@ namespace ZeroConfiguration
             if (!res1.IsValid)
             {
                 ret = true;
-                Config.Notifier.SetUserMessage(false, res1.Status);
+                Config.Notifier.SetUserMessage(false, res1.Message);
             }
 
             return ret;
@@ -468,7 +468,7 @@ namespace ZeroConfiguration
                 ret = true;
             }
             else
-                Config.Notifier.SetUserMessage(false, res2.Status);
+                Config.Notifier.SetUserMessage(false, res2.Message);
 
             return ret;
         }
@@ -501,7 +501,7 @@ namespace ZeroConfiguration
                 ret = true;
             }
             else
-                Config.Notifier.SetUserMessage(false, res2.Status);
+                Config.Notifier.SetUserMessage(false, res2.Message);
 
             return ret;
         }

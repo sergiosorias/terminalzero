@@ -13,14 +13,14 @@ namespace ZeroCommonClasses.GlobalObjects
         public bool IsValid { get; set; }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false)]
-        public string Status { get; set; }
+        public string Message { get; set; }
 
         [DataMember(EmitDefaultValue = false, IsRequired = false)]
         public T Result { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Response: {0} | {1} | Result-> {2}",IsValid,Status,Result);
+            return string.Format("Response: {0} | {1} | Result-> {2}",IsValid,Message,Result);
         }
         
     }
