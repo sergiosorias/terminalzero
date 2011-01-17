@@ -7,20 +7,23 @@ using System.ServiceModel;
 using ZeroCommonClasses.Interfaces.Services;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Channels;
+using System.Diagnostics;
 
 namespace ZeroCommonClasses.Context
 {
     public static class ContextBuilder
     {
+        public static TraceSwitch LogLevel { get; private set; }
         public static System.Configuration.ConnectionStringSettings ServerConnectionString { get; private set; }
         public static System.Configuration.ConnectionStringSettings ClientConnectionString { get; private set; }
-        public static System.Configuration.ConnectionStringSettings IncomingConnectionString { get; private set; }
+        public static System.Configuration.ConnectionStringSettings UsersConnectionString { get; private set; }
 
         static ContextBuilder()
         {
             ServerConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.ConfigConn"];
-            IncomingConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.IncomingConn"];
             ClientConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TerminalZeroClient.Properties.Settings.ConfigConn"];
+            UsersConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.UsersConn"];
+            LogLevel = new TraceSwitch("ZeroLogLevelSwitch", "Zero Log Level Switch", "Error");
         }
 
         public static System.Configuration.ConnectionStringSettings GetConnectionForCurrentEnvironment()
@@ -42,8 +45,6 @@ namespace ZeroCommonClasses.Context
         {
             System.Configuration.ConnectionStringSettings set = GetConnectionForCurrentEnvironment();
             
-            
-
             EntityConnectionStringBuilder conStrIntegratedSecurity = new EntityConnectionStringBuilder()
             {
                 Metadata = "res://*/Entities." + modelName + ".csdl|"

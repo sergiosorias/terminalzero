@@ -261,7 +261,7 @@ namespace TerminalZeroClient
 
         private static string GetStamp()
         {
-            return DateTime.Now.ToString("hh:mm:ss") + " - ";
+            return DateTime.Now.ToString("MM/dd hh:mm:ss") + " - ";
         }
 
         public void SetProgress(int newProgress)
@@ -310,7 +310,7 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            System.Diagnostics.Trace.WriteLineIf(App.Instance.CurrentClient.LogLevel.Level >= level, GetStamp() + message);
+            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.Level >= level, GetStamp() + message);
         }
 
         #endregion

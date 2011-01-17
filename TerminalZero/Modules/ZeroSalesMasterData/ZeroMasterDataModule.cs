@@ -57,7 +57,6 @@ namespace ZeroMasterData
             MasterDataPackManager PackReceived = new MasterDataPackManager(path);
             PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { } };
             Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose,"Starting Master Data pack import process");
-            PackReceived.Process();
             PackReceived.Error += new System.IO.ErrorEventHandler(PackReceived_Error);
             if (PackReceived.Process())
             {
