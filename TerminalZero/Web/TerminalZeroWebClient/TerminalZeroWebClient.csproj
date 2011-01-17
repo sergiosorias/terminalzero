@@ -201,41 +201,41 @@
       <Generator>DataServiceClientGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper.disco" />
     <None Include="Service References\ServiceHelperReference\configuration91.svcinfo" />
     <None Include="Service References\ServiceHelperReference\configuration.svcinfo" />
     <None Include="Service References\ServiceHelperReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper1.disco" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\DataService\service.edmx" />
-    <None Include="Service References\ServiceHelperReference\ServiceHelper.wsdl" />
-    <None Include="Service References\ServiceHelperReference\ServiceHelper.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper1.wsdl" />
+    <None Include="Service References\ServiceHelperReference\ServiceHelper9.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper1.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper91.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper2.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper92.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper3.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper93.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper4.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper94.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper5.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper95.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper6.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper96.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper7.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper97.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper8.xsd">
+    <None Include="Service References\ServiceHelperReference\ServiceHelper98.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.Pack.datasource">

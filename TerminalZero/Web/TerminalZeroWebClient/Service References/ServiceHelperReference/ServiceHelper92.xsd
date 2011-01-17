@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.Entities" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" />
+  <xs:complexType name="ArrayOfPack">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Pack" nillable="true" type="tns:Pack" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPack" nillable="true" type="tns:ArrayOfPack" />
+  <xs:complexType name="Pack">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q1:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" type="xs:int" />
+          <xs:element minOccurs="0" name="Connection" nillable="true" type="tns:Connection" />
+          <xs:element minOccurs="0" name="ConnectionCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ConnectionReference" nillable="true" type="q1:EntityReferenceOfConnectionAMTtCmoD" />
+          <xs:element minOccurs="0" name="Data" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsMasterData" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="IsUpgrade" nillable="true" type="xs:boolean" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PackPendings" nillable="true" type="tns:ArrayOfPackPending" />
+          <xs:element minOccurs="0" name="PackStatu" nillable="true" type="tns:PackStatu" />
+          <xs:element minOccurs="0" name="PackStatuReference" nillable="true" type="q1:EntityReferenceOfPackStatuAMTtCmoD" />
+          <xs:element minOccurs="0" name="PackStatusCode" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Result" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Stamp" nillable="true" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Pack" nillable="true" type="tns:Pack" />
+  <xs:complexType name="Connection">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q2:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Packs" nillable="true" type="tns:ArrayOfPack" />
+          <xs:element minOccurs="0" name="Stamp" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StatusCode" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="TerminalCode" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Connection" nillable="true" type="tns:Connection" />
+  <xs:complexType name="ArrayOfPackPending">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PackPending" nillable="true" type="tns:PackPending" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPackPending" nillable="true" type="tns:ArrayOfPackPending" />
+  <xs:complexType name="PackPending">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q3:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Pack" nillable="true" type="tns:Pack" />
+          <xs:element minOccurs="0" name="PackCode" type="xs:int" />
+          <xs:element minOccurs="0" name="PackReference" nillable="true" type="q3:EntityReferenceOfPackAMTtCmoD" />
+          <xs:element minOccurs="0" name="Stamp" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="TerminalCode" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PackPending" nillable="true" type="tns:PackPending" />
+  <xs:complexType name="PackStatu">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" base="q4:EntityObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Code" type="xs:int" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Packs" nillable="true" type="tns:ArrayOfPack" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PackStatu" nillable="true" type="tns:PackStatu" />
+</xs:schema>

@@ -25,6 +25,7 @@ namespace TerminalZeroWebClient
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             client = new ServiceHelperReference.ServiceHelperClient();
+            
             client.GetTerminalsStatusCompleted += new EventHandler<ServiceHelperReference.GetTerminalsStatusCompletedEventArgs>(client_GetTerminalsStatusCompleted);
             client.GetTerminalsStatusAsync();
             waitCursorHome.Start();
@@ -38,9 +39,9 @@ namespace TerminalZeroWebClient
                 foreach (var item in e.Result.Result)
                 {
                     Controls.TerminalStatus T = new Controls.TerminalStatus();
-                    T.Margin = new Thickness(3);
+                    T.Margin = new Thickness(1,1.5,1,1.5);
                     T.DataContext = item;
-                    T.MaxWidth = 280;
+                    T.Width = 300;
                     terminalContent.Children.Add(T);
                 }
                 
