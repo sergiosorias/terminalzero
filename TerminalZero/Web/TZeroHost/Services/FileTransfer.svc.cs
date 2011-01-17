@@ -40,11 +40,15 @@ namespace TZeroHost.Services
                 System.IO.FileInfo fileInfo = new System.IO.FileInfo(filePath);
                 length = fileInfo.Length;
                 // report start
-                System.Diagnostics.Trace.Write("Sending stream " + request.FileName + " to client");
-                System.Diagnostics.Trace.Write("Size " + fileInfo.Length);
+                System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Sending stream " + request.FileName + " to client");
+                System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose,"Size " + fileInfo.Length);
 
                 // check if exists
-                if (!fileInfo.Exists) throw new System.IO.FileNotFoundException("File not found", request.FileName);
+                if (!fileInfo.Exists)
+                {
+                    System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceError, "File not found");
+                    throw new System.IO.FileNotFoundException("File not found", request.FileName);
+                }
 
                 // open stream
                 stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -57,12 +61,12 @@ namespace TZeroHost.Services
                     ZeroCommonClasses.Entities.Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);
                     if (P != null)
                     {
-                        System.Diagnostics.Trace.Write("Sending pack " + request.Code + " to client");
+                        System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client");
                         stream = new System.IO.MemoryStream(P.Data);
                     }
                     else
                     {
-                        System.Diagnostics.Trace.Write("Pack " + request.Code + " Not found");
+                        System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceWarning, "Pack " + request.Code + " Not found");
                     }
                 }
             }
@@ -80,8 +84,8 @@ namespace TZeroHost.Services
         {
             // report start
 
-            System.Diagnostics.Trace.WriteLine("Start uploading " + request.FileName, "Verbose");
-            System.Diagnostics.Trace.WriteLine("Size " + request.Length, "Verbose");
+            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose,"Start uploading " + request.FileName, "Verbose");
+            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Size " + request.Length, "Verbose");
 
             string filePath = System.IO.Path.Combine(Helpers.AppDirectories.UploadFolder, System.IO.Path.GetFileName(request.FileName));
             if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
@@ -106,7 +110,7 @@ namespace TZeroHost.Services
                     } while (true);
 
                     // report end
-                    System.Diagnostics.Trace.WriteLine("Done!", "Verbose");
+                    System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Done!", "Verbose");
                     ret = new ServerFileInfo { FileName = filePath };
 
                     OnPackReceived(filePath,request.ConnectionID);

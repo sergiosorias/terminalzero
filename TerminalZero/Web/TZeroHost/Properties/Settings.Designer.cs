@@ -44,5 +44,16 @@ namespace TZeroHost.Properties {
                 return ((string)(this["IncomingConn"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=sebas-note;Initial Catalog=TZeroUsers;Persist Security Info=True;User" +
+            " ID=sa;Password=blanco")]
+        public string UsersConn {
+            get {
+                return ((string)(this["UsersConn"]));
+            }
+        }
     }
 }

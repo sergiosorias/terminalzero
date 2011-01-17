@@ -12,29 +12,36 @@
             width: 100%;
         }
     </style>
-    <title>Login Geo Codification</title>
+    <title>Login Terminal Zero</title>
 </head>
 <body>
     <form id="form1" runat="server">
     <table style="background-color: Gray Green; width: 100%; height: 100%">
         <tr>
             <td align="center" style="height: 25%;" valign="bottom">
-                <img src="Images/logoLogIn.jpg" width="393px" alt="Terminal Zero" />
+                <img src="../images/logoLogIn.png" width="393px" alt="Terminal Zero" />
             </td>
         </tr>
         <tr style="height: 180px;">
             <td align="center" style="height: 180px;" valign="middle" class="cssPage">
-                <asp:Login ID="Login1" runat="server" OnLoggingIn="TryLogIn"
-                    LoginButtonText="" HyperLinkStyle-HorizontalAlign="Left"
-                    DestinationPageUrl="~/Default.aspx"
-                    BorderColor="Transparent" ForeColor="#f0f1f2">
+                <asp:Login ID="Login1" runat="server" OnLoggingIn="TryLogIn" LoginButtonText="" 
+                    TitleText=""
+                    UserNameLabelText="Nombre" 
+                    PasswordLabelText="Contraseña"
+                    PasswordRequiredErrorMessage="Contraseña obligatoria"
+                    UserNameRequiredErrorMessage="Por favor ingrese un nombre"
+                    FailureText="Usuario/Contraseña inválidos"
+                    RememberMeText="Recordar datos ingresados"
+                    HyperLinkStyle-HorizontalAlign="Left"
+                    DestinationPageUrl="~/Default.aspx" BorderColor="Transparent" ForeColor="#f0f1f2">
                     <TitleTextStyle CssClass="cssLoginTitle" />
                     <InstructionTextStyle Font-Italic="True" ForeColor="#f0f1f2" />
-                    <TextBoxStyle CssClass="cssLoginTextBox"/>
+                    <TextBoxStyle CssClass="cssLoginTextBox" />
                     <LoginButtonStyle CssClass="cssButtonYes" />
                     <FailureTextStyle ForeColor="#77bfb8" />
                     <HyperLinkStyle ForeColor="#f0f1f2" />
                 </asp:Login>
+            </td>
         </tr>
         <tr>
             <td align="center" style="height: 100%;" valign="top">
