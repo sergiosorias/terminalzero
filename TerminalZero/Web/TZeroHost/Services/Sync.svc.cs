@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using ZeroCommonClasses;
 using ZeroCommonClasses.Interfaces.Services;
-using ZeroCommonClasses.Interfaces;
 using ZeroConfiguration.Entities;
-using System.Data;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroConfiguration;
@@ -21,7 +15,7 @@ namespace TZeroHost.Services
         public ZeroResponse<string> SayHello(string name, int terminal)
         {
             ZeroResponse<string> ret = new ZeroResponse<string>();
-            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SayHello", "", name, terminal))
+            using (Helpers.ServiceLogHelper hlp = new Helpers.ServiceLogHelper("SayHello", "", name, terminal))
             {
                 hlp.TerminalCode = terminal;
                 hlp.Handle(() =>
@@ -46,7 +40,7 @@ namespace TZeroHost.Services
         public ZeroResponse<DateTime> SayBye(string ID)
         {
             ZeroResponse<DateTime> ret = new ZeroResponse<DateTime>();
-            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SayBye", ID))
+            using (Helpers.ServiceLogHelper hlp = new Helpers.ServiceLogHelper("SayBye", ID))
             {
                 hlp.Handle(() =>
                     {
@@ -79,7 +73,7 @@ namespace TZeroHost.Services
         public ZeroResponse<bool> SendClientModules(string ID, string modules)
         {
             ZeroResponse<bool> ret = new ZeroResponse<bool>();
-            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SendClientModules", ID, modules))
+            using (Helpers.ServiceLogHelper hlp = new Helpers.ServiceLogHelper("SendClientModules", ID, modules))
             {
                 hlp.Handle(() =>
                     {
@@ -107,7 +101,7 @@ namespace TZeroHost.Services
         {
             ZeroResponse<bool> ret = new ZeroResponse<bool>();
 
-            using (TZeroHost.Helpers.ServiceLogHelper hlp = new TZeroHost.Helpers.ServiceLogHelper("SendClientProperties", ID, properties))
+            using (Helpers.ServiceLogHelper hlp = new Helpers.ServiceLogHelper("SendClientProperties", ID, properties))
             {
                 hlp.Handle(() =>
                     {

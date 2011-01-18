@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.IO;
+﻿using System.Web;
 using TZeroHost.Services;
 
 namespace TZeroHost
@@ -10,12 +6,12 @@ namespace TZeroHost
     /// <summary>
     /// Summary description for filereceiver
     /// </summary>
-    public class filereceiver : IHttpHandler
+    public class Filereceiver : IHttpHandler
     {
 
         public void ProcessRequest(HttpContext context)
         {
-            string filename = context.Request.QueryString["filename"].ToString();
+            string filename = context.Request.QueryString["filename"];
             FileTransfer trf = new FileTransfer();
             trf.UploadFile(new ZeroCommonClasses.Files.RemoteFileInfo
             {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using ZeroCommonClasses.PackClasses;
 using ZeroMasterData;
 using System.IO;
@@ -12,10 +9,11 @@ namespace TZeroHost.Classes
     {
         public static PackManager GetManager(string packPath)
         {
+            if (packPath == null) throw new ArgumentNullException("packPath");
             PackManager manager = null;
             string[] args = Path.GetFileName(packPath).Split('_');
 
-            int moduleCode = 0;
+            int moduleCode;
             if (args.Length > 1)
                 int.TryParse(args[0], out moduleCode);
 

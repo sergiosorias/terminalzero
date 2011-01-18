@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-using System.Data;
 using ZeroCommonClasses.GlobalObjects;
-using System.Data.SqlClient;
-using System.ServiceModel.Activation;
 using ZeroConfiguration.Entities;
 using ZeroCommonClasses.Entities;
 
@@ -32,10 +27,10 @@ namespace TZeroHost.Services
         public List<ZeroLogHandle.Classes.VirtualLogEntry> GetLogs(DateTime lastStamp)
         {
             List<ZeroLogHandle.Classes.VirtualLogEntry> res = null;
-            ZeroLogHandle.VirtualTraceListener VL = System.Diagnostics.Trace.Listeners.OfType<ZeroLogHandle.VirtualTraceListener>().FirstOrDefault();
-            if (VL != null)
+            ZeroLogHandle.VirtualTraceListener vl = System.Diagnostics.Trace.Listeners.OfType<ZeroLogHandle.VirtualTraceListener>().FirstOrDefault();
+            if (vl != null)
             {
-                res = VL.GetLogs();
+                res = vl.GetLogs();
             }
 
             return res;
@@ -56,9 +51,9 @@ namespace TZeroHost.Services
         }
 
         [OperationContract]
-        public ZeroResponse<List<ZeroConfiguration.Entities.Terminal>> GetTerminalsStatus()
+        public ZeroResponse<List<Terminal>> GetTerminalsStatus()
         {
-            ZeroResponse<List<ZeroConfiguration.Entities.Terminal>> ret = new ZeroResponse<List<ZeroConfiguration.Entities.Terminal>>();
+            ZeroResponse<List<Terminal>> ret = new ZeroResponse<List<Terminal>>();
             try
             {
                 using (ConfigurationEntities ent = new ConfigurationEntities())

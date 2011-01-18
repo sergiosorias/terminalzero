@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using System.Threading;
 
 namespace ZeroGUI
 {
@@ -28,7 +15,7 @@ namespace ZeroGUI
 
         public void Start()
         {
-            this.Visibility = System.Windows.Visibility.Visible;
+            Visibility = System.Windows.Visibility.Visible;
             Storyboard sb = Resources["rotation"] as Storyboard;
             if(sb!=null)
             {
@@ -45,7 +32,7 @@ namespace ZeroGUI
             }
             Dispatcher.BeginInvoke(new Update(() =>
             {
-                this.Visibility = System.Windows.Visibility.Collapsed;
+                Visibility = System.Windows.Visibility.Collapsed;
             }), null);
             
             
