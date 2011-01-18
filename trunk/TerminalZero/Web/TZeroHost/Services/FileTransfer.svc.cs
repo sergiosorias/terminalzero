@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using ZeroCommonClasses.Files;
-using System.ServiceModel.Activation;
 using ZeroCommonClasses.Interfaces.Services;
 using TZeroHost.Handlers;
-using TZeroHost.Classes;
 
 namespace TZeroHost.Services
 {
@@ -21,11 +15,11 @@ namespace TZeroHost.Services
             Helpers.AppDirectories.Init();
         }
 
-        private void OnPackReceived(string fileName, string ConnectionID)
+        private void OnPackReceived(string fileName, string connectionId)
         {
             if (FileReceived != null)
             {
-                FileReceived(this, new IncomingPackEventArgs(fileName, ConnectionID));
+                FileReceived(this, new IncomingPackEventArgs(fileName, connectionId));
             }
         }
 

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using TerminalZeroWebClient.ServiceHelperReference;
 
 namespace TerminalZeroWebClient.Controls
@@ -57,16 +51,16 @@ namespace TerminalZeroWebClient.Controls
             popUpMoreInfo.IsOpen = !popUpMoreInfo.IsOpen;
         }
 
-        SolidColorBrush borderActive = new SolidColorBrush(Colors.Gray);
-        SolidColorBrush borderInactive = new SolidColorBrush(Colors.Transparent);
+        readonly SolidColorBrush _borderActive = new SolidColorBrush(Colors.Gray);
+        readonly SolidColorBrush _borderInactive = new SolidColorBrush(Colors.Transparent);
         private void LayoutRoot_MouseEnter(object sender, MouseEventArgs e)
         {
-            BackBorder.BorderBrush = borderActive;
+            BackBorder.BorderBrush = _borderActive;
         }
 
         private void LayoutRoot_MouseLeave(object sender, MouseEventArgs e)
         {
-            BackBorder.BorderBrush = borderInactive;
+            BackBorder.BorderBrush = _borderInactive;
         }
     }
 }

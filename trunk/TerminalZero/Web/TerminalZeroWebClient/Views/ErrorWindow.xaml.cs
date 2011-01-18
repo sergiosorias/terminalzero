@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace TerminalZeroWebClient
+namespace TerminalZeroWebClient.Views
 {
     public partial class ErrorWindow : ChildWindow
     {

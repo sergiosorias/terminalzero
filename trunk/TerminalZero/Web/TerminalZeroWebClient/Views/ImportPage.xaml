@@ -6,8 +6,7 @@
            mc:Ignorable="d" xmlns:Mycontrols="clr-namespace:ZeroGUI"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
            Title="ImportPage Page" 
-           xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" 
-           xmlns:my="clr-namespace:TerminalZeroWebClient.ServiceHelperReference">
+           xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
     <Grid x:Name="LayoutRoot">
         <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
             <Grid>

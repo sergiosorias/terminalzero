@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Windows.Navigation;
-using System.Threading;
 using System.Windows.Data;
 using System.Windows.Printing;
 
@@ -19,7 +10,7 @@ namespace TerminalZeroWebClient.Views
     public partial class VirtualLog : Page
     {
 
-        ServiceHelperReference.ServiceHelperClient client;
+        ServiceHelperReference.ServiceHelperClient _client;
         
         public VirtualLog()
         {
@@ -29,8 +20,8 @@ namespace TerminalZeroWebClient.Views
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            client = new ServiceHelperReference.ServiceHelperClient();
-            client.GetLogsCompleted += new EventHandler<ServiceHelperReference.GetLogsCompletedEventArgs>(client_GetLogsCompleted);
+            _client = new ServiceHelperReference.ServiceHelperClient();
+            _client.GetLogsCompleted += new EventHandler<ServiceHelperReference.GetLogsCompletedEventArgs>(client_GetLogsCompleted);
         }
 
         void client_GetLogsCompleted(object sender, ServiceHelperReference.GetLogsCompletedEventArgs e)
@@ -66,7 +57,7 @@ namespace TerminalZeroWebClient.Views
         
         private void RefreshTimer_Tick(object sender, EventArgs e)
         {
-            client.GetLogsAsync(DateTime.Now);
+            _client.GetLogsAsync(DateTime.Now);
         }
 
         private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
