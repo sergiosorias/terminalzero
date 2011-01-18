@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -64,7 +54,7 @@ namespace ZeroMasterData.Pages.Controls
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {
             Controls.SupplierDetail detail = new Controls.SupplierDetail(DataProvider, (int)((Button)sender).DataContext);
-            bool? ret = ZeroMessageBox.Show(detail);
+            bool? ret = ZeroMessageBox.Show(detail, "Editar proveedor");
             if (ret.HasValue && ret.Value)
             {
                 

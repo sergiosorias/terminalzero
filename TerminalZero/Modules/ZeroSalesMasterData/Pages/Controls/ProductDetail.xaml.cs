@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.Objects.DataClasses;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZeroCommonClasses.Interfaces;
-using System.Data.Objects.DataClasses;
 using ZeroGUI;
 
 namespace ZeroMasterData.Pages.Controls
@@ -150,7 +141,7 @@ namespace ZeroMasterData.Pages.Controls
         private void groupBtn_Click(object sender, RoutedEventArgs e)
         {
             ProductGroupDetail pgd = new ProductGroupDetail(DataProvider);
-            bool? res = ZeroMessageBox.Show(pgd);
+            bool? res = ZeroMessageBox.Show(pgd, "Nuevo Grupo");
             if (res.HasValue && res.Value)
             {
                 DataProvider.ProductGroups.AddObject(pgd.ProductGroupNew);
@@ -163,7 +154,7 @@ namespace ZeroMasterData.Pages.Controls
         private void weightBtn_Click(object sender, RoutedEventArgs e)
         {
             WeightDetail pgd = new WeightDetail(DataProvider);
-            bool? res = ZeroMessageBox.Show(pgd);
+            bool? res = ZeroMessageBox.Show(pgd, "Nueva unidad de medida");
             if (res.HasValue && res.Value)
             {
                 DataProvider.Weights.AddObject(pgd.WeigthNew);
@@ -295,7 +286,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             int t = (int)((Button)sender).DataContext;
             ProductGroupDetail pgd = new ProductGroupDetail(DataProvider);
-            bool? res = ZeroMessageBox.Show(pgd);
+            bool? res = ZeroMessageBox.Show(pgd, "Editar grupo");
             if (res.HasValue && res.Value)
             {
                 DataProvider.SaveChanges();
@@ -308,7 +299,7 @@ namespace ZeroMasterData.Pages.Controls
             int t = (int)((Button)sender).DataContext;
             WeightDetail pgd = new WeightDetail(DataProvider,
                 DataProvider.Weights.First(w => w.Code == t));
-            bool? res = ZeroMessageBox.Show(pgd);
+            bool? res = ZeroMessageBox.Show(pgd, "Editar unidad de medida");
             if (res.HasValue && res.Value)
             {
                 DataProvider.SaveChanges();

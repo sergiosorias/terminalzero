@@ -8,22 +8,21 @@
     <Grid Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch">
+        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" Content="Lista de clientes"/>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Clientes:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:SearchBox Search="SearchBox_Search"/>
-            </StackPanel>
+            <baseControls:SearchBox Search="SearchBox_Search"/>
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
                 <Button x:Name="btnNewSupplier" Content="Nuevo" HorizontalAlignment="Right" Style="{DynamicResource buttonTextStyle}" Click="btnNewSupplier_Click"/>
             </WrapPanel>
         </Grid>
-        <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
+        <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>
                 <myControls:CustomerGrid x:Name="customerGrid"/>
             </ContentPresenter.Content>

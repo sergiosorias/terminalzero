@@ -51,7 +51,7 @@
     </Compile>
     <Compile Include="Classes\VirtualLogEntry.cs" />
     <Compile Include="VirtualTraceListener.cs" />
-    <Compile Include="ZeroLogHandle.cs" />
+    <Compile Include="ZeroLogHandleModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

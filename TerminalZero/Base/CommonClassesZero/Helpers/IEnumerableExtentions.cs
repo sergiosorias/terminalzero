@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Data;
-using System.Reflection;
-using System.Collections;
-using System.ComponentModel;
 using System.Data.Objects.DataClasses;
-using System.Data.Objects;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace ZeroCommonClasses.Helpers
 {

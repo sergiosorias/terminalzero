@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
 using System.Globalization;
-using ZeroCommonClasses.GlobalObjects.Barcode;
-using System.Windows;
+using System.Windows.Controls;
 
 namespace ZeroGUI.Classes
 {

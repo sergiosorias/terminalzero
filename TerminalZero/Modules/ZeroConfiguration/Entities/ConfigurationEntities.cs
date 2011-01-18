@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeroCommonClasses.Interfaces;
-using System.IO;
-using System.Data;
-using ZeroCommonClasses.Helpers;
+﻿using System.Linq;
 using ZeroCommonClasses;
 
 namespace ZeroConfiguration.Entities
@@ -25,8 +18,9 @@ namespace ZeroConfiguration.Entities
 
         internal static ModuleStatus GetTerminalModuleStatus(ConfigurationEntities configurationEntities, int terminalCode, ZeroModule c)
         {
-            ModuleStatus ret = ModuleStatus.Valid;
-            Module M = configurationEntities.Modules.FirstOrDefault(m => m.Code == c.ModuleCode);
+            ModuleStatus ret;
+            Module M;
+            M = configurationEntities.Modules.FirstOrDefault(m => m.Code == c.ModuleCode);
             if (M == null)
             {
                 ret = ModuleStatus.NeedsSync;

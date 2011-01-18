@@ -9,22 +9,21 @@
     <Grid Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch">
+        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" Content="Lista de productos"/>
+        <Grid HorizontalAlignment="Stretch" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Productos:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
-            </StackPanel>
+            <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
             <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
                 <Button x:Name="btnNewProduct" Content="Nuevo" HorizontalAlignment="Right" Style="{DynamicResource buttonTextStyle}" Click="Button_Click"/>
             </WrapPanel>
         </Grid>
-        <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
+        <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>
                 <myControls:ProductGrid x:Name="productList"/>
             </ContentPresenter.Content>

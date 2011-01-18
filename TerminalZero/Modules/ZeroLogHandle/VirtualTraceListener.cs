@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ZeroCommonClasses.Interfaces;
-using System.ComponentModel;
 using System.Timers;
 using ZeroLogHandle.Classes;
 
@@ -11,20 +8,19 @@ namespace ZeroLogHandle
 {
     public class VirtualTraceListener : System.Diagnostics.TraceListener
     {
-        private int LogEntryTimeOut = 600;
-        private int LogEntryMaxCount = 500;
+        private const int LogEntryTimeOut = 600;
+        private const int LogEntryMaxCount = 500;
 
-        Timer timer;
+        readonly Timer _timer;
         public VirtualTraceListener()
-            : base()
         {
-            timer = new Timer(1000 * LogEntryTimeOut);
-            timer.Elapsed += new ElapsedEventHandler(Clean);
-            timer.Start();
+            _timer = new Timer(1000 * LogEntryTimeOut);
+            _timer.Elapsed += new ElapsedEventHandler(Clean);
+            _timer.Start();
         }
 
         private List<VirtualLogEntry> Logs = new List<VirtualLogEntry>();
-        private object oSync = new object();
+        private readonly object _oSync = new object();
 
         public List<VirtualLogEntry> GetLogs()
         {
@@ -38,14 +34,14 @@ namespace ZeroLogHandle
 
         private void Clean(object sender, ElapsedEventArgs e)
         {
-            DateTime MaxStamp = DateTime.Now.AddSeconds(LogEntryTimeOut*-1);
-            lock (oSync)
+            DateTime maxStamp = DateTime.Now.AddSeconds(LogEntryTimeOut*-1);
+            lock (_oSync)
             {
-                Logs.RemoveAll(l => l.Stamp < MaxStamp);
+                Logs.RemoveAll(l => l.Stamp < maxStamp);
             }
             if (Logs.Count > LogEntryMaxCount)
             {
-                lock (oSync)
+                lock (_oSync)
                 {
                     Logs.RemoveRange(0, Logs.Count - LogEntryMaxCount);
                 }
@@ -60,7 +56,7 @@ namespace ZeroLogHandle
         public override void Write(string message)
         {
             VirtualLogEntry args = new VirtualLogEntry(message);
-            lock (oSync)
+            lock (_oSync)
             {
                 Logs.Add(args);
             }

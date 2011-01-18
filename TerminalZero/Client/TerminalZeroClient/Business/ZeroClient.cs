@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeroCommonClasses.Interfaces;
 using System.IO;
-using System.Windows.Controls;
+using System.Linq;
 using TerminalZeroClient.Extras;
-using ZeroCommonClasses.Interfaces.Services;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
-using System.Diagnostics;
+using ZeroCommonClasses.Interfaces;
 
 
 namespace TerminalZeroClient.Business

@@ -62,6 +62,9 @@
     <Compile Include="Pages\Controls\StockGrid.xaml.cs">
       <DependentUpon>StockGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\DeliveryNoteView.xaml.cs">
+      <DependentUpon>DeliveryNoteView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\CurrentStockView.xaml.cs">
       <DependentUpon>CurrentStockView.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,11 @@
     </Compile>
     <Compile Include="Pages\StockView.xaml.cs">
       <DependentUpon>StockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ZeroStockModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +108,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\DeliveryNoteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\CurrentStockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +134,13 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

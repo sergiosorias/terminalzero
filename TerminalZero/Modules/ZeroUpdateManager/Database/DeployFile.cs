@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
-using ZeroUpdateManager.Database.ScriptLines;
+using System.Text;
 using System.Text.RegularExpressions;
+using ZeroUpdateManager.Database.ScriptLines;
 
 namespace ZeroUpdateManager.Database
 {

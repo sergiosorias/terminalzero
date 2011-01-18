@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ZeroCommonClasses;
-using System.Windows.Controls;
-using ZeroConfiguration.Entities;
-using ZeroConfiguration.Controls;
+using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
-using ZeroCommonClasses.Helpers;
-using ZeroCommonClasses.Context;
-using ZeroCommonClasses.GlobalObjects;
+using ZeroConfiguration.Controls;
+using ZeroConfiguration.Entities;
+using ZeroConfiguration.Properties;
 
 
 namespace ZeroConfiguration
@@ -38,14 +35,14 @@ namespace ZeroConfiguration
             Terminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, "Configuración@Propiedades", OpenConfiguration));
             Terminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, "Configuración@Usuarios", OpenUsers, "ValidateUser"));
 
-            Terminal.Session.AddAction(new ZeroAction(ActionType.BackgroudAction, "terminalZeroValidation", isTerminalZero));
+            Terminal.Session.AddAction(new ZeroAction(ActionType.BackgroudAction, "terminalZeroValidation", IsTerminalZero));
             Terminal.Session.AddAction(new ZeroAction(ActionType.BackgroudAction, "userAuthorization", CanOpenConfiguration));
         }
 
         private void BuildRulesActions()
         {
-            Terminal.Session.AddRule(new ZeroRule("ValidateUser", "Usuario válido", "No esta autorizado para realizar esta acción!", "userAuthorization"));
-            Terminal.Session.AddRule(new ZeroRule("ValidateTerminalZero", "Terminal válida", "Esta Terminal no esta autorizada para realizar esta acción!", "terminalZeroValidation"));
+            Terminal.Session.AddRule(new ZeroRule("ValidateUser", Resources.ValidUser, Resources.UnauthorizedUser, "userAuthorization"));
+            Terminal.Session.AddRule(new ZeroRule("ValidateTerminalZero", Resources.ValidTerminal, Resources.UnauthorizedTrminal, "terminalZeroValidation"));
         }
 
         public override string[] GetFilesToSend()
@@ -92,7 +89,9 @@ namespace ZeroConfiguration
 
         private void OpenConfiguration(ZeroRule rule)
         {
-            Properties P = new Properties(Terminal);
+// ReSharper disable RedundantNameQualifier
+            var P = new ZeroConfiguration.Controls.Properties(Terminal);
+// ReSharper restore RedundantNameQualifier
             P.UpdateTimeRemaining(Sync);
             if (Terminal.Manager.ValidateRule("ValidateTerminalZero"))
                 P.Mode = Mode.Update;
@@ -105,7 +104,7 @@ namespace ZeroConfiguration
             rule.Satisfied = false;
         }
 
-        private void isTerminalZero(ZeroRule rule)
+        private void IsTerminalZero(ZeroRule rule)
         {
             if (Terminal != null && ConfigurationEntities.IsTerminalZero(new ConfigurationEntities(), Terminal.TerminalCode))
                 rule.Satisfied = (TerminalStatus == ModuleStatus.Valid || TerminalStatus == ModuleStatus.NeedsSync);
@@ -123,9 +122,9 @@ namespace ZeroConfiguration
                 ConfigurationRequired(this, EventArgs.Empty);
         }
 
-        public ModuleStatus GetModuleStatus(ZeroModule c)
+        public ModuleStatus GetModuleStatus(ZeroModule module)
         {
-            return ConfigurationEntities.GetTerminalModuleStatus(new ConfigurationEntities(), Terminal.TerminalCode, c);
+            return ConfigurationEntities.GetTerminalModuleStatus(new ConfigurationEntities(), Terminal.TerminalCode, module);
         }
 
         public void InitializeTerminal()
@@ -140,29 +139,29 @@ namespace ZeroConfiguration
 
         }
 
-        public bool ExecuteAction(ZeroAction Action)
+        public bool ExecuteAction(ZeroAction action)
         {
             bool ret = false; 
             try
             {
                 string result = "";
-                if (Terminal.Manager.CanExecute(Action, out result))
+                if (Terminal.Manager.CanExecute(action, out result))
                 {
 
-                    Action.Execute(null);
+                    action.Execute(null);
                     ret = true;
                 }
                 else
                 {
-                    Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Action {0} Error:", Action.Name, result));
-                    Terminal.Session.Notifier.SendNotification(string.Format("No se ha podido realizar la acción deseada\n\nProblemas: {0} ", result));
+                    Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Action {0} Error:", action.Name, result));
+                    Terminal.Session.Notifier.SendNotification(string.Format(Resources.CannotExecuteAction + "\n\nProblemas: {0} ", result));
                 }
 
             }
             catch (Exception ex)
             {
-                Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Action {0} Error:", Action.Name, ex.ToString()));
-                Terminal.Session.Notifier.SendNotification("Ha ocurrido un error inesperado en la ejecución.\n Comuniquese con el Administrador del sistema");
+                Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Action {0} Error:", action.Name, ex.ToString()));
+                Terminal.Session.Notifier.SendNotification(Resources.UnexpectedError + ".\n " + Resources.ContactSystemAdministrator);
             }
 
             return ret;
@@ -198,16 +197,16 @@ namespace ZeroConfiguration
             return ret;
         }
 
-        public bool CanExecute(ZeroAction Action, out string result)
+        public bool CanExecute(ZeroAction action, out string result)
         {
             bool ret = true;
             result = "";
-            if (ret = ValidateActionParams(ref result, Action))
+            if (ret = ValidateActionParams(ref result, action))
             {
-                if (!Action.CanExecute(null))
+                if (!action.CanExecute(null))
                 {
                     ret = false;
-                    result = Action.RuleToSatisfy.Result;
+                    result = action.RuleToSatisfy.Result;
                 }
             }
 
@@ -278,9 +277,9 @@ namespace ZeroConfiguration
 
         public List<ZeroAction> GetShorcutActions()
         {
-            List<ZeroAction> actions = new List<ZeroAction>();
+            var actions = new List<ZeroAction>();
             string[] ret = new string[] { };
-            using (ConfigurationEntities conf = new ConfigurationEntities())
+            using (var conf = new ConfigurationEntities())
             {
                 TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == Terminal.TerminalCode && tp.Code == Namespace.Properties.HomeShorcuts);
                 if (prop != null)
