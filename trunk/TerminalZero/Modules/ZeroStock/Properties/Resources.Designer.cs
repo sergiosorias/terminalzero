@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZeroMasterData.Properties {
+namespace ZeroStock.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ZeroMasterData.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZeroMasterData.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZeroStock.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,34 +61,74 @@ namespace ZeroMasterData.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nuevo producto.
+        ///   Looks up a localized string similar to Tiene que seleccionar un documento para poder continuar!.
         /// </summary>
-        internal static string NewProduct {
+        internal static string DeliveryNoteMandatoryMsg {
             get {
-                return ResourceManager.GetString("NewProduct", resourceCulture);
+                return ResourceManager.GetString("DeliveryNoteMandatoryMsg", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nuevo proveedor.
+        ///   Looks up a localized string similar to Selección de remitos.
         /// </summary>
-        internal static string NewSupplier {
+        internal static string DeliveryNoteSelection {
             get {
-                return ResourceManager.GetString("NewSupplier", resourceCulture);
+                return ResourceManager.GetString("DeliveryNoteSelection", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap search {
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Fail {
             get {
-                object obj = ResourceManager.GetObject("search", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Fail", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap zoom_in {
+        /// <summary>
+        ///   Looks up a localized string similar to Importante.
+        /// </summary>
+        internal static string Important {
             get {
-                object obj = ResourceManager.GetObject("zoom_in", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Important", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ¿Desea guardar los datos ingresados?.
+        /// </summary>
+        internal static string QuestionSaveCurrentData {
+            get {
+                return ResourceManager.GetString("QuestionSaveCurrentData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Producto Inexistente.
+        /// </summary>
+        internal static string UnexistentProduct {
+            get {
+                return ResourceManager.GetString("UnexistentProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Día incorrecto.
+        /// </summary>
+        internal static string WrongDay {
+            get {
+                return ResourceManager.GetString("WrongDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mes incorrecto.
+        /// </summary>
+        internal static string WrongMonth {
+            get {
+                return ResourceManager.GetString("WrongMonth", resourceCulture);
             }
         }
     }

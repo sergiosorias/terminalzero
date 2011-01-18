@@ -3,20 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Unloaded="UserControl_Unloaded"
-             d:DesignHeight="300" d:DesignWidth="300" xmlns:my="clr-namespace:ZeroConfiguration.Entities" Loaded="UserControl_Loaded">
+             mc:Ignorable="d" Unloaded="UserControlUnloaded"
+             d:DesignHeight="300" d:DesignWidth="300" xmlns:my="clr-namespace:ZeroConfiguration.Entities" Loaded="UserControlLoaded">
     <Grid Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" Content="Lista de productos"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="140"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Terminal" HorizontalAlignment="Right"/>
+            <Label Content="Terminal" HorizontalAlignment="Right" Foreground="White"/>
             <ComboBox Grid.Column="1" Name="cbTerminals" SelectedValuePath="Code" SelectionChanged="cbTerminals_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -63,7 +64,7 @@
                         <Label Grid.Column="6" Grid.Row="1" x:Name="lblNextSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
                     <DataGrid Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" Name="terminalPropertiesDataGrid" 
-                              SelectionChanged="terminalPropertiesDataGrid_SelectionChanged" CanUserAddRows="False" RowDetailsVisibilityMode="VisibleWhenSelected">
+                              SelectionChanged="TerminalPropertiesDataGridSelectionChanged" CanUserAddRows="False" RowDetailsVisibilityMode="VisibleWhenSelected">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="descriptionColumn" Binding="{Binding Path=Description}" Header="Descripción" IsReadOnly="True" />
                             <DataGridTextColumn x:Name="valueColumn" Binding="{Binding Path=Value}" Header="Valor" Width="SizeToHeader" />
@@ -116,8 +117,5 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,5,0">
-            
-        </StackPanel>
     </Grid>
 </UserControl>

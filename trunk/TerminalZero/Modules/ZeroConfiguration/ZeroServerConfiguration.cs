@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ZeroConfiguration.Entities;
-using ZeroCommonClasses.Context;
-using ZeroCommonClasses.Interfaces;
-using System.IO;
-using System.Data;
-using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Entities;
+using ZeroConfiguration.Entities;
+using ZeroConfiguration.Properties;
+using Connection = ZeroConfiguration.Entities.Connection;
 
 namespace ZeroConfiguration
 {
@@ -23,11 +21,13 @@ namespace ZeroConfiguration
 
         }
 
-        private EntitiesContext<ConfigurationEntities> CurrentContext;
-        private int maxConnectioMinutes = 10;
+// ReSharper disable FieldCanBeMadeReadOnly.Local
+        private EntitiesContext<ConfigurationEntities> _currentContext;
+// ReSharper restore FieldCanBeMadeReadOnly.Local
+        private const int MaxConnectioMinutes = 10;
         public ZeroServerConfiguration()
         {
-            CurrentContext = new EntitiesContext<ConfigurationEntities>();
+            _currentContext = new EntitiesContext<ConfigurationEntities>();
 
         }
 
@@ -40,24 +40,24 @@ namespace ZeroConfiguration
         {
             bool ret = true;
             msg = "";
-            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
-            Terminal T = CurrentContext.Context.Terminals.FirstOrDefault(C => C.Code == tcode);
+            System.Diagnostics.Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
+            Terminal T = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == tcode);
             if (T == default(Terminal))
             {
-                if (CurrentContext.Context.Terminals.Count() >= 5)
+                if (_currentContext.Context.Terminals.Count() >= 5)
                 {
                     ret = false;
-                    msg = "Se excedió el número máximo de terminales";
+                    msg = Resources.MaxTerminalsReach;
                 }
                 else if (string.IsNullOrEmpty(tname) || tname.Length < 4)
                 {
                     ret = false;
-                    msg = "Nombre de terminal inválido, mínimo 4 caracteres";
+                    msg = Resources.InvalidTerminalName;
                 }
                 else
                 {
-                    msg = "Terminal nueva, se intentará crearla";
-                    ConfigurationEntities.AddNewTerminal(CurrentContext.Context, tcode, tname);
+                    msg = Resources.NewTerminal;
+                    ConfigurationEntities.AddNewTerminal(_currentContext.Context, tcode, tname);
                 }
             }
             else
@@ -65,86 +65,85 @@ namespace ZeroConfiguration
                 if (T.Name != tname)
                 {
                     ret = false;
-                    msg = "El nombre no concuerda con el existente en la central.";
+                    msg = Resources.WrongTerminalName;
                 }
 
                 if (!T.Active)
                 {
                     ret = false;
-                    msg += "\nLa Terminal fue desactivada para realizar esta acción.";
+                    msg += Resources.DeactivatedTerminal;
                 }
             }
 
             return ret;
         }
 
-        public string CreateConnection(int TerminalCode)
+        public string CreateConnection(int terminalCode)
         {
-            Connection cnn = global::ZeroConfiguration.Entities.Connection.CreateConnection(Guid.NewGuid().ToString(), TerminalCode, DateTime.Now);
-            cnn.Terminal = CurrentContext.Context.Terminals.FirstOrDefault(C => C.Code == TerminalCode);
-            CurrentContext.Context.AddToConnections(cnn);
-            CurrentContext.Context.SaveChanges();
+            Connection cnn = global::ZeroConfiguration.Entities.Connection.CreateConnection(Guid.NewGuid().ToString(), terminalCode, DateTime.Now);
+            cnn.Terminal = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == terminalCode);
+            _currentContext.Context.AddToConnections(cnn);
+            _currentContext.Context.SaveChanges();
             return cnn.Code;
         }
 
-        public bool ValidateConnection(string connID, out int TerminalCode, out string msg)
+        public bool ValidateConnection(string connId, out int terminalCode, out string msg)
         {
             bool ret = false;
-            Connection cnn = CurrentContext.Context.Connections.FirstOrDefault(C => C.Code == connID);
-            TerminalCode = -1;
+            Connection cnn = _currentContext.Context.Connections.FirstOrDefault(c => c.Code == connId);
+            terminalCode = -1;
             msg = "";
             if (cnn != default(Connection))
             {
-                DateTime d = cnn.Stamp.AddMinutes(maxConnectioMinutes);
+                DateTime d = cnn.Stamp.AddMinutes(MaxConnectioMinutes);
 
                 ret = DateTime.Now < d;
                 if (ret)
                 {
-                    TerminalCode = cnn.TerminalCode;
+                    terminalCode = cnn.TerminalCode;
                 }
                 else
                 {
-                    ret = false;
-                    msg = "La conexión ha superado el tiempo de espera máximo.";
+                    msg = Resources.MaxTimeReach;
                 }
             }
             else
-                msg = "La conexión no fue inicializada";
+                msg = Resources.ConnectionFinished;
 
             return ret;
         }
 
-        public void UpdateConnectionStatus(string connID, ConnectionState state)
+        public void UpdateConnectionStatus(string connId, ConnectionState state)
         {
-            Connection Con = CurrentContext.Context.Connections.First(c => c.Code == connID);
-            Con.ConnectionStatu = CurrentContext.Context.ConnectionStatus.First(CS => CS.Code == (int)state);
+            Connection con = _currentContext.Context.Connections.First(c => c.Code == connId);
+            con.ConnectionStatu = _currentContext.Context.ConnectionStatus.First(cs => cs.Code == (int)state);
             if (state == ConnectionState.Ended) //Correcto
             {
-                if (!Con.TerminalReference.IsLoaded)
-                    Con.TerminalReference.Load();
+                if (!con.TerminalReference.IsLoaded)
+                    con.TerminalReference.Load();
 
-                Con.Terminal.LastSync = DateTime.Now;
+                con.Terminal.LastSync = DateTime.Now;
             }
 
-            CurrentContext.Context.SaveChanges();
+            _currentContext.Context.SaveChanges();
         }
 
         public void InsertModule(int terminalCode, ZeroModule module)
         {
-            ConfigurationEntities.AddNewModule(CurrentContext.Context, terminalCode, module.ModuleCode, "", module.Description);
+            ConfigurationEntities.AddNewModule(_currentContext.Context, terminalCode, module.ModuleCode, "", module.Description);
         }
 
         public Dictionary<int, int> GetPacksToSend(int terminalCode)
         {
             Dictionary<int, int> ret = new Dictionary<int, int>();
-            Terminal ter = CurrentContext.Context.Terminals.First(t => t.Code == terminalCode);
+            Terminal ter = _currentContext.Context.Terminals.First(t => t.Code == terminalCode);
             
-            using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
+            using (var ent = new ZeroCommonClasses.Entities.CommonEntities())
             {
                 var query = ent.GetPacksToSend(terminalCode);
-                int module = -1;
                 foreach (var item in query)
                 {
+                    int module;
                     if (int.TryParse(item.PackName.Substring(0, item.PackName.IndexOf('_')), out module))
                     {
                         ret.Add(item.PackCode, module);
@@ -154,7 +153,6 @@ namespace ZeroConfiguration
                         module = -1;
                     }
                 }
-                    
             }
             
 
@@ -163,37 +161,30 @@ namespace ZeroConfiguration
 
         public IEnumerable<Terminal> GetTerminals(int tCode)
         {
-            return CurrentContext.Context.Terminals.Where(t => t.Code != tCode);
+            return _currentContext.Context.Terminals.Where(t => t.Code != tCode);
         }
 
         public IEnumerable<TerminalProperty> GetTerminalProperties(int tCode)
         {
-            if (ConfigurationEntities.IsTerminalZero(CurrentContext.Context, tCode))
-                return CurrentContext.Context.TerminalProperties;
-            else
-                return CurrentContext.Context.TerminalProperties.Where(tp => tp.TerminalCode == tCode);
+            if (ConfigurationEntities.IsTerminalZero(_currentContext.Context, tCode))
+                return _currentContext.Context.TerminalProperties;
+
+            return _currentContext.Context.TerminalProperties.Where(tp => tp.TerminalCode == tCode);
         }
 
         public void MarkPackReceived(int terminalCode,int packCode)
         {
-            using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
+            PackPending packPending;
+            using (var ent = new ZeroCommonClasses.Entities.CommonEntities())
             {
-                ZeroCommonClasses.Entities.PackPending P = ent.PackPendings.FirstOrDefault(PP => PP.PackCode == packCode && PP.TerminalCode == terminalCode);
-                if (P != null)
+                packPending = ent.PackPendings.FirstOrDefault(pp => pp.PackCode == packCode && pp.TerminalCode == terminalCode);
+                if (packPending != null)
                 {
-                    ent.PackPendings.DeleteObject(P);
+                    ent.PackPendings.DeleteObject(packPending);
                     ent.SaveChanges();
                 }
 
-                bool mark = true;
-                foreach (var item in ent.Packs.Where(p => p.Code == packCode))
-                {
-                    if (item.IsMasterData.HasValue && item.IsMasterData.Value)
-                    {
-                        mark = false;
-                        break;
-                    }    
-                }
+                bool mark = Enumerable.All(ent.Packs.Where(p => p.Code == packCode), item => !item.IsMasterData.HasValue || !item.IsMasterData.Value);
                 if (!mark)
                 {
                     
@@ -205,45 +196,45 @@ namespace ZeroConfiguration
         {
             foreach (var item in mods)
             {
-                if (CurrentContext.Context.Modules.FirstOrDefault(m => m.Code == item.Code) == null)
+                if (_currentContext.Context.Modules.FirstOrDefault(m => m.Code == item.Code) == null)
                 {
-                    item.Terminals.Add(CurrentContext.Context.Terminals.First(t => t.Code == terminalCaller));
-                    CurrentContext.Context.Modules.AddObject(item);
+                    item.Terminals.Add(_currentContext.Context.Terminals.First(t => t.Code == terminalCaller));
+                    _currentContext.Context.Modules.AddObject(item);
                 }
             }
-            
-            CurrentContext.Context.SaveChanges();
+
+            _currentContext.Context.SaveChanges();
         }
 
         public void MergeTerminalProperties(int terminalCode, IEnumerable<TerminalProperty> terProp)
         {
             foreach (var item in terProp)
             {
-                if (CurrentContext.Context.TerminalProperties.FirstOrDefault(m => m.Code == item.Code && m.TerminalCode == item.TerminalCode) == null)
-                    CurrentContext.Context.TerminalProperties.AddObject(item);
-                else if (ConfigurationEntities.IsTerminalZero(CurrentContext.Context,terminalCode))
-                    CurrentContext.Context.TerminalProperties.ApplyCurrentValues(item);
+                if (_currentContext.Context.TerminalProperties.FirstOrDefault(m => m.Code == item.Code && m.TerminalCode == item.TerminalCode) == null)
+                    _currentContext.Context.TerminalProperties.AddObject(item);
+                else if (ConfigurationEntities.IsTerminalZero(_currentContext.Context,terminalCode))
+                    _currentContext.Context.TerminalProperties.ApplyCurrentValues(item);
             }
 
-            CurrentContext.Context.SaveChanges();
+            _currentContext.Context.SaveChanges();
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            if (CurrentContext != null && CurrentContext.Context != null)
-                CurrentContext.Context.Dispose();
+            if (_currentContext != null && _currentContext.Context != null)
+                _currentContext.Context.Dispose();
         }
 
         #endregion
         
         public void MergeTerminal(int tCode, IEnumerable<Terminal> iEnumerable)
         {
-            Terminal tAux = null;
+            Terminal tAux;
             foreach (var item in iEnumerable)
             {
-                tAux = CurrentContext.Context.Terminals.FirstOrDefault(m => m.Code == item.Code);
+                tAux = _currentContext.Context.Terminals.FirstOrDefault(m => m.Code == item.Code);
                 if (tAux  != null)
                 {
                     tAux.Name = item.Name;
@@ -252,7 +243,7 @@ namespace ZeroConfiguration
                 }
             }
 
-            CurrentContext.Context.SaveChanges();
+            _currentContext.Context.SaveChanges();
         }
     }
 }

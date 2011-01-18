@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ZeroCommonClasses.Interfaces;
 using System.Windows.Forms;
+using ZeroCommonClasses.Interfaces;
 
 namespace ZeroConfiguration.Controls
 {
@@ -21,51 +12,53 @@ namespace ZeroConfiguration.Controls
     /// </summary>
     public partial class Properties : IZeroPage
     {
-        Entities.ConfigurationEntities DataProvider = null;
-        ITerminal Terminal;
+        Entities.ConfigurationEntities _dataProvider;
+        readonly ITerminal _terminal;
         public Properties(ITerminal terminal)
         {
+            Mode = Mode.ReadOnly;
+            _dataProvider = null;
             InitializeComponent();
-            Terminal = terminal;
+            _terminal = terminal;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
-                DataProvider = new Entities.ConfigurationEntities();
+                _dataProvider = new Entities.ConfigurationEntities();
                 switch (Mode)
                 {
                     case Mode.New:
                     case Mode.Update:
                     case Mode.Delete:
-                        cbTerminals.ItemsSource = DataProvider.Terminals;
+                        cbTerminals.ItemsSource = _dataProvider.Terminals;
                         break;
                     case Mode.ReadOnly:
-                        cbTerminals.ItemsSource = DataProvider.Terminals.Where(t => t.Code == Terminal.TerminalCode);
+                        cbTerminals.ItemsSource = _dataProvider.Terminals.Where(t => t.Code == _terminal.TerminalCode);
                         cbTerminals.IsEnabled = false;
                         terminalPropertiesDataGrid.IsEnabled = false;
                         modulesListView.IsEnabled = false;
                         cbTerminalIsActive.IsEnabled = false;
                         tbTerminal.IsReadOnly = descriptionTextBox.IsReadOnly = true;
-                        cbsendMasterData.Visibility = System.Windows.Visibility.Hidden;
+                        cbsendMasterData.Visibility = Visibility.Hidden;
                         break;
                     default:
                         break;
                 }
 
-                cbTerminals.SelectedItem = DataProvider.Terminals.First(t => t.Code == Terminal.TerminalCode);
+                cbTerminals.SelectedItem = _dataProvider.Terminals.First(t => t.Code == _terminal.TerminalCode);
             }
         }
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int terminal = (int)cbTerminals.SelectedValue;
-            Entities.Terminal T = DataProvider.Terminals.First(c => c.Code == terminal);
+            Entities.Terminal T = _dataProvider.Terminals.First(c => c.Code == terminal);
             tbTerminal.DataContext = T;
             if (T.LastSync != null)
             {
-                lblLastSynclabel.Visibility = System.Windows.Visibility.Visible;
+                lblLastSynclabel.Visibility = Visibility.Visible;
                 lblLastSync.Content = T.LastSync.GetValueOrDefault(DateTime.MinValue).ToString("dd/MM hh:mm:ss tt");
             }
             else
@@ -77,53 +70,42 @@ namespace ZeroConfiguration.Controls
             terminalPropertiesDataGrid.ItemsSource = T.TerminalProperties;
             if (!T.Modules.IsLoaded)
                 T.Modules.Load();
-            modulesListView.ItemsSource = DataProvider.Modules;
+            modulesListView.ItemsSource = _dataProvider.Modules;
         }
 
         #region IZeroPage Members
         
         public bool CanAccept()
         {
-            DataProvider.SaveChanges();
+            _dataProvider.SaveChanges();
             return true;
         }
 
         public bool CanCancel()
         {
-            DataProvider.SaveChanges();
+            _dataProvider.SaveChanges();
             return true;
         }
 
-        private Mode _Mode = Mode.ReadOnly;
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public Mode Mode { get; set; }
 
         #endregion
 
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        private void UserControlUnloaded(object sender, RoutedEventArgs e)
         {
-            SyncProcess.SyncCountdownTick -= sync_SyncCountdownTick;
-            if (DataProvider != null)
-                DataProvider.SaveChanges();
+            _syncProcess.SyncCountdownTick -= SyncSyncCountdownTick;
+            if (_dataProvider != null)
+                _dataProvider.SaveChanges();
         }
 
-        Synchronizer SyncProcess;
+        private Synchronizer _syncProcess;
         public void UpdateTimeRemaining(Synchronizer sync)
         {
-            SyncProcess = sync;
-            sync.SyncCountdownTick += new EventHandler<Synchronizer.SyncCountdownTickEventArgs>(sync_SyncCountdownTick);
+            _syncProcess = sync;
+            sync.SyncCountdownTick += SyncSyncCountdownTick;
         }
 
-        void sync_SyncCountdownTick(object sender, Synchronizer.SyncCountdownTickEventArgs e)
+        private void SyncSyncCountdownTick(object sender, Synchronizer.SyncCountdownTickEventArgs e)
         {
             Dispatcher.Invoke(
                 new MethodInvoker(
@@ -138,7 +120,7 @@ namespace ZeroConfiguration.Controls
                     }), null);
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void UserControlLoaded(object sender, RoutedEventArgs e)
         {
 
             // Do not load your data at design time.
@@ -157,7 +139,7 @@ namespace ZeroConfiguration.Controls
             // }
         }
 
-        private void terminalPropertiesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TerminalPropertiesDataGridSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }

@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TerminalZeroClient.Business;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using System.Drawing;
-using System.Diagnostics;
-using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace TerminalZeroClient
 {
@@ -26,11 +15,11 @@ namespace TerminalZeroClient
     /// </summary>
     public partial class MainWindow : Window, IProgressNotifier
     {
-        private object LastViewShown = null;
+        private object _lastViewShown = null;
         public MainWindow()
         {
             InitializeComponent();
-            Messages = new StringBuilder();
+            Messages = new Queue<string>(10);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -79,7 +68,7 @@ namespace TerminalZeroClient
         private void GoBack(ZeroRule rule)
         {
             ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
-            args.ControlToShow = LastViewShown;
+            args.ControlToShow = _lastViewShown;
             m_Notifing(null, args);
         }
 
@@ -100,7 +89,7 @@ namespace TerminalZeroClient
 
         private void ShowObject(ModuleNotificationEventArgs e)
         {
-            LastViewShown = PrimaryWindow.Content;
+            _lastViewShown = PrimaryWindow.Content;
 
             PrimaryWindow.Content = e.ControlToShow;
             if (e.ControlToShow is UIElement)
@@ -153,12 +142,16 @@ namespace TerminalZeroClient
         private void btnGetMoreStatusInfo_Click(object sender, RoutedEventArgs e)
         {
             TextBox tb = new TextBox();
-            tb.Text = Messages.ToString();
-            Messages.Clear();
+            tb.Text = "";
+            while (Messages.Count>0)
+            {
+                tb.Text += Environment.NewLine + Messages.Dequeue();
+            }
+            
             btnGetMoreStatusInfo.Visibility = System.Windows.Visibility.Hidden;
             tb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             tb.TextWrapping = TextWrapping.Wrap;
-            ZeroMessageBox.Show(tb);
+            ZeroMessageBox.Show(tb, "Información");
         }
 
         #region TryIcon
@@ -249,14 +242,15 @@ namespace TerminalZeroClient
         }
 
         public string LastMessage { get; set; }
-        public StringBuilder Messages { get; private set; }
+        public Queue<string> Messages { get; private set; }
+        public int MaxSaveMessages { get; private set; }
 
         #region IProgressNotifier Members
 
         public void SetProcess(string newProgress)
         {
-            this.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate() { statusMsg.Content = newProgress; }), null);
-            this.Messages.AppendLine(GetStamp() + newProgress);
+            Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate() { statusMsg.Content = newProgress; }), null);
+            Messages.Enqueue(GetStamp() + newProgress);
         }
 
         private static string GetStamp()
@@ -266,23 +260,18 @@ namespace TerminalZeroClient
 
         public void SetProgress(int newProgress)
         {
-            this.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate() { statusBar.Value = newProgress; }), null);
+            Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate() { statusBar.Value = newProgress; }), null);
         }
 
         public void SetUserMessage(bool isMandatory, string message)
         {
             this.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate()
             {
-                if (isMandatory)
-                {
-                    btnGetMoreStatusInfo.Visibility = System.Windows.Visibility.Visible;
-                }
-                else
-                    btnGetMoreStatusInfo.Visibility = System.Windows.Visibility.Hidden;
+                btnGetMoreStatusInfo.Visibility = isMandatory ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
             }), null);
 
             LastMessage = message;
-            this.Messages.AppendLine(GetStamp() + LastMessage);
+            this.Messages.Enqueue(GetStamp() + LastMessage);
             Log(TraceLevel.Verbose, GetStamp() + LastMessage);
         }
 
@@ -310,7 +299,7 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.Level >= level, GetStamp() + message);
+            Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.Level >= level, GetStamp() + message);
         }
 
         #endregion

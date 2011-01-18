@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.EntityClient;
+using System.Diagnostics;
 using System.ServiceModel;
 using ZeroCommonClasses.Interfaces.Services;
-using System.ServiceModel.Configuration;
-using System.ServiceModel.Channels;
-using System.Diagnostics;
 
 namespace ZeroCommonClasses.Context
 {

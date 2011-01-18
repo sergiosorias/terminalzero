@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Zip;
-using ZeroCommonClasses.Interfaces;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Entities;
 
 namespace ZeroCommonClasses.PackClasses

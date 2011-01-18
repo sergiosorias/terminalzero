@@ -9,12 +9,12 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for DeliveryDocumentView.xaml
     /// </summary>
-    public partial class DeliveryDocumentView : UserControl, ZeroCommonClasses.Interfaces.IZeroPage
+    public partial class DeliveryNoteView : UserControl, ZeroCommonClasses.Interfaces.IZeroPage
     {
         private ITerminal Terminal;
         public Entities.DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
 
-        public DeliveryDocumentView(ITerminal terminal)
+        public DeliveryNoteView(ITerminal terminal)
         {
             InitializeComponent();
             Terminal = terminal;

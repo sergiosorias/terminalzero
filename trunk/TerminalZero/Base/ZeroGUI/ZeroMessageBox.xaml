@@ -5,13 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Title="Información" WindowStartupLocation="CenterOwner"
              WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="40" MaxHeight="500" MaxWidth="800"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="current_MouseLeftButtonDown">
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid Background="{DynamicResource mainBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="9"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue=Terminal Zero}"/>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <ContentPresenter Margin="4" x:Name="contentpress">
     
@@ -19,8 +20,8 @@
         </ScrollViewer>
         
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2">
-            <Button Content="Aceptar" Style="{DynamicResource buttonTextStyle}" Foreground="#FF42C742" Click="Accept_Button_Click" />
-            <Button Content="Cancelar" Style="{DynamicResource buttonTextStyle}" Foreground="#FFC42626" Click="Cancel_Button_Click"/>
+            <Button Content="Aceptar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FF727C49" Foreground="#FF727C49" Click="AcceptButtonClick" />
+            <Button Content="Cancelar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FFB46161" Foreground="#FFB46161" Click="CancelButtonClick"/>
         </WrapPanel>
     </Grid>
 </Window>

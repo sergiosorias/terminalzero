@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -23,6 +13,7 @@ namespace ZeroMasterData.Pages
     {
         public CustomerView()
         {
+            Mode = Mode.ReadOnly;
             InitializeComponent();
         }
 
@@ -38,7 +29,7 @@ namespace ZeroMasterData.Pages
                 }
                 catch (Exception wx)
                 {
-                    global::System.Windows.Forms.MessageBox.Show(wx.ToString());
+                    MessageBox.Show(wx.ToString());
                 }
             }
         }
@@ -55,18 +46,7 @@ namespace ZeroMasterData.Pages
 
         #region IZeroPage Members
 
-        private Mode _Mode = Mode.ReadOnly;
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public Mode Mode { get; set; }
 
         public bool CanAccept()
         {

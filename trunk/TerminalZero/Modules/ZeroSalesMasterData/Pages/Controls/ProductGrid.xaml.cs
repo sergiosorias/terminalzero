@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.ComponentModel;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -68,7 +58,7 @@ namespace ZeroMasterData.Pages.Controls
             int t = (int)((Button)sender).DataContext;
             Controls.ProductDetail detail = new Controls.ProductDetail(DataProvider, t);
 
-            bool? ret = ZeroMessageBox.Show(detail);
+            bool? ret = ZeroMessageBox.Show(detail, "Editar producto");
             if (ret.HasValue && ret.Value)
             {
                

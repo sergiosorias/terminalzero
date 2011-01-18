@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZeroMasterData.Properties {
+namespace ZeroUpdateManager.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ZeroMasterData.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZeroMasterData.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZeroUpdateManager.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,34 +61,47 @@ namespace ZeroMasterData.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nuevo producto.
+        ///   Looks up a localized string similar to .zip.
         /// </summary>
-        internal static string NewProduct {
+        internal static string CompressFileExtention {
             get {
-                return ResourceManager.GetString("NewProduct", resourceCulture);
+                return ResourceManager.GetString("CompressFileExtention", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nuevo proveedor.
+        ///   Looks up a localized string similar to .sql.
         /// </summary>
-        internal static string NewSupplier {
+        internal static string ScripFileExtention {
             get {
-                return ResourceManager.GetString("NewSupplier", resourceCulture);
+                return ResourceManager.GetString("ScripFileExtention", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap search {
+        /// <summary>
+        ///   Looks up a localized string similar to Actualización completada con éxito!.
+        /// </summary>
+        internal static string SuccessfullyUpgrade {
             get {
-                object obj = ResourceManager.GetObject("search", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("SuccessfullyUpgrade", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap zoom_in {
+        /// <summary>
+        ///   Looks up a localized string similar to Ocurrio un error durante el proceso de actualización!.
+        /// </summary>
+        internal static string UnsuccessfullyUpgrade {
             get {
-                object obj = ResourceManager.GetObject("zoom_in", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("UnsuccessfullyUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .zpack.
+        /// </summary>
+        internal static string ZeroPackFileExtention {
+            get {
+                return ResourceManager.GetString("ZeroPackFileExtention", resourceCulture);
             }
         }
     }

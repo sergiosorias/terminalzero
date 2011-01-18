@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ZeroCommonClasses.Interfaces;
+﻿using System.Collections.Generic;
 using ZeroCommonClasses.GlobalObjects;
-using System.ComponentModel;
+using ZeroCommonClasses.Interfaces;
+using ZeroUpdateManager.Properties;
 
 
 namespace ZeroUpdateManager
@@ -35,8 +32,8 @@ namespace ZeroUpdateManager
         private void ImportScriptFile(ZeroRule rule)
         {
             List<string> filesToProcess = new List<string>();
-            filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*.zip"));
-            filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*.zpack"));            
+            filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*"+Resources.CompressFileExtention));
+            filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*"+Resources.ZeroPackFileExtention));
             foreach (var item in filesToProcess)
             {
                 NewPackReceived(item);
@@ -46,16 +43,16 @@ namespace ZeroUpdateManager
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            UpdateManagerPackManager PackReceived = new UpdateManagerPackManager(path);
+            var PackReceived = new UpdateManagerPackManager(path);
             PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
             PackReceived.Error += new System.IO.ErrorEventHandler(PackReceived_Error);
             if (PackReceived.Process())
             {
-                Terminal.Session.Notifier.SendNotification("Actualización completada con éxito!");
+                Terminal.Session.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
             }
             else
             {
-                Terminal.Session.Notifier.SendNotification("Ocurrio un error durante el proceso de actualización!");
+                Terminal.Session.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
             }
         }
 

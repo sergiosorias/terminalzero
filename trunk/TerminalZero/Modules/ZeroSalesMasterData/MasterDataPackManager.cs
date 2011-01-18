@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 using ZeroCommonClasses.PackClasses;
-using System.Collections;
-using System.Reflection;
 using ZeroMasterData.Entities;
 
 
@@ -15,17 +12,17 @@ namespace ZeroMasterData
 {
     public class MasterDataPackManager : PackManager
     {
-        private ExportEntitiesPackInfo MyInfo = null;
+        private ExportEntitiesPackInfo _myInfo = null;
         public MasterDataPackManager(ExportEntitiesPackInfo info)
             : base(info)
         {
-            MyInfo = info;
+            _myInfo = info;
             base.Exporting += new EventHandler<PackEventArgs>(MasterDataPackManager_Exporting);
         }
 
         void MasterDataPackManager_Exporting(object sender, PackEventArgs e)
         {
-            foreach (PackTableInfo item in MyInfo.Tables)
+            foreach (PackTableInfo item in _myInfo.Tables)
             {
                 using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
                 {
@@ -48,10 +45,10 @@ namespace ZeroMasterData
             XmlSerializer reader = new XmlSerializer(infoType);
             using (XmlReader xmlreader = XmlReader.Create(Path.Combine(e.WorkingDirectory, infoType.ToString())))
             {
-                MyInfo = (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
+                _myInfo = (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
                 xmlreader.Close();
             }
-            e.PackInfo = MyInfo;
+            e.PackInfo = _myInfo;
 
             ImportEntities(e);
         }
@@ -89,7 +86,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveCustomers(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveCustomers(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<Customer> items = item.DeserializeRows<Customer>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -103,7 +100,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveSupplier(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveSupplier(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<Supplier> items = item.DeserializeRows<Supplier>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -117,7 +114,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveProduct(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveProduct(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<Product> items = item.DeserializeRows<Product>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -131,7 +128,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveTaxPosition(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveTaxPosition(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<TaxPosition> items = item.DeserializeRows<TaxPosition>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -145,7 +142,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveTax(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveTax(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<Tax> items = item.DeserializeRows<Tax>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -159,7 +156,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveProductGroup(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveProductGroup(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<ProductGroup> items = item.DeserializeRows<ProductGroup>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -173,7 +170,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SavePaymentInstrument(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SavePaymentInstrument(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<PaymentInstrument> items = item.DeserializeRows<PaymentInstrument>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -187,7 +184,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SaveWeight(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SaveWeight(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<Weight> items = item.DeserializeRows<Weight>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))
@@ -201,7 +198,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void SavePrices(string filePath, MasterDataEntities ent, PackTableInfo item)
+        private static void SavePrices(string filePath, MasterDataEntities ent, PackTableInfo item)
         {
             List<Price> items = item.DeserializeRows<Price>(filePath);
             foreach (var price in items.OrderBy(p => p.Code))

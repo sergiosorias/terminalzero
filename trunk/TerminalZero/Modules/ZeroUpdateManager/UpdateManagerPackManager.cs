@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SqlClient;
-using ZeroUpdateManager.Database.ScriptLines;
+using ZeroUpdateManager.Properties;
 
 namespace ZeroUpdateManager
 {
@@ -12,7 +9,7 @@ namespace ZeroUpdateManager
         public UpdateManagerPackManager(string packDir)
             : base(packDir)
         {
-            Importing += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(UpdateManagerPackManager_Importing);
+            Importing += UpdateManagerPackManager_Importing;
         }
 
         private void UpdateManagerPackManager_Importing(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
@@ -20,7 +17,7 @@ namespace ZeroUpdateManager
             e.Pack.IsUpgrade = true;
             SqlTransaction tran = null;
             SqlConnection conn = null;
-            string[] filesToProcess = System.IO.Directory.GetFiles(e.WorkingDirectory, "*.sql");
+            string[] filesToProcess = System.IO.Directory.GetFiles(e.WorkingDirectory, "*" + Resources.ScripFileExtention);
             if (filesToProcess.Length > 0)
             {
                 string lastScript = "";
