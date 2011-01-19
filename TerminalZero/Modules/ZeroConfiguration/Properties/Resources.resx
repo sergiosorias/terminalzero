@@ -141,4 +141,26 @@ La Terminal fue desactivada para realizar esta acción.]]></value>
 	<data name="ConnectionFinished">
 		<value xml:space="preserve">La conexión no fue inicializada</value>
 	</data>
+	<data name="UnasignedParameter">
+		<value xml:space="preserve">No se ha asignado el parámetro</value>
+	</data>
+	<data name="UnexistentRuleNamed?">
+		<value><![CDATA[No existe la regla con el nombre '{0}'
+]]></value>
+	</data>
+	<data name="Welcome">
+		<value xml:space="preserve">Bienvenido</value>
+	</data>
+	<data name="MsgIncorrectUserPassTryAgain">
+		<value xml:space="preserve">Usuario/password incorrectos. Por favor intente nuevamente!</value>
+	</data>
+	<data name="Fail">
+		<value xml:space="preserve">Error</value>
+	</data>
+	<data name="MsgLogInPlease">
+		<value xml:space="preserve">Por favor ingrese su usuario!</value>
+	</data>
+	<data name="SyncEveryFormat">
+		<value xml:space="preserve">Sincronizando cada {0} minutos</value>
+	</data>
 </root>

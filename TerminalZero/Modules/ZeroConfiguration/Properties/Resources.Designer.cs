@@ -98,6 +98,15 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Fail {
+            get {
+                return ResourceManager.GetString("Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nombre de terminal inválido, mínimo 4 caracteres.
         /// </summary>
         internal static string InvalidTerminalName {
@@ -125,11 +134,47 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Usuario/password incorrectos. Por favor intente nuevamente!.
+        /// </summary>
+        internal static string MsgIncorrectUserPassTryAgain {
+            get {
+                return ResourceManager.GetString("MsgIncorrectUserPassTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor ingrese su usuario!.
+        /// </summary>
+        internal static string MsgLogInPlease {
+            get {
+                return ResourceManager.GetString("MsgLogInPlease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminal nueva, se intentará crearla.
         /// </summary>
         internal static string NewTerminal {
             get {
                 return ResourceManager.GetString("NewTerminal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sincronizando cada {0} minutos.
+        /// </summary>
+        internal static string SyncEveryFormat {
+            get {
+                return ResourceManager.GetString("SyncEveryFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se ha asignado el parámetro.
+        /// </summary>
+        internal static string UnasignedParameter {
+            get {
+                return ResourceManager.GetString("UnasignedParameter", resourceCulture);
             }
         }
         
@@ -148,6 +193,16 @@ namespace ZeroConfiguration.Properties {
         internal static string UnauthorizedUser {
             get {
                 return ResourceManager.GetString("UnauthorizedUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No existe la regla con el nombre &apos;{0}&apos;
+        ///.
+        /// </summary>
+        internal static string UnexistentRuleNamed_ {
+            get {
+                return ResourceManager.GetString("UnexistentRuleNamed?", resourceCulture);
             }
         }
         
@@ -175,6 +230,15 @@ namespace ZeroConfiguration.Properties {
         internal static string ValidUser {
             get {
                 return ResourceManager.GetString("ValidUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bienvenido.
+        /// </summary>
+        internal static string Welcome {
+            get {
+                return ResourceManager.GetString("Welcome", resourceCulture);
             }
         }
         
