@@ -75,12 +75,12 @@ namespace ZeroMasterData.Pages.Controls
             }
         }
 
-        public bool CanAccept()
+        public bool CanAccept(object parameter)
         {
             return true;
         }
 
-        public bool CanCancel()
+        public bool CanCancel(object parameter)
         {
             return true;
         }

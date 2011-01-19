@@ -13,8 +13,8 @@ namespace ZeroCommonClasses.Interfaces
     public interface IZeroPage 
     {
         Mode Mode { get; set; }
-        bool CanAccept();
-        bool CanCancel();
+        bool CanAccept(object parameter);
+        bool CanCancel(object parameter);
         
     }
 }

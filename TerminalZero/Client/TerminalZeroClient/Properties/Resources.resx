@@ -121,4 +121,22 @@
   <data name="ZeroAppIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ZeroAppIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+	<data name="AppName">
+		<value xml:space="preserve">Terminal Zero</value>
+	</data>
+	<data name="QuestionAreYouSureAppClosing">
+		<value xml:space="preserve">¿Esta seguro que desea salir de la aplicacion?</value>
+	</data>
+	<data name="ClickToOpen">
+		<value xml:space="preserve">Click para abrir</value>
+	</data>
+	<data name="AppMinimized">
+		<value xml:space="preserve">Aplicación minizada</value>
+	</data>
+	<data name="Closing">
+		<value xml:space="preserve">Cerrando</value>
+	</data>
+	<data name="Home">
+		<value xml:space="preserve">Inicio</value>
+	</data>
 </root>

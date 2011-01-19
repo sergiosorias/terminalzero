@@ -88,7 +88,6 @@
     <Compile Include="GlobalObjects\ZeroActionParameter.cs" />
     <Compile Include="PackClasses\PackManager.cs" />
     <Compile Include="GlobalObjects\ZeroResponse.cs" />
-    <Compile Include="GlobalObjects\ZeroRule.cs" />
     <Compile Include="ZeroSession.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,9 +16,9 @@ namespace ZeroCommonClasses
     [DataContract]
     public abstract partial class ZeroModule
     {
-        public const string kInFolderName = "In";
+        public const string KInFolderName = "In";
 
-        public ZeroModule(ITerminal iCurrentTerminal,int code, string description)
+        protected ZeroModule(ITerminal iCurrentTerminal,int code, string description)
         {
             Terminal = iCurrentTerminal;
             ModuleCode = code;
@@ -45,40 +45,40 @@ namespace ZeroCommonClasses
                 Notifing(this, args);
         }
 
-        private string _WorkingDirectory = "";
+        private string _workingDirectory = "";
         [DataMember]
         public string WorkingDirectory 
         { 
             get
             {
-                return _WorkingDirectory;
+                return _workingDirectory;
             }
             set
             {
-                _WorkingDirectory = value;
-                if (!System.IO.Directory.Exists(_WorkingDirectory))
-                    System.IO.Directory.CreateDirectory(_WorkingDirectory);
+                _workingDirectory = value;
+                if (!System.IO.Directory.Exists(_workingDirectory))
+                    System.IO.Directory.CreateDirectory(_workingDirectory);
 
-                WorkingDirectoryIn = System.IO.Path.Combine(_WorkingDirectory, kInFolderName);
+                WorkingDirectoryIn = System.IO.Path.Combine(_workingDirectory, KInFolderName);
 
                 
             }
         }
 
-        private string _WorkingDirectoryIn = "";
+        private string _workingDirectoryIn = "";
 
         [DataMember]
         public string WorkingDirectoryIn
         {
             get
             {
-                return _WorkingDirectoryIn;
+                return _workingDirectoryIn;
             }
             private set
             {
-                _WorkingDirectoryIn = value;
-                if (!System.IO.Directory.Exists(_WorkingDirectoryIn))
-                    System.IO.Directory.CreateDirectory(_WorkingDirectoryIn);
+                _workingDirectoryIn = value;
+                if (!System.IO.Directory.Exists(_workingDirectoryIn))
+                    System.IO.Directory.CreateDirectory(_workingDirectoryIn);
             }
         }
 

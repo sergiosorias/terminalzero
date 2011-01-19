@@ -2,10 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Loaded="current_Loaded"
              mc:Ignorable="d" Title="Información" WindowStartupLocation="CenterOwner"
              WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="40" MaxHeight="500" MaxWidth="800"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Window.InputBindings>
+        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Ctrl"/>
+        <KeyBinding x:Name="ShortCutCancel" Key="Escape"/>
+    </Window.InputBindings>
     <Grid Background="{DynamicResource mainBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,8 +24,8 @@
         </ScrollViewer>
         
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2">
-            <Button Content="Aceptar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FF727C49" Foreground="#FF727C49" Click="AcceptButtonClick" />
-            <Button Content="Cancelar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FFB46161" Foreground="#FFB46161" Click="CancelButtonClick"/>
+            <Button x:Name="btnAccept" Content="Aceptar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FF727C49" Foreground="#FF727C49" />
+            <Button x:Name="btnCancel" Content="Cancelar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FFB46161" Foreground="#FFB46161"/>
         </WrapPanel>
     </Grid>
 </Window>

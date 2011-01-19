@@ -19,8 +19,7 @@ namespace TerminalZeroClient.Pages
                     Button b = new Button();
                     b.Content = item.Alias;
                     b.Style = (Style)Resources["homeButtonStyle"];
-                    b.DataContext = item;
-                    b.Click += new RoutedEventHandler(btn_Click);
+                    b.Command = item;
                     ButtonsContent.Children.Add(b);
                 }
 
@@ -30,17 +29,6 @@ namespace TerminalZeroClient.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             
-        }
-
-        private void btn_Click(object sender, RoutedEventArgs e)
-        {
-            FrameworkElement item = (FrameworkElement)sender;
-            ZeroAction buttonAction = item.DataContext as ZeroAction;
-
-            if (buttonAction != null)
-            {
-                App.Instance.Manager.ExecuteAction(buttonAction);
-            }
         }
     }
 }

@@ -60,6 +60,60 @@ namespace TerminalZeroClient.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Aplicación minizada.
+        /// </summary>
+        internal static string AppMinimized {
+            get {
+                return ResourceManager.GetString("AppMinimized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terminal Zero.
+        /// </summary>
+        internal static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click para abrir.
+        /// </summary>
+        internal static string ClickToOpen {
+            get {
+                return ResourceManager.GetString("ClickToOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cerrando.
+        /// </summary>
+        internal static string Closing {
+            get {
+                return ResourceManager.GetString("Closing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inicio.
+        /// </summary>
+        internal static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ¿Esta seguro que desea salir de la aplicacion?.
+        /// </summary>
+        internal static string QuestionAreYouSureAppClosing {
+            get {
+                return ResourceManager.GetString("QuestionAreYouSureAppClosing", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Icon ZeroAppIcon {
             get {
                 object obj = ResourceManager.GetObject("ZeroAppIcon", resourceCulture);

@@ -34,11 +34,6 @@ namespace ZeroLogHandle
             }
         }
 
-        private void OpenLog(ZeroRule rule)
-        {
-
-        }
-
         public override void Init()
         {
             

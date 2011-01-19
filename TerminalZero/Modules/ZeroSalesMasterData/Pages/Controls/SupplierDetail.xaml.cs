@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZeroCommonClasses.Interfaces;
 using System.Data.Objects.DataClasses;
 
@@ -80,7 +70,7 @@ namespace ZeroMasterData.Pages.Controls
         
         #region IZeroPage Members
 
-        public bool CanAccept()
+        public bool CanAccept(object parameter)
         {
             bool ret = true;
 
@@ -108,7 +98,7 @@ namespace ZeroMasterData.Pages.Controls
             return ret;
         }
 
-        public bool CanCancel()
+        public bool CanCancel(object parameter)
         {
             EntityObject obj = CurrentSupplier as EntityObject;
             if (obj.EntityState == System.Data.EntityState.Modified)
