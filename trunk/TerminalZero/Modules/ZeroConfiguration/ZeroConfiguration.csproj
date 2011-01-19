@@ -41,9 +41,10 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -51,10 +52,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationPackManager.cs" />
-    <Compile Include="Controls\Properties.xaml.cs">
+    <Compile Include="Pages\Controls\UserDetail.xaml.cs">
+      <DependentUpon>UserDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Properties.xaml.cs">
       <DependentUpon>Properties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Users.xaml.cs">
+    <Compile Include="Pages\UserLogIn.xaml.cs">
+      <DependentUpon>UserLogIn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Users.xaml.cs">
       <DependentUpon>Users.xaml</DependentUpon>
     </Compile>
     <Compile Include="Entities\Configuration.Designer.cs">
@@ -80,13 +87,26 @@
       <Name>ZeroCommonClasses</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Base\ZeroGUI\ZeroGUI.csproj">
+      <Project>{C5EE22F8-88E6-4E39-839F-B274B28A1FE1}</Project>
+      <Name>ZeroGUI</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\Properties.xaml">
+    <Page Include="Pages\Controls\UserDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Users.xaml">
+    <Page Include="Pages\Properties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\UserLogIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Users.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
