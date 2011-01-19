@@ -20,10 +20,10 @@ namespace ZeroStock
 
         private void BuildPosibleActions()
         {
-            Terminal.Session.AddAction( new ZeroAction(ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
-            Terminal.Session.AddAction( new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
-            Terminal.Session.AddAction( new ZeroAction(ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
-            Terminal.Session.AddAction(new ZeroAction(ActionType.MainViewButton, "Operaciones@Remitos", openModifyStockView));
+            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
+            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
+            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
+            Terminal.Session.AddAction(new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Remitos", openModifyStockView));
         }
 
         public override void Init()
@@ -123,19 +123,19 @@ namespace ZeroStock
         
         #region Handlers
 
-        private void openStockView(ZeroRule rule)
+        private void openStockView()
         {
             CurrentStockView view = new CurrentStockView();
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
-        private void openNewStockView(ZeroRule rule)
+        private void openNewStockView()
         {
             StockView view = new StockView(Terminal, 0);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
-        private void openModifyStockView(ZeroRule rule)
+        private void openModifyStockView()
         {
             StockView view = new StockView(Terminal, 1);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });

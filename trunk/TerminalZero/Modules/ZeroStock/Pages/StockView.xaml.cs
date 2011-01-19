@@ -53,11 +53,8 @@ namespace ZeroStock.Pages
         {
             ZeroCommonClasses.GlobalObjects.ZeroAction action;
             string aux = "";
-            if (Terminal.Manager.ExistsAction(ZeroCommonClasses.GlobalObjects.ApplicationActions.Back, out action) && Terminal.Manager.CanExecute(action, out aux))
-            {
-                action.Execute(null);
-            }
-            else
+            if (!Terminal.Manager.ExistsAction(ZeroCommonClasses.GlobalObjects.ApplicationActions.Back, out action) 
+                || !Terminal.Manager.ExecuteAction(action))
             {
                 IsEnabled = false;
             }
@@ -95,7 +92,7 @@ namespace ZeroStock.Pages
             }
         }
 
-        public bool CanAccept()
+        public bool CanAccept(object parameter)
         {
             bool ret = true;
             if (_header!=null && _header.StockItems != null && _header.StockItems.Count > 0)
@@ -122,7 +119,7 @@ namespace ZeroStock.Pages
             return ret;
         }
 
-        public bool CanCancel()
+        public bool CanCancel(object parameter)
         {
             return true;
         }

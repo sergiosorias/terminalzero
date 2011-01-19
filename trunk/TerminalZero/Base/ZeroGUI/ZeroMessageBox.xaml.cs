@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroGUI
@@ -10,41 +11,25 @@ namespace ZeroGUI
     public partial class ZeroMessageBox : Window
     {
         bool _isDialog = false;
+        private readonly ZeroAction _acceptAction;
+        private readonly ZeroAction _cancelAction;
         public ZeroMessageBox()
         {
             InitializeComponent();
-            Owner = Application.Current.Windows[0];
+            Owner = Application.Current.Windows[Application.Current.Windows.Count-2];
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             lblCaption.DataContext = this;
+            _acceptAction = new ZeroAction(null, ActionType.BackgroudAction, "cancel", Accept);
+            _cancelAction = new ZeroAction(null, ActionType.BackgroudAction, "accept", Cancel);
+            btnAccept.Command = ShortCutAccept.Command = _acceptAction;
+            btnCancel.Command = ShortCutCancel.Command = _cancelAction;
+            
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        public ZeroMessageBox(bool isDialog)
+            :this()
         {
-            base.OnClosing(e);
-            if (Content is UIElement)
-            {
-                UIElement elem = Content as UIElement;
-                elem.KeyDown -= new KeyEventHandler(ElemKeyDown);
-            }
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            ElemKeyDown(null, e);
-            base.OnKeyDown(e);
-        }
-
-        private void ElemKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                e.Handled = true;
-                CancelButtonClick(null, null);
-            }
-            else if(e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.Enter)
-            {
-                e.Handled = true;
-                AcceptButtonClick(null, null);
-            }
+            _isDialog = isDialog;
         }
 
         public new object Content
@@ -57,51 +42,33 @@ namespace ZeroGUI
             set
             {
                 contentpress.Content = value;
-                if (Content is UIElement)
+                if (Content is IZeroPage)
                 {
-                    UIElement elem = Content as UIElement;
-                    elem.PreviewKeyDown += new KeyEventHandler(ElemKeyDown);
+                    _acceptAction.RuleToSatisfy = ((IZeroPage)value).CanAccept;
+                    _cancelAction.RuleToSatisfy = ((IZeroPage)value).CanCancel;
                 }
             }
         }
 
-        private void AcceptButtonClick(object sender, RoutedEventArgs e)
+        private void Accept()
         {
-            bool exit = true;
-
-            if (contentpress.Content is IZeroPage)
-            {
-                exit = ((IZeroPage)contentpress.Content).CanAccept();
-            }
-
-            if (_isDialog && exit)
+            if (_isDialog)
                 DialogResult = true;
 
-            if(exit)
-                this.Close();
+            this.Close();
+        }
 
+        private void Cancel()
+        {
+            if (_isDialog)
+                DialogResult = false;
 
+            this.Close();
         }
 
         private void CurrentMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
-        }
-
-        private void CancelButtonClick(object sender, RoutedEventArgs e)
-        {
-            bool exit = true;
-
-            if (contentpress.Content is IZeroPage)
-            {
-                exit = ((IZeroPage)contentpress.Content).CanCancel();
-            }
-
-            if (_isDialog && exit)
-                DialogResult = false;
-
-            if (exit)
-                this.Close();
         }
 
         public static bool? Show(object content)
@@ -121,7 +88,7 @@ namespace ZeroGUI
 
         public static bool? Show(object content, string caption, SizeToContent sizeToContent)
         {
-            ZeroMessageBox MB = new ZeroMessageBox();
+            ZeroMessageBox MB = new ZeroMessageBox(true);
             MB.Content = content;
             if (content is UIElement)
             {
@@ -129,8 +96,12 @@ namespace ZeroGUI
             }
             MB.Title = caption;
             MB.SizeToContent = sizeToContent;
-            MB._isDialog = true;
             return MB.ShowDialog();
+        }
+
+        private void current_Loaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

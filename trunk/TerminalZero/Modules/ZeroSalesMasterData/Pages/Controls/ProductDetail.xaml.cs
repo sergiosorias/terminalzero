@@ -166,7 +166,7 @@ namespace ZeroMasterData.Pages.Controls
 
         #region IEntitiyValidate Members
 
-        public bool CanAccept()
+        public bool CanAccept(object parameter)
         {
             bool ret = true; ;
             string msg = string.Empty;
@@ -258,7 +258,7 @@ namespace ZeroMasterData.Pages.Controls
             return ret;
         }
 
-        public bool CanCancel()
+        public bool CanCancel(object parameter)
         {
             EntityObject obj = CurrentProduct as EntityObject;
             if (obj.EntityState == System.Data.EntityState.Modified)

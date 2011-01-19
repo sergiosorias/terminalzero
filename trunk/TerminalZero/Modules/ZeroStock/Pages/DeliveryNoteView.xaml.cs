@@ -65,7 +65,7 @@ namespace ZeroStock.Pages
             }
         }
 
-        public bool CanAccept()
+        public bool CanAccept(object parameter)
         {
             bool ret = true;
             if (Mode == Mode.Selection)
@@ -82,7 +82,7 @@ namespace ZeroStock.Pages
             return ret;
         }
 
-        public bool CanCancel()
+        public bool CanCancel(object parameter)
         {
             return true;
         }

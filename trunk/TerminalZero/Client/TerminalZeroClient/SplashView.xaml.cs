@@ -14,19 +14,16 @@ namespace TerminalZeroClient
     public partial class SplashView : Window, IProgressNotifier
     {
         StringBuilder fullLog = new StringBuilder();
-        public SplashView()
-        {
-            
-        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             appName.Content = Properties.Settings.Default.ApplicationName;
             App.Instance.Session.Notifier = this;
             BackgroundWorker work = new BackgroundWorker();
-            work.DoWork += new DoWorkEventHandler(work_DoWork);
-            work.RunWorkerCompleted += new RunWorkerCompletedEventHandler(work_RunWorkerCompleted);
+            work.DoWork += work_DoWork;
+            work.RunWorkerCompleted += work_RunWorkerCompleted;
             work.RunWorkerAsync();
+            
         }
         
         void work_DoWork(object sender, DoWorkEventArgs e)

@@ -17,21 +17,21 @@ namespace ZeroMasterData
 
         private void BuildPosibleActions()
         {
-            ZeroAction openProducList = new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Productos@Lista de Productos",
+            ZeroAction openProducList = new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Productos@Lista de Productos",
                 OpenProductView);
             Terminal.Session.AddAction( openProducList);
 
-            Terminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Productos@Consulta",
+            Terminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Productos@Consulta",
                 OpenProductMessage));
 
-            Terminal.Session.AddAction( new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Proveedores",
+            Terminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Proveedores",
                 OpenSupplierView, "ValidateTerminalZero"));
 
-            Terminal.Session.AddAction( new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Clientes",
+            Terminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Clientes",
                 OpenCustomerView));
 
             //IFileTransfer
-            ZeroAction ac = new ZeroAction(ActionType.MenuItem, "Tablas Maestras@Exportar Datos", ExportMasterDataPack, "ValidateTerminalZero");
+            ZeroAction ac = new ZeroAction(Terminal.Session, ActionType.MenuItem, "Tablas Maestras@Exportar Datos", ExportMasterDataPack, "ValidateTerminalZero");
             Terminal.Session.AddAction( ac);
                         
         }
@@ -71,7 +71,7 @@ namespace ZeroMasterData
 
         #region Actions Handle
 
-        private void OpenProductView(ZeroRule rule)
+        private void OpenProductView()
         {
             ZeroMasterData.Pages.ProductsView P = new ZeroMasterData.Pages.ProductsView();
             if (Terminal.TerminalCode != 0)
@@ -80,10 +80,10 @@ namespace ZeroMasterData
             
         }
 
-        private void OpenProductMessage(ZeroRule rule)
+        private void OpenProductMessage()
         {
             ZeroMessageBox mb = new ZeroMessageBox();
-            ZeroMasterData.Pages.Controls.ProductGrid view = new ZeroMasterData.Pages.Controls.ProductGrid();
+            Pages.Controls.ProductGrid view = new Pages.Controls.ProductGrid();
             view.Mode = Mode.ReadOnly;
             mb.Content = view;
             mb.SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
@@ -92,23 +92,25 @@ namespace ZeroMasterData
             mb.Show();
         }
 
-        private void OpenSupplierView(ZeroRule rule)
+        private void OpenSupplierView()
         {
             ZeroMasterData.Pages.SupplierView P = new ZeroMasterData.Pages.SupplierView();
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
             
         }
 
-        private void OpenCustomerView(ZeroRule rule)
+        private void OpenCustomerView()
         {
-            ZeroMasterData.Pages.CustomerView P = new ZeroMasterData.Pages.CustomerView();
+            Pages.CustomerView P = new Pages.CustomerView();
             if (Terminal.Manager.ValidateRule("ValidateTerminalZero"))
+            {
                 P.Mode = Mode.Update;
+            }
 
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
         }
 
-        private void ExportMasterDataPack(ZeroRule rule)
+        private void ExportMasterDataPack()
         {
             System.Threading.Thread th = new System.Threading.Thread(
                 new System.Threading.ParameterizedThreadStart(ExportPackEntryPoint));
@@ -168,7 +170,7 @@ namespace ZeroMasterData
         private void NotifyEntityCreation(string entity, int rowCount)
         {
             Terminal.Session.Notifier.SetUserMessage(false, "Creando archivo de "+entity);
-            Terminal.Session.Notifier.SetUserMessage(false, "Cantidad: "+rowCount.ToString());
+            Terminal.Session.Notifier.SetUserMessage(false, "Cantidad: "+rowCount);
         }
 
         #endregion

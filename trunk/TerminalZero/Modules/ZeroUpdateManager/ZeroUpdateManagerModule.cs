@@ -16,7 +16,7 @@ namespace ZeroUpdateManager
 
         public void BuildPosibleActions()
         {
-            Terminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
+            Terminal.Session.AddAction(new ZeroAction(null,ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
         }
 
         public override string[] GetFilesToSend()
@@ -29,7 +29,7 @@ namespace ZeroUpdateManager
             
         }
 
-        private void ImportScriptFile(ZeroRule rule)
+        private void ImportScriptFile()
         {
             List<string> filesToProcess = new List<string>();
             filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*"+Resources.CompressFileExtention));

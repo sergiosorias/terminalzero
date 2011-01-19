@@ -11,10 +11,8 @@ namespace ZeroCommonClasses.Interfaces
         ModuleStatus GetModuleStatus(ZeroModule module);
         List<ZeroAction> GetShorcutActions();
         List<ZeroAction> BuilSessionActions();
-        bool ExecuteAction(ZeroAction action);
         bool ValidateRule(string ruleName);
-        bool ValidateRule(string ruleName, ref string result);
-        bool CanExecute(ZeroAction action, out string result);
+        bool ExecuteAction(ZeroAction action);
         bool ExistsAction(string actionName, out ZeroAction action);
     }
 }

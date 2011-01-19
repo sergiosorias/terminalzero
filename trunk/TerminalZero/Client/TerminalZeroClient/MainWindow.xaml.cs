@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
@@ -24,11 +25,13 @@ namespace TerminalZeroClient
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            App.Instance.Manager.ConfigurationRequired += new EventHandler(Manager_ConfigurationRequired);
-            App.Instance.Session.Notifier = this;
-            App.Instance.Session.ModuleList.ForEach(m => m.Notifing += new EventHandler<ModuleNotificationEventArgs>(m_Notifing));
-            LoadConfigs();
             InitTryIcon();
+            LoadConfigs();
+            App.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
+            App.Instance.Session.Notifier = this;
+            App.Instance.Session.ModuleList.ForEach(m => m.Notifing += m_Notifing);
+            App.Instance.Session.ModuleList.ForEach(m => m.Init());
+            OpenHome();
         }
 
         void Manager_ConfigurationRequired(object sender, EventArgs e)
@@ -41,31 +44,28 @@ namespace TerminalZeroClient
             mainMenu.Items.Clear();
             MenuItem item = new MenuItem();
             item.Style = (Style)Resources["masterMenuItem"];
-            item.Header = "Inicio";
-            item.Click += menuitemitem_Click;
+            item.Header = Properties.Resources.Home;
             ZeroAction actionInit = null;
-            
             if (!App.Instance.Manager.ExistsAction(ApplicationActions.Home, out actionInit))
             {
-                actionInit = new ZeroAction(ActionType.BackgroudAction, ApplicationActions.Home, OpenHome);
+                actionInit = new ZeroAction(null,ActionType.BackgroudAction, ApplicationActions.Home,OpenHome);
                 App.Instance.Session.AddAction(actionInit);
-                App.Instance.Session.AddAction(new ZeroAction(ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
+                App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
             }
-
-            item.DataContext = actionInit;
+            ShortCutHome.Command = actionInit;
+            item.Command = actionInit;
             mainMenu.Items.Add(item);
             InternalBuildMenu(App.Instance.CurrentClient.BuildMenu(), mainMenu.Items);
-            App.Instance.Manager.ExecuteAction(actionInit);
         }
-
-        private void OpenHome(ZeroRule rule)
+        
+        private void OpenHome()
         {
             ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
             args.ControlToShow = new Pages.Home();
             m_Notifing(null, args);
         }
 
-        private void GoBack(ZeroRule rule)
+        private void GoBack()
         {
             ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
             args.ControlToShow = _lastViewShown;
@@ -76,14 +76,21 @@ namespace TerminalZeroClient
         {
             if (e.SomethingToShow)
             {
-                if (!(PrimaryWindow.Content is IZeroPage))
+                if (e.ControlToShow is ZeroGUI.ZeroMessageBox)
+                {
+                    ((ZeroMessageBox) e.ControlToShow).Owner = this;
+                    ((ZeroMessageBox) e.ControlToShow).Top = Top + 1;
+                    ((ZeroMessageBox) e.ControlToShow).ShowDialog();
+                }
+                else if (!(PrimaryWindow.Content is IZeroPage))
                 {
                     ShowObject(e);
                 }
-                else if(((IZeroPage)PrimaryWindow.Content).CanAccept())
+                else if (((IZeroPage) PrimaryWindow.Content).CanAccept(null))
                 {
                     ShowObject(e);
                 }
+                
             }
         }
 
@@ -94,11 +101,12 @@ namespace TerminalZeroClient
             PrimaryWindow.Content = e.ControlToShow;
             if (e.ControlToShow is UIElement)
             {
-                ((UIElement)e.ControlToShow).Focus();
+                bool focus = ((UIElement)e.ControlToShow).Focus();
+                if (focus) ((UIElement) e.ControlToShow).CaptureMouse();
             }
         }
 
-        private void InternalBuildMenu(TerminalZeroClient.Extras.ZeroMenu menu, ItemCollection items)
+        private static void InternalBuildMenu(TerminalZeroClient.Extras.ZeroMenu menu, ItemCollection items)
         {
             foreach (var item in menu)
             {
@@ -108,35 +116,11 @@ namespace TerminalZeroClient
                     InternalBuildMenu(item.Value, menuitem.Items);
                 else
                 {
-                    menuitem.DataContext = item.Value.MenuAction;
-                    if (!item.Value.MenuAction.AlwaysVisible)
-                        menuitem.SetBinding(MenuItem.IsEnabledProperty, "Enabled");
-
-                    if (item.Value.MenuAction.RuleToSatisfy != null && !item.Value.MenuAction.Enabled)
-                    {
-                        ToolTipService.SetToolTip(menuitem, item.Value.MenuAction.RuleToSatisfy.Result);
-                        ToolTipService.SetShowOnDisabled(menuitem, true);
-                    }
-
-                    menuitem.Click += new RoutedEventHandler(menuitemitem_Click);
+                    menuitem.Command = item.Value.MenuAction;
                 }
 
                 items.Add(menuitem);
             }
-        }
-
-        protected void menuitemitem_Click(object sender, RoutedEventArgs e)
-        {
-            mainBar.IsEnabled = false;
-            MenuItem item = (MenuItem)sender;
-            ZeroAction buttonAction = item.DataContext as ZeroAction;
-
-            if (buttonAction != null)
-            {
-                App.Instance.Manager.ExecuteAction(buttonAction);
-            }
-
-            mainBar.IsEnabled = true;
         }
 
         private void btnGetMoreStatusInfo_Click(object sender, RoutedEventArgs e)
@@ -156,41 +140,41 @@ namespace TerminalZeroClient
 
         #region TryIcon
 
-        private System.Windows.Forms.NotifyIcon notifyIcon;
-        private System.Windows.Forms.MenuItem notifyIconMenuItem;
+        private System.Windows.Forms.NotifyIcon _notifyIcon;
+        private System.Windows.Forms.MenuItem _notifyIconMenuItem;
         
-        private bool isNotifyIconOpen = false;
+        private bool _isNotifyIconOpen = false;
         private void InitTryIcon()
         {
-            notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.BalloonTipTitle = Properties.Settings.Default.ApplicationName;
-            notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
-            notifyIcon.Text = App.Instance.Name;
-            notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
-            notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-            notifyIcon.Visible = true;
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
-            notifyIcon.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
-            notifyIconMenuItem = new System.Windows.Forms.MenuItem("Mostrar Notificaciones", (o, e) => { notifyIconMenuItem.Checked = !notifyIconMenuItem.Checked; });
-            notifyIconMenuItem.Checked = true;
-            notifyIcon.ContextMenu.MenuItems.Add(notifyIconMenuItem);
+            _notifyIcon = new System.Windows.Forms.NotifyIcon();
+            _notifyIcon.BalloonTipTitle = Properties.Settings.Default.ApplicationName;
+            _notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
+            _notifyIcon.Text = App.Instance.Name;
+            _notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
+            _notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            _notifyIcon.Visible = true;
+            _notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
+            _notifyIcon.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
+            _notifyIconMenuItem = new System.Windows.Forms.MenuItem("Mostrar Notificaciones", (o, e) => { _notifyIconMenuItem.Checked = !_notifyIconMenuItem.Checked; });
+            _notifyIconMenuItem.Checked = true;
+            _notifyIcon.ContextMenu.MenuItems.Add(_notifyIconMenuItem);
 
         }
 
         private void ContextMenu_Popup(object sender, EventArgs e)
         {
-            isNotifyIconOpen = !isNotifyIconOpen;
+            _isNotifyIconOpen = !_isNotifyIconOpen;
         }
 
         private void m_notifyIcon_Click(object sender, EventArgs e)
         {
-            if (WindowState == WindowState.Minimized && !isNotifyIconOpen)
+            if (WindowState == WindowState.Minimized && !_isNotifyIconOpen)
             {
                 WindowState = System.Windows.WindowState.Maximized;
                 Show();
             }
-            if(isNotifyIconOpen)
-                isNotifyIconOpen = false;
+            if(_isNotifyIconOpen)
+                _isNotifyIconOpen = false;
 
             Activate();
         }
@@ -201,13 +185,13 @@ namespace TerminalZeroClient
             {
                 Hide();
                 WindowState = WindowState.Minimized;
-                PopUpNotify("Aplicación minizada, Click para abrir.");
+                PopUpNotify(Properties.Resources.AppMinimized + ", " + Properties.Resources.ClickToOpen);
             }
         }
         
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var res = MessageBox.Show("¿Esta seguro que desea salir de la aplicacion?","Cerrando",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
+            var res = MessageBox.Show(Properties.Resources.QuestionAreYouSureAppClosing,Properties.Resources.Closing,MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
             switch (res)
             {
                 case MessageBoxResult.Cancel:
@@ -221,8 +205,8 @@ namespace TerminalZeroClient
                     break;
                 case MessageBoxResult.OK:
                 case MessageBoxResult.Yes:
-                    notifyIcon.Dispose();
-                    notifyIcon = null;
+                    _notifyIcon.Dispose();
+                    _notifyIcon = null;
                     break;
                 default:
                     break;
@@ -234,10 +218,10 @@ namespace TerminalZeroClient
 
         private void PopUpNotify(string text)
         {
-            if (notifyIcon != null && notifyIconMenuItem != null && notifyIconMenuItem.Checked)
+            if (_notifyIcon != null && _notifyIconMenuItem != null && _notifyIconMenuItem.Checked)
             {
-                notifyIcon.BalloonTipText = text;
-                notifyIcon.ShowBalloonTip(2000);
+                _notifyIcon.BalloonTipText = text;
+                _notifyIcon.ShowBalloonTip(2000);
             }
         }
 

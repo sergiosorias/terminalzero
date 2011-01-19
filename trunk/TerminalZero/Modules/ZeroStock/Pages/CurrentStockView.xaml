@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="False"/>
-            <Label Style="{StaticResource titleLabelStyle}" Content="Stock por producto"/>
+            <Label Style="{DynamicResource titleLabelStyle}" Content="Stock por producto"/>
         </StackPanel>
         <DataGrid AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Grid.ColumnSpan="2" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Name="stockSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>

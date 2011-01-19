@@ -170,7 +170,6 @@ namespace TerminalZeroClient.Business
         public ZeroMenu BuildMenu()
         {
             List<ZeroAction> validActions = App.Instance.Manager.BuilSessionActions();
-            App.Instance.Session.ModuleList.ForEach(m => { m.Init(); });
             ZeroMenu menu = new ZeroMenu();
             string aux = "", current = "";
             int pos = 0;
