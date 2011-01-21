@@ -5,6 +5,7 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.PackClasses;
+using ZeroGUI;
 using ZeroStock.Entities;
 using ZeroStock.Pages;
 
@@ -21,9 +22,9 @@ namespace ZeroStock
         private void BuildPosibleActions()
         {
             Terminal.Session.AddAction( new ZeroAction(null,ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
-            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView));
+            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView,"IsTerminalZero"));
             Terminal.Session.AddAction( new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
-            Terminal.Session.AddAction(new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Remitos", openModifyStockView));
+            Terminal.Session.AddAction( new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Remitos de salida", OpenDeliveryNoteView, "IsTerminalZero"));
         }
 
         public override void Init()
@@ -41,9 +42,9 @@ namespace ZeroStock
         {
             try
             {
-                using (StockEntities ent = new StockEntities())
+                using (var ent = new StockEntities())
                 {
-                    ZeroCommonClasses.PackClasses.ExportEntitiesPackInfo info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
+                    var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
                     IEnumerable<StockHeader> headers = ent.StockHeaders.Where(h => h.Status == (int)StockEntities.EntitiesStatus.New);
                     IEnumerable<StockItem> stockItems = null;
                     if (headers.Count() > 0)
@@ -64,9 +65,9 @@ namespace ZeroStock
 
                     if (info.TableCount > 0)
                     {
-                        using (ZeroStockPackMaganer manager = new ZeroStockPackMaganer(info))
+                        using (var manager = new ZeroStockPackMaganer(Terminal))
                         {
-                            if (manager.Process())
+                            if (manager.Export(info))
                             {
                                 if (info.Tables.Exists(t=>t.RowType ==  typeof(DeliveryDocumentHeader)))
                                 {
@@ -125,20 +126,26 @@ namespace ZeroStock
 
         private void openStockView()
         {
-            CurrentStockView view = new CurrentStockView();
+            var view = new CurrentStockView();
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openNewStockView()
         {
-            StockView view = new StockView(Terminal, 0);
+            var view = new StockView(Terminal, 0);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openModifyStockView()
         {
-            StockView view = new StockView(Terminal, 1);
+            var view = new StockView(Terminal, 1);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+        }
+
+        private void OpenDeliveryNoteView()
+        {
+            ZeroMessageBox.Show("En construcción, Disculpe las molestias!", ZeroStock.Properties.Resources.Important,
+                                System.Windows.ResizeMode.NoResize);
         }
 
         #endregion

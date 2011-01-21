@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 
@@ -71,9 +72,28 @@ namespace ZeroGUI
             DragMove();
         }
 
+        private void CurrentLoaded(object sender, RoutedEventArgs e)
+        {
+            if (Content is IZeroPage)
+            {
+                
+            }
+            else
+            {
+                btnAccept.Focus();
+            }
+        }
+
+        #region Statics
+
         public static bool? Show(object content)
         {
             return Show(content, "", SizeToContent.WidthAndHeight);
+        }
+
+        public static bool? Show(object content, ResizeMode resizeMode)
+        {
+            return Show(content, "", resizeMode);
         }
 
         public static bool? Show(object content, string caption)
@@ -81,15 +101,26 @@ namespace ZeroGUI
             return Show(content, caption, SizeToContent.WidthAndHeight);
         }
 
-        public static bool? Show(object content, SizeToContent sizeToContent)
+        public static bool? Show(object content, string caption, ResizeMode resizeMode)
         {
-            return Show(content, "", sizeToContent);
+            return Show(content, caption, SizeToContent.WidthAndHeight,resizeMode);
         }
 
         public static bool? Show(object content, string caption, SizeToContent sizeToContent)
         {
+            return Show(content, caption, sizeToContent, ResizeMode.CanResize);
+        }
+
+        public static bool? Show(object content, string caption, SizeToContent sizeToContent, ResizeMode resizeMode)
+        {
             ZeroMessageBox MB = new ZeroMessageBox(true);
             MB.Content = content;
+            MB.ResizeMode = resizeMode;
+            if(resizeMode == ResizeMode.NoResize)
+            {
+                MB.BorderThickness = new Thickness(1);
+                MB.BorderBrush = Brushes.Black;
+            }
             if (content is UIElement)
             {
                 ((UIElement)content).Focus();
@@ -99,9 +130,7 @@ namespace ZeroGUI
             return MB.ShowDialog();
         }
 
-        private void current_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
+        #endregion Statics
+
     }
 }

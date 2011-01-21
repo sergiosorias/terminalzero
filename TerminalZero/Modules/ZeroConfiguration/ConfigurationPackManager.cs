@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml;
+using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.PackClasses;
 using ZeroConfiguration.Entities;
 
@@ -9,18 +10,15 @@ namespace ZeroConfiguration
 {
     public class ConfigurationPackManager : PackManager
     {
-        private ExportEntitiesPackInfo MyInfo;
-        
-        public ConfigurationPackManager(ExportEntitiesPackInfo info)
-            : base(info)
+        public ConfigurationPackManager(ITerminal terminal)
+            : base(terminal)
         {
-            MyInfo = info;
             Exporting += new EventHandler<PackEventArgs>(ConfigurationPackManager_Exporting);
         }
 
         private void ConfigurationPackManager_Exporting(object sender, PackEventArgs e)
         {
-            foreach (PackTableInfo item in MyInfo.Tables)
+            foreach (PackTableInfo item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
             {
                 using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
                 {
@@ -29,12 +27,7 @@ namespace ZeroConfiguration
                 }
             }
         }
-
-        public ConfigurationPackManager(string path)
-            : base(path)
-        {
-            Importing += new EventHandler<PackEventArgs>(ImportConfigurations);
-        }
+        
 
         private void ImportConfigurations(object sender, PackEventArgs e)
         {

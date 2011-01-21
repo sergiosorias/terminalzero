@@ -3,41 +3,52 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.PackClasses;
 using ZeroStock.Entities;
 
 namespace ZeroStock
 {
-    public class ZeroStockPackMaganer : ZeroCommonClasses.PackClasses.PackManager
+    public class ZeroStockPackMaganer : PackManager
     {
-        ZeroCommonClasses.PackClasses.ExportEntitiesPackInfo MyInfo;
-
-        public ZeroStockPackMaganer(string packPath)
-            : base(packPath)
+        public ZeroStockPackMaganer(ITerminal termminal)
+            : base(termminal)
         {
-            Importing += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(ZeroStockPackMaganer_Importing);
+            Importing += ZeroStockPackMaganer_Importing;
+            Exporting += ZeroStockPackMaganer_Exporting;
         }
 
-        void ZeroStockPackMaganer_Importing(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
+        void ZeroStockPackMaganer_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsMasterData = false;
             Type infoType = typeof(ExportEntitiesPackInfo);
-            XmlSerializer reader = new XmlSerializer(infoType);
+            var reader = new XmlSerializer(infoType);
             using (XmlReader xmlreader = XmlReader.Create(Path.Combine(e.WorkingDirectory, infoType.ToString())))
             {
-                MyInfo = (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
+                e.PackInfo = (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
                 xmlreader.Close();
             }
-            e.PackInfo = MyInfo;
-
+            
             ImportEntities(e);
+        }
+
+        void ZeroStockPackMaganer_Exporting(object sender, PackEventArgs e)
+        {
+            foreach (var item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
+            {
+                using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
+                {
+                    item.SerializeRows(xmlwriter);
+                    xmlwriter.Close();
+                }
+            }
         }
 
         private void ImportEntities(PackEventArgs e)
         {
-            ExportEntitiesPackInfo packInfo = (ExportEntitiesPackInfo)e.PackInfo;
+            var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
             
-            using (ZeroStock.Entities.StockEntities ent = new Entities.StockEntities())
+            using (var ent = new StockEntities())
             {
                 var a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(StockHeader).ToString());
                 if (a != null)
@@ -94,24 +105,7 @@ namespace ZeroStock
             }
         }
 
-        public ZeroStockPackMaganer(ZeroCommonClasses.PackClasses.ExportEntitiesPackInfo info)
-            : base(info)
-        {
-            MyInfo = info;
-            base.Exporting += new EventHandler<ZeroCommonClasses.PackClasses.PackEventArgs>(ZeroStockPackMaganer_Exporting);
-        }
-
-        void ZeroStockPackMaganer_Exporting(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
-        {
-            foreach (var item in MyInfo.Tables)
-            {
-                using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
-                {
-                    item.SerializeRows(xmlwriter);
-                    xmlwriter.Close();
-                }
-            }
-        }
+        
 
     }
 }

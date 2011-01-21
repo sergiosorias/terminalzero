@@ -6,15 +6,16 @@ using System.Xml;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Zip;
 using ZeroCommonClasses.Entities;
+using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses.PackClasses
 {
     public abstract class PackManager : IDisposable
     {
-        public const string kPackNameFromat = "{0}_{1}_{2}{3}";
         public const string kPackExtention = ".zpack";
-
-        [Flags()]
+        public const string kPackNameFromat = "{0}_{1}_{2}_{3}" + kPackExtention;
+        
+        [Flags]
         public enum PackFlags
         {
             MasterData = 2,
@@ -35,8 +36,8 @@ namespace ZeroCommonClasses.PackClasses
 
         public static string[] GetPacks(int moduleCode, string workingDirectory)
         {
-            List<string> res = new List<string>();
-            res.AddRange(Directory.GetFiles(workingDirectory, moduleCode.ToString() + "*" + kPackExtention));
+            var res = new List<string>();
+            res.AddRange(Directory.GetFiles(workingDirectory, moduleCode + "*" + kPackExtention));
             return res.ToArray();
         }
 
@@ -60,14 +61,7 @@ namespace ZeroCommonClasses.PackClasses
         public event EventHandler<PackEventArgs> Exported;
         public event EventHandler<PackEventArgs> Importing;
         public event EventHandler<PackEventArgs> Imported;
-        public event EventHandler UnknownModeRecieved;
         public event ErrorEventHandler Error;
-
-        private void OnUnknownModeRecieved()
-        {
-            if (UnknownModeRecieved != null)
-                UnknownModeRecieved(this, EventArgs.Empty);
-        }
 
         private void OnExporting(PackEventArgs e)
         {
@@ -101,57 +95,65 @@ namespace ZeroCommonClasses.PackClasses
 
         #endregion
 
-        private Mode RunMode = Mode.Import;
+        private readonly ITerminal _terminal;
         private string WorkingDirectory = "";
         private string ImportPackPath = "";
         public string ConnectionID { get; set; }
 
         private PackInfoBase PackInfo { get; set; }
 
-        public PackManager(string packPath)
+        protected PackManager()
         {
-            RunMode = Mode.Import;
-            WorkingDirectory = Path.Combine(Path.GetDirectoryName(packPath), Path.GetFileNameWithoutExtension(packPath));
-            ImportPackPath = packPath;
+            _terminal = null;
         }
 
-        public PackManager(PackInfoBase info)
+        protected PackManager(ITerminal terminal)
         {
-            RunMode = Mode.Export;
-            PackInfo = info;
-            SetCurrentDirectory();
-
+            _terminal = terminal;
         }
 
         #region Public Methods
 
-        public bool Process()
+        public bool Import(string packPath)
         {
-            bool ret = true;
 
+            bool ret = true;
             try
             {
-                switch (RunMode)
-                {
-                    case Mode.Export:
-                        ExportProcess();
-                        break;
-                    case Mode.Import:
-                        ImportProcess();
-                        break;
-                    default:
-                        OnUnknownModeRecieved();
-                        ret = false;
-                        break;
-                }
+                WorkingDirectory = Path.Combine(Path.GetDirectoryName(packPath), Path.GetFileNameWithoutExtension(packPath));
+                ImportPackPath = packPath;
+                ImportProcess();
             }
             catch (Exception ex)
             {
                 ret = false;
-                ErrorEventArgs e = new ErrorEventArgs(ex);
+                var e = new ErrorEventArgs(ex);
                 OnError(e);
             }
 
+            return ret;
+        }
+
+        public bool Export(PackInfoBase info)
+        {
+
+            bool ret = true;
+            try
+            {
+                
+                PackInfo = info;
+                WorkingDirectory = Path.Combine(PackInfo.Path, Guid.NewGuid().ToString());
+                if (!Directory.Exists(WorkingDirectory))
+                    Directory.CreateDirectory(WorkingDirectory);
+
+                ExportProcess();
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                var e = new ErrorEventArgs(ex);
+                OnError(e);
+            }
 
             return ret;
         }
@@ -169,7 +171,7 @@ namespace ZeroCommonClasses.PackClasses
 
         private void ExportProcess()
         {
-            PackEventArgs args = new PackEventArgs();
+            var args = new PackEventArgs();
 
             args.PackInfo = PackInfo;
             args.WorkingDirectory = WorkingDirectory;
@@ -183,21 +185,21 @@ namespace ZeroCommonClasses.PackClasses
 
         private void CreateZip()
         {
-            FastZipEvents events = new FastZipEvents();
-            FastZip zip = new FastZip(events);
-            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, PackInfo.Flags, PackInfo.Stamp.ToString("yyyyMMddhhmmss"), kPackExtention)), WorkingDirectory, true, "");
+            var events = new FastZipEvents();
+            var zip = new FastZip(events);
+            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, PackInfo.DestinationTerminalCode, PackInfo.Stamp.ToString("yyyyMMddhhmmss"))), WorkingDirectory, true, "");
         }
 
         private void ImportProcess()
         {
             Pack aPack = null;
             CommonEntities dbent = null;
-            PackEventArgs args = new PackEventArgs();
+            var args = new PackEventArgs();
             try
             {
                 dbent = new CommonEntities();
 
-                aPack = InsertPackInDB(ImportPackPath, dbent);
+                aPack = InsertPackInDb(ImportPackPath, dbent);
                 args.WorkingDirectory = WorkingDirectory;
 
                 UpdatePackStatus(aPack, dbent, 0, null);
@@ -237,7 +239,7 @@ namespace ZeroCommonClasses.PackClasses
             dbent.SaveChanges();
         }
 
-        private Pack InsertPackInDB(string packFilePath, CommonEntities dbent)
+        private Pack InsertPackInDb(string packFilePath, CommonEntities dbent)
         {
 
             string name = Path.GetFileName(packFilePath);
@@ -259,21 +261,14 @@ namespace ZeroCommonClasses.PackClasses
 
         private void ExtractZip(string packFilePath)
         {
-            FastZipEvents events = new FastZipEvents();
-            FastZip zip = new FastZip(events);
+            var events = new FastZipEvents();
+            var zip = new FastZip(events);
             zip.ExtractZip(packFilePath, WorkingDirectory, FastZip.Overwrite.Always, null, "", "", false);
-        }
-
-        private void SetCurrentDirectory()
-        {
-            WorkingDirectory = Path.Combine(PackInfo.Path, Guid.NewGuid().ToString());
-            if (!Directory.Exists(WorkingDirectory))
-                Directory.CreateDirectory(WorkingDirectory);
         }
 
         private void AddPackageData()
         {
-            XmlSerializer writer = new XmlSerializer(PackInfo.GetType());
+            var writer = new XmlSerializer(PackInfo.GetType());
             using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(WorkingDirectory, PackInfo.GetType().ToString())))
             {
                 writer.Serialize(xmlwriter, PackInfo);

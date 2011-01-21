@@ -61,6 +61,42 @@ namespace ZeroMasterData.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Editar grupo.
+        /// </summary>
+        internal static string EditGroup {
+            get {
+                return ResourceManager.GetString("EditGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editar unidad de medida.
+        /// </summary>
+        internal static string EditMeasurementUnit {
+            get {
+                return ResourceManager.GetString("EditMeasurementUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuevo Grupo.
+        /// </summary>
+        internal static string NewGroup {
+            get {
+                return ResourceManager.GetString("NewGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nueva unidad de medida.
+        /// </summary>
+        internal static string NewMeasurementUnit {
+            get {
+                return ResourceManager.GetString("NewMeasurementUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nuevo producto.
         /// </summary>
         internal static string NewProduct {

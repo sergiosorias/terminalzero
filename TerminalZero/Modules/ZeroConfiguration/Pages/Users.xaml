@@ -17,7 +17,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <WrapPanel HorizontalAlignment="Right">
-                <Button Content="Nuevo" Style="{DynamicResource buttonTextStyle}"/>
+                <Button Content="Nuevo" Name="btnNew" Style="{DynamicResource buttonTextStyle}" Click="btnNew_Click"/>
+                <Button Content="Cambiar contraseña" Width="100" FontSize="10" Name="btnChangePassword" Style="{DynamicResource buttonTextStyle}"/>
             </WrapPanel>
             <Grid Grid.Row="1">
                 <DataGrid AutoGenerateColumns="True" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" 
