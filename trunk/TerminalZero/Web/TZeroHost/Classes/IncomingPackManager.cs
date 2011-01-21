@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.PackClasses;
+using ZeroConfiguration.Entities;
+using ThreadState = System.Threading.ThreadState;
 
 namespace TZeroHost.Classes
 {
@@ -8,12 +14,12 @@ namespace TZeroHost.Classes
     {
         private class IncomingPack
         {
-            public string ConnID { get; set; }
-            public bool IsFromDB { get; set; }
+            public string ConnId { get; set; }
+            public bool IsFromDb { get; set; }
             public string PackPath { get; set; }
         }
-        private System.Threading.Thread _importProcessThread = null;
-        private readonly Queue<IncomingPack> _packsToImport = null;
+        private Thread _importProcessThread;
+        private readonly Queue<IncomingPack> _packsToImport;
 
         public int PackToProcessCount
         {
@@ -31,7 +37,7 @@ namespace TZeroHost.Classes
 
         private void CreateImportThread()
         {
-            _importProcessThread = new System.Threading.Thread(ImportProcessEntryPoint);
+            _importProcessThread = new Thread(ImportProcessEntryPoint);
             _importProcessThread.Name = "IncomingPackManagerThread";
         }
 
@@ -39,48 +45,47 @@ namespace TZeroHost.Classes
         {
             while (_packsToImport.Count > 0)
             {
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
                 IncomingPack data = _packsToImport.Dequeue();
-                using (var a = PackManagerBuilder.GetManager(data.PackPath))
+                using (var packManager = PackManagerBuilder.GetManager(data.PackPath))
                 {
-                    if (a != null)
+                    if (packManager != null)
                     {
-                        System.Diagnostics.Trace.Write(string.Format("Starting import: ConnID = {0}", data.ConnID), "");
-                        a.ConnectionID = data.ConnID;
-                        a.Imported += a_Imported;
-                        a.Error += a_Error;
+                        Trace.Write(string.Format("Starting import: ConnID = {0}", data.ConnId), "");
+                        packManager.ConnectionID = data.ConnId;
+                        packManager.Imported += a_Imported;
+                        packManager.Error += a_Error;
                         try
                         {
-
-                            a.Process();
+                            packManager.Import(data.PackPath);
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.Write(string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnID, ex), "EXCEPTION");
+                            Trace.Write(string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnId, ex), "EXCEPTION");
                         }
                         finally
                         {
-                            a.Imported -= a_Imported;
-                            a.Error -= a_Error;
+                            packManager.Imported -= a_Imported;
+                            packManager.Error -= a_Error;
                         }
 
-                        System.Threading.Thread.Sleep(500);
+                        Thread.Sleep(500);
                     }
                 }
 
             }
         }
 
-        private void a_Error(object sender, System.IO.ErrorEventArgs e)
+        private void a_Error(object sender, ErrorEventArgs e)
         {
             var pack = sender as PackManager;
             if (pack != null)
-                System.Diagnostics.Trace.Write(string.Format("Import ERROR: ConnID = {0}, ERROR = {1}", pack.ConnectionID, e.GetException()), "ERROR");
+                Trace.Write(string.Format("Import ERROR: ConnID = {0}, ERROR = {1}", pack.ConnectionID, e.GetException()), "ERROR");
         }
 
         private void a_Imported(object sender, PackEventArgs e)
         {
-            System.Diagnostics.Trace.Write(string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}", e.ConnectionID, e.Pack.Code, e.PackInfo != null ? e.PackInfo.ModuleCode : -1, e.Pack.PackStatusCode), "Information");
+            Trace.Write(string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}", e.ConnectionID, e.Pack.Code, e.PackInfo != null ? e.PackInfo.ModuleCode : -1, e.Pack.PackStatusCode), "Information");
 
             if (e.Pack.PackStatusCode == 2 && 
                     (
@@ -89,13 +94,13 @@ namespace TZeroHost.Classes
                     )
                 )
             {
-                using (var packEnt = new ZeroCommonClasses.Entities.CommonEntities())
+                using (var packEnt = new CommonEntities())
                 {
-                    using (var ent = new ZeroConfiguration.Entities.ConfigurationEntities())
+                    using (var ent = new ConfigurationEntities())
                     {
                         foreach (var item in ent.Terminals)
                         {
-                            packEnt.PackPendings.AddObject(ZeroCommonClasses.Entities.PackPending.CreatePackPending(e.Pack.Code, item.Code));
+                            packEnt.PackPendings.AddObject(PackPending.CreatePackPending(e.Pack.Code, item.Code));
                         }
                     }
                     packEnt.SaveChanges();
@@ -103,7 +108,7 @@ namespace TZeroHost.Classes
             }
         }
 
-        private static IncomingPackManager _instance = null;
+        private static IncomingPackManager _instance;
         public static IncomingPackManager Instance
         {
             get
@@ -114,24 +119,24 @@ namespace TZeroHost.Classes
 
         internal void AddPack(string connectionId, string packName)
         {
-            _packsToImport.Enqueue(new IncomingPack { ConnID = connectionId, PackPath = packName });
+            _packsToImport.Enqueue(new IncomingPack { ConnId = connectionId, PackPath = packName });
 
             switch (_importProcessThread.ThreadState)
             {
-                case System.Threading.ThreadState.AbortRequested:
-                case System.Threading.ThreadState.Aborted:
-                case System.Threading.ThreadState.Background:
-                case System.Threading.ThreadState.Running:
-                case System.Threading.ThreadState.SuspendRequested:
-                case System.Threading.ThreadState.Suspended:
-                case System.Threading.ThreadState.WaitSleepJoin:
+                case ThreadState.AbortRequested:
+                case ThreadState.Aborted:
+                case ThreadState.Background:
+                case ThreadState.Running:
+                case ThreadState.SuspendRequested:
+                case ThreadState.Suspended:
+                case ThreadState.WaitSleepJoin:
                     break;
-                case System.Threading.ThreadState.StopRequested:
-                case System.Threading.ThreadState.Stopped:
+                case ThreadState.StopRequested:
+                case ThreadState.Stopped:
                     CreateImportThread();
                     _importProcessThread.Start();
                     break;
-                case System.Threading.ThreadState.Unstarted:
+                case ThreadState.Unstarted:
                     _importProcessThread.Start();
                     break;
             }

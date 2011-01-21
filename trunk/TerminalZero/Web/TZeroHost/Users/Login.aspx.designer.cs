@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TZeroHost {
+namespace TZeroHost.Users {
     
     
     public partial class Login {
