@@ -130,4 +130,16 @@
 	<data name="NewProduct">
 		<value xml:space="preserve">Nuevo producto</value>
 	</data>
+	<data name="NewMeasurementUnit">
+		<value xml:space="preserve">Nueva unidad de medida</value>
+	</data>
+	<data name="EditMeasurementUnit">
+		<value xml:space="preserve">Editar unidad de medida</value>
+	</data>
+	<data name="EditGroup">
+		<value xml:space="preserve">Editar grupo</value>
+	</data>
+	<data name="NewGroup">
+		<value xml:space="preserve">Nuevo Grupo</value>
+	</data>
 </root>

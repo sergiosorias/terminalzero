@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.GlobalObjects.Barcode;
@@ -12,14 +13,14 @@ namespace ZeroStock.Pages
     /// </summary>
     public partial class StockView : UserControl, IZeroPage
     {
-        ITerminal Terminal;
+        private readonly ITerminal _terminal;
         private Entities.StockHeader _header;
         private Entities.StockEntities _context;
         readonly int _stockType = -1;
         public StockView(ITerminal terminal, int stockType)
         {
             InitializeComponent();
-            Terminal = terminal;
+            _terminal = terminal;
             _stockType = stockType;
         }
 
@@ -33,7 +34,7 @@ namespace ZeroStock.Pages
                 
                 if (IsDeliveryDocumentMandatory())
                 {
-                    DeliveryDocumentView view = new DeliveryDocumentView(Terminal);
+                    DeliveryDocumentView view = new DeliveryDocumentView(_terminal);
                     view.Mode = Mode.Selection;
                     bool? res = ZeroGUI.ZeroMessageBox.Show(view,Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
@@ -52,9 +53,8 @@ namespace ZeroStock.Pages
         private void TryGoHome()
         {
             ZeroCommonClasses.GlobalObjects.ZeroAction action;
-            string aux = "";
-            if (!Terminal.Manager.ExistsAction(ZeroCommonClasses.GlobalObjects.ApplicationActions.Back, out action) 
-                || !Terminal.Manager.ExecuteAction(action))
+            if (!_terminal.Manager.ExistsAction(ZeroCommonClasses.GlobalObjects.ApplicationActions.Back, out action) 
+                || !_terminal.Manager.ExecuteAction(action))
             {
                 IsEnabled = false;
             }
@@ -68,10 +68,16 @@ namespace ZeroStock.Pages
         private void LoadHeader(int stockType, int code)
         {
             _header = Entities.StockHeader.CreateStockHeader(
-                Terminal.TerminalCode,
+                _terminal.TerminalCode,
                 code,
                 true,
                 0,DateTime.Now.Date);
+            ZeroCommonClasses.GlobalObjects.ZeroActionParameterBase param =
+                _terminal.Session.GetParameter<MembershipUser>();
+            if(param!=null)
+            {
+                _header.UserCode = (Guid)((MembershipUser)param.Value).ProviderUserKey;
+            }
             _header.StockType = _context.StockTypes.FirstOrDefault(st => st.Code == stockType);
             _context.AddToStockHeaders(_header);
 
@@ -162,7 +168,7 @@ namespace ZeroStock.Pages
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, ex.ToString());
+                _terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, ex.ToString());
             }
             return ret;
         }
@@ -189,7 +195,7 @@ namespace ZeroStock.Pages
                     BarCodePart partMonth = e.Parts.FirstOrDefault(p => p.Name == "Mes");
 
                     Entities.StockItem item = Entities.StockItem.CreateStockItem(_itemsCount++,
-                        Terminal.TerminalCode,
+                        _terminal.TerminalCode,
                         _header.Code,
                         true,
                         0,

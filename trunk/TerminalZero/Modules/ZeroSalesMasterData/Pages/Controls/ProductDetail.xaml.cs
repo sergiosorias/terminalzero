@@ -104,7 +104,7 @@ namespace ZeroMasterData.Pages.Controls
                 case Mode.New:
                     CurrentProduct = Entities.Product.CreateProduct(
                         DataProvider.Products.Count()
-                        , true, 2, true);
+                        , true, DataProvider.GetNextProductCode(), true);
 
                     P = Entities.Price.CreatePrice(
                         DataProvider.Prices.Count(),
@@ -141,7 +141,7 @@ namespace ZeroMasterData.Pages.Controls
         private void groupBtn_Click(object sender, RoutedEventArgs e)
         {
             ProductGroupDetail pgd = new ProductGroupDetail(DataProvider);
-            bool? res = ZeroMessageBox.Show(pgd, "Nuevo Grupo");
+            bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewGroup);
             if (res.HasValue && res.Value)
             {
                 DataProvider.ProductGroups.AddObject(pgd.ProductGroupNew);
@@ -154,7 +154,7 @@ namespace ZeroMasterData.Pages.Controls
         private void weightBtn_Click(object sender, RoutedEventArgs e)
         {
             WeightDetail pgd = new WeightDetail(DataProvider);
-            bool? res = ZeroMessageBox.Show(pgd, "Nueva unidad de medida");
+            bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewMeasurementUnit);
             if (res.HasValue && res.Value)
             {
                 DataProvider.Weights.AddObject(pgd.WeigthNew);
@@ -173,6 +173,12 @@ namespace ZeroMasterData.Pages.Controls
             if (CurrentProduct.MasterCode == 0)
             {
                 msg = "Por favor ingrese un código de producto.";
+                masterCodeTextBox.SelectAll();
+                masterCodeTextBox.Focus();
+            }
+            else if(DataProvider.Products.FirstOrDefault(pr=>pr.MasterCode.Equals(CurrentProduct.MasterCode))!=null)
+            {
+                msg = "Codigo de product existente!\n Por favor ingrese otro código.";
                 masterCodeTextBox.SelectAll();
                 masterCodeTextBox.Focus();
             }
@@ -286,7 +292,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             int t = (int)((Button)sender).DataContext;
             ProductGroupDetail pgd = new ProductGroupDetail(DataProvider);
-            bool? res = ZeroMessageBox.Show(pgd, "Editar grupo");
+            bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
                 DataProvider.SaveChanges();
@@ -299,7 +305,7 @@ namespace ZeroMasterData.Pages.Controls
             int t = (int)((Button)sender).DataContext;
             WeightDetail pgd = new WeightDetail(DataProvider,
                 DataProvider.Weights.First(w => w.Code == t));
-            bool? res = ZeroMessageBox.Show(pgd, "Editar unidad de medida");
+            bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
             {
                 DataProvider.SaveChanges();

@@ -1,37 +1,43 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Interfaces;
+using ZeroCommonClasses.PackClasses;
+using ZeroUpdateManager.Database;
 using ZeroUpdateManager.Properties;
 
 namespace ZeroUpdateManager
 {
-    public class UpdateManagerPackManager : ZeroCommonClasses.PackClasses.PackManager
+    public class UpdateManagerPackManager : PackManager
     {
-        public UpdateManagerPackManager(string packDir)
-            : base(packDir)
+        public UpdateManagerPackManager(ITerminal terminal)
+            : base(terminal)
         {
             Importing += UpdateManagerPackManager_Importing;
         }
 
-        private void UpdateManagerPackManager_Importing(object sender, ZeroCommonClasses.PackClasses.PackEventArgs e)
+        private void UpdateManagerPackManager_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsUpgrade = true;
             SqlTransaction tran = null;
             SqlConnection conn = null;
-            string[] filesToProcess = System.IO.Directory.GetFiles(e.WorkingDirectory, "*" + Resources.ScripFileExtention);
+            string[] filesToProcess = Directory.GetFiles(e.WorkingDirectory, "*" + Resources.ScripFileExtention);
             if (filesToProcess.Length > 0)
             {
                 string lastScript = "";
                 e.Pack.Result = "SQL";
                 try
                 {
-                    conn = new SqlConnection(ZeroCommonClasses.Context.ContextBuilder.GetConnectionForCurrentEnvironment().ConnectionString);
+                    conn = new SqlConnection(ContextBuilder.GetConnectionForCurrentEnvironment().ConnectionString);
                     conn.Open();
                     tran = conn.BeginTransaction();
-                    System.Data.IDbCommand command = conn.CreateCommand();
+                    IDbCommand command = conn.CreateCommand();
                     command.Transaction = tran;
                     foreach (var file in filesToProcess)
                     {
-                        ZeroUpdateManager.Database.DeployFile deployFile = Database.DeployFile.LoadFrom(file);
+                        DeployFile deployFile = DeployFile.LoadFrom(file);
                         foreach (var item in deployFile.GetStatements(conn.Database))
                         {
                             lastScript = item;

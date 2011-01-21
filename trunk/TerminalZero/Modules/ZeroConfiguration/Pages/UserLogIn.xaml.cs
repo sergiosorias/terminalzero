@@ -21,5 +21,10 @@ namespace ZeroConfiguration.Pages
         {
             UserPass = namePass.Password;
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            nameText.Focus();
+        }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroUpdateManager.Properties;
-
 
 namespace ZeroUpdateManager
 {
@@ -16,7 +14,7 @@ namespace ZeroUpdateManager
 
         public void BuildPosibleActions()
         {
-            Terminal.Session.AddAction(new ZeroAction(null,ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
+            //Terminal.Session.AddAction(new ZeroAction(null,ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
         }
 
         public override string[] GetFilesToSend()
@@ -31,7 +29,7 @@ namespace ZeroUpdateManager
 
         private void ImportScriptFile()
         {
-            List<string> filesToProcess = new List<string>();
+            var filesToProcess = new List<string>();
             filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*"+Resources.CompressFileExtention));
             filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*"+Resources.ZeroPackFileExtention));
             foreach (var item in filesToProcess)
@@ -43,10 +41,10 @@ namespace ZeroUpdateManager
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new UpdateManagerPackManager(path);
+            var PackReceived = new UpdateManagerPackManager(Terminal);
             PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
-            PackReceived.Error += new System.IO.ErrorEventHandler(PackReceived_Error);
-            if (PackReceived.Process())
+            PackReceived.Error += PackReceived_Error;
+            if (PackReceived.Import(path))
             {
                 Terminal.Session.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
             }

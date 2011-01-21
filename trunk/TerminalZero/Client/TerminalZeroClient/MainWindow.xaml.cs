@@ -30,7 +30,14 @@ namespace TerminalZeroClient
             App.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
             App.Instance.Session.Notifier = this;
             App.Instance.Session.ModuleList.ForEach(m => m.Notifing += m_Notifing);
-            App.Instance.Session.ModuleList.ForEach(m => m.Init());
+            try
+            {
+                App.Instance.Session.ModuleList.ForEach(m => m.Init());
+            }
+            catch (Exception ex)
+            {
+                SendNotification(string.Format("Error on Init. Error: {0}",ex));
+            }
             OpenHome();
         }
 
@@ -51,6 +58,7 @@ namespace TerminalZeroClient
                 actionInit = new ZeroAction(null,ActionType.BackgroudAction, ApplicationActions.Home,OpenHome);
                 App.Instance.Session.AddAction(actionInit);
                 App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
+                App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Exit, ForceClose));
             }
             ShortCutHome.Command = actionInit;
             item.Command = actionInit;
@@ -189,32 +197,48 @@ namespace TerminalZeroClient
             }
         }
         
+        #endregion
+
+        private bool _isForced = false;
+        private void ForceClose()
+        {
+            _isForced = true;
+            Close();
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var res = MessageBox.Show(Properties.Resources.QuestionAreYouSureAppClosing,Properties.Resources.Closing,MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
-            switch (res)
+            if (!_isForced)
             {
-                case MessageBoxResult.Cancel:
-                    e.Cancel = true;
-                    break;
-                case MessageBoxResult.No:
-                    e.Cancel = true;
-                    WindowState = WindowState.Minimized;
-                    break;
-                case MessageBoxResult.None:
-                    break;
-                case MessageBoxResult.OK:
-                case MessageBoxResult.Yes:
-                    _notifyIcon.Dispose();
-                    _notifyIcon = null;
-                    break;
-                default:
-                    break;
+                var res = MessageBox.Show(Properties.Resources.QuestionAreYouSureAppClosing,
+                                          Properties.Resources.Closing, MessageBoxButton.YesNoCancel,
+                                          MessageBoxImage.Question);
+                switch (res)
+                {
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.No:
+                        e.Cancel = true;
+                        WindowState = WindowState.Minimized;
+                        break;
+                    case MessageBoxResult.None:
+                        break;
+                    case MessageBoxResult.OK:
+                    case MessageBoxResult.Yes:
+                        _notifyIcon.Dispose();
+                        _notifyIcon = null;
+                        break;
+                    default:
+                        break;
+                }
             }
-            
-        }
+            else
+            {
+                _notifyIcon.Dispose();
+                _notifyIcon = null;
+            }
 
-        #endregion
+        }
 
         private void PopUpNotify(string text)
         {

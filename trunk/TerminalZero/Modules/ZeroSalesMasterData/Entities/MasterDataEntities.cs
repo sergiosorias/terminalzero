@@ -15,5 +15,10 @@ namespace ZeroMasterData.Entities
         {
             return Customers.Count()+1;
         }
+
+        internal int GetNextProductCode()
+        {
+            return Products.Select(p => p.Code).Max() + 1;
+        }
     }
 }

@@ -85,8 +85,17 @@ namespace ZeroCommonClasses.GlobalObjects
         {
             if (_canExecute)
             {
-                ExecuteAction();
-                OnFinished();
+                try
+                {
+                    ExecuteAction();
+                    OnFinished();
+                }
+                catch (Exception ex)
+                {
+                    if (Session != null) Session.Notifier.SendNotification("Error: "+ex);
+                    System.Diagnostics.Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceError,
+                                                     string.Format("{2} on {1} throws-> {0}",ex,ExecuteAction.Method, ExecuteAction.Target.GetType()), "Error");
+                }
             }
         }
 

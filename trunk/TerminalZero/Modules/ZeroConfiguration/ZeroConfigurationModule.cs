@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -10,6 +12,7 @@ using ZeroConfiguration.Pages;
 using ZeroConfiguration.Properties;
 using System.Web.Security;
 using System.Text;
+using ZeroGUI;
 
 
 namespace ZeroConfiguration
@@ -35,7 +38,11 @@ namespace ZeroConfiguration
             SyncAction.Parameters.Add(new ZeroActionParameterBase("ExistingModules", true));
             Terminal.Session.AddAction(SyncAction);
             Terminal.Session.AddAction(new ZeroAction(Terminal.Session,ActionType.MenuItem, "Configuración@Propiedades", OpenConfiguration));
-            Terminal.Session.AddAction(new ZeroAction(Terminal.Session, ActionType.MenuItem, "Configuración@Usuarios", OpenUsers, "ValidateUser"));
+            Terminal.Session.AddAction(new ZeroAction(Terminal.Session, ActionType.MenuItem, "Configuración@Usuarios@Lista de Usuarios", OpenUsers, "ValidateUser"));
+            ZeroAction changePassAction = new ZeroAction(Terminal.Session, ActionType.MenuItem,
+                                                         "Configuración@Usuarios@Cambiar contraseña", OpenChangePassword);
+            changePassAction.Parameters.Add(new ZeroActionParameterBase(typeof (MembershipUser), true));
+            Terminal.Session.AddAction(changePassAction);
         }
 
         private void BuildRulesActions()
@@ -66,39 +73,34 @@ namespace ZeroConfiguration
 
         private void OpenLogInDialog()
         {
-#if DEBUG
-            Terminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser("Administrator", true), false));
-#else
-            var obj = new ZeroGUI.ZeroMessageBox(true);
+//#if DEBUG
+//            Terminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser("Administrator", true), false));
+//#else
             var view = new UserLogIn();
-            obj.Content = view;
-            obj.Title = "Log In";
-            obj.AllowsTransparency = true;
-            obj.BorderThickness= new Thickness(1);
-            obj.BorderBrush = Brushes.Black;
-            obj.WindowStyle = WindowStyle.None;
-            obj.SizeToContent = SizeToContent.WidthAndHeight;
-            obj.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            bool? dialogResult = obj.ShowDialog();
+            bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
             if (dialogResult.GetValueOrDefault())
             {
                 if (Membership.ValidateUser(view.UserName, view.UserPass))
                 {
                     Terminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false,Membership.GetUser(view.UserName,true), false));
-                    ZeroGUI.ZeroMessageBox.Show(view.UserName, Resources.Welcome);
+                    ZeroGUI.ZeroMessageBox.Show(view.UserName, Resources.Welcome, ResizeMode.NoResize);
                 }
                 else
                 {
-                    ZeroGUI.ZeroMessageBox.Show(Resources.MsgIncorrectUserPassTryAgain, Resources.Fail);
-                    OpenLogInDialog(null);
+                    ZeroGUI.ZeroMessageBox.Show(Resources.MsgIncorrectUserPassTryAgain, Resources.Fail, ResizeMode.NoResize);
+                    OpenLogInDialog();
                 }
             }
             else
             {
-                ZeroGUI.ZeroMessageBox.Show(Resources.MsgLogInPlease, Resources.Fail);
-                OpenLogInDialog(null);
+                ZeroGUI.ZeroMessageBox.Show(Resources.MsgLogInPlease+"\n El sistema se cerrara.", Resources.Fail, ResizeMode.NoResize);
+                ZeroAction action;
+                if(ExistsAction(ApplicationActions.Exit,out action))
+                {
+                    ExecuteAction(action);
+                }
             }
-#endif
+//#endif
         }
 
         private void StartSyncronizer()
@@ -130,7 +132,14 @@ namespace ZeroConfiguration
 
         private void OpenUsers()
         {
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = new Users() });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = new Users(Terminal) });
+        }
+
+        private void OpenChangePassword()
+        {
+            Pages.Controls.UserChangePassword pswChange = new Pages.Controls.UserChangePassword();
+            pswChange.DataContext = Terminal.Session.GetParameter<MembershipUser>().Value;
+            ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize);
         }
 
         private void OpenConfiguration()
@@ -147,7 +156,8 @@ namespace ZeroConfiguration
 
         private bool CanOpenConfiguration(object param)
         {
-            bool ret = false;
+            bool ret = true;
+            
             if (param != null)
                 if (param is StringBuilder)
                 {
@@ -241,6 +251,7 @@ namespace ZeroConfiguration
                 action = Terminal.Session.SystemActions[actionName];
                 return true;
             }
+            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
             return false;
         }
         

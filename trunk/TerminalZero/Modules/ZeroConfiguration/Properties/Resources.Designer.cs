@@ -70,6 +70,15 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cambiar Contraseña.
+        /// </summary>
+        internal static string ChangePassword {
+            get {
+                return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to La conexión no fue inicializada.
         /// </summary>
         internal static string ConnectionFinished {
@@ -98,6 +107,15 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Editar Usuario.
+        /// </summary>
+        internal static string EditUser {
+            get {
+                return ResourceManager.GetString("EditUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string Fail {
@@ -107,11 +125,29 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Información.
+        /// </summary>
+        internal static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nombre de terminal inválido, mínimo 4 caracteres.
         /// </summary>
         internal static string InvalidTerminalName {
             get {
                 return ResourceManager.GetString("InvalidTerminalName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log In.
+        /// </summary>
+        internal static string LogIn {
+            get {
+                return ResourceManager.GetString("LogIn", resourceCulture);
             }
         }
         
@@ -152,11 +188,38 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to La contraseña fue modificada exitosamente!.
+        /// </summary>
+        internal static string MsgPasswordSuccessfullyModificated {
+            get {
+                return ResourceManager.GetString("MsgPasswordSuccessfullyModificated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verifique los datos ingresados por favor!.
+        /// </summary>
+        internal static string MsgVerifyInsertedInfo {
+            get {
+                return ResourceManager.GetString("MsgVerifyInsertedInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminal nueva, se intentará crearla.
         /// </summary>
         internal static string NewTerminal {
             get {
                 return ResourceManager.GetString("NewTerminal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuevo Usuario.
+        /// </summary>
+        internal static string NewUser {
+            get {
+                return ResourceManager.GetString("NewUser", resourceCulture);
             }
         }
         
@@ -202,7 +265,7 @@ namespace ZeroConfiguration.Properties {
         /// </summary>
         internal static string UnexistentRuleNamed_ {
             get {
-                return ResourceManager.GetString("UnexistentRuleNamed?", resourceCulture);
+                return ResourceManager.GetString("UnexistentRuleNamed_", resourceCulture);
             }
         }
         

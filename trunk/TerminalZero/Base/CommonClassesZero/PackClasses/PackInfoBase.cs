@@ -6,16 +6,16 @@ namespace ZeroCommonClasses.PackClasses
     [DataContract]
     public abstract class PackInfoBase
     {
-        public PackInfoBase()
+        protected PackInfoBase()
         {
-            
+            DestinationTerminalCode = -1;
         }
 
         [DataMember]
-        public int Flags { get; set; }
-        
-        [DataMember]
         public int ModuleCode { get; set; }
+
+        [DataMember]
+        public int DestinationTerminalCode { get; set; }
 
         [IgnoreDataMember]
         public string Path { get; set; }

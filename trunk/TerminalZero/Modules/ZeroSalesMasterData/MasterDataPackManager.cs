@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.PackClasses;
 using ZeroMasterData.Entities;
 
@@ -12,17 +13,16 @@ namespace ZeroMasterData
 {
     public class MasterDataPackManager : PackManager
     {
-        private ExportEntitiesPackInfo _myInfo = null;
-        public MasterDataPackManager(ExportEntitiesPackInfo info)
-            : base(info)
+        public MasterDataPackManager(ITerminal terminal)
+            : base(terminal)
         {
-            _myInfo = info;
-            base.Exporting += new EventHandler<PackEventArgs>(MasterDataPackManager_Exporting);
+            Exporting += MasterDataPackManager_Exporting;
+            Importing += MasterDataPackManager_Importing;
         }
 
         void MasterDataPackManager_Exporting(object sender, PackEventArgs e)
         {
-            foreach (PackTableInfo item in _myInfo.Tables)
+            foreach (PackTableInfo item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
             {
                 using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
                 {
@@ -32,32 +32,27 @@ namespace ZeroMasterData
             }
         }
 
-        public MasterDataPackManager(string packPath)
-            : base(packPath)
-        {
-            base.Importing += new EventHandler<PackEventArgs>(MasterDataPackManager_Importing);
-        }
-
         void MasterDataPackManager_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsMasterData = true;
             Type infoType = typeof(ExportEntitiesPackInfo);
             XmlSerializer reader = new XmlSerializer(infoType);
+            
             using (XmlReader xmlreader = XmlReader.Create(Path.Combine(e.WorkingDirectory, infoType.ToString())))
             {
-                _myInfo = (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
+                e.PackInfo =  (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
                 xmlreader.Close();
             }
-            e.PackInfo = _myInfo;
+            
 
             ImportEntities(e);
         }
 
-        private void ImportEntities(PackEventArgs e)
+        private static void ImportEntities(PackEventArgs e)
         {
-            ExportEntitiesPackInfo packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-
-            using (MasterDataEntities ent = new MasterDataEntities())
+            var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
+            
+            using (var ent = new MasterDataEntities())
             {
                 foreach (var item in packInfo.Tables)
                 {

@@ -5,5 +5,6 @@ namespace ZeroCommonClasses.GlobalObjects
     {
         public const string Back = "Application@Back";
         public const string Home = "Application@Home";
+        public const string Exit = "Application@Exit";
     }
 }
