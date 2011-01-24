@@ -44,7 +44,7 @@
     <OutputPath>.\sql\debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
     <TargetConnectionString>Data Source=SEBAS-NOTE\SQLEXPRESS;Persist Security Info=True;User ID=SA;Pooling=False</TargetConnectionString>
-    <TargetDatabase>TZeroMaster_Client</TargetDatabase>
+    <TargetDatabase>TZeroMaster</TargetDatabase>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <SuppressWarnings>
     </SuppressWarnings>
@@ -496,6 +496,9 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\Keys\DeliveryNoteItem.PK_DeliveryNoteItem.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Views\TerminalTo.view.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>

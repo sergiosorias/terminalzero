@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ZeroStock.Entities;
+using ZeroCommonClasses;
+using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
+using ZeroStock.Entities;
 
 namespace ZeroStock.Pages.Controls
 {
@@ -13,31 +16,43 @@ namespace ZeroStock.Pages.Controls
     public partial class DocumentDeliveryDetail : UserControl, IZeroPage
     {
         private StockEntities DataProvider;
-        private ITerminal Terminal;
+        private readonly ITerminal _terminal;
         public DeliveryDocumentHeader CurrentDocumentDelivery { get; private set; }
 
         public DocumentDeliveryDetail(ITerminal terminal)
         {
             InitializeComponent();
-            Terminal = terminal;
+            _terminal = terminal;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-
             // Do not load your data at design time.
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 DataProvider = new StockEntities();
-                CurrentDocumentDelivery = Entities.DeliveryDocumentHeader.CreateDeliveryDocumentHeader(
-                     Terminal.TerminalCode,
-                     DataProvider.DeliveryDocumentHeaders.Count() + 1,
-                     true,
-                     (short)StockEntities.EntitiesStatus.New,
-                     DateTime.Now);
+                
+                CurrentDocumentDelivery = DeliveryDocumentHeader.CreateDeliveryDocumentHeader(
+                    _terminal.TerminalCode,
+                    DataProvider.DeliveryDocumentHeaders.Count() + 1,
+                    true,
+                    (short) StockEntities.EntitiesStatus.New,
+                    DateTime.Now, _terminal.TerminalCode);
+
                 DataProvider.DeliveryDocumentHeaders.AddObject(CurrentDocumentDelivery);
                 grid1.DataContext = CurrentDocumentDelivery;
                 supplierBox.ItemsSource = DataProvider.Suppliers;
+                cbTerminals.ItemsSource = DataProvider.TerminalToes;
+            }
+        }
+
+        private void TryGoHome()
+        {
+            ZeroAction action;
+            if (!_terminal.Manager.ExistsAction(ApplicationActions.Back, out action)
+                || !_terminal.Manager.ExecuteAction(action))
+            {
+                IsEnabled = false;
             }
         }
 
@@ -48,8 +63,8 @@ namespace ZeroStock.Pages.Controls
 
         #region IZeroPage Members
 
-        ZeroCommonClasses.Interfaces.Mode _Mode = ZeroCommonClasses.Interfaces.Mode.New;
-        public ZeroCommonClasses.Interfaces.Mode Mode
+        Mode _Mode = Mode.New;
+        public Mode Mode
         {
             get
             {
@@ -67,8 +82,14 @@ namespace ZeroStock.Pages.Controls
 
             if (!CurrentDocumentDelivery.SupplierCode.HasValue)
             {
-                msg += "\nPor favor seleccione un proveedor.";
+                msg += Properties.Resources.MsgSelectSupplierPlease;
             }
+
+            if (cbTerminals.SelectedIndex <0)
+            {
+                msg += "\n"+Properties.Resources.MsgSelectTerminalPlease;
+            }
+
 
             if (string.IsNullOrWhiteSpace(msg))
             {
@@ -79,11 +100,11 @@ namespace ZeroStock.Pages.Controls
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 
-            System.Windows.MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
 
@@ -98,6 +119,11 @@ namespace ZeroStock.Pages.Controls
         {
             if (DataProvider != null)
                 DataProvider.Dispose();
+        }
+
+        private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CurrentDocumentDelivery.TerminalToCode = (int) cbTerminals.SelectedValue;
         }
     }
 }

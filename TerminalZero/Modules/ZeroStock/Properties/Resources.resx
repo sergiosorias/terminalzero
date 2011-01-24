@@ -101,7 +101,7 @@
 	<data name="DeliveryNoteSelection">
 		<value xml:space="preserve">Selección de remitos</value>
 	</data>
-	<data name="DeliveryNoteMandatoryMsg">
+	<data name="MsgDeliveryNoteMandatory">
 		<value xml:space="preserve">Tiene que seleccionar un documento para poder continuar!</value>
 	</data>
 	<data name="Fail">
@@ -121,5 +121,14 @@
 	</data>
 	<data name="Important">
 		<value xml:space="preserve">Importante</value>
+	</data>
+	<data name="MsgMandatoryTerminal">
+		<value xml:space="preserve">Es obligatorio seleccionar una terminal destino.</value>
+	</data>
+	<data name="MsgSelectTerminalPlease">
+		<value xml:space="preserve">Por favor seleccione una terminal.</value>
+	</data>
+	<data name="MsgSelectSupplierPlease">
+		<value xml:space="preserve">Por favor seleccione un proveedor.</value>
 	</data>
 </root>

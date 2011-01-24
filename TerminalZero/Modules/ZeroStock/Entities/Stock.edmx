@@ -21,7 +21,8 @@
       [StockCreateSummary].[ProductMasterCode] AS [ProductMasterCode], 
       [StockCreateSummary].[NetWeight] AS [NetWeight], 
       [StockCreateSummary].[QuantityKG] AS [QuantityKG], 
-      [StockCreateSummary].[ProductCount] AS [ProductCount]
+      [StockCreateSummary].[ProductCount] AS [ProductCount], 
+      [StockCreateSummary].[TerminalToCode] AS [TerminalToCode]
       FROM [data].[StockCreateSummary] AS [StockCreateSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="StockModifySummary" EntityType="TZeroMasterModel.Store.StockModifySummary" store:Type="Views" store:Schema="data" store:Name="StockModifySummary">
@@ -30,7 +31,8 @@
       [StockModifySummary].[ProductMasterCode] AS [ProductMasterCode], 
       [StockModifySummary].[NetWeight] AS [NetWeight], 
       [StockModifySummary].[QuantityKG] AS [QuantityKG], 
-      [StockModifySummary].[ProductCount] AS [ProductCount]
+      [StockModifySummary].[ProductCount] AS [ProductCount], 
+      [StockModifySummary].[TerminalToCode] AS [TerminalToCode]
       FROM [data].[StockModifySummary] AS [StockModifySummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="StockSummary" EntityType="TZeroMasterModel.Store.StockSummary" store:Type="Views" store:Schema="data" store:Name="StockSummary">
@@ -39,8 +41,16 @@
       [StockSummary].[ProductMasterCode] AS [ProductMasterCode], 
       [StockSummary].[NetWeight] AS [NetWeight], 
       [StockSummary].[QuantityKG] AS [QuantityKG], 
-      [StockSummary].[ProductCount] AS [ProductCount]
+      [StockSummary].[ProductCount] AS [ProductCount], 
+      [StockSummary].[TerminalToCode] AS [TerminalToCode]
       FROM [data].[StockSummary] AS [StockSummary]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TerminalTo" EntityType="TZeroMasterModel.Store.TerminalTo" store:Type="Views" store:Schema="data" store:Name="TerminalTo">
+            <DefiningQuery>SELECT 
+      [TerminalTo].[Code] AS [Code], 
+      [TerminalTo].[Name] AS [Name], 
+      [TerminalTo].[Description] AS [Description]
+      FROM [data].[TerminalTo] AS [TerminalTo]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_DeliveryDocumentHeader_Supplier" Association="TZeroMasterModel.Store.FK_DeliveryDocumentHeader_Supplier">
             <End Role="Supplier" EntitySet="Supplier" />
@@ -93,6 +103,7 @@
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="UserCode" Type="uniqueidentifier" />
           <Property Name="SupplierCode" Type="int" />
@@ -150,6 +161,7 @@
           <Property Name="Tax2Code" Type="int" />
           <Property Name="Group1" Type="int" />
           <Property Name="Group2" Type="int" />
+          <Property Name="DueDays" Type="int" />
         </EntityType>
         <EntityType Name="StockHeader">
           <Key>
@@ -161,6 +173,7 @@
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="UserCode" Type="uniqueidentifier" />
           <Property Name="StockTypeCode" Type="int" />
@@ -239,12 +252,14 @@
         <EntityType Name="StockCreateSummary">
           <Key>
             <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
           </Key>
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="ProductMasterCode" Type="int" Nullable="false" />
           <Property Name="NetWeight" Type="float" />
           <Property Name="QuantityKG" Type="float" />
           <Property Name="ProductCount" Type="int" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'TZeroMaster.data.StockModifySummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -252,12 +267,14 @@
         <EntityType Name="StockModifySummary">
           <Key>
             <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
           </Key>
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="ProductMasterCode" Type="int" Nullable="false" />
           <Property Name="NetWeight" Type="float" />
           <Property Name="QuantityKG" Type="float" />
           <Property Name="ProductCount" Type="int" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'TZeroMaster.data.StockSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -265,12 +282,26 @@
         <EntityType Name="StockSummary">
           <Key>
             <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
           </Key>
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="ProductMasterCode" Type="int" Nullable="false" />
           <Property Name="NetWeight" Type="float" />
           <Property Name="QuantityKG" Type="float" />
           <Property Name="ProductCount" Type="int" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.TerminalTo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="TerminalTo">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Association Name="FK_DeliveryDocumentHeader_Supplier">
           <End Role="Supplier" Type="TZeroMasterModel.Store.Supplier" Multiplicity="0..1" />
@@ -455,6 +486,7 @@
             <End Role="StockHeader" EntitySet="StockHeaders" />
             <End Role="StockItem" EntitySet="StockItems" />
           </AssociationSet>
+          <EntitySet Name="TerminalToes" EntityType="TZeroMasterModel.TerminalTo" />
         </EntityContainer>
         <EntityType Name="Price">
           <Key>
@@ -494,6 +526,7 @@
           <NavigationProperty Name="Price" Relationship="TZeroMasterModel.FK_PriceCost_Product_Price" FromRole="Product" ToRole="Price" />
           <NavigationProperty Name="Price1" Relationship="TZeroMasterModel.FK_Product_Price" FromRole="Product" ToRole="Price" />
           <NavigationProperty Name="StockItems" Relationship="TZeroMasterModel.FK_StockItem_Product" FromRole="Product" ToRole="StockItem" />
+          <Property Type="Int32" Name="DueDays" />
         </EntityType>
         <EntityType Name="Weight">
           <Key>
@@ -570,32 +603,38 @@
         <EntityType Name="StockCreateSummary">
           <Key>
             <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
           </Key>
           <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
           <Property Type="Double" Name="NetWeight" />
           <Property Type="Double" Name="QuantityKG" />
           <Property Type="Int32" Name="ProductCount" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <EntityType Name="StockModifySummary">
           <Key>
             <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
           </Key>
           <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
           <Property Type="Double" Name="NetWeight" />
           <Property Type="Double" Name="QuantityKG" />
           <Property Type="Int32" Name="ProductCount" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <EntityType Name="StockSummary">
           <Key>
             <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
           </Key>
           <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ProductMasterCode" Nullable="false" />
           <Property Type="Double" Name="NetWeight" />
           <Property Type="Double" Name="QuantityKG" />
           <Property Type="Int32" Name="ProductCount" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <EntityType Name="StockHeader">
           <Key>
@@ -615,6 +654,7 @@
           <Property Type="Int32" Name="DeliveryDocumentHeaderCode" />
           <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="StockHeader" ToRole="DeliveryDocumentHeader" />
           <NavigationProperty Name="StockItems" Relationship="TZeroMasterModel.FK_StockItem_StockHeader" FromRole="StockHeader" ToRole="StockItem" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <Association Name="FK_StockHeader_StockType">
           <End Type="TZeroMasterModel.StockType" Role="StockType" Multiplicity="0..1" />
@@ -670,6 +710,7 @@
           <NavigationProperty Name="Supplier" Relationship="TZeroMasterModel.FK_DeliveryDocumentHeader_Supplier" FromRole="DeliveryDocumentHeader" ToRole="Supplier" />
           <NavigationProperty Name="StockHeaders" Relationship="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="StockHeader" />
           <NavigationProperty Name="DeliveryDocumentItems" Relationship="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="DeliveryDocumentItem" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <Association Name="FK_DeliveryDocumentHeader_Supplier">
           <End Type="TZeroMasterModel.Supplier" Role="Supplier" Multiplicity="0..1" />
@@ -782,6 +823,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TerminalTo">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -799,7 +849,8 @@
             <ScalarProperty Name="Value" ColumnName="Value" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Products"><EntityTypeMapping TypeName="TZeroMasterModel.Product"><MappingFragment StoreEntitySet="Product">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="DueDays" ColumnName="DueDays" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="MasterCode" ColumnName="MasterCode" />
@@ -836,6 +887,7 @@
           <EntitySetMapping Name="StockCreateSummaries">
             <EntityTypeMapping TypeName="TZeroMasterModel.StockCreateSummary">
               <MappingFragment StoreEntitySet="StockCreateSummary">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
                 <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
                 <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
@@ -847,6 +899,7 @@
           <EntitySetMapping Name="StockModifySummaries">
             <EntityTypeMapping TypeName="TZeroMasterModel.StockModifySummary">
               <MappingFragment StoreEntitySet="StockModifySummary">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
                 <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
                 <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
@@ -858,6 +911,7 @@
           <EntitySetMapping Name="StockSummaries">
             <EntityTypeMapping TypeName="TZeroMasterModel.StockSummary">
               <MappingFragment StoreEntitySet="StockSummary">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
                 <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
                 <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
@@ -869,6 +923,7 @@
           <EntitySetMapping Name="StockHeaders">
             <EntityTypeMapping TypeName="TZeroMasterModel.StockHeader">
               <MappingFragment StoreEntitySet="StockHeader">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="DeliveryDocumentHeaderCode" ColumnName="DeliveryDocumentHeaderCode" />
                 <ScalarProperty Name="DeliveryDocumentHeaderTerminalCode" ColumnName="DeliveryDocumentHeaderTerminalCode" />
                 <ScalarProperty Name="StockTypeCode" ColumnName="StockTypeCode" />
@@ -910,6 +965,7 @@
           <EntitySetMapping Name="DeliveryDocumentHeaders">
             <EntityTypeMapping TypeName="TZeroMasterModel.DeliveryDocumentHeader">
               <MappingFragment StoreEntitySet="DeliveryDocumentHeader">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />
                 <ScalarProperty Name="UserCode" ColumnName="UserCode" />
@@ -962,6 +1018,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TerminalToes">
+            <EntityTypeMapping TypeName="TZeroMasterModel.TerminalTo">
+              <MappingFragment StoreEntitySet="TerminalTo">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -987,12 +1052,12 @@
         <EntityTypeShape EntityType="TZeroMasterModel.Product" Width="1.5" PointX="4.5" PointY="0.5" Height="4.2879036458333335" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.Weight" Width="1.5" PointX="0.5" PointY="0.5" Height="2.5571907552083339" IsExpanded="true" />
         <AssociationConnector Association="TZeroMasterModel.FK_PriceCost_Product_Price" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.875" PointY="2.7569359397888178" />
-          <ConnectorPoint PointX="4.5" PointY="2.7569359397888178" />
+          <ConnectorPoint PointX="3.875" PointY="2.7586822271347042" />
+          <ConnectorPoint PointX="4.5" PointY="2.7586822271347042" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_Product_Price" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.875" PointY="1.5659679698944089" />
-          <ConnectorPoint PointX="4.5" PointY="1.5659679698944089" />
+          <ConnectorPoint PointX="3.875" PointY="1.5668411135673521" />
+          <ConnectorPoint PointX="4.5" PointY="1.5668411135673521" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_SaleWeight_Price_Weight" ManuallyRouted="false">
           <ConnectorPoint PointX="2" PointY="1.7785953776041668" />
@@ -1003,8 +1068,8 @@
           <ConnectorPoint PointX="2.375" PointY="1.0767976888020834" />
         </AssociationConnector>
         <EntityTypeShape EntityType="TZeroMasterModel.StockType" Width="1.5" PointX="4.5" PointY="5.5" Height="2.1725878906249996" />
-        <EntityTypeShape EntityType="TZeroMasterModel.StockCreateSummary" Width="1.5" PointX="0.75" PointY="4.75" Height="1.9802864583333317" />
-        <EntityTypeShape EntityType="TZeroMasterModel.StockModifySummary" Width="1.5" PointX="0.75" PointY="7.25" Height="1.9802864583333335" />
+        <EntityTypeShape EntityType="TZeroMasterModel.StockCreateSummary" Width="1.5" PointX="0.75" PointY="4.75" Height="2.1725878906249996" />
+        <EntityTypeShape EntityType="TZeroMasterModel.StockModifySummary" Width="1.5" PointX="0.75" PointY="7.25" Height="2.1725878906249996" />
         <EntityTypeShape EntityType="TZeroMasterModel.StockSummary" Width="1.5" PointX="2.5" PointY="7.25" Height="1.9802864583333317" />
         <EntityTypeShape EntityType="TZeroMasterModel.StockHeader" Width="1.5" PointX="4.5" PointY="8.625" Height="3.5186979166666656" />
         <AssociationConnector Association="TZeroMasterModel.FK_StockHeader_StockType" >
@@ -1019,24 +1084,25 @@
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" >
           <ConnectorPoint PointX="4.25" PointY="13.375" />
-          <ConnectorPoint PointX="4.25" PointY="10.7182421875" />
-          <ConnectorPoint PointX="4.5" PointY="10.7182421875" />
+          <ConnectorPoint PointX="4.25" PointY="10.814392903645832" />
+          <ConnectorPoint PointX="4.5" PointY="10.814392903645832" />
         </AssociationConnector>
         <EntityTypeShape EntityType="TZeroMasterModel.DeliveryDocumentItem" Width="1.5" PointX="5.25" PointY="13.125" Height="3.9033007812500031" />
         <EntityTypeShape EntityType="TZeroMasterModel.StockItem" Width="1.5" PointX="6.75" PointY="4.25" Height="4.0956022135416674" />
         <AssociationConnector Association="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" >
-          <ConnectorPoint PointX="4.5" PointY="15.038198242187502" />
-          <ConnectorPoint PointX="5.25" PointY="15.038198242187502" />
+          <ConnectorPoint PointX="4.5" PointY="15.134348958333334" />
+          <ConnectorPoint PointX="5.25" PointY="15.134348958333334" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_StockItem_Product" >
-          <ConnectorPoint PointX="6" PointY="4.5189518229166667" />
-          <ConnectorPoint PointX="6.75" PointY="4.5189518229166667" />
+          <ConnectorPoint PointX="6" PointY="4.6151025390625" />
+          <ConnectorPoint PointX="6.75" PointY="4.6151025390625" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_StockItem_StockHeader" >
-          <ConnectorPoint PointX="6" PointY="10.384348958333334" />
-          <ConnectorPoint PointX="7.5" PointY="10.384348958333334" />
+          <ConnectorPoint PointX="6" PointY="10.480499674479166" />
+          <ConnectorPoint PointX="7.5" PointY="10.480499674479166" />
           <ConnectorPoint PointX="7.5" PointY="8.3456022135416674" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="TZeroMasterModel.TerminalTo" Width="1.5" PointX="6.5" PointY="0.625" Height="1.5956835937500031" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -4,7 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-             d:DesignHeight="300" d:DesignWidth="300" xmlns:my="clr-namespace:ZeroStock.Entities" Loaded="UserControl_Loaded">
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <CollectionViewSource Source="{Binding}" x:Key="cvs1"/>
+        <CollectionViewSource Source="{Binding}" x:Key="cvs2"/>
+        <CollectionViewSource Source="{Binding}" x:Key="cvs3"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="100"/>
@@ -16,11 +21,30 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" MinHeight="100"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Name="terminalFilterContent" Visibility="Collapsed">
+                <Label Content="Terminal:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1" Grid.Row="0" Width="200" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedValuePath="Code"
+                      Margin="3" Name="cbTerminals">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Code}" Height="20"/>
+                                <TextBlock Text=" - " Height="20"/>
+                                <TextBlock Text="{Binding Path=Description}" Height="20"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
             <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="False"/>
-            <Label Style="{DynamicResource titleLabelStyle}" Content="Stock por producto"/>
-        </StackPanel>
-        <DataGrid AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Grid.ColumnSpan="2" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Name="stockSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <Label Grid.Row="1" Style="{DynamicResource titleLabelStyle}" Content="Stock por producto"/>
+        </Grid>
+        <DataGrid AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Grid.ColumnSpan="2" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs2}}" Name="stockSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
@@ -31,7 +55,7 @@
         </DataGrid>
         <Label Grid.Column="0" Grid.Row="2" Style="{StaticResource titleLabelStyle}" Content="Resumen de altas"/>
         <Label Grid.Column="1" Grid.Row="2" Content="Resumen de bajas" Style="{StaticResource titleLabelStyle}"/>
-        <DataGrid AutoGenerateColumns="False" Grid.Row="3" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Name="stockCreateSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid AutoGenerateColumns="False" Grid.Row="3" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs1}}" Name="stockCreateSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn1" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn1" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
@@ -41,7 +65,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <GridSplitter Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Width="3" Background="{StaticResource DarkBlueBrushKey}"/>
-        <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Name="stockModifySummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs3}}" Name="stockModifySummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn2" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn2" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />

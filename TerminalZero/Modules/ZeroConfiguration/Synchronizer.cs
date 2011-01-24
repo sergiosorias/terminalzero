@@ -219,7 +219,7 @@ namespace ZeroConfiguration
 
                             ZeroCommonClasses.Files.RemoteFileInfo inf = Config.FileTransferService.DownloadFile(aFile);
 
-                            string packPath = Path.Combine(Mod.WorkingDirectoryIn, string.Format(ZeroCommonClasses.PackClasses.PackManager.kPackNameFromat, item.Value, item.Key, DateTime.Now.ToString("yyyyMMddhhmmss"), ZeroCommonClasses.PackClasses.PackManager.kPackExtention));
+                            string packPath = Path.Combine(Mod.WorkingDirectoryIn, string.Format(ZeroCommonClasses.Pack.PackManager.kPackNameFromat, item.Value, item.Key, DateTime.Now.ToString("yyyyMMddhhmmss")));
                             ret = DownloadFile(Config, packPath, inf);
                             if (ret)
                             {

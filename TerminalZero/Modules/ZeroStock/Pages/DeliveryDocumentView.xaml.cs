@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
+using ZeroStock.Entities;
 using ZeroStock.Pages.Controls;
 
 namespace ZeroStock.Pages
@@ -9,10 +12,10 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for DeliveryDocumentView.xaml
     /// </summary>
-    public partial class DeliveryDocumentView : UserControl, ZeroCommonClasses.Interfaces.IZeroPage
+    public partial class DeliveryDocumentView : UserControl, IZeroPage
     {
         private ITerminal Terminal;
-        public Entities.DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
+        public DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
 
         public DeliveryDocumentView(ITerminal terminal)
         {
@@ -39,21 +42,21 @@ namespace ZeroStock.Pages
                     break;
             }
             // Do not load your data at design time.
-             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+             if (!DesignerProperties.GetIsInDesignMode(this))
              {
              	//Load your data here and assign the result to the CollectionViewSource.
                 //System.Windows.Data.CollectionViewSource myCollectionViewSource = (System.Windows.Data.CollectionViewSource)this.Resources["Resource Key for CollectionViewSource"];
                 //myCollectionViewSource.Source = your data
                  dateFilter.SelectedDateFormat = DatePickerFormat.Short;
                  dateFilter.DisplayDateEnd = DateTime.Now.AddDays(1);
-                 dateFilter.SelectedDateChanged+=new EventHandler<SelectionChangedEventArgs>(dateFilter_SelectedDateChanged);
+                 dateFilter.SelectedDateChanged+=dateFilter_SelectedDateChanged;
              }
         }
 
         #region IZeroPage Members
 
-        ZeroCommonClasses.Interfaces.Mode _Mode = ZeroCommonClasses.Interfaces.Mode.New;
-        public ZeroCommonClasses.Interfaces.Mode Mode
+        Mode _Mode = Mode.New;
+        public Mode Mode
         {
             get
             {
@@ -89,7 +92,7 @@ namespace ZeroStock.Pages
 
         #endregion
 
-        private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
+        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
             DeliveryGrid.ApplyFilter(e.Criteria);
             e.Matches = DeliveryGrid.deliveryDocumentHeadersDataGrid.Items.Count;
@@ -97,8 +100,8 @@ namespace ZeroStock.Pages
 
         private void btnNewProduct_Click(object sender, RoutedEventArgs e)
         {
-            DocumentDeliveryDetail det = new DocumentDeliveryDetail(Terminal);
-            bool? res = ZeroGUI.ZeroMessageBox.Show(det, "Nuevo remito");
+            var det = new DocumentDeliveryDetail(Terminal);
+            bool? res = ZeroMessageBox.Show(det, "Nuevo remito");
             if (res.HasValue && res.Value)
             {
                 DeliveryGrid.AddDeliveryDocumentHeader(det.CurrentDocumentDelivery);

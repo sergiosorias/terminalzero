@@ -11,7 +11,7 @@
 				0
 		END AS QuantityKG,
 		COUNT(SI.ProductByWeight) AS ProductCount,
-		SH.TerminalCode as TerminalCode
+		SH.TerminalToCode as TerminalToCode
 	FROM
 		Data.StockHeader SH
 	INNER JOIN
@@ -27,7 +27,7 @@
 		SH.StockTypeCode IS NULL
 		OR SH.StockTypeCode = 0
 	GROUP BY
-		SH.TerminalCode,
+		SH.TerminalToCode,
 		SI.ProductMasterCode, 
 		P.Name,
 		SI.ProductByWeight
