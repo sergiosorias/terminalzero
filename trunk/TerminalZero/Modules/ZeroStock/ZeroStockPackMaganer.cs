@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using ZeroCommonClasses.Interfaces;
-using ZeroCommonClasses.PackClasses;
+using ZeroCommonClasses.Pack;
 using ZeroStock.Entities;
 
 namespace ZeroStock
@@ -18,7 +18,7 @@ namespace ZeroStock
             Exporting += ZeroStockPackMaganer_Exporting;
         }
 
-        void ZeroStockPackMaganer_Importing(object sender, PackEventArgs e)
+        private void ZeroStockPackMaganer_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsMasterData = false;
             Type infoType = typeof(ExportEntitiesPackInfo);
@@ -32,7 +32,7 @@ namespace ZeroStock
             ImportEntities(e);
         }
 
-        void ZeroStockPackMaganer_Exporting(object sender, PackEventArgs e)
+        private void ZeroStockPackMaganer_Exporting(object sender, PackEventArgs e)
         {
             foreach (var item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
             {
@@ -69,7 +69,7 @@ namespace ZeroStock
             }
         }
 
-        private void ImportDeliveryDocumentHeader(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportDeliveryDocumentHeader(string p, StockEntities ent, PackTableInfo a)
         {
             foreach (var item in a.DeserializeRows<DeliveryDocumentHeader>(p))
             {
@@ -78,7 +78,7 @@ namespace ZeroStock
             }
         }
 
-        private void ImportDeliveryDocumentItem(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportDeliveryDocumentItem(string p, StockEntities ent, PackTableInfo a)
         {
             foreach (var item in a.DeserializeRows<DeliveryDocumentItem>(p))
             {
@@ -87,7 +87,7 @@ namespace ZeroStock
             }
         }
 
-        private void ImportStockItem(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportStockItem(string p, StockEntities ent, PackTableInfo a)
         {
             foreach (var item in a.DeserializeRows<StockItem>(p))
             {
@@ -96,7 +96,7 @@ namespace ZeroStock
             }
         }
 
-        private void ImportStockHeader(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportStockHeader(string p, StockEntities ent, PackTableInfo a)
         {
             foreach (var item in a.DeserializeRows<StockHeader>(p))
             {

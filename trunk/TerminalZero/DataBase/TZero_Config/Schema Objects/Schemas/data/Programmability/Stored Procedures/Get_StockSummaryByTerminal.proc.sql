@@ -7,7 +7,7 @@ AS
 		SCS.NetWeight - ISNULL(SMS.NetWeight,0) as NetWeight,
 		SCS.QuantityKG - ISNULL(SMS.QuantityKG,0) as QuantityKG, 
 		SCS.ProductCount - ISNULL(SMS.ProductCount,0) as ProductCount,
-		@TerminalCode AS TerminalCode
+		@TerminalCode AS TerminalToCode
 	FROM 
 		data.StockCreateSummary SCS
 	LEFT JOIN
@@ -15,6 +15,6 @@ AS
 	ON
 		SCS.ProductMasterCode = SMS.ProductMasterCode
 	where
-		SCS.TerminalCode = @TerminalCode
-		AND SMS.TerminalCode = @TerminalCode OR SMS.TerminalCode IS NULL
+		SCS.TerminalToCode = @TerminalCode
+		AND SMS.TerminalToCode = @TerminalCode OR SMS.TerminalToCode IS NULL
 		

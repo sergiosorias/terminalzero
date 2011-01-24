@@ -270,6 +270,22 @@ namespace ZeroStock.Entities
             }
         }
         private ObjectSet<StockItem> _StockItems;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<TerminalTo> TerminalToes
+        {
+            get
+            {
+                if ((_TerminalToes == null))
+                {
+                    _TerminalToes = base.CreateObjectSet<TerminalTo>("TerminalToes");
+                }
+                return _TerminalToes;
+            }
+        }
+        private ObjectSet<TerminalTo> _TerminalToes;
 
         #endregion
         #region AddTo Methods
@@ -369,6 +385,14 @@ namespace ZeroStock.Entities
         {
             base.AddObject("StockItems", stockItem);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the TerminalToes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToTerminalToes(TerminalTo terminalTo)
+        {
+            base.AddObject("TerminalToes", terminalTo);
+        }
 
         #endregion
     }
@@ -396,7 +420,8 @@ namespace ZeroStock.Entities
         /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="status">Initial value of the Status property.</param>
         /// <param name="date">Initial value of the Date property.</param>
-        public static DeliveryDocumentHeader CreateDeliveryDocumentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date)
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        public static DeliveryDocumentHeader CreateDeliveryDocumentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date, global::System.Int32 terminalToCode)
         {
             DeliveryDocumentHeader deliveryDocumentHeader = new DeliveryDocumentHeader();
             deliveryDocumentHeader.TerminalCode = terminalCode;
@@ -404,6 +429,7 @@ namespace ZeroStock.Entities
             deliveryDocumentHeader.Enable = enable;
             deliveryDocumentHeader.Status = status;
             deliveryDocumentHeader.Date = date;
+            deliveryDocumentHeader.TerminalToCode = terminalToCode;
             return deliveryDocumentHeader;
         }
 
@@ -631,6 +657,30 @@ namespace ZeroStock.Entities
         private global::System.String _Note;
         partial void OnNoteChanging(global::System.String value);
         partial void OnNoteChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                OnTerminalToCodeChanging(value);
+                ReportPropertyChanging("TerminalToCode");
+                _TerminalToCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TerminalToCode");
+                OnTerminalToCodeChanged();
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
 
         #endregion
     
@@ -1873,6 +1923,30 @@ namespace ZeroStock.Entities
         private Nullable<global::System.Int32> _Group2;
         partial void OnGroup2Changing(Nullable<global::System.Int32> value);
         partial void OnGroup2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> DueDays
+        {
+            get
+            {
+                return _DueDays;
+            }
+            set
+            {
+                OnDueDaysChanging(value);
+                ReportPropertyChanging("DueDays");
+                _DueDays = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DueDays");
+                OnDueDaysChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _DueDays;
+        partial void OnDueDaysChanging(Nullable<global::System.Int32> value);
+        partial void OnDueDaysChanged();
 
         #endregion
     
@@ -1993,10 +2067,12 @@ namespace ZeroStock.Entities
         /// Create a new StockCreateSummary object.
         /// </summary>
         /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
-        public static StockCreateSummary CreateStockCreateSummary(global::System.Int32 productMasterCode)
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        public static StockCreateSummary CreateStockCreateSummary(global::System.Int32 productMasterCode, global::System.Int32 terminalToCode)
         {
             StockCreateSummary stockCreateSummary = new StockCreateSummary();
             stockCreateSummary.ProductMasterCode = productMasterCode;
+            stockCreateSummary.TerminalToCode = terminalToCode;
             return stockCreateSummary;
         }
 
@@ -2125,6 +2201,33 @@ namespace ZeroStock.Entities
         private Nullable<global::System.Int32> _ProductCount;
         partial void OnProductCountChanging(Nullable<global::System.Int32> value);
         partial void OnProductCountChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                if (_TerminalToCode != value)
+                {
+                    OnTerminalToCodeChanging(value);
+                    ReportPropertyChanging("TerminalToCode");
+                    _TerminalToCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalToCode");
+                    OnTerminalToCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
 
         #endregion
     
@@ -2148,7 +2251,8 @@ namespace ZeroStock.Entities
         /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="status">Initial value of the Status property.</param>
         /// <param name="date">Initial value of the Date property.</param>
-        public static StockHeader CreateStockHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date)
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        public static StockHeader CreateStockHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date, global::System.Int32 terminalToCode)
         {
             StockHeader stockHeader = new StockHeader();
             stockHeader.TerminalCode = terminalCode;
@@ -2156,6 +2260,7 @@ namespace ZeroStock.Entities
             stockHeader.Enable = enable;
             stockHeader.Status = status;
             stockHeader.Date = date;
+            stockHeader.TerminalToCode = terminalToCode;
             return stockHeader;
         }
 
@@ -2407,6 +2512,30 @@ namespace ZeroStock.Entities
         private Nullable<global::System.Int32> _DeliveryDocumentHeaderCode;
         partial void OnDeliveryDocumentHeaderCodeChanging(Nullable<global::System.Int32> value);
         partial void OnDeliveryDocumentHeaderCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                OnTerminalToCodeChanging(value);
+                ReportPropertyChanging("TerminalToCode");
+                _TerminalToCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TerminalToCode");
+                OnTerminalToCodeChanged();
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
 
         #endregion
     
@@ -2999,10 +3128,12 @@ namespace ZeroStock.Entities
         /// Create a new StockModifySummary object.
         /// </summary>
         /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
-        public static StockModifySummary CreateStockModifySummary(global::System.Int32 productMasterCode)
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        public static StockModifySummary CreateStockModifySummary(global::System.Int32 productMasterCode, global::System.Int32 terminalToCode)
         {
             StockModifySummary stockModifySummary = new StockModifySummary();
             stockModifySummary.ProductMasterCode = productMasterCode;
+            stockModifySummary.TerminalToCode = terminalToCode;
             return stockModifySummary;
         }
 
@@ -3131,6 +3262,33 @@ namespace ZeroStock.Entities
         private Nullable<global::System.Int32> _ProductCount;
         partial void OnProductCountChanging(Nullable<global::System.Int32> value);
         partial void OnProductCountChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                if (_TerminalToCode != value)
+                {
+                    OnTerminalToCodeChanging(value);
+                    ReportPropertyChanging("TerminalToCode");
+                    _TerminalToCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalToCode");
+                    OnTerminalToCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
 
         #endregion
     
@@ -3150,10 +3308,12 @@ namespace ZeroStock.Entities
         /// Create a new StockSummary object.
         /// </summary>
         /// <param name="productMasterCode">Initial value of the ProductMasterCode property.</param>
-        public static StockSummary CreateStockSummary(global::System.Int32 productMasterCode)
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        public static StockSummary CreateStockSummary(global::System.Int32 productMasterCode, global::System.Int32 terminalToCode)
         {
             StockSummary stockSummary = new StockSummary();
             stockSummary.ProductMasterCode = productMasterCode;
+            stockSummary.TerminalToCode = terminalToCode;
             return stockSummary;
         }
 
@@ -3282,6 +3442,33 @@ namespace ZeroStock.Entities
         private Nullable<global::System.Int32> _ProductCount;
         partial void OnProductCountChanging(Nullable<global::System.Int32> value);
         partial void OnProductCountChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                if (_TerminalToCode != value)
+                {
+                    OnTerminalToCodeChanging(value);
+                    ReportPropertyChanging("TerminalToCode");
+                    _TerminalToCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalToCode");
+                    OnTerminalToCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
 
         #endregion
     
@@ -3977,6 +4164,114 @@ namespace ZeroStock.Entities
         }
 
         #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="TerminalTo")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class TerminalTo : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new TerminalTo object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        public static TerminalTo CreateTerminalTo(global::System.Int32 code, global::System.String name)
+        {
+            TerminalTo terminalTo = new TerminalTo();
+            terminalTo.Code = code;
+            terminalTo.Name = name;
+            return terminalTo;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                if (_Name != value)
+                {
+                    OnNameChanging(value);
+                    ReportPropertyChanging("Name");
+                    _Name = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Name");
+                    OnNameChanged();
+                }
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
+
+        #endregion
+    
     }
     
     /// <summary>

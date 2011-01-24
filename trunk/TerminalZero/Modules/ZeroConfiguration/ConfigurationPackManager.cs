@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using ZeroCommonClasses.Interfaces;
-using ZeroCommonClasses.PackClasses;
+using ZeroCommonClasses.Pack;
 using ZeroConfiguration.Entities;
 
 namespace ZeroConfiguration

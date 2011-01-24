@@ -16,9 +16,24 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <ComboBox x:Name="supplierBox" Grid.Row="0" HorizontalAlignment="Left" Margin="3" Grid.Column="1" Width="200" TextSearch.TextPath="Name1" SelectionChanged="supplierBox_SelectionChanged">
+            <Label Content="Terminal:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+            <ComboBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedValuePath="Code"
+                      Margin="3" Name="cbTerminals" SelectionChanged="cbTerminals_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=Code}" Height="20"/>
+                            <TextBlock Text=" - " Height="20"/>
+                            <TextBlock Text="{Binding Path=Description}" Height="20"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label Content="Proveedor:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+            <ComboBox x:Name="supplierBox" Grid.Row="1" HorizontalAlignment="Left" Margin="3" Grid.Column="1" Width="200" TextSearch.TextPath="Name1" SelectionChanged="supplierBox_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="itemBack" 
@@ -35,10 +50,8 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-
-            <Label Content="Date:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
-            <DatePicker Grid.Column="1" Grid.Row="1" Height="25" HorizontalAlignment="Left" Margin="3" Name="dateDatePicker" SelectedDate="{Binding Path=Date, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" Width="115" />
-            <Label Content="Proveedor:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+            <Label Content="Fecha:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+            <DatePicker Grid.Column="1" Grid.Row="2" Height="25" HorizontalAlignment="Left" Margin="3" Name="dateDatePicker" SelectedDate="{Binding Path=Date, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" Width="115" />
             <Label Content="Nota:" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Top" />
             <TextBox Grid.Column="1" Grid.Row="3" Height="80" HorizontalAlignment="Stretch" Margin="3,3,0,3" AcceptsReturn="True" Name="noteTextBox" Text="{Binding Path=Note, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"/>
         </Grid>

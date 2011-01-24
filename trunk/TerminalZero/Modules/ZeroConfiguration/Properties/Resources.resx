@@ -130,8 +130,7 @@
     <value>El nombre no concuerda con el existente en la central.</value>
   </data>
   <data name="DeactivatedTerminal" xml:space="preserve">
-    <value>
-La Terminal fue desactivada para realizar esta acción.</value>
+    <value>La Terminal fue desactivada para realizar esta acción.</value>
   </data>
   <data name="CannotExecuteAction" xml:space="preserve">
     <value>No se ha podido realizar la acción deseada</value>
@@ -182,25 +181,25 @@ La Terminal fue desactivada para realizar esta acción.</value>
   <data name="SyncEveryFormat" xml:space="preserve">
     <value>Sincronizando cada {0} minutos</value>
   </data>
-	<data name="MsgVerifyInsertedInfo">
-		<value xml:space="preserve">Verifique los datos ingresados por favor!</value>
-	</data>
-	<data name="Information">
-		<value xml:space="preserve">Información</value>
-	</data>
-	<data name="MsgPasswordSuccessfullyModificated">
-		<value xml:space="preserve">La contraseña fue modificada exitosamente!</value>
-	</data>
-	<data name="LogIn">
-		<value xml:space="preserve">Log In</value>
-	</data>
-	<data name="ChangePassword">
-		<value xml:space="preserve">Cambiar Contraseña</value>
-	</data>
-	<data name="NewUser">
-		<value xml:space="preserve">Nuevo Usuario</value>
-	</data>
-	<data name="EditUser">
-		<value xml:space="preserve">Editar Usuario</value>
-	</data>
+  <data name="MsgVerifyInsertedInfo" xml:space="preserve">
+    <value>Verifique los datos ingresados por favor!</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Información</value>
+  </data>
+  <data name="MsgPasswordSuccessfullyModificated" xml:space="preserve">
+    <value>La contraseña fue modificada exitosamente!</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Cambiar Contraseña</value>
+  </data>
+  <data name="NewUser" xml:space="preserve">
+    <value>Nuevo Usuario</value>
+  </data>
+  <data name="EditUser" xml:space="preserve">
+    <value>Editar Usuario</value>
+  </data>
 </root>

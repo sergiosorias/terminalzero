@@ -7,7 +7,8 @@
 		SCS.ProductMasterCode,
 		SCS.NetWeight - ISNULL(SMS.NetWeight,0) as NetWeight,
 		SCS.QuantityKG - ISNULL(SMS.QuantityKG,0) as QuantityKG, 
-		SCS.ProductCount - ISNULL(SMS.ProductCount,0) as ProductCount
+		SCS.ProductCount - ISNULL(SMS.ProductCount,0) as ProductCount,
+		SCS.TerminalToCode
 	FROM 
 		data.StockCreateSummary SCS
 	LEFT JOIN

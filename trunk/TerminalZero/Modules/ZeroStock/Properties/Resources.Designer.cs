@@ -61,15 +61,6 @@ namespace ZeroStock.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tiene que seleccionar un documento para poder continuar!.
-        /// </summary>
-        internal static string DeliveryNoteMandatoryMsg {
-            get {
-                return ResourceManager.GetString("DeliveryNoteMandatoryMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Selección de remitos.
         /// </summary>
         internal static string DeliveryNoteSelection {
@@ -93,6 +84,42 @@ namespace ZeroStock.Properties {
         internal static string Important {
             get {
                 return ResourceManager.GetString("Important", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tiene que seleccionar un documento para poder continuar!.
+        /// </summary>
+        internal static string MsgDeliveryNoteMandatory {
+            get {
+                return ResourceManager.GetString("MsgDeliveryNoteMandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Es obligatorio seleccionar una terminal destino..
+        /// </summary>
+        internal static string MsgMandatoryTerminal {
+            get {
+                return ResourceManager.GetString("MsgMandatoryTerminal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor seleccione un proveedor..
+        /// </summary>
+        internal static string MsgSelectSupplierPlease {
+            get {
+                return ResourceManager.GetString("MsgSelectSupplierPlease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor seleccione una terminal..
+        /// </summary>
+        internal static string MsgSelectTerminalPlease {
+            get {
+                return ResourceManager.GetString("MsgSelectTerminalPlease", resourceCulture);
             }
         }
         

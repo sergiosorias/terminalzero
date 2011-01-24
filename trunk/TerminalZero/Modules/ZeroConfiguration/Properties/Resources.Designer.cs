@@ -97,8 +97,7 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///La Terminal fue desactivada para realizar esta acción..
+        ///   Looks up a localized string similar to La Terminal fue desactivada para realizar esta acción..
         /// </summary>
         internal static string DeactivatedTerminal {
             get {
