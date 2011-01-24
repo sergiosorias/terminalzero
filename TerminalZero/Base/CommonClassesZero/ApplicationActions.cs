@@ -1,5 +1,5 @@
 ﻿
-namespace ZeroCommonClasses.GlobalObjects
+namespace ZeroCommonClasses
 {
     public class ApplicationActions
     {

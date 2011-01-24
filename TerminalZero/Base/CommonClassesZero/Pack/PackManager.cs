@@ -8,18 +8,20 @@ using ICSharpCode.SharpZipLib.Zip;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
 
-namespace ZeroCommonClasses.PackClasses
+namespace ZeroCommonClasses.Pack
 {
     public abstract class PackManager : IDisposable
     {
         public const string kPackExtention = ".zpack";
-        public const string kPackNameFromat = "{0}_{1}_{2}_{3}" + kPackExtention;
+        public const string kPackNameFromat = "{0}_{1}_{2}" + kPackExtention;
         
         [Flags]
-        public enum PackFlags
+        public enum PackStatus
         {
-            MasterData = 2,
-            Upgrade = 4,
+            Starting = 0,
+            InProgress = 1,
+            Imported = 2,
+            Error = 3,
         }
 
         private enum Mode
@@ -51,6 +53,22 @@ namespace ZeroCommonClasses.PackClasses
 
             return moduleCode;
 
+        }
+
+        public static int[] GetTerminalDestinationList(Entities.Pack aPack)
+        {
+            List<int> ret = new List<int>();
+            string[] parts = aPack.Name.Split('_');
+            if (parts.Length > 1)
+            {
+                string[] terminals = parts[1].ToUpper().Split("T".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                foreach (string terminal in terminals)
+                {
+                    ret.Add(int.Parse(terminal));
+                }
+            }
+
+            return ret.ToArray();
         }
 
         #endregion
@@ -187,12 +205,17 @@ namespace ZeroCommonClasses.PackClasses
         {
             var events = new FastZipEvents();
             var zip = new FastZip(events);
-            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, PackInfo.DestinationTerminalCode, PackInfo.Stamp.ToString("yyyyMMddhhmmss"))), WorkingDirectory, true, "");
+            string terminals = "";
+            foreach (var terminal in PackInfo.TerminalToCodes)
+            {
+                terminals += "T" + terminal;
+            }
+            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, terminals, PackInfo.Stamp.ToString("yyyyMMddhhmmss"))), WorkingDirectory, true, "");
         }
 
         private void ImportProcess()
         {
-            Pack aPack = null;
+            Entities.Pack aPack = null;
             CommonEntities dbent = null;
             var args = new PackEventArgs();
             try
@@ -202,14 +225,14 @@ namespace ZeroCommonClasses.PackClasses
                 aPack = InsertPackInDb(ImportPackPath, dbent);
                 args.WorkingDirectory = WorkingDirectory;
 
-                UpdatePackStatus(aPack, dbent, 0, null);
+                UpdatePackStatus(aPack, dbent, PackStatus.Starting, null);
                 args.Pack = aPack;
 
                 ExtractZip(ImportPackPath);
 
-                UpdatePackStatus(aPack, dbent, 1, null);
+                UpdatePackStatus(aPack, dbent, PackStatus.InProgress, null);
                 OnImporting(args);
-                UpdatePackStatus(aPack, dbent, 2, null);
+                UpdatePackStatus(aPack, dbent, PackStatus.Imported, null);
                 OnImported(args);
 
                 Clean();
@@ -218,7 +241,7 @@ namespace ZeroCommonClasses.PackClasses
             catch (Exception ex)
             {
                 if (dbent != null && aPack != null)
-                    UpdatePackStatus(aPack, dbent, 3, ex.ToString());
+                    UpdatePackStatus(aPack, dbent, PackStatus.Error, ex.ToString());
 
                 throw;
             }
@@ -231,22 +254,22 @@ namespace ZeroCommonClasses.PackClasses
             }
         }
 
-        private static void UpdatePackStatus(Pack aPack, CommonEntities dbent, int newStatus, string message)
+        private static void UpdatePackStatus(Entities.Pack aPack, CommonEntities dbent, PackStatus newStatus, string message)
         {
             aPack.Stamp = DateTime.Now;
-            aPack.PackStatusCode = newStatus;
+            aPack.PackStatusCode = (int)newStatus;
             aPack.Result = message;
             dbent.SaveChanges();
         }
 
-        private Pack InsertPackInDb(string packFilePath, CommonEntities dbent)
+        private Entities.Pack InsertPackInDb(string packFilePath, CommonEntities dbent)
         {
 
             string name = Path.GetFileName(packFilePath);
-            Pack P = dbent.Packs.FirstOrDefault(p => p.Name == name);
-            if (default(Pack) == P)
+            Entities.Pack P = dbent.Packs.FirstOrDefault(p => p.Name == name);
+            if (default(Entities.Pack) == P)
             {
-                P = Pack.CreatePack(0, true);
+                P = Entities.Pack.CreatePack(0, true);
                 P.Name = name;
                 P.Data = File.ReadAllBytes(packFilePath);
                 if (!string.IsNullOrWhiteSpace(ConnectionID))

@@ -1,21 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ZeroCommonClasses.PackClasses
+namespace ZeroCommonClasses.Pack
 {
     [DataContract]
     public abstract class PackInfoBase
     {
         protected PackInfoBase()
         {
-            DestinationTerminalCode = -1;
+            TerminalToCodes = new List<int>();
         }
 
         [DataMember]
         public int ModuleCode { get; set; }
 
         [DataMember]
-        public int DestinationTerminalCode { get; set; }
+        public List<int> TerminalToCodes { get; set; }
 
         [IgnoreDataMember]
         public string Path { get; set; }
