@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using TZeroHost.Handlers;
+using TZeroHost.Helpers;
+using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Files;
 using ZeroCommonClasses.Interfaces.Services;
-using TZeroHost.Handlers;
 
 namespace TZeroHost.Services
 {
@@ -12,7 +18,7 @@ namespace TZeroHost.Services
 
         static FileTransfer()
         {
-            Helpers.AppDirectories.Init();
+            AppDirectories.Init();
         }
 
         private void OnPackReceived(string fileName, string connectionId)
@@ -25,47 +31,47 @@ namespace TZeroHost.Services
 
         public RemoteFileInfo DownloadFile(ServerFileInfo request)
         {
-            System.IO.Stream stream = null;
+            Stream stream = null;
             long length = 0;
             // get some info about the input file
             if (!request.IsFromDB)
             {
-                string filePath = System.IO.Path.Combine(Helpers.AppDirectories.DownloadFolder, request.FileName);
-                System.IO.FileInfo fileInfo = new System.IO.FileInfo(filePath);
+                string filePath = Path.Combine(AppDirectories.DownloadFolder, request.FileName);
+                var fileInfo = new FileInfo(filePath);
                 length = fileInfo.Length;
                 // report start
-                System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Sending stream " + request.FileName + " to client");
-                System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose,"Size " + fileInfo.Length);
+                Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Sending stream " + request.FileName + " to client");
+                Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose,"Size " + fileInfo.Length);
 
                 // check if exists
                 if (!fileInfo.Exists)
                 {
-                    System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceError, "File not found");
-                    throw new System.IO.FileNotFoundException("File not found", request.FileName);
+                    Trace.WriteLineIf(ContextBuilder.LogLevel.TraceError, "File not found");
+                    throw new FileNotFoundException("File not found", request.FileName);
                 }
 
                 // open stream
-                stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             }
             else
             {
-                using (ZeroCommonClasses.Entities.CommonEntities ent = new ZeroCommonClasses.Entities.CommonEntities())
+                using (var ent = new CommonEntities())
                 {
 
-                    ZeroCommonClasses.Entities.Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);
+                    Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);
                     if (P != null)
                     {
-                        System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client");
-                        stream = new System.IO.MemoryStream(P.Data);
+                        Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client");
+                        stream = new MemoryStream(P.Data);
                     }
                     else
                     {
-                        System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceWarning, "Pack " + request.Code + " Not found");
+                        Trace.WriteLineIf(ContextBuilder.LogLevel.TraceWarning, "Pack " + request.Code + " Not found");
                     }
                 }
             }
             // return result
-            RemoteFileInfo result = new RemoteFileInfo();
+            var result = new RemoteFileInfo();
             result.FileName = request.FileName;
             result.Length = length;
             result.FileByteStream = stream;
@@ -78,18 +84,18 @@ namespace TZeroHost.Services
         {
             // report start
 
-            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose,"Start uploading " + request.FileName, "Verbose");
-            System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Size " + request.Length, "Verbose");
+            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose,"Start uploading " + request.FileName, "Verbose");
+            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Size " + request.Length, "Verbose");
 
-            string filePath = System.IO.Path.Combine(Helpers.AppDirectories.UploadFolder, System.IO.Path.GetFileName(request.FileName));
-            if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
+            string filePath = Path.Combine(AppDirectories.UploadFolder, Path.GetFileName(request.FileName));
+            if (File.Exists(filePath)) File.Delete(filePath);
 
             ServerFileInfo ret = null;
 
             int chunkSize = 1024 * 4;
-            byte[] buffer = new byte[chunkSize];
+            var buffer = new byte[chunkSize];
 
-            using (System.IO.FileStream writeStream = new System.IO.FileStream(filePath, System.IO.FileMode.CreateNew, System.IO.FileAccess.Write))
+            using (var writeStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write))
             {
                 try
                 {
@@ -104,26 +110,54 @@ namespace TZeroHost.Services
                     } while (true);
 
                     // report end
-                    System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, "Done!", "Verbose");
-                    ret = new ServerFileInfo { FileName = filePath };
+                    Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Done!", "Verbose");
+                    ret = new ServerFileInfo {FileName = filePath};
 
-                    OnPackReceived(filePath,request.ConnectionID);
+                    OnPackReceived(filePath, request.ConnectionID);
 
                     return ret;
                 }
                 catch (Exception exe)
                 {
-                    Console.WriteLine(exe);
-                    throw exe;
+                    Trace.WriteLineIf(ContextBuilder.LogLevel.TraceError, exe);
+                    throw;
                 }
                 finally
                 {
                     writeStream.Close();
                 }
-
-                
             }
+        }
 
+        public string UploadFileSilverlight(string fileName, byte[] fileByteStream)
+        {
+            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Start web uploading " + fileName, "Verbose");
+            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Size " + fileByteStream.Length, "Verbose");
+            string destFileName = Path.GetFileNameWithoutExtension(fileName)+"_"+DateTime.Now.ToString("yyyyMMddhhmmss")+Path.GetExtension(fileName);
+            string filePath = Path.Combine(AppDirectories.UploadFolder, destFileName);
+            if (File.Exists(filePath)) File.Delete(filePath);
+
+            using (var writeStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write))
+            {
+                try
+                {
+                    writeStream.Write(fileByteStream, 0, fileByteStream.Length);
+
+                    // report end
+                    Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Done!", "Verbose");
+                    OnPackReceived(filePath, null);
+                    return destFileName;
+                }
+                catch (Exception exe)
+                {
+                    Trace.WriteLineIf(ContextBuilder.LogLevel.TraceError, exe);
+                }
+                finally
+                {
+                    writeStream.Close();
+                }
+                return "";
+            }
         }
     }
 }

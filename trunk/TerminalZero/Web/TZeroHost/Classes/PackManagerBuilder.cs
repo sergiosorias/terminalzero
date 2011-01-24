@@ -1,5 +1,7 @@
 ﻿using System;
-using ZeroCommonClasses.PackClasses;
+using ZeroCommonClasses;
+using ZeroCommonClasses.Interfaces;
+using ZeroCommonClasses.Pack;
 using ZeroMasterData;
 using System.IO;
 
@@ -7,6 +9,51 @@ namespace TZeroHost.Classes
 {
     public static class PackManagerBuilder
     {
+        private class ServerTerminal : ITerminal
+        {
+            private ServerTerminal()
+            {
+            }
+
+            private static ServerTerminal _Instance;
+            public static ServerTerminal Instance
+            {
+                get { return _Instance ?? (_Instance = new ServerTerminal()); }
+            }
+
+            
+            #region Implementation of ITerminal
+
+            private int _terminalCode = -1;
+
+            private string _terminalName = "WebServer";
+
+            private ZeroSession _session;
+
+            private ITerminalManager _manager;
+
+            public int TerminalCode
+            {
+                get { return _terminalCode; }
+            }
+
+            public string TerminalName
+            {
+                get { return _terminalName; }
+            }
+
+            public ZeroSession Session
+            {
+                get { return _session; }
+            }
+
+            public ITerminalManager Manager
+            {
+                get { return _manager; }
+            }
+
+            #endregion
+        }
         public static PackManager GetManager(string packPath)
         {
             if (packPath == null) throw new ArgumentNullException("packPath");
@@ -24,13 +71,13 @@ namespace TZeroHost.Classes
                 case 2:
                     break;
                 case 3:
-                    manager = new MasterDataPackManager(null);
+                    manager = new MasterDataPackManager(ServerTerminal.Instance);
                     break;
                 case 4:
-                    manager = new ZeroStock.ZeroStockPackMaganer(null);
+                    manager = new ZeroStock.ZeroStockPackMaganer(ServerTerminal.Instance);
                     break;
                 case 5:
-                    manager = new ZeroUpdateManager.UpdateManagerPackManager(null);
+                    manager = new ZeroUpdateManager.UpdateManagerPackManager(ServerTerminal.Instance);
                     break;
                 default:
                     manager = PackManager.GetDefaultManager();
