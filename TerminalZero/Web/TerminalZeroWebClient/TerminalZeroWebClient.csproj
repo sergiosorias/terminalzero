@@ -110,6 +110,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.datasvcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\FileTranferReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ServiceHelperReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,6 +206,22 @@
       <Generator>DataServiceClientGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\FileTranferReference\FileTransfer.wsdl" />
+    <None Include="Service References\FileTranferReference\FileTransfer.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileTranferReference\FileTransfer1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileTranferReference\FileTransfer2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FileTranferReference\TerminalZeroWebClient.FileTranferReference.RemoteFileInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FileTranferReference\TerminalZeroWebClient.FileTranferReference.ServerFileInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ServiceHelperReference\configuration91.svcinfo" />
     <None Include="Service References\ServiceHelperReference\configuration.svcinfo" />
     <None Include="Service References\ServiceHelperReference\Reference.svcmap">
@@ -208,6 +229,13 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\ServiceHelperReference\ServiceHelper1.disco" />
+    <None Include="Service References\FileTranferReference\FileTransfer.disco" />
+    <None Include="Service References\FileTranferReference\configuration91.svcinfo" />
+    <None Include="Service References\FileTranferReference\configuration.svcinfo" />
+    <None Include="Service References\FileTranferReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\DataService\service.edmx" />
     <None Include="Service References\ServiceHelperReference\ServiceHelper1.wsdl" />
@@ -260,6 +288,7 @@
     </ServiceReferenceMetadataStorage>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\FileTranferReference\" />
     <WCFMetadataStorage Include="Service References\ServiceHelperReference\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

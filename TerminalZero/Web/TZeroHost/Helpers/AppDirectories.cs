@@ -14,10 +14,10 @@ namespace TZeroHost.Helpers
 
         public static void Init()
         {
-            _UploadFolder = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath ,"Downloads");
+            _UploadFolder = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Upload");
             if (!System.IO.Directory.Exists(UploadFolder)) System.IO.Directory.CreateDirectory(UploadFolder);
 
-            _DownloadFolder = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath ,"Upload");
+            _DownloadFolder = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "Downloads");
             if (!System.IO.Directory.Exists(_DownloadFolder)) System.IO.Directory.CreateDirectory(_DownloadFolder);
 
         }

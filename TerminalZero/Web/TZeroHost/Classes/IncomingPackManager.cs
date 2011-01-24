@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using ZeroCommonClasses.Entities;
-using ZeroCommonClasses.PackClasses;
+using ZeroCommonClasses.Pack;
 using ZeroConfiguration.Entities;
 using ThreadState = System.Threading.ThreadState;
 
@@ -51,7 +52,7 @@ namespace TZeroHost.Classes
                 {
                     if (packManager != null)
                     {
-                        Trace.Write(string.Format("Starting import: ConnID = {0}", data.ConnId), "");
+                        Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceInfo, string.Format("Starting import: ConnID = {0}", data.ConnId), "Information");
                         packManager.ConnectionID = data.ConnId;
                         packManager.Imported += a_Imported;
                         packManager.Error += a_Error;
@@ -61,7 +62,7 @@ namespace TZeroHost.Classes
                         }
                         catch (Exception ex)
                         {
-                            Trace.Write(string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnId, ex), "EXCEPTION");
+                            Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceError, string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnId, ex), "EXCEPTION");
                         }
                         finally
                         {
@@ -85,25 +86,55 @@ namespace TZeroHost.Classes
 
         private void a_Imported(object sender, PackEventArgs e)
         {
-            Trace.Write(string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}", e.ConnectionID, e.Pack.Code, e.PackInfo != null ? e.PackInfo.ModuleCode : -1, e.Pack.PackStatusCode), "Information");
+            Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceInfo,
+                string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}",
+                              e.ConnectionID, e.Pack.Code, e.PackInfo != null ? e.PackInfo.ModuleCode : -1,
+                              (PackManager.PackStatus)e.Pack.PackStatusCode), "Information");
 
-            if (e.Pack.PackStatusCode == 2 && 
-                    (
-                    (e.Pack.IsMasterData.HasValue && e.Pack.IsMasterData.Value)
-                    || (e.Pack.IsUpgrade.HasValue && e.Pack.IsUpgrade.Value)
-                    )
-                )
+            if (e.Pack.PackStatusCode == (int)PackManager.PackStatus.Imported)
             {
-                using (var packEnt = new CommonEntities())
+
+                if ((e.Pack.IsMasterData.GetValueOrDefault()) || (e.Pack.IsUpgrade.GetValueOrDefault()))
                 {
-                    using (var ent = new ConfigurationEntities())
+                    using (var packEnt = new CommonEntities())
                     {
-                        foreach (var item in ent.Terminals)
+                        using (var ent = new ConfigurationEntities())
                         {
-                            packEnt.PackPendings.AddObject(PackPending.CreatePackPending(e.Pack.Code, item.Code));
+                            foreach (var item in ent.Terminals)
+                            {
+                                Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", item.Code), "Verbose");
+                                PackPending pp = PackPending.CreatePackPending(e.Pack.Code, item.Code);
+                                pp.Stamp = DateTime.Now;
+                                packEnt.PackPendings.AddObject(pp);
+                            }
+                        }
+                        packEnt.SaveChanges();
+                    }
+                }
+                else
+                {
+                    int[] terminals = PackManager.GetTerminalDestinationList(e.Pack);
+                    if (terminals.Length > 0)
+                    {
+                        using (var packEnt = new CommonEntities())
+                        {
+                            using (var ent = new ConfigurationEntities())
+                            {
+                                foreach (int terminal in terminals)
+                                {
+                                    if (ent.Terminals.FirstOrDefault(t => t.Active && t.Code == terminal) != null)
+                                    {
+                                        Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", terminal), "Verbose");
+                                        PackPending pp = PackPending.CreatePackPending(e.Pack.Code, terminal);
+                                        pp.Stamp = DateTime.Now;
+                                        packEnt.PackPendings.AddObject(pp);
+                                    }
+
+                                }
+                            }
+                            packEnt.SaveChanges();
                         }
                     }
-                    packEnt.SaveChanges();
                 }
             }
         }

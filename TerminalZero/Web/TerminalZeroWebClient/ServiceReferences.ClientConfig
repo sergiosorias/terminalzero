@@ -7,12 +7,19 @@
                     <textMessageEncoding messageVersion="Default" writeEncoding="utf-8" />
                     <httpTransport maxReceivedMessageSize="2147483647" maxBufferSize="2147483647" />
                 </binding>
+                <binding name="WSHttpBinding_IFileTransfer">
+                    <textMessageEncoding messageVersion="Default" writeEncoding="utf-8" />
+                    <httpTransport maxReceivedMessageSize="2147483647" maxBufferSize="2147483647" />
+                </binding>
             </customBinding>
         </bindings>
         <client>
             <endpoint address="http://sebas-note/TZeroHost/services/ServiceHelper.svc"
                 binding="customBinding" bindingConfiguration="WSHttpBinding_ServiceHelper"
                 contract="ServiceHelperReference.ServiceHelper" name="WSHttpBinding_ServiceHelper" />
+            <endpoint address="http://sebas-note/TZeroHost/Services/FileTransfer.svc"
+                binding="customBinding" bindingConfiguration="WSHttpBinding_IFileTransfer"
+                contract="FileTranferReference.IFileTransfer" name="WSHttpBinding_IFileTransfer" />
         </client>
     </system.serviceModel>
 </configuration>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d431860c-9dde-4bc0-a6c8-631e365a1b02" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://sebas-note/TZeroHost/Services/FileTransfer.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="FileTransfer.xsd" MetadataType="Schema" ID="98b03f6b-d4f1-41c2-88a0-b28df9d5214c" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/FileTransfer.svc?xsd=xsd1" />
+    <MetadataFile FileName="FileTransfer1.xsd" MetadataType="Schema" ID="8c7c2836-9bcd-405c-9dc3-d8c3c3f7442f" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/FileTransfer.svc?xsd=xsd0" />
+    <MetadataFile FileName="FileTransfer.disco" MetadataType="Disco" ID="5f264518-9283-4716-9364-4f675844a01c" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/FileTransfer.svc?disco" />
+    <MetadataFile FileName="FileTransfer.wsdl" MetadataType="Wsdl" ID="dd93c72a-b2e0-4e3e-9901-1821dbc82633" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/FileTransfer.svc?wsdl" />
+    <MetadataFile FileName="FileTransfer2.xsd" MetadataType="Schema" ID="92fbb36f-db1d-4667-92eb-1c0d68d97ae2" SourceId="1" SourceUrl="http://sebas-note/TZeroHost/Services/FileTransfer.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

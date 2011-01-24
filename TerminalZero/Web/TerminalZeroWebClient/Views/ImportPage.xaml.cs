@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Windows.Navigation;
-using System.IO;
 using System.Windows.Data;
+using System.Windows.Navigation;
+using TerminalZeroWebClient.FileTranferReference;
+using TerminalZeroWebClient.ServiceHelperReference;
+using ZeroGUI;
 
 namespace TerminalZeroWebClient.Views
 {
     public partial class ImportPage : Page
     {
-        ServiceHelperReference.ServiceHelperClient client;
-
+        ServiceHelperClient client;
+        FileTransferClient _uploadClient = new FileTransferClient();
         public ImportPage()
         {
             InitializeComponent();
@@ -27,17 +22,18 @@ namespace TerminalZeroWebClient.Views
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            client = new ServiceHelperReference.ServiceHelperClient();
-            client.GetPackCompleted += new EventHandler<ServiceHelperReference.GetPackCompletedEventArgs>(client_GetPackCompleted);
+            client = new ServiceHelperClient();
+            client.GetPackCompleted += client_GetPackCompleted;
+            _uploadClient.UploadFileSilverlightCompleted += _uploadClient_UploadFileSilverlightCompleted;
             startDate.SelectedDate = DateTime.Now.Date;
             endDate.SelectedDate = DateTime.Now.AddDays(1).Date;
         }
 
-        private void client_GetPackCompleted(object sender, ServiceHelperReference.GetPackCompletedEventArgs e)
+        private void client_GetPackCompleted(object sender, GetPackCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke(() =>
             {
-                PagedCollectionView taskListView = new PagedCollectionView(e.Result);
+                var taskListView = new PagedCollectionView(e.Result);
                 if (taskListView.CanGroup)
                 {
                     
@@ -47,14 +43,15 @@ namespace TerminalZeroWebClient.Views
                 packDataGrid.ItemsSource = taskListView;
                 if (!string.IsNullOrWhiteSpace(searchBox.txtSearchCriteria.Text))
                 {
-                    searchBox_Search(null, new ZeroGUI.SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
+                    searchBox_Search(null, new SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
                 }
             });
         }
 
         private void btnUpload_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofdlg = new OpenFileDialog();
+            var ofdlg = new OpenFileDialog();
+            fileProgress.Value = 0;
             ofdlg.Filter = "Zip File (.zip)|*.zip";
             ofdlg.Multiselect = false;
             bool? res = ofdlg.ShowDialog();
@@ -67,23 +64,30 @@ namespace TerminalZeroWebClient.Views
 
         private void UploadFile(FileInfo fileName, Stream data)
         {
-            UriBuilder ub = new UriBuilder(new Uri(Application.Current.Host.Source, "../filereceiver.ashx"));
-            ub.Query = string.Format("filename={0}", fileName.Name);
+            //UriBuilder ub = new UriBuilder(new Uri(Application.Current.Host.Source, "../filereceiver.ashx"));
+            //ub.Query = string.Format("filename={0}", fileName.Name);
 
-            WebClient c = new WebClient();
-            c.OpenWriteCompleted += (sender, e) =>
-            {
-                PushData(fileName.Length, data, e.Result);
-                e.Result.Close();
-                data.Close();
-            };
-            c.OpenWriteAsync(ub.Uri);
-
+            //WebClient c = new WebClient();
+            //c.OpenWriteCompleted += (sender, e) =>
+            //{
+            //    PushData(fileName.Length, data, e.Result);
+            //    e.Result.Close();
+            //    data.Close();
+            //};
+            //c.OpenWriteAsync(ub.Uri);
+            //OperationContext.Current.OutgoingMessageHeaders
+            BinaryReader br = new BinaryReader(data);
+            _uploadClient.UploadFileSilverlightAsync(fileName.Name, br.ReadBytes((int)fileName.Length));
+        }
+        
+        private void _uploadClient_UploadFileSilverlightCompleted(object sender, UploadFileSilverlightCompletedEventArgs e)
+        {
+            fileProgress.Value = 100;
         }
 
         private void PushData(long totalLength, Stream input, Stream output)
         {
-            byte[] buffer = new byte[4096];
+            var buffer = new byte[4096];
             int bytesRead;
             long total = 0;
             while ((bytesRead = input.Read(buffer, 0, buffer.Length)) != 0)
@@ -100,9 +104,9 @@ namespace TerminalZeroWebClient.Views
             client.GetPackAsync(startDate.SelectedDate.GetValueOrDefault(), endDate.SelectedDate.GetValueOrDefault());
         }
 
-        private void searchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
+        private void searchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
-            PagedCollectionView taskListView = packDataGrid.ItemsSource as PagedCollectionView;
+            var taskListView = packDataGrid.ItemsSource as PagedCollectionView;
 
             if (taskListView != null)
             {
@@ -110,7 +114,7 @@ namespace TerminalZeroWebClient.Views
                 {
                     taskListView.Filter = new Predicate<object>(i =>
                     {
-                        ServiceHelperReference.Pack entry = i as ServiceHelperReference.Pack;
+                        var entry = i as Pack;
                         return (entry != null && entry.Name.ToUpper().Contains(e.Criteria.ToUpper())
                             || (entry.Result != null && entry.Result.ToUpper().Contains(e.Criteria.ToUpper())));
                     });
@@ -122,13 +126,13 @@ namespace TerminalZeroWebClient.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
+            var sfd = new SaveFileDialog();
             sfd.Filter = "Zip File (.zip)|*.zip";
             if (sfd.ShowDialog().GetValueOrDefault())
             {
                 using (Stream fs = sfd.OpenFile())
                 {
-                    byte[] file = (byte[])((Button)sender).DataContext;
+                    var file = (byte[])((Button)sender).DataContext;
                     fs.Write(file, 0, file.Length);
                 }
             }
