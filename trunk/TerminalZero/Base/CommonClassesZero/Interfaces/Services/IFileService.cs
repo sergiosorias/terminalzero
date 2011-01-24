@@ -11,5 +11,8 @@ namespace ZeroCommonClasses.Interfaces.Services
 
         [OperationContract]
         ServerFileInfo UploadFile(RemoteFileInfo request);
+
+        [OperationContract]
+        string UploadFileSilverlight(string fileName, byte[] fileByteStream);
     }
 }

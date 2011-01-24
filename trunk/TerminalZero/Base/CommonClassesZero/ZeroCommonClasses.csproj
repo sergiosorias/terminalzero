@@ -61,14 +61,14 @@
       <DependentUpon>DBCommonTables.edmx</DependentUpon>
     </Compile>
     <Compile Include="GlobalObjects\ActionRequest.cs" />
-    <Compile Include="GlobalObjects\ApplicationAction.cs" />
+    <Compile Include="ApplicationActions.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
     <Compile Include="Interfaces\ITerminalManager.cs" />
-    <Compile Include="PackClasses\ExportEntitiesPackInfo.cs" />
-    <Compile Include="PackClasses\PackInfoBase.cs" />
+    <Compile Include="Pack\ExportEntitiesPackInfo.cs" />
+    <Compile Include="Pack\PackInfoBase.cs" />
     <Compile Include="Interfaces\IZeroPage.cs" />
-    <Compile Include="PackClasses\PackProcessesHandlers.cs" />
+    <Compile Include="Pack\PackProcessesHandlers.cs" />
     <Compile Include="GlobalObjects\RemoteFilesInfo.cs" />
     <Compile Include="GlobalObjects\ServerFileInfo.cs" />
     <Compile Include="Helpers\IEnumerableExtentions.cs" />
@@ -86,7 +86,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="GlobalObjects\ZeroActionParameter.cs" />
-    <Compile Include="PackClasses\PackManager.cs" />
+    <Compile Include="Pack\PackManager.cs" />
     <Compile Include="GlobalObjects\ZeroResponse.cs" />
     <Compile Include="ZeroSession.cs" />
   </ItemGroup>

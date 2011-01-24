@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace ZeroCommonClasses.PackClasses
+namespace ZeroCommonClasses.Pack
 {
     [DataContract]
     public class PackTableInfo
