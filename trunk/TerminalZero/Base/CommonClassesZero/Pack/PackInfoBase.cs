@@ -5,9 +5,9 @@ using System.Runtime.Serialization;
 namespace ZeroCommonClasses.Pack
 {
     [DataContract]
-    public abstract class PackInfoBase
+    public class PackInfoBase
     {
-        protected PackInfoBase()
+        public PackInfoBase()
         {
             TerminalToCodes = new List<int>();
         }

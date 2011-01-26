@@ -13,13 +13,6 @@ namespace ZeroStock.Entities
 
         }
 
-        public enum EntitiesStatus
-        {
-            New = 0,
-            Exported = 1,
-            Imported = 2,
-        }
-
         internal int GetNextStockHeaderCode()
         {
             return StockHeaders.Max(sh => sh.Code) + 1;

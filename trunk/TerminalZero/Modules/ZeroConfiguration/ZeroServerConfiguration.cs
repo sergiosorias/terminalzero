@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
@@ -40,7 +41,7 @@ namespace ZeroConfiguration
         {
             bool ret = true;
             msg = "";
-            System.Diagnostics.Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
+            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
             Terminal T = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == tcode);
             if (T == default(Terminal))
             {
@@ -57,7 +58,7 @@ namespace ZeroConfiguration
                 else
                 {
                     msg = Resources.NewTerminal;
-                    ConfigurationEntities.AddNewTerminal(_currentContext.Context, tcode, tname);
+                    Terminal.AddNewTerminal(_currentContext.Context, tcode, tname);
                 }
             }
             else
@@ -80,7 +81,7 @@ namespace ZeroConfiguration
 
         public string CreateConnection(int terminalCode)
         {
-            Connection cnn = global::ZeroConfiguration.Entities.Connection.CreateConnection(Guid.NewGuid().ToString(), terminalCode, DateTime.Now);
+            Connection cnn = Connection.CreateConnection(Guid.NewGuid().ToString(), terminalCode, DateTime.Now);
             cnn.Terminal = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == terminalCode);
             _currentContext.Context.AddToConnections(cnn);
             _currentContext.Context.SaveChanges();
@@ -130,15 +131,15 @@ namespace ZeroConfiguration
 
         public void InsertModule(int terminalCode, ZeroModule module)
         {
-            ConfigurationEntities.AddNewModule(_currentContext.Context, terminalCode, module.ModuleCode, "", module.Description);
+            Module.AddNewModule(_currentContext.Context, terminalCode, module.ModuleCode, "", module.Description);
         }
 
         public Dictionary<int, int> GetPacksToSend(int terminalCode)
         {
-            Dictionary<int, int> ret = new Dictionary<int, int>();
+            var ret = new Dictionary<int, int>();
             Terminal ter = _currentContext.Context.Terminals.First(t => t.Code == terminalCode);
             
-            using (var ent = new ZeroCommonClasses.Entities.CommonEntities())
+            using (var ent = new CommonEntities())
             {
                 var query = ent.GetPacksToSend(terminalCode);
                 foreach (var item in query)
@@ -175,7 +176,7 @@ namespace ZeroConfiguration
         public void MarkPackReceived(int terminalCode,int packCode)
         {
             PackPending packPending;
-            using (var ent = new ZeroCommonClasses.Entities.CommonEntities())
+            using (var ent = new CommonEntities())
             {
                 packPending = ent.PackPendings.FirstOrDefault(pp => pp.PackCode == packCode && pp.TerminalCode == terminalCode);
                 if (packPending != null)
@@ -240,6 +241,7 @@ namespace ZeroConfiguration
                     tAux.Name = item.Name;
                     tAux.Description = item.Description;
                     tAux.Active = item.Active;
+                    tAux.IsTerminalZero = item.IsTerminalZero;
                 }
             }
 

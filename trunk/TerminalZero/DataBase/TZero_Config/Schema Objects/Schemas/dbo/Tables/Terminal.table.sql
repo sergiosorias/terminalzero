@@ -9,4 +9,5 @@
 	--ExistsMasterData bit NULL,
 	LastSync datetime NULL,
 	IsSyncronized bit NULL,
+	IsTerminalZero bit NOT NULL CONSTRAINT DF_Terminal_IsTerminalZero DEFAULT (0),
 )

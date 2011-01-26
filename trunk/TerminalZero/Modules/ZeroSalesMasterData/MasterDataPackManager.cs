@@ -24,27 +24,14 @@ namespace ZeroMasterData
         {
             foreach (PackTableInfo item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
             {
-                using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
-                {
-                    item.SerializeRows(xmlwriter);
-                    xmlwriter.Close();
-                }
+                item.SerializeRows(e.WorkingDirectory);
             }
         }
 
         void MasterDataPackManager_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsMasterData = true;
-            Type infoType = typeof(ExportEntitiesPackInfo);
-            XmlSerializer reader = new XmlSerializer(infoType);
-            
-            using (XmlReader xmlreader = XmlReader.Create(Path.Combine(e.WorkingDirectory, infoType.ToString())))
-            {
-                e.PackInfo =  (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
-                xmlreader.Close();
-            }
-            
-
+            e.PackInfo = BuildPackInfo<ExportEntitiesPackInfo>();
             ImportEntities(e);
         }
 

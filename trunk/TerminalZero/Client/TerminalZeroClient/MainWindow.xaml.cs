@@ -3,12 +3,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using System.Collections.Generic;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace TerminalZeroClient
 {
@@ -44,7 +48,7 @@ namespace TerminalZeroClient
 
         void Manager_ConfigurationRequired(object sender, EventArgs e)
         {
-            LoadConfigs();
+            Dispatcher.BeginInvoke(new MethodInvoker(() => { LoadConfigs(); }), null);
         }
 
         private void LoadConfigs()

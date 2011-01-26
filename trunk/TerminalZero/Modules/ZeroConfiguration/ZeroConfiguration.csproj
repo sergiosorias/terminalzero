@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationPackManager.cs" />
+    <Compile Include="Entities\Module.cs" />
+    <Compile Include="Entities\Terminal.cs" />
     <Compile Include="Pages\Controls\UserChangePassword.xaml.cs">
       <DependentUpon>UserChangePassword.xaml</DependentUpon>
     </Compile>
@@ -123,6 +125,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Configuration.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="Properties\DataSources\ZeroConfiguration.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

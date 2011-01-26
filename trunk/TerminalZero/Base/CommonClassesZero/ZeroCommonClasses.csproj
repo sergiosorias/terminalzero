@@ -60,10 +60,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBCommonTables.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Entities\EntityStatus.cs" />
     <Compile Include="GlobalObjects\ActionRequest.cs" />
     <Compile Include="ApplicationActions.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
+    <Compile Include="Interfaces\IExportableEntity.cs" />
     <Compile Include="Interfaces\ITerminalManager.cs" />
     <Compile Include="Pack\ExportEntitiesPackInfo.cs" />
     <Compile Include="Pack\PackInfoBase.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Helpers\IEnumerableExtentions.cs" />
     <Compile Include="Interfaces\ILogBuilder.cs" />
     <Compile Include="Interfaces\IProgressNotifier.cs" />
+    <Compile Include="Pack\PackTableInfo.cs" />
     <Compile Include="ZeroModule.cs" />
     <Compile Include="Interfaces\Services\ISyncService.cs" />
     <Compile Include="Interfaces\Services\IFileService.cs" />
