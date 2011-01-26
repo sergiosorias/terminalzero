@@ -31,8 +31,9 @@ namespace ZeroStock.Pages
                 if(_terminal.Manager.ValidateRule("ValidateTerminalZero"))
                 {
                     terminalFilterContent.Visibility = Visibility.Visible;
-                    cbTerminals.ItemsSource = MyEntities.TerminalToes;
-                    cbTerminals.SelectedItem = MyEntities.TerminalToes.First(t => t.Code == _terminal.TerminalCode);
+                    var expter = MyEntities.GetExportTerminal(_terminal.TerminalCode).ToList();
+                    cbTerminals.ItemsSource = expter;
+                    cbTerminals.SelectedItem = expter.First(t => t.Code == _terminal.TerminalCode);
                     cbTerminals.SelectionChanged += cbTerminals_SelectionChanged;
                 }
                 FilterPerTerminal(_terminal.TerminalCode);

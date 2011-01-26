@@ -217,8 +217,8 @@ namespace ZeroStock.Pages
                         prod.MasterCode,
                         prod.ByWeight,
                         prod.Price1 != null ? prod.Price1.Value : 0,
-                        prod.ByWeight ? partQty.Code : 1
-                        );
+                        prod.ByWeight ? partQty.Code : 1,
+                        _header.TerminalToCode);
 
                     _header.StockItems.Add(item);
 

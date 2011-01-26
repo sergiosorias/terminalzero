@@ -13,7 +13,12 @@ namespace ZeroConfiguration.Entities
 
         public static bool IsTerminalZero(ConfigurationEntities configurationEntities, int tCode)
         {
-            return tCode == 0;
+            bool ret = false;
+            
+            Terminal T = configurationEntities.Terminals.First(t => t.Code == tCode);
+            ret = T.IsTerminalZero;
+            
+            return ret;
         }
 
         internal static ModuleStatus GetTerminalModuleStatus(ConfigurationEntities configurationEntities, int terminalCode, ZeroModule c)
@@ -24,7 +29,7 @@ namespace ZeroConfiguration.Entities
             if (M == null)
             {
                 ret = ModuleStatus.NeedsSync;
-                AddNewModule(configurationEntities, terminalCode, c.ModuleCode, "", c.Description);
+                Module.AddNewModule(configurationEntities, terminalCode, c.ModuleCode, "", c.Description);
             }
             else
             {
@@ -64,25 +69,8 @@ namespace ZeroConfiguration.Entities
             }
         }
 
-        internal static Terminal AddNewTerminal(ConfigurationEntities configurationEntities, int terminalCode, string terminalName)
-        {
-            Terminal T = Terminal.CreateTerminal(terminalCode, terminalName, true);
-            T.IsSyncronized = false;
-            configurationEntities.AddToTerminals(T);
-            configurationEntities.SaveChanges();
+        
 
-            return T;
-        }
-
-        internal static Module AddNewModule(ConfigurationEntities configurationEntities, int terminalCode, int moduleCode, string moduleName, string moduleDescription)
-        {
-            Module T = Module.CreateModule(moduleCode, moduleName);
-            T.Description = moduleDescription;
-            T.Terminals.Add(configurationEntities.Terminals.First(t => t.Code == terminalCode));
-            configurationEntities.AddToModules(T);
-            configurationEntities.SaveChanges();
-            return T;
-        }
 
     }
 }

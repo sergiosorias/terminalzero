@@ -39,6 +39,15 @@ namespace ZeroConfiguration
             else
                 Config.Cancel = true;
         }
+
+        public event EventHandler SyncFinished;
+
+        public void OnSyncFinished()
+        {
+            EventHandler handler = SyncFinished;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         public event EventHandler<SyncCountdownTickEventArgs> SyncCountdownTick;
         protected void OnSyncCountdownTick(SyncCountdownTickEventArgs tick)
         {
@@ -79,7 +88,6 @@ namespace ZeroConfiguration
             if (currentTerminal.Manager.ValidateRule("ValidateTerminalZero"))
             {
                 Steps.Add(SendTerminals);
-                Steps.Add(GetTerminals);
                 Steps.Add(SendModules);
             }
             else
@@ -87,6 +95,7 @@ namespace ZeroConfiguration
                 Steps.Add(ValidateCurrentModules);
                 Steps.Add(GetTerminalProperties);
             }
+            Steps.Add(GetTerminals);
             Steps.Add(SendTerminalProperties);
             Steps.Add(SendExistingPacks);
             Steps.Add(GetExistingPacks);
@@ -181,6 +190,7 @@ namespace ZeroConfiguration
                         CurrentContext.Dispose();
                 }
             Config.Cancel = false;
+            OnSyncFinished();
             SyncronizerStatus.Enabled = Syncronizer.Enabled = true;
         }
 
@@ -492,6 +502,9 @@ namespace ZeroConfiguration
                     else
                     {
                         T.LastSync = item.LastSync;
+                        T.Description = item.Description;
+                        T.Name = item.Name;
+                        T.IsTerminalZero = item.IsTerminalZero;
                     }
                     ConfigurationEntities.CreateTerminalProperties(CurrentContext, item.Code);
                 }

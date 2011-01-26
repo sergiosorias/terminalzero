@@ -20,7 +20,7 @@ namespace ZeroCommonClasses
 
         protected ZeroModule(ITerminal iCurrentTerminal,int code, string description)
         {
-            Terminal = iCurrentTerminal;
+            OwnerTerminal = iCurrentTerminal;
             ModuleCode = code;
             Description = description;
         }
@@ -82,7 +82,7 @@ namespace ZeroCommonClasses
             }
         }
 
-        protected ITerminal Terminal { get; private set; }
+        protected ITerminal OwnerTerminal { get; private set; }
 
         public abstract string[] GetFilesToSend();
 
@@ -93,8 +93,8 @@ namespace ZeroCommonClasses
 
         public virtual void NewPackReceived(string path)
         {
-            if (Terminal.Session != null && Terminal.Session.Notifier != null)
-                Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
+            if (OwnerTerminal.Session != null && OwnerTerminal.Session.Notifier != null)
+                OwnerTerminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
         }
                 
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroStock.Entities;
@@ -36,13 +37,13 @@ namespace ZeroStock.Pages.Controls
                     _terminal.TerminalCode,
                     DataProvider.DeliveryDocumentHeaders.Count() + 1,
                     true,
-                    (short) StockEntities.EntitiesStatus.New,
+                    (short) EntityStatus.New,
                     DateTime.Now, _terminal.TerminalCode);
 
                 DataProvider.DeliveryDocumentHeaders.AddObject(CurrentDocumentDelivery);
                 grid1.DataContext = CurrentDocumentDelivery;
                 supplierBox.ItemsSource = DataProvider.Suppliers;
-                cbTerminals.ItemsSource = DataProvider.TerminalToes;
+                cbTerminals.ItemsSource = DataProvider.GetExportTerminal(_terminal.TerminalCode);
             }
         }
 

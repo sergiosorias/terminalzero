@@ -48,12 +48,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\DeliveryDocumentHeader.cs" />
     <Compile Include="Entities\Stock.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Stock.edmx</DependentUpon>
     </Compile>
     <Compile Include="Entities\StockEntitiesClass.cs" />
+    <Compile Include="Entities\StockHeader.cs" />
     <Compile Include="Pages\Controls\DeliveryDocumentGrid.xaml.cs">
       <DependentUpon>DeliveryDocumentGrid.xaml</DependentUpon>
     </Compile>
@@ -131,6 +133,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Stock.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="Properties\DataSources\ZeroStock.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

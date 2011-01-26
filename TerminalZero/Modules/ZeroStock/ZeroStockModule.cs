@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
-using ZeroGUI;
 using ZeroStock.Entities;
 using ZeroStock.Pages;
-using ZeroStock.Properties;
 
 namespace ZeroStock
 {
@@ -22,15 +22,15 @@ namespace ZeroStock
 
         private void BuildPosibleActions()
         {
-            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
-            Terminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView, "ValidateTerminalZero"));
-            Terminal.Session.AddAction( new ZeroAction(null,ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
-            Terminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Remitos de salida", OpenDeliveryNoteView, "ValidateTerminalZero"));
+            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
+            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView, "ValidateTerminalZero"));
+            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
+            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Remitos de salida", OpenDeliveryNoteView, "ValidateTerminalZero"));
         }
 
         public override void Init()
         {
-            
+
         }
 
         public override string[] GetFilesToSend()
@@ -42,29 +42,29 @@ namespace ZeroStock
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new ZeroStockPackMaganer(Terminal);
+            var PackReceived = new ZeroStockPackMaganer(OwnerTerminal);
             PackReceived.Imported += (o, e) =>
             {
                 try
                 {
-                    System.IO.File.Delete(path);
+                    File.Delete(path);
                 }
                 catch
                 {
-                    Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format(
+                    OwnerTerminal.Session.Notifier.Log(TraceLevel.Verbose, string.Format(
                                                     "Error deleting pack imported. Module = {0}, Path = {1}",
                                                     ModuleCode, path));
                 }
             };
-            PackReceived.Imported+=PackReceived_Imported;
-            PackReceived.Error += (o,e)=> Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, e.GetException().ToString());
+            PackReceived.Imported += PackReceived_Imported;
+            PackReceived.Error += (o, e) => OwnerTerminal.Session.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
             PackReceived.Import(path);
 
         }
 
         void PackReceived_Imported(object sender, PackEventArgs e)
         {
-            Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Info,
+            OwnerTerminal.Session.Notifier.Log(TraceLevel.Info,
                                           string.Format(
                                               "Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}",
                                               e.ConnectionID, e.Pack.Code,
@@ -72,7 +72,7 @@ namespace ZeroStock
                                                   ? e.PackInfo.ModuleCode
                                                   : -1,
                                               e.Pack.PackStatusCode));
-            
+
         }
 
         private void TryExportStockDataPack()
@@ -81,118 +81,71 @@ namespace ZeroStock
             {
                 using (var ent = new StockEntities())
                 {
-                    foreach (TerminalTo terminalTo in ent.TerminalToes.Where(tt=>tt.Code!=Terminal.TerminalCode).ToList())
+                    var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
+                    info.TerminalToCodes.AddRange(
+                        ent.GetExportTerminal(OwnerTerminal.TerminalCode).Where(
+                            t => t.IsTerminalZero && t.Code != OwnerTerminal.TerminalCode).Select(t => t.Code));
+
+                    info.AddTable(ent.StockHeaders.Where(h => h.Status == (int)EntityStatus.New));
+                    info.AddTable(ent.StockItems.Where(h => h.Status == (int)EntityStatus.New));
+                    info.AddTable(ent.DeliveryDocumentHeaders.Where(h => h.Status == (int)EntityStatus.New));
+                    info.AddTable(ent.DeliveryDocumentItems.Where(h => h.Status == (int) EntityStatus.New));
+
+                    if (info.TableCount > 0)
                     {
-                        var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                        info.TerminalToCodes.Add(terminalTo.Code);
-                        List<StockHeader> headers = ent.StockHeaders.Where(h => h.TerminalToCode == terminalTo.Code && h.Status == (int)StockEntities.EntitiesStatus.New).ToList();
-                        List<StockItem> stockItems = new List<StockItem>();
-                        if (headers.Count() > 0)
+                        foreach (PackTableInfo packTableInfo in info.Tables)
                         {
-                            foreach (StockHeader header in headers)
+                            foreach (IExportableEntity exportable in packTableInfo.GetRowsAs<IExportableEntity>())
                             {
-                                stockItems.AddRange(header.StockItems);
-                                info.AddTable(stockItems);
-                                info.AddTable(headers);    
-                            }
-                            
-                        }
-
-                        List<DeliveryDocumentHeader> Delheaders = ent.DeliveryDocumentHeaders.Where(h => h.TerminalToCode == terminalTo.Code && h.Status == (int)StockEntities.EntitiesStatus.New).ToList();
-                        List<DeliveryDocumentItem> DelItems = null;
-                        if (Delheaders.Count() > 0)
-                        {
-                            DelItems = new List<DeliveryDocumentItem>();
-                            foreach (DeliveryDocumentHeader deliveryDocumentHeader in Delheaders)
-                            {
-                                DelItems.AddRange(deliveryDocumentHeader.DeliveryDocumentItems);
-                                info.AddTable(Delheaders);
-                                info.AddTable(DelItems);
-                            }
-                        }
-
-                        if (info.TableCount > 0)
-                        {
-                            using (var manager = new ZeroStockPackMaganer(Terminal))
-                            {
-                                if (manager.Export(info))
+                                exportable.UpdateStatus(EntityStatus.Exported);
+                                if (!info.TerminalToCodes.Contains(exportable.TerminalDestination))
                                 {
-                                    if (info.Tables.Exists(t => t.RowType == typeof(DeliveryDocumentHeader)))
-                                    {
-                                        UpdatteDeliveryDocumentStatus(Delheaders, DelItems);
-
-                                    }
-                                    if (info.Tables.Exists(t => t.RowType == typeof(StockHeader)))
-                                    {
-                                        UpdateStockStatus(headers, stockItems);
-                                    }
-                                    ent.SaveChanges();
+                                    info.TerminalToCodes.Add(exportable.TerminalDestination);
                                 }
                             }
                         }
+                        
+                        using (var manager = new ZeroStockPackMaganer(OwnerTerminal))
+                        {
+                            if (manager.Export(info))
+                            {
+                                ent.SaveChanges();
+                            }
+                        }
                     }
-               }
+
+
+                }
             }
             catch (Exception ex)
             {
-                Terminal.Session.Notifier.SetUserMessage(true, ex.ToString());
+                OwnerTerminal.Session.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
 
-        private static void UpdatteDeliveryDocumentStatus(IEnumerable<DeliveryDocumentHeader> Delheaders, IEnumerable<DeliveryDocumentItem> DelItems)
-        {
-
-            foreach (var header in Delheaders)
-            {
-                header.Stamp = DateTime.Now;
-                header.Status = (int)StockEntities.EntitiesStatus.Exported;
-            }
-            foreach (var sitem in DelItems)
-            {
-                sitem.Stamp = DateTime.Now;
-                sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
-            }
-
-        }
-
-        private static void UpdateStockStatus(IEnumerable<StockHeader> headers, IEnumerable<StockItem> stockItems)
-        {
-            foreach (var header in headers)
-            {
-                header.Stamp = DateTime.Now;
-                header.Status = (int)StockEntities.EntitiesStatus.Exported;
-            }
-            foreach (var sitem in stockItems)
-            {
-                sitem.Stamp = DateTime.Now;
-                sitem.Status = (int)StockEntities.EntitiesStatus.Exported;
-            }
-
-        }
-        
         #region Handlers
 
         private void openStockView()
         {
-            var view = new CurrentStockView(Terminal);
+            var view = new CurrentStockView(OwnerTerminal);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openNewStockView()
         {
-            var view = new StockView(Terminal, 0);
+            var view = new StockView(OwnerTerminal, 0);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openModifyStockView()
         {
-            var view = new StockView(Terminal, 1);
+            var view = new StockView(OwnerTerminal, 1);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void OpenDeliveryNoteView()
         {
-            var view = new DeliveryDocumentView(Terminal);
+            var view = new DeliveryDocumentView(OwnerTerminal);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 

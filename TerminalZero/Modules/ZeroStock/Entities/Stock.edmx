@@ -45,13 +45,6 @@
       [StockSummary].[TerminalToCode] AS [TerminalToCode]
       FROM [data].[StockSummary] AS [StockSummary]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="TerminalTo" EntityType="TZeroMasterModel.Store.TerminalTo" store:Type="Views" store:Schema="data" store:Name="TerminalTo">
-            <DefiningQuery>SELECT 
-      [TerminalTo].[Code] AS [Code], 
-      [TerminalTo].[Name] AS [Name], 
-      [TerminalTo].[Description] AS [Description]
-      FROM [data].[TerminalTo] AS [TerminalTo]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_DeliveryDocumentHeader_Supplier" Association="TZeroMasterModel.Store.FK_DeliveryDocumentHeader_Supplier">
             <End Role="Supplier" EntitySet="Supplier" />
             <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeader" />
@@ -121,6 +114,7 @@
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
           <Property Name="Batch" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="ProductCode" Type="int" Nullable="false" />
           <Property Name="ProductMasterCode" Type="int" Nullable="false" />
@@ -192,6 +186,7 @@
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
           <Property Name="Batch" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="ProductCode" Type="int" Nullable="false" />
           <Property Name="ProductMasterCode" Type="int" Nullable="false" />
@@ -290,18 +285,6 @@
           <Property Name="QuantityKG" Type="float" />
           <Property Name="ProductCount" Type="int" />
           <Property Name="TerminalToCode" Type="int" Nullable="false" />
-        </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'TZeroMaster.data.TerminalTo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <EntityType Name="TerminalTo">
-          <Key>
-            <PropertyRef Name="Code" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Code" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="Description" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Association Name="FK_DeliveryDocumentHeader_Supplier">
           <End Role="Supplier" Type="TZeroMasterModel.Store.Supplier" Multiplicity="0..1" />
@@ -429,6 +412,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetExportTerminal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TerminalCode" Type="int" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -486,7 +472,9 @@
             <End Role="StockHeader" EntitySet="StockHeaders" />
             <End Role="StockItem" EntitySet="StockItems" />
           </AssociationSet>
-          <EntitySet Name="TerminalToes" EntityType="TZeroMasterModel.TerminalTo" />
+          <FunctionImport Name="GetExportTerminal" ReturnType="Collection(TZeroMasterModel.ExportTerminal)">
+            <Parameter Name="TerminalCode" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Price">
           <Key>
@@ -759,6 +747,7 @@
           <Property Type="Double" Name="SaleWeightQuantity" />
           <Property Type="Double" Name="Quantity" Nullable="false" />
           <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentItem" ToRole="DeliveryDocumentHeader" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <EntityType Name="StockItem">
           <Key>
@@ -782,6 +771,7 @@
           <Property Type="Double" Name="Quantity" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="TZeroMasterModel.FK_StockItem_Product" FromRole="StockItem" ToRole="Product" />
           <NavigationProperty Name="StockHeader" Relationship="TZeroMasterModel.FK_StockItem_StockHeader" FromRole="StockItem" ToRole="StockHeader" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
         </EntityType>
         <Association Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader">
           <End Type="TZeroMasterModel.DeliveryDocumentHeader" Role="DeliveryDocumentHeader" Multiplicity="1" />
@@ -823,15 +813,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="TerminalTo">
-          <Key>
-            <PropertyRef Name="Code" />
-            <PropertyRef Name="Name" />
-          </Key>
+        <ComplexType Name="ExportTerminal" >
           <Property Type="Int32" Name="Code" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Description" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="Boolean" Name="IsTerminalZero" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -981,6 +968,7 @@
           <EntitySetMapping Name="DeliveryDocumentItems">
             <EntityTypeMapping TypeName="TZeroMasterModel.DeliveryDocumentItem">
               <MappingFragment StoreEntitySet="DeliveryDocumentItem">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
                 <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
@@ -1001,6 +989,7 @@
           <EntitySetMapping Name="StockItems">
             <EntityTypeMapping TypeName="TZeroMasterModel.StockItem">
               <MappingFragment StoreEntitySet="StockItem">
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
                 <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
@@ -1018,15 +1007,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TerminalToes">
-            <EntityTypeMapping TypeName="TZeroMasterModel.TerminalTo">
-              <MappingFragment StoreEntitySet="TerminalTo">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+          <FunctionImportMapping FunctionImportName="GetExportTerminal" FunctionName="TZeroMasterModel.Store.GetExportTerminal">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TZeroMasterModel.ExportTerminal">
                 <ScalarProperty Name="Code" ColumnName="Code" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1102,7 +1089,6 @@
           <ConnectorPoint PointX="7.5" PointY="10.480499674479166" />
           <ConnectorPoint PointX="7.5" PointY="8.3456022135416674" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="TZeroMasterModel.TerminalTo" Width="1.5" PointX="6.5" PointY="0.625" Height="1.5956835937500031" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -12,7 +12,7 @@
 				<ColumnDefinition Width="140" />
 			</Grid.ColumnDefinitions>
 			<Label Content="Terminal" HorizontalAlignment="Right" Foreground="White" />
-			<ComboBox Grid.Column="1" Name="cbTerminals" SelectedValuePath="Code" SelectionChanged="cbTerminals_SelectionChanged">
+			<ComboBox Grid.Column="1" Name="cbTerminals" SelectedValuePath="Code" Height="22" VerticalAlignment="Center" SelectionChanged="cbTerminals_SelectionChanged">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">

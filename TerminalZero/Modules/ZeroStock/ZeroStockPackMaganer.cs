@@ -21,14 +21,8 @@ namespace ZeroStock
         private void ZeroStockPackMaganer_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsMasterData = false;
-            Type infoType = typeof(ExportEntitiesPackInfo);
-            var reader = new XmlSerializer(infoType);
-            using (XmlReader xmlreader = XmlReader.Create(Path.Combine(e.WorkingDirectory, infoType.ToString())))
-            {
-                e.PackInfo = (ExportEntitiesPackInfo)reader.Deserialize(xmlreader);
-                xmlreader.Close();
-            }
-            
+            e.Pack.IsUpgrade = false;
+            e.PackInfo = BuildPackInfo<ExportEntitiesPackInfo>();
             ImportEntities(e);
         }
 
@@ -36,11 +30,7 @@ namespace ZeroStock
         {
             foreach (var item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
             {
-                using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
-                {
-                    item.SerializeRows(xmlwriter);
-                    xmlwriter.Close();
-                }
+                item.SerializeRows(e.WorkingDirectory);
             }
         }
 
@@ -55,7 +45,8 @@ namespace ZeroStock
                 {
                     ImportStockHeader(e.WorkingDirectory, ent, a);
                     a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(StockItem).ToString());
-                    ImportStockItem(e.WorkingDirectory, ent, a);
+
+                    if (a != null) ImportStockItem(e.WorkingDirectory, ent, a);
                 }
 
                 a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(DeliveryDocumentHeader).ToString());
@@ -63,7 +54,7 @@ namespace ZeroStock
                 {
                     ImportDeliveryDocumentHeader(e.WorkingDirectory, ent, a);
                     a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(DeliveryDocumentItem).ToString());
-                    ImportDeliveryDocumentItem(e.WorkingDirectory, ent, a);
+                    if (a != null) ImportDeliveryDocumentItem(e.WorkingDirectory, ent, a);
                 }
                 ent.SaveChanges();
             }

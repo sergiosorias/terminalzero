@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using ICSharpCode.SharpZipLib.Zip;
@@ -55,7 +56,7 @@ namespace ZeroCommonClasses.Pack
 
         }
 
-        public static int[] GetTerminalDestinationList(Entities.Pack aPack)
+        private static int[] GetTerminalDestinationList(Entities.Pack aPack)
         {
             List<int> ret = new List<int>();
             string[] parts = aPack.Name.Split('_');
@@ -130,11 +131,25 @@ namespace ZeroCommonClasses.Pack
             _terminal = terminal;
         }
 
+        protected PackInfoBase BuildPackInfo<T>()
+            where T : PackInfoBase
+        {
+            Type infoType = typeof(T);
+            var reader = new XmlSerializer(infoType);
+            T ret;
+            using (XmlReader xmlreader = XmlReader.Create(Path.Combine(WorkingDirectory, infoType.ToString())))
+            {
+                ret = (T)reader.Deserialize(xmlreader);
+                xmlreader.Close();
+            }
+
+            return ret;
+        }
+
         #region Public Methods
 
         public bool Import(string packPath)
         {
-
             bool ret = true;
             try
             {
@@ -189,10 +204,8 @@ namespace ZeroCommonClasses.Pack
 
         private void ExportProcess()
         {
-            var args = new PackEventArgs();
+            var args = new PackEventArgs {PackInfo = PackInfo, WorkingDirectory = WorkingDirectory};
 
-            args.PackInfo = PackInfo;
-            args.WorkingDirectory = WorkingDirectory;
             OnExporting(args);
             AddPackageData();
             CreateZip();
@@ -205,14 +218,14 @@ namespace ZeroCommonClasses.Pack
         {
             var events = new FastZipEvents();
             var zip = new FastZip(events);
-            string terminals = "";
+            StringBuilder terminals = new StringBuilder();
             foreach (var terminal in PackInfo.TerminalToCodes)
             {
-                terminals += "T" + terminal;
+                terminals.AppendFormat("T{0}",terminal);
             }
             zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, terminals, PackInfo.Stamp.ToString("yyyyMMddhhmmss"))), WorkingDirectory, true, "");
         }
-
+        
         private void ImportProcess()
         {
             Entities.Pack aPack = null;
@@ -232,6 +245,12 @@ namespace ZeroCommonClasses.Pack
 
                 UpdatePackStatus(aPack, dbent, PackStatus.InProgress, null);
                 OnImporting(args);
+                if (PackInfo == null)
+                    PackInfo = new PackInfoBase { ModuleCode = GetModule(ImportPackPath), Path = ImportPackPath, Stamp = DateTime.Now, TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack)) };
+                if (!aPack.IsMasterData.HasValue)
+                    aPack.IsMasterData = false;
+                if (!aPack.IsUpgrade.HasValue)
+                    aPack.IsUpgrade = false;
                 UpdatePackStatus(aPack, dbent, PackStatus.Imported, null);
                 OnImported(args);
 

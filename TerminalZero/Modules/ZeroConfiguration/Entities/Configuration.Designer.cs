@@ -837,12 +837,14 @@ namespace ZeroConfiguration.Entities
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="name">Initial value of the Name property.</param>
         /// <param name="active">Initial value of the Active property.</param>
-        public static Terminal CreateTerminal(global::System.Int32 code, global::System.String name, global::System.Boolean active)
+        /// <param name="isTerminalZero">Initial value of the IsTerminalZero property.</param>
+        public static Terminal CreateTerminal(global::System.Int32 code, global::System.String name, global::System.Boolean active, global::System.Boolean isTerminalZero)
         {
             Terminal terminal = new Terminal();
             terminal.Code = code;
             terminal.Name = name;
             terminal.Active = active;
+            terminal.IsTerminalZero = isTerminalZero;
             return terminal;
         }
 
@@ -995,6 +997,30 @@ namespace ZeroConfiguration.Entities
         private Nullable<global::System.Boolean> _IsSyncronized;
         partial void OnIsSyncronizedChanging(Nullable<global::System.Boolean> value);
         partial void OnIsSyncronizedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsTerminalZero
+        {
+            get
+            {
+                return _IsTerminalZero;
+            }
+            set
+            {
+                OnIsTerminalZeroChanging(value);
+                ReportPropertyChanging("IsTerminalZero");
+                _IsTerminalZero = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsTerminalZero");
+                OnIsTerminalZeroChanged();
+            }
+        }
+        private global::System.Boolean _IsTerminalZero;
+        partial void OnIsTerminalZeroChanging(global::System.Boolean value);
+        partial void OnIsTerminalZeroChanged();
 
         #endregion
     

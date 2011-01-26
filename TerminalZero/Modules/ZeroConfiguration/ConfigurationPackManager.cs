@@ -20,11 +20,7 @@ namespace ZeroConfiguration
         {
             foreach (PackTableInfo item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
             {
-                using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(e.WorkingDirectory, item.RowType.ToString())))
-                {
-                    item.SerializeRows(xmlwriter);
-                    xmlwriter.Close();
-                }
+                item.SerializeRows(e.WorkingDirectory);
             }
         }
         
