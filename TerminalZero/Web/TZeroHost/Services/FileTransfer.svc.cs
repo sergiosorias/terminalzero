@@ -61,12 +61,12 @@ namespace TZeroHost.Services
                     Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);
                     if (P != null)
                     {
-                        Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client");
+                        Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client","Verbose");
                         stream = new MemoryStream(P.Data);
                     }
                     else
                     {
-                        Trace.WriteLineIf(ContextBuilder.LogLevel.TraceWarning, "Pack " + request.Code + " Not found");
+                        Trace.WriteLineIf(ContextBuilder.LogLevel.TraceWarning, "Pack " + request.Code + " Not found", "Verbose");
                     }
                 }
             }

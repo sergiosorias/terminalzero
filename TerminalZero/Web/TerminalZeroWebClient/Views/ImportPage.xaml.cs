@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using TerminalZeroWebClient.FileTranferReference;
 using TerminalZeroWebClient.ServiceHelperReference;
@@ -136,6 +137,44 @@ namespace TerminalZeroWebClient.Views
                     fs.Write(file, 0, file.Length);
                 }
             }
+        }
+
+        private void packDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                // the original source is what was clicked.  For example  
+                // a button. 
+                DependencyObject dep = (DependencyObject)e.OriginalSource;
+
+                // iteratively traverse the visual tree upwards looking for 
+                // the clicked row. 
+                while ((dep != null) && !(dep is DataGridRow))
+                {
+                    dep = VisualTreeHelper.GetParent(dep);
+                }
+
+                // if we found the clicked row 
+                if (dep != null && dep is DataGridRow)
+                {
+                    // get the row 
+                    DataGridRow row = (DataGridRow)dep;
+
+                    // change the details visibility 
+                    if (row.DetailsVisibility == Visibility.Collapsed)
+                    {
+                        row.DetailsVisibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        row.DetailsVisibility = Visibility.Collapsed;
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+            } 
+
         }
 
     }

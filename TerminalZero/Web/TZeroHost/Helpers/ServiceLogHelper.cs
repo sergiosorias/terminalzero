@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ZeroCommonClasses.GlobalObjects;
+using System.Diagnostics;
 using System.Text;
+using ZeroCommonClasses.Context;
 
 namespace TZeroHost.Helpers
 {
     public class ServiceLogHelper : IDisposable
     {
         private object[] Parameters;
-        private string ConnID;
+        private string _connId;
         private string Method;
         public int TerminalCode;
 
@@ -20,27 +18,27 @@ namespace TZeroHost.Helpers
         public ServiceLogHelper(string method, string connID, params object[] parameters)
         {
             TerminalCode = -1;
-            ConnID = connID;
+            _connId = connID;
             Method = method;
             Parameters = parameters;
         }
 
         public void Handle(Action action)
         {
-            System.Diagnostics.Trace.Indent();
+            Trace.Indent();
             try
             {
                 DateTime stamp = DateTime.Now;
                 action.Invoke();
                 IsValid = true;
-                System.Diagnostics.Trace.Unindent();
-                System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceInfo,  string.Format("Terminal: {0}, Service Method -> {1}, Duration: {2}", TerminalCode, Method, DateTime.Now-stamp), "Information");
+                Trace.Unindent();
+                Trace.WriteLineIf(ContextBuilder.LogLevel.TraceInfo,  string.Format("Terminal: {0}, Service Method -> {1}, Duration: {2}", TerminalCode, Method, DateTime.Now-stamp), "Information");
             }
             catch (Exception ex)
             {
                 IsValid = false;
-                StatusMessage = string.Format("{1} ERROR, ",Method,ex);
-                StringBuilder messageFormat = new StringBuilder();
+                StatusMessage = string.Format("{0} ERROR {1}, ",Method,ex);
+                var messageFormat = new StringBuilder();
                 if (Parameters != null)
                 {
                     
@@ -50,10 +48,10 @@ namespace TZeroHost.Helpers
                     }
                 }
 
-                System.Diagnostics.Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceError,string.Format("Terminal: {0}, Service Method -> {1}, Parameters: {2}, throw {3}", TerminalCode, Method, messageFormat, ex), "Error");
+                Trace.WriteLineIf(ContextBuilder.LogLevel.TraceError,string.Format("Terminal: {0}, Service Method -> {1}, Parameters: {2}, throw {3}", TerminalCode, Method, messageFormat, ex), "Error");
             }
 
-            System.Diagnostics.Trace.Unindent();
+            Trace.Unindent();
 
         }
 

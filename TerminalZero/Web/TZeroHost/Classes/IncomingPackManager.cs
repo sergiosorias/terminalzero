@@ -113,16 +113,15 @@ namespace TZeroHost.Classes
                 }
                 else
                 {
-                    int[] terminals = PackManager.GetTerminalDestinationList(e.Pack);
-                    if (terminals.Length > 0)
+                    if (e.PackInfo.TerminalToCodes.Count > 0)
                     {
                         using (var packEnt = new CommonEntities())
                         {
                             using (var ent = new ConfigurationEntities())
                             {
-                                foreach (int terminal in terminals)
+                                foreach (int terminal in e.PackInfo.TerminalToCodes)
                                 {
-                                    if (ent.Terminals.FirstOrDefault(t => t.Active && t.Code == terminal) != null)
+                                    if (ent.Terminals.FirstOrDefault(t => t.Code == terminal) != null)
                                     {
                                         Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", terminal), "Verbose");
                                         PackPending pp = PackPending.CreatePackPending(e.Pack.Code, terminal);
