@@ -8,79 +8,84 @@
            Title="ImportPage Page" 
            xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
     <Grid x:Name="LayoutRoot">
-        <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2">
-                    <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
-                        <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,2,2,0">
-                            <Mycontrols:RefreshTimer Tick="RefreshTimer_Tick" RefreshEvery="20"/>
-                        </StackPanel>
-                    </Border>
-                    <Line Width="5" />
-                    <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Between " VerticalAlignment="Center"/>
-                            <sdk:DatePicker Margin="2" Name="startDate" />
-                            <TextBlock Text=" and " VerticalAlignment="Center"/>
-                            <sdk:DatePicker Margin="2" Name="endDate" />
-                        </StackPanel>
-                    </Border>
-                    <Line Width="5" />
-                    <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
-                        <Mycontrols:SearchBox Search="searchBox_Search" ShowResultCount="True" x:Name="searchBox" />
-                    </Border>
-                    <Line Width="5" />
-                    <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="4" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource DownloadButtonStyle}" RenderTransformOrigin="0.5,0.5" Height="22" Width="22" Background="LightGreen" DataContext="{Binding Data}" Name="btnUpload" Click="btnUpload_Click">
-                                <Button.RenderTransform>
-                                    <TransformGroup>
-                                        <RotateTransform Angle="180"/>
-                                    </TransformGroup>
-                                </Button.RenderTransform>
-                            </Button>
-                            <ProgressBar Name="fileProgress" Width="100" Margin="2"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-                <Grid Grid.Row="1">
-                    <sdk:DataGrid AutoGenerateColumns="False" IsReadOnly="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Margin="6,2,0,0" Name="packDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" VerticalAlignment="Stretch">
-                        <sdk:DataGrid.Columns>
-                            <sdk:DataGridTextColumn x:Name="codeColumn" Binding="{Binding Path=Code}" Header="Code" Width="SizeToHeader" />
-                            <sdk:DataGridTextColumn x:Name="connectionCodeColumn" Binding="{Binding Path=ConnectionCode}" Header="Connection Code" Width="130" />
-                            <sdk:DataGridCheckBoxColumn x:Name="isMasterDataColumn" Binding="{Binding Path=IsMasterData}" Header="Master Data" Width="SizeToHeader" />
-                            <sdk:DataGridCheckBoxColumn x:Name="isUpgradeColumn" Binding="{Binding Path=IsUpgrade}" Header="Upgrade" Width="SizeToHeader" />
-                            <sdk:DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Name" Width="160" />
-                            <sdk:DataGridTextColumn x:Name="packStatusColumn" Binding="{Binding Path=PackStatusCode}" Header="Status" Width="SizeToHeader" />
-                            <sdk:DataGridTextColumn x:Name="packResultColumn" Binding="{Binding Path=Result}" Header="Result" Width="150" />
-                            <sdk:DataGridTemplateColumn x:Name="stampColumn" Header="Stamp" Width="110">
-                                <sdk:DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <sdk:DatePicker SelectedDate="{Binding Path=Stamp, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" />
-                                    </DataTemplate>
-                                </sdk:DataGridTemplateColumn.CellEditingTemplate>
-                                <sdk:DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Stamp}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </sdk:DataGridTemplateColumn.CellTemplate>
-                            </sdk:DataGridTemplateColumn>
-                            <sdk:DataGridTemplateColumn Header="" Width="30">
-                                <sdk:DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="LightSkyBlue" DataContext="{Binding Data}" Click="Button_Click"/>
-                                    </DataTemplate>
-                                </sdk:DataGridTemplateColumn.CellTemplate>
-                            </sdk:DataGridTemplateColumn>
-                        </sdk:DataGrid.Columns>
-
-                    </sdk:DataGrid>
-                </Grid>
+                <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
+                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,2,2,0">
+                        <Mycontrols:RefreshTimer Tick="RefreshTimer_Tick" RefreshEvery="20"/>
+                    </StackPanel>
+                </Border>
+                <Line Width="5" />
+                <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Between " VerticalAlignment="Center"/>
+                        <sdk:DatePicker Margin="2" Name="startDate" />
+                        <TextBlock Text=" and " VerticalAlignment="Center"/>
+                        <sdk:DatePicker Margin="2" Name="endDate" />
+                    </StackPanel>
+                </Border>
+                <Line Width="5" />
+                <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
+                    <Mycontrols:SearchBox Search="searchBox_Search" ShowResultCount="True" x:Name="searchBox" />
+                </Border>
+                <Line Width="5" />
+                <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="4" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource DownloadButtonStyle}" RenderTransformOrigin="0.5,0.5" Height="22" Width="22" Background="LightGreen" DataContext="{Binding Data}" Name="btnUpload" Click="btnUpload_Click">
+                            <Button.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="180"/>
+                                </TransformGroup>
+                            </Button.RenderTransform>
+                        </Button>
+                        <ProgressBar Name="fileProgress" Width="100" Margin="2"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            
+            <Grid Grid.Row="1">
+                <sdk:DataGrid AutoGenerateColumns="False" IsReadOnly="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Margin="6,2,0,0" Name="packDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected"  VerticalAlignment="Stretch">
+                    <sdk:DataGrid.Columns>
+                        <sdk:DataGridTextColumn x:Name="codeColumn" Binding="{Binding Path=Code}" Header="Code" Width="SizeToHeader" CanUserResize="False"/>
+                        <sdk:DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Name" Width="190" />
+                        <sdk:DataGridTextColumn x:Name="connectionCodeColumn" Binding="{Binding Path=ConnectionCode}" Header="Connection Code" Width="230" CanUserResize="False" />
+                        <sdk:DataGridCheckBoxColumn x:Name="isMasterDataColumn" Binding="{Binding Path=IsMasterData}" Header="Master Data" Width="SizeToHeader" CanUserResize="False" />
+                        <sdk:DataGridCheckBoxColumn x:Name="isUpgradeColumn" Binding="{Binding Path=IsUpgrade}" Header="Upgrade" Width="SizeToHeader" CanUserResize="False" />
+                        <sdk:DataGridTextColumn x:Name="packStatusColumn" Binding="{Binding Path=PackStatusCode}" Header="Status" Width="SizeToHeader" CanUserResize="False" />
+                        <sdk:DataGridTemplateColumn x:Name="stampColumn" Header="Stamp" Width="140">
+                            <sdk:DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <sdk:DatePicker SelectedDate="{Binding Path=Stamp, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" />
+                                </DataTemplate>
+                            </sdk:DataGridTemplateColumn.CellEditingTemplate>
+                            <sdk:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Stamp}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </sdk:DataGridTemplateColumn.CellTemplate>
+                        </sdk:DataGridTemplateColumn>
+                        <sdk:DataGridTemplateColumn Header="" Width="30" CanUserResize="False">
+                            <sdk:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="LightSkyBlue" DataContext="{Binding Data}" Click="Button_Click"/>
+                                </DataTemplate>
+                            </sdk:DataGridTemplateColumn.CellTemplate>
+                        </sdk:DataGridTemplateColumn>
+                    </sdk:DataGrid.Columns>
+                    <sdk:DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <ScrollViewer BorderBrush="Transparent" Margin="0" Padding="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="120">
+                                <TextBox Text="{Binding Result}" IsReadOnly="True"/>
+                            </ScrollViewer>
+                        </DataTemplate>
+                    </sdk:DataGrid.RowDetailsTemplate>
+                </sdk:DataGrid>
             </Grid>
-        </ScrollViewer>
+        </Grid>
     </Grid>
 </navigation:Page>
