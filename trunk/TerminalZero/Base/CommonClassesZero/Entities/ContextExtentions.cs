@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ZeroCommonClasses.Entities;
+using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses.Helpers
 {
-    public static class  IEnumerableExtentions
+    public static class  ContextExtentions
     {
         public static string GetEntitiesAsXMLObjectList<T>(IEnumerable<T> list)
         {
-            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(List<T>));
-            StringWriter sw = new StringWriter();
-            ser.Serialize(sw, list.ToList());
-            string ret = sw.ToString();
-            sw.Close();
-            sw.Dispose();
+            var ser = new System.Xml.Serialization.XmlSerializer(typeof(List<T>));
+            string ret;
+            using(StringWriter sw = new StringWriter())
+            {
+                ser.Serialize(sw, list.ToList());
+                ret = sw.ToString();
+                sw.Close();
+            }
             return ret;
         }
 
@@ -25,10 +30,11 @@ namespace ZeroCommonClasses.Helpers
         {
             System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(List<T>));
             List<T> ret = null;
-            StringReader sr = new StringReader(list);
-            ret = (List<T>)ser.Deserialize(sr);
-            sr.Close();
-            sr.Dispose();
+            using(StringReader sr = new StringReader(list))
+            {
+                ret = (List<T>) ser.Deserialize(sr);
+                sr.Close();
+            }
             return ret;
         }
 
@@ -157,28 +163,28 @@ namespace ZeroCommonClasses.Helpers
             }
         }
 
-        //public static void Merge<T>(ObjectSet<T> list, T item)
-        //    where T : EntityObject
-        //{
-        //    T found = list.FirstOrDefault(i => i.EntityKey == item.EntityKey);
-        //    if (found == default(T))
-        //    {
-        //        list.AddObject(item);
-        //    }
-        //    else
-        //    {
-        //        list.ApplyCurrentValues(item);
-        //    }
+        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities)
+        {
+            MergeEntities(context, entities, false);
+        }
 
-        //}
+        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities, bool isExportable)
+        {
+            foreach (var item in entities)
+            {
+                if (isExportable)
+                    ((IExportableEntity)item).UpdateStatus(EntityStatus.Imported);
+                object entity;
+                if (context.TryGetObjectByKey(item.EntityKey, out entity))
+                {
+                    context.ApplyCurrentValues(item.EntityKey.EntitySetName, item);
+                }
+                else
+                {
+                    context.AddObject(item.EntityKey.EntitySetName, item);
+                }
+            }
 
-        //public static void Merge(ObjectContext context, EntityObject item)
-        //{
-        //    object obj = null;
-        //    if (context.TryGetObjectByKey(item.EntityKey, out obj))
-        //        context.ApplyCurrentValues(item.EntityKey.EntitySetName, item);
-        //    else
-        //        context.AddObject(item.EntityKey.EntitySetName, item);
-        //}
+        }
     }
 }

@@ -125,7 +125,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Configuration.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="Properties\DataSources\ZeroConfiguration.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

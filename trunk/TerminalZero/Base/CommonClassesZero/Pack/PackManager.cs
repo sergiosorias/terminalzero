@@ -117,6 +117,7 @@ namespace ZeroCommonClasses.Pack
         private readonly ITerminal _terminal;
         private string WorkingDirectory = "";
         private string ImportPackPath = "";
+        private string _infoFileName = "Info_";
         public string ConnectionID { get; set; }
 
         private PackInfoBase PackInfo { get; set; }
@@ -129,21 +130,6 @@ namespace ZeroCommonClasses.Pack
         protected PackManager(ITerminal terminal)
         {
             _terminal = terminal;
-        }
-
-        protected PackInfoBase BuildPackInfo<T>()
-            where T : PackInfoBase
-        {
-            Type infoType = typeof(T);
-            var reader = new XmlSerializer(infoType);
-            T ret;
-            using (XmlReader xmlreader = XmlReader.Create(Path.Combine(WorkingDirectory, infoType.ToString())))
-            {
-                ret = (T)reader.Deserialize(xmlreader);
-                xmlreader.Close();
-            }
-
-            return ret;
         }
 
         #region Public Methods
@@ -175,6 +161,7 @@ namespace ZeroCommonClasses.Pack
             {
                 
                 PackInfo = info;
+                PackInfo.TerminalCode = _terminal.TerminalCode;
                 WorkingDirectory = Path.Combine(PackInfo.Path, Guid.NewGuid().ToString());
                 if (!Directory.Exists(WorkingDirectory))
                     Directory.CreateDirectory(WorkingDirectory);
@@ -207,7 +194,7 @@ namespace ZeroCommonClasses.Pack
             var args = new PackEventArgs {PackInfo = PackInfo, WorkingDirectory = WorkingDirectory};
 
             OnExporting(args);
-            AddPackageData();
+            SerializePackInfo();
             CreateZip();
             Clean();
             OnExported(args);
@@ -242,15 +229,17 @@ namespace ZeroCommonClasses.Pack
                 args.Pack = aPack;
 
                 ExtractZip(ImportPackPath);
-
-                UpdatePackStatus(aPack, dbent, PackStatus.InProgress, null);
-                OnImporting(args);
+                DeserializePackInfo();
                 if (PackInfo == null)
-                    PackInfo = new PackInfoBase { ModuleCode = GetModule(ImportPackPath), Path = ImportPackPath, Stamp = DateTime.Now, TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack)) };
-                if (!aPack.IsMasterData.HasValue)
+                    PackInfo = new PackInfoBase {TerminalCode = PackInfo.TerminalCode, ModuleCode = GetModule(ImportPackPath), Path = ImportPackPath, Stamp = DateTime.Now, TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack)) };
+                
+                 if (!aPack.IsMasterData.HasValue)
                     aPack.IsMasterData = false;
                 if (!aPack.IsUpgrade.HasValue)
                     aPack.IsUpgrade = false;
+                args.PackInfo = PackInfo;
+                UpdatePackStatus(aPack, dbent, PackStatus.InProgress, null);
+                OnImporting(args);
                 UpdatePackStatus(aPack, dbent, PackStatus.Imported, null);
                 OnImported(args);
 
@@ -308,13 +297,29 @@ namespace ZeroCommonClasses.Pack
             zip.ExtractZip(packFilePath, WorkingDirectory, FastZip.Overwrite.Always, null, "", "", false);
         }
 
-        private void AddPackageData()
+        private void SerializePackInfo()
         {
             var writer = new XmlSerializer(PackInfo.GetType());
-            using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(WorkingDirectory, PackInfo.GetType().ToString())))
+            using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(WorkingDirectory,_infoFileName+ PackInfo.GetType())))
             {
                 writer.Serialize(xmlwriter, PackInfo);
                 xmlwriter.Close();
+            }
+        }
+
+        private void DeserializePackInfo()
+        {
+            string[] files = Directory.GetFiles(WorkingDirectory, _infoFileName + "*.*");
+            if (files.Length > 0)
+            {
+                Type infoType = Type.GetType(Path.GetFileName(files[0]).Remove(0, _infoFileName.Length));
+                var reader = new XmlSerializer(infoType);
+                using (XmlReader xmlreader = XmlReader.Create(files[0]))
+                {
+                    PackInfo = (PackInfoBase)reader.Deserialize(xmlreader);
+                    xmlreader.Close();
+                }
+
             }
         }
 

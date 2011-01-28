@@ -73,7 +73,7 @@
     <Compile Include="Pack\PackProcessesHandlers.cs" />
     <Compile Include="GlobalObjects\RemoteFilesInfo.cs" />
     <Compile Include="GlobalObjects\ServerFileInfo.cs" />
-    <Compile Include="Helpers\IEnumerableExtentions.cs" />
+    <Compile Include="Entities\ContextExtentions.cs" />
     <Compile Include="Interfaces\ILogBuilder.cs" />
     <Compile Include="Interfaces\IProgressNotifier.cs" />
     <Compile Include="Pack\PackTableInfo.cs" />
@@ -112,6 +112,9 @@
       <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
       <Name>SharpZipLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

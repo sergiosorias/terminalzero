@@ -22,7 +22,6 @@ namespace ZeroStock
         {
             e.Pack.IsMasterData = false;
             e.Pack.IsUpgrade = false;
-            e.PackInfo = BuildPackInfo<ExportEntitiesPackInfo>();
             ImportEntities(e);
         }
 

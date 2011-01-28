@@ -13,6 +13,9 @@ namespace ZeroCommonClasses.Pack
         }
 
         [DataMember]
+        public int TerminalCode { get; set; }
+
+        [DataMember]
         public int ModuleCode { get; set; }
 
         [DataMember]

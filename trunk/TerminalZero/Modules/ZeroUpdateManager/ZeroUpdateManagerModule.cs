@@ -14,7 +14,7 @@ namespace ZeroUpdateManager
 
         public void BuildPosibleActions()
         {
-            //Terminal.Session.AddAction(new ZeroAction(null,ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
+            //OwnerTerminal.Session.AddAction(new ZeroAction(null,ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
         }
 
         public override string[] GetFilesToSend()
@@ -41,22 +41,22 @@ namespace ZeroUpdateManager
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new UpdateManagerPackManager(Terminal);
-            PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
+            var PackReceived = new UpdateManagerPackManager(OwnerTerminal);
+            PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { OwnerTerminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
             PackReceived.Error += PackReceived_Error;
             if (PackReceived.Import(path))
             {
-                Terminal.Session.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
+                OwnerTerminal.Session.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
             }
             else
             {
-                Terminal.Session.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
+                OwnerTerminal.Session.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
             }
         }
 
         private void PackReceived_Error(object sender, System.IO.ErrorEventArgs e)
         {
-            Terminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, e.GetException().ToString());
+            OwnerTerminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, e.GetException().ToString());
         }
 
     }
