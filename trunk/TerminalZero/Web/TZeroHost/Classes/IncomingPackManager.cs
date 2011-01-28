@@ -46,7 +46,6 @@ namespace TZeroHost.Classes
         {
             while (_packsToImport.Count > 0)
             {
-                Thread.Sleep(1000);
                 IncomingPack data = _packsToImport.Dequeue();
                 using (var packManager = PackManagerBuilder.GetManager(data.PackPath))
                 {
@@ -100,7 +99,7 @@ namespace TZeroHost.Classes
                     {
                         using (var ent = new ConfigurationEntities())
                         {
-                            foreach (var item in ent.Terminals)
+                            foreach (var item in ent.Terminals.Where(t=>t.Code != e.PackInfo.TerminalCode))
                             {
                                 Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", item.Code), "Verbose");
                                 PackPending pp = PackPending.CreatePackPending(e.Pack.Code, item.Code);
@@ -119,7 +118,7 @@ namespace TZeroHost.Classes
                         {
                             using (var ent = new ConfigurationEntities())
                             {
-                                foreach (int terminal in e.PackInfo.TerminalToCodes)
+                                foreach (int terminal in e.PackInfo.TerminalToCodes.Where(c => c != e.PackInfo.TerminalCode))
                                 {
                                     if (ent.Terminals.FirstOrDefault(t => t.Code == terminal) != null)
                                     {
