@@ -97,7 +97,7 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to La Terminal fue desactivada para realizar esta acción..
+        ///   Looks up a localized string similar to La OwnerTerminal fue desactivada para realizar esta acción..
         /// </summary>
         internal static string DeactivatedTerminal {
             get {
@@ -205,7 +205,7 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terminal nueva, se intentará crearla.
+        ///   Looks up a localized string similar to OwnerTerminal nueva, se intentará crearla.
         /// </summary>
         internal static string NewTerminal {
             get {
@@ -241,7 +241,7 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Esta Terminal no esta autorizada para realizar esta acción!.
+        ///   Looks up a localized string similar to Esta OwnerTerminal no esta autorizada para realizar esta acción!.
         /// </summary>
         internal static string UnauthorizedTrminal {
             get {
@@ -278,7 +278,7 @@ namespace ZeroConfiguration.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terminal válida.
+        ///   Looks up a localized string similar to OwnerTerminal válida.
         /// </summary>
         internal static string ValidTerminal {
             get {

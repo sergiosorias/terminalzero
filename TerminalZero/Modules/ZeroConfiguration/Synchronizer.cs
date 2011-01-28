@@ -384,7 +384,7 @@ namespace ZeroConfiguration
             string modulesToSend;
             if (CurrentTerminal.Manager.ValidateRule("ValidateTerminalZero"))
             {
-                modulesToSend = IEnumerableExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Modules);
+                modulesToSend = ContextExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Modules);
             }
             else
             {
@@ -392,7 +392,7 @@ namespace ZeroConfiguration
                 if (!T.Modules.IsLoaded)
                     T.Modules.Load();
 
-                modulesToSend = IEnumerableExtentions.GetEntitiesAsXMLObjectList(T.Modules);
+                modulesToSend = ContextExtentions.GetEntitiesAsXMLObjectList(T.Modules);
             }
 
             ZeroResponse<bool> rest = Config.SyncService.SendClientModules(CurrentConnectionID,modulesToSend);
@@ -430,7 +430,7 @@ namespace ZeroConfiguration
             bool ret = true;
             Config.Notifier.SetProcess("Enviando Terminales");
             
-            ZeroResponse<bool> res1 = Config.SyncService.SendClientTerminals(CurrentConnectionID, IEnumerableExtentions.GetEntitiesAsXMLObjectList<Entities.Terminal>(CurrentContext.Terminals));
+            ZeroResponse<bool> res1 = Config.SyncService.SendClientTerminals(CurrentConnectionID, ContextExtentions.GetEntitiesAsXMLObjectList<Entities.Terminal>(CurrentContext.Terminals));
             if (!res1.IsValid)
             {
                 ret = true;
@@ -445,7 +445,7 @@ namespace ZeroConfiguration
             bool ret = true;
             Config.Notifier.SetProcess("Enviando Propiedades");
             
-            ZeroResponse<bool> res1 = Config.SyncService.SendClientProperties(CurrentConnectionID, IEnumerableExtentions.GetEntitiesAsXMLObjectList<Entities.TerminalProperty>(CurrentContext.TerminalProperties));
+            ZeroResponse<bool> res1 = Config.SyncService.SendClientProperties(CurrentConnectionID, ContextExtentions.GetEntitiesAsXMLObjectList<Entities.TerminalProperty>(CurrentContext.TerminalProperties));
             if (!res1.IsValid)
             {
                 ret = true;
@@ -463,7 +463,7 @@ namespace ZeroConfiguration
             ZeroResponse<string> res2 = Config.SyncService.GetServerProperties(CurrentConnectionID);
             if (res2.IsValid)
             {
-                IEnumerable<TerminalProperty> props = IEnumerableExtentions.GetEntitiesFromXMLObjectList<TerminalProperty>(res2.Result);
+                IEnumerable<TerminalProperty> props = ContextExtentions.GetEntitiesFromXMLObjectList<TerminalProperty>(res2.Result);
 
                 foreach (var item in props)
                 {
@@ -490,7 +490,7 @@ namespace ZeroConfiguration
             ZeroResponse<string> res2 = Config.SyncService.GetTerminals(CurrentConnectionID);
             if (res2.IsValid)
             {
-                IEnumerable<Terminal> props = IEnumerableExtentions.GetEntitiesFromXMLObjectList<Terminal>(res2.Result);
+                IEnumerable<Terminal> props = ContextExtentions.GetEntitiesFromXMLObjectList<Terminal>(res2.Result);
 
                 foreach (var item in props)
                 {

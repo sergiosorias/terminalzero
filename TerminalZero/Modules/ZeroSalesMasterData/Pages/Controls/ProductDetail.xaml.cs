@@ -176,7 +176,7 @@ namespace ZeroMasterData.Pages.Controls
                 masterCodeTextBox.SelectAll();
                 masterCodeTextBox.Focus();
             }
-            else if(DataProvider.Products.FirstOrDefault(pr=>pr.MasterCode.Equals(CurrentProduct.MasterCode))!=null)
+            else if(Mode == Mode.New && DataProvider.Products.FirstOrDefault(pr=>pr.MasterCode.Equals(CurrentProduct.MasterCode))!=null)
             {
                 msg = "Codigo de product existente!\n Por favor ingrese otro código.";
                 masterCodeTextBox.SelectAll();

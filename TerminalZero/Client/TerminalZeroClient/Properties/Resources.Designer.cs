@@ -70,7 +70,7 @@ namespace TerminalZeroClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terminal Zero.
+        ///   Looks up a localized string similar to OwnerTerminal Zero.
         /// </summary>
         internal static string AppName {
             get {
