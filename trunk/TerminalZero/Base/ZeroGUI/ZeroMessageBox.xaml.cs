@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using ZeroCommonClasses.GlobalObjects;
@@ -27,7 +28,7 @@ namespace ZeroGUI
             
         }
 
-        public ZeroMessageBox(bool isDialog)
+        private ZeroMessageBox(bool isDialog)
             :this()
         {
             _isDialog = isDialog;
@@ -88,30 +89,55 @@ namespace ZeroGUI
 
         public static bool? Show(object content)
         {
-            return Show(content, "", SizeToContent.WidthAndHeight);
+            return Show(content, MessageBoxButton.OK);
+        }
+
+        public static bool? Show(object content, MessageBoxButton mboxButtons)
+        {
+            return Show(content, "", SizeToContent.WidthAndHeight,mboxButtons);
         }
 
         public static bool? Show(object content, ResizeMode resizeMode)
         {
-            return Show(content, "", resizeMode);
+            return Show(content, resizeMode, MessageBoxButton.OKCancel);
+        }
+
+        public static bool? Show(object content, ResizeMode resizeMode, MessageBoxButton mboxButtons)
+        {
+            return Show(content, "", resizeMode, mboxButtons);
         }
 
         public static bool? Show(object content, string caption)
         {
-            return Show(content, caption, SizeToContent.WidthAndHeight);
+            return Show(content, caption, MessageBoxButton.OKCancel);
+        }
+
+        public static bool? Show(object content, string caption, MessageBoxButton mboxButtons)
+        {
+            return Show(content, caption, SizeToContent.WidthAndHeight, mboxButtons);
         }
 
         public static bool? Show(object content, string caption, ResizeMode resizeMode)
         {
-            return Show(content, caption, SizeToContent.WidthAndHeight,resizeMode);
+            return Show(content, caption, resizeMode, MessageBoxButton.OKCancel);
+        }
+
+        public static bool? Show(object content, string caption, ResizeMode resizeMode, MessageBoxButton mboxButtons)
+        {
+            return Show(content, caption, SizeToContent.WidthAndHeight, resizeMode, mboxButtons);
         }
 
         public static bool? Show(object content, string caption, SizeToContent sizeToContent)
         {
-            return Show(content, caption, sizeToContent, ResizeMode.CanResize);
+            return Show(content, caption, sizeToContent, MessageBoxButton.OKCancel);
         }
 
-        public static bool? Show(object content, string caption, SizeToContent sizeToContent, ResizeMode resizeMode)
+        public static bool? Show(object content, string caption, SizeToContent sizeToContent, MessageBoxButton mboxButtons)
+        {
+            return Show(content, caption, sizeToContent, ResizeMode.CanResize, mboxButtons);
+        }
+
+        public static bool? Show(object content, string caption, SizeToContent sizeToContent, ResizeMode resizeMode, MessageBoxButton mboxButtons)
         {
             ZeroMessageBox MB = new ZeroMessageBox(true);
             MB.Content = content;
@@ -124,6 +150,23 @@ namespace ZeroGUI
             if (content is UIElement)
             {
                 ((UIElement)content).Focus();
+            }
+
+            switch (mboxButtons)
+            {
+                case MessageBoxButton.OK:
+                    MB.btnCancel.Visibility = Visibility.Collapsed;
+                    break;
+                case MessageBoxButton.OKCancel:
+                   break;
+                case MessageBoxButton.YesNoCancel:
+                    break;
+                case MessageBoxButton.YesNo:
+                     MB.btnCancel.Content = "No";
+                     MB.btnAccept.Content = "Si";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("mboxButtons");
             }
             MB.Title = caption;
             MB.SizeToContent = sizeToContent;

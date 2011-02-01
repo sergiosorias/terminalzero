@@ -7,7 +7,7 @@
              WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="40" MaxHeight="500" MaxWidth="800"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Window.InputBindings>
-        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Ctrl"/>
+        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Shift"/>
         <KeyBinding x:Name="ShortCutCancel" Key="Escape"/>
     </Window.InputBindings>
     <Grid Background="{DynamicResource mainBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
