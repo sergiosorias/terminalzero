@@ -47,18 +47,19 @@ namespace ZeroStock.Pages
 
         private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
         {
+            int tCode = _terminal.TerminalCode;
+            if (cbTerminals.SelectedValue != null) tCode = ((int)cbTerminals.SelectedValue);
             CollectionViewSource cvs1 = Resources["cvs1"] as CollectionViewSource;
-            cvs1.Source = MyEntities.StockSummaries.Where(s => s.Name.Contains(e.Criteria));
+            cvs1.Source = MyEntities.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
             CollectionViewSource cvs2 = Resources["cvs2"] as CollectionViewSource;
-            cvs2.Source = MyEntities.StockCreateSummaries.Where(s => s.Name.Contains(e.Criteria));
+            cvs2.Source = MyEntities.StockCreateSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
             CollectionViewSource cvs3 = Resources["cvs3"] as CollectionViewSource;
-            cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.Name.Contains(e.Criteria));
-            UpdateLayout();
+            cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
         }
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FilterPerTerminal((int)cbTerminals.SelectedValue);
+            if (cbTerminals.SelectedValue != null) FilterPerTerminal((int)cbTerminals.SelectedValue);
         }
 
         private void FilterPerTerminal(int tCode)

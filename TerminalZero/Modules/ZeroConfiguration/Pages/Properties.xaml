@@ -5,7 +5,7 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" Content="Lista de productos" />
+		<Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" Content="Propiedades del sistema" />
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />

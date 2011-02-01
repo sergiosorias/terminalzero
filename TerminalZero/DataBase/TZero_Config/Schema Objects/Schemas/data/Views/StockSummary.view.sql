@@ -14,6 +14,7 @@
 	LEFT JOIN
 		data.StockModifySummary SMS
 	ON
-		SCS.ProductMasterCode = SMS.ProductMasterCode) AS T
+		SCS.ProductMasterCode = SMS.ProductMasterCode 
+		AND SCS.TerminalToCode = SMS.TerminalToCode) AS T
 	ORDER BY
 		T.NetWeight desc

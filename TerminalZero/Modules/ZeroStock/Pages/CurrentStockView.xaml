@@ -44,7 +44,7 @@
             <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="False"/>
             <Label Grid.Row="1" Style="{DynamicResource titleLabelStyle}" Content="Stock por producto"/>
         </Grid>
-        <DataGrid AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Grid.ColumnSpan="2" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs2}}" Name="stockSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Grid.ColumnSpan="2" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs1}}" Name="stockSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
@@ -55,7 +55,7 @@
         </DataGrid>
         <Label Grid.Column="0" Grid.Row="2" Style="{StaticResource titleLabelStyle}" Content="Resumen de altas"/>
         <Label Grid.Column="1" Grid.Row="2" Content="Resumen de bajas" Style="{StaticResource titleLabelStyle}"/>
-        <DataGrid AutoGenerateColumns="False" Grid.Row="3" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs1}}" Name="stockCreateSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid AutoGenerateColumns="False" Grid.Row="3" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs2}}" Name="stockCreateSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn1" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn1" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
