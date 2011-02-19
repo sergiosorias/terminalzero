@@ -80,8 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="clientaccesspolicy.xml" />
+    <Content Include="ClientAccessPolicy.xml" />
     <Content Include="ClientBin\TerminalZeroWebClient.xap" />
+    <Content Include="CrossDomain.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\background_icons.jpg" />
@@ -161,7 +162,7 @@
     <Content Include="Services\Sync.svc" />
     <Content Include="Silverlight.js" />
     <Content Include="Styles\CSS-Styles.css" />
-    <Content Include="TerminalZeroWebClientTestPage.aspx" />
+    <Content Include="TerminalZero.aspx" />
     <Content Include="Users\Login.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

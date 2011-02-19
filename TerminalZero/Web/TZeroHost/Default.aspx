@@ -101,7 +101,7 @@
                 </div>
             </td>
             <td style="height: 100%; width: 100%;" valign="top">
-                <iframe src="./TerminalZeroWebClientTestPage.aspx" frameborder="0" style="height: 100%;
+                <iframe src="./TerminalZero.aspx" frameborder="0" style="height: 100%;
                     width: 100%"></iframe>
             </td>
         </tr>
@@ -109,7 +109,7 @@
             <td style="height: 22px; padding-left: 30px; font-size; 18px; background-color: #4E4F52;
                 color: White" valign="middle" align="center" colspan="3" class="cssLoginTitle">
                 <p>
-                    Sebastian Etchevest
+                    N&S Systems
                 </p>
             </td>
         </tr>
