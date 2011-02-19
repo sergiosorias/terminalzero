@@ -80,7 +80,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientAccessPolicy.xml" />
     <Content Include="ClientBin\TerminalZeroWebClient.xap" />
     <Content Include="CrossDomain.xml" />
     <Content Include="Default.aspx" />
