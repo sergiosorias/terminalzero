@@ -44,6 +44,9 @@ namespace ZeroCommonClasses.GlobalObjects.Barcode
             string ret = "";
             switch (compositionChar)
             {
+                case 'Y':
+                    ret = "Año";
+                    break;
                 case 'M':
                     ret = "Mes";
                     break;

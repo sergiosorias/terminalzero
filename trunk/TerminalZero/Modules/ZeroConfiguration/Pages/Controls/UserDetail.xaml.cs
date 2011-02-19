@@ -82,6 +82,7 @@ namespace ZeroConfiguration.Pages.Controls
                 default:
                     MembershipUser usr = ((MembershipUser)DataContext);
                     Membership.UpdateUser(usr);
+                    ret = true;
                     break;
             }
             

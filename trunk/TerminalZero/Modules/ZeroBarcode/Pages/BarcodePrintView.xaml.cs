@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace ZeroBarcode.Views
+namespace ZeroBarcode.Pages
 {
     /// <summary>
     /// Interaction logic for BarcodePrintView.xaml
@@ -23,5 +13,40 @@ namespace ZeroBarcode.Views
         {
             InitializeComponent();
         }
+
+        public void Init(TextBlock barcodeText)
+        {
+            var dialog = new PrintDialog();
+            document.PageHeight = dialog.PrintableAreaHeight;
+            document.PageWidth = dialog.PrintableAreaWidth;
+
+            document.ColumnWidth = barcodeText.DesiredSize.Width;
+            document.IsColumnWidthFlexible = false;
+            for (int i = 0; i < 16; i++)
+            {
+                var tr = new TableRow();
+                for (int j = 0; j < 6; j++)
+                {
+                    var td = new
+                        TableCell(
+                        new BlockUIContainer
+                            (
+                            new TextBlock
+                                {
+                                    Margin = barcodeText.Margin,
+                                    Text = barcodeText.Text,
+                                    FontFamily = barcodeText.FontFamily,
+                                    FontSize = barcodeText.FontSize
+                                }
+                            )
+                        );
+                    tr.Cells.Add(td);
+                }
+                barcodeTableRow.Rows.Add(tr);
+            }
+            
+        }
     }
+
+
 }

@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    
+
     <Grid x:Name="LayoutRoot" MaxHeight="25" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -12,21 +12,21 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <ProgressBar x:Name="remainingTime" MinWidth="60" Minimum="0" Maximum="100" Margin="2"/>
-                <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="autoUpdate" 
+            <ProgressBar x:Name="remainingTime" MinWidth="60" Minimum="0" Maximum="100" Margin="2"/>
+            <CheckBox HorizontalAlignment="Center" Background="Transparent" VerticalAlignment="Center" VerticalContentAlignment="Center" x:Name="autoUpdate" 
                           Checked="autoUpdate_Checked" Unchecked="autoUpdate_Unchecked" Content="Auto" Margin="2"/>
-            <TextBlock VerticalAlignment="Center" Text="{Binding Path=RefreshEvery, Mode=TwoWay}" />
-                
-            </Grid>
-            <Slider Grid.Column="1" Maximum="60" Minimum="10" x:Name="sliderRefreshEvery" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SmallChange="1" Value="{Binding Path=RefreshEvery, Mode=TwoWay}">
-                <Slider.RenderTransform>
-                    <TransformGroup>
-                        <RotateTransform Angle="-90" CenterX="13" CenterY="12"/>
-                    </TransformGroup>
-                </Slider.RenderTransform>
-            </Slider>
+        </Grid>
+        <Slider Grid.Column="1" Maximum="60" Minimum="10" x:Name="sliderRefreshEvery" HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" SmallChange="1" Value="{Binding Path=RefreshEvery, Mode=TwoWay}">
+            <Slider.RenderTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="-90" CenterX="13" CenterY="12"/>
+                </TransformGroup>
+            </Slider.RenderTransform>
+            
+        </Slider>
         <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="Refresh" 
                 Click="Button_Click" Margin="2"/>
-        
+
     </Grid>
 </UserControl>

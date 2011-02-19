@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Security;
@@ -18,13 +19,14 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for NewStockView.xaml
     /// </summary>
-    public partial class StockView : UserControl, IZeroPage
+    public partial class CreateStockView : UserControl, IZeroPage
     {
         private readonly ITerminal _terminal;
         private StockHeader _header;
         private StockEntities _context;
+        private string _lot = "";
         readonly int _stockType = -1;
-        public StockView(ITerminal terminal, int stockType)
+        public CreateStockView(ITerminal terminal, int stockType)
         {
             InitializeComponent();
             _terminal = terminal;
@@ -50,8 +52,9 @@ namespace ZeroStock.Pages
                     bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
                     {
-                        _header.DeliveryDocumentHeaderCode = view.SelectedDeliveryDocumentHeader.Code;
-                        _header.TerminalToCode = view.SelectedDeliveryDocumentHeader.TerminalToCode;
+                        _header.DeliveryDocumentHeader =(DeliveryDocumentHeader)_context.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
+                        //_header.DeliveryDocumentHeaderCode = view.SelectedDeliveryDocumentHeader.Code;
+                        //_header.TerminalToCode = view.SelectedDeliveryDocumentHeader.TerminalToCode;
                     }
                     else
                     {
@@ -114,7 +117,7 @@ namespace ZeroStock.Pages
         public bool CanAccept(object parameter)
         {
             bool ret = true;
-            if (_header != null && _header.EntityState != System.Data.EntityState.Unchanged && _header.StockItems != null && _header.StockItems.Count > 0 &&  _header.StockItems.All(si => si.EntityState != System.Data.EntityState.Unchanged))
+            if (_header != null && _header.EntityState != EntityState.Unchanged && _header.StockItems != null && _header.StockItems.Count > 0 &&  _header.StockItems.All(si => si.EntityState != EntityState.Unchanged))
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -148,42 +151,16 @@ namespace ZeroStock.Pages
         private int _itemsCount;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            if (!(e.Parts[0].IsValid = e.Parts[0].Code > 0 && e.Parts[0].Code <= 12))
-                e.Error = Properties.Resources.WrongMonth;
-            else if (!(e.Parts[1].IsValid = e.Parts[1].Code > 0 && e.Parts[1].Code <= 31))
-                e.Error = Properties.Resources.WrongDay;
-            else
+            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
+            if (Part != null)
             {
-                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
-                if (Part != null)
+                Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
+                if (prod == null)
                 {
-                    Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
-                    if (prod == null)
-                    {
-                        Part.IsValid = false;
-                        e.Error = Properties.Resources.UnexistentProduct;
-                    }
+                    Part.IsValid = false;
+                    e.Error = Properties.Resources.UnexistentProduct;
                 }
             }
-
-        }
-
-        private bool SaveData()
-        {
-            bool ret = false;
-            try
-            {
-                _context.SaveChanges();
-                MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
-                ret = true;
-            }
-            catch (Exception ex)
-            {
-                ret = false;
-                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                _terminal.Session.Notifier.Log(TraceLevel.Error, ex.ToString());
-            }
-            return ret;
         }
 
         private void BarCodeTextBox_BarcodeReceived(object sender, BarCodeEventArgs e)
@@ -204,15 +181,13 @@ namespace ZeroStock.Pages
                     }
 
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
-                    BarCodePart partDay = e.Parts.FirstOrDefault(p => p.Name == "Día");
-                    BarCodePart partMonth = e.Parts.FirstOrDefault(p => p.Name == "Mes");
-
+                    
                     StockItem item = StockItem.CreateStockItem(_itemsCount++,
                         _terminal.TerminalCode,
                         _header.Code,
                         true,
                         0,
-                        string.Format("{0:00}{1:00}", partMonth.Code, partDay.Code),
+                        _lot,
                         prod.Code,
                         prod.MasterCode,
                         prod.ByWeight,
@@ -221,10 +196,31 @@ namespace ZeroStock.Pages
                         _header.TerminalToCode);
 
                     _header.StockItems.Add(item);
-
+                    //TODO:
+                    //_header.DeliveryDocumentHeader.DeliveryDocumentItems.Add()
                     stockGrid.Add(item);
+                    _lot = "";
+                    lotBarcode.SetFocus();
                 }
             }
+        }
+
+        private bool SaveData()
+        {
+            bool ret = false;
+            try
+            {
+                _context.SaveChanges();
+                MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                ret = true;
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+                _terminal.Session.Notifier.Log(TraceLevel.Error, ex.ToString());
+            }
+            return ret;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -236,6 +232,23 @@ namespace ZeroStock.Pages
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             UserControl_Loaded(null, null);
+        }
+
+        private void lotBarcode_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
+        {
+            if (!(e.Parts[1].IsValid = e.Parts[1].Code >= DateTime.Now.Year))
+                e.Error = Properties.Resources.WrongYear;
+            else if (!(e.Parts[2].IsValid = e.Parts[2].Code > 0 && e.Parts[2].Code <= 12))
+                e.Error = Properties.Resources.WrongMonth;
+            else if (!(e.Parts[3].IsValid = e.Parts[3].Code > 0 && e.Parts[3].Code <= 31))
+                e.Error = Properties.Resources.WrongDay;
+        }
+
+        private void lotBarcode_BarcodeReceived(object sender, BarCodeEventArgs e)
+        {
+            _lot = string.Format("{0:0000}{1:00}{2:00}", e.Parts[1].Code, e.Parts[2].Code, e.Parts[3].Code);
+            mainBarcode.SetFocus();
+
         }
 
 

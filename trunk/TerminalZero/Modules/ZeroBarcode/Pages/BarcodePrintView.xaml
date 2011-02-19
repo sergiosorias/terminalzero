@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ZeroBarcode.Views.BarcodePrintView"
+﻿<UserControl x:Class="ZeroBarcode.Pages.BarcodePrintView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,10 +6,43 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <FlowDocumentPageViewer>
-        <FlowDocument>
-            <BlockUIContainer>
-                <Button Content="Hello"/>
-            </BlockUIContainer>
+        <FlowDocument Name="document">
+            <Table Name="barcodeTable">
+                <TableRowGroup Name="barcodeTableRow">
+                    <!--<TableRow>
+                        <TableCell>
+                            <Paragraph>
+                                <TextBlock Text="asdasdasd"/>
+                            </Paragraph>
+                        </TableCell>
+                        <TableCell>
+                            <Paragraph>
+                                <TextBlock Text="asdasdasd"/>
+                            </Paragraph>
+                        </TableCell>
+                        <TableCell>
+                            <Paragraph>
+                                <TextBlock Text="asdasdasd"/>
+                            </Paragraph>
+                        </TableCell>
+                        <TableCell>
+                            <Paragraph>
+                                <TextBlock Text="asdasdasd"/>
+                            </Paragraph>
+                        </TableCell>
+                        <TableCell>
+                            <Paragraph>
+                                <TextBlock Text="asdasdasd"/>
+                            </Paragraph>
+                        </TableCell>
+                        <TableCell>
+                            <Paragraph>
+                                <TextBlock Text="asdasdasd"/>
+                            </Paragraph>
+                        </TableCell>
+                    </TableRow>-->
+                </TableRowGroup>
+            </Table>
         </FlowDocument>
     </FlowDocumentPageViewer>
 </UserControl>

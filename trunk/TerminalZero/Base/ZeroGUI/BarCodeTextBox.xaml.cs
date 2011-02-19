@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroGUI.Classes;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace ZeroGUI
 {
@@ -78,8 +80,13 @@ namespace ZeroGUI
                 Text.Length == Composition.Length
                 && !Validation.GetHasError(barCode))
             {
-                OnBarcodeReceived(new BarCodeEventArgs(Text, BarCodePart.BuildComposition(Composition,Text)));
+                string barcodeText = Text;
                 Text = "";
+                Dispatcher.BeginInvoke(new MethodInvoker(() => OnBarcodeReceived(new BarCodeEventArgs(barcodeText,
+                                                                                                      BarCodePart.
+                                                                                                          BuildComposition
+                                                                                                          (Composition,
+                                                                                                           barcodeText)))), null);
             }
         }
 
@@ -92,6 +99,11 @@ namespace ZeroGUI
                 e.IsValid = args.Parts.TrueForAll(p => p.IsValid);
                 e.ErrorContent = args.Error;
             }
+        }
+
+        public void SetFocus()
+        {
+            bool b = barCode.Focus();
         }
     }
 

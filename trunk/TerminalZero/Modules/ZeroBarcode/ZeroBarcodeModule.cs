@@ -17,7 +17,7 @@ namespace ZeroBarcode
         public ZeroBarcodeModule(ITerminal terminal)
             :base(terminal,5,"Generador de Códigos de barras")
         {
-            OwnerTerminal.Session.AddAction(new ZeroAction(OwnerTerminal.Session, ActionType.MenuItem, "Configuración@Códigos de barras", OpenCodebarView));
+            OwnerTerminal.Session.AddAction(new ZeroAction(OwnerTerminal.Session, ActionType.MenuItem, "Configuración@Generar Códigos de lote", OpenCodebarView));
         }
 
         public override string[] GetFilesToSend()

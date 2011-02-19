@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Loaded="CurrentLoaded"
              mc:Ignorable="d" Title="Información" WindowStartupLocation="CenterOwner"
-             WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="40" MaxHeight="500" MaxWidth="800"
+             WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="80" MinWidth="100"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Window.InputBindings>
-        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Shift"/>
+        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Control"/>
         <KeyBinding x:Name="ShortCutCancel" Key="Escape"/>
     </Window.InputBindings>
     <Grid Background="{DynamicResource mainBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -17,12 +17,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue=Terminal Zero}"/>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <ContentPresenter Margin="4" x:Name="contentpress" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ContentPresenter Grid.Row="1" Margin="4" x:Name="contentpress" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
     
-            </ContentPresenter>
-        </ScrollViewer>
-        
+        </ContentPresenter>
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2">
             <Button x:Name="btnAccept" Content="Aceptar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FF727C49" Foreground="#FF727C49" />
             <Button x:Name="btnCancel" Content="Cancelar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FFB46161" Foreground="#FFB46161"/>
