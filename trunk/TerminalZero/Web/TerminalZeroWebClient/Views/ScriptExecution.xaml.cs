@@ -20,7 +20,9 @@ namespace TerminalZeroWebClient.Views
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _entities = new DataService.Entities(new Uri(Application.Current.Host.Source, "../Services/DatabaseDataService.svc"));
+            Uri uri = new Uri(Application.Current.Host.Source, "../Services/DatabaseDataService.svc");
+            uriContent.Text = uri.ToString();
+            _entities = new DataService.Entities(uri);
             ConfigureEntities();
         }
 
