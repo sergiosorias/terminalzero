@@ -126,7 +126,7 @@
     <Content Include="Images\icon_user_active.jpg" />
     <Content Include="Images\icon_user_inac.jpg" />
     <Content Include="Images\logo.png" />
-    <Content Include="Images\logoLogIn.jpg" />
+    <Content Include="Images\logoLogIn.png" />
     <Content Include="Images\MenuBack.png" />
     <Content Include="Images\OpacityColor.png" />
     <Content Include="Images\pant1.jpg" />
