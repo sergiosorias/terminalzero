@@ -40,6 +40,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,8 +75,8 @@
     <Compile Include="Pages\DeliveryDocumentView.xaml.cs">
       <DependentUpon>DeliveryDocumentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\StockView.xaml.cs">
-      <DependentUpon>StockView.xaml</DependentUpon>
+    <Compile Include="Pages\CreateStockView.xaml.cs">
+      <DependentUpon>CreateStockView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -123,7 +124,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\StockView.xaml">
+    <Page Include="Pages\CreateStockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

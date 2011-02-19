@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ZeroConfiguration.Pages
 {
@@ -25,6 +26,22 @@ namespace ZeroConfiguration.Pages
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             nameText.Focus();
+        }
+
+        private void namePass_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                
+            }
+        }
+
+        private void nameText_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                namePass.Focus();
+            }
         }
     }
 }

@@ -91,8 +91,7 @@ namespace ZeroStock.Pages
 
         private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
         {
-            DeliveryGrid.ApplyFilter(e.Criteria);
-            e.Matches = DeliveryGrid.deliveryDocumentHeadersDataGrid.Items.Count;
+            e.Matches = DeliveryGrid.ApplyFilter(e.Criteria, dateFilter.SelectedDate); ;
         }
 
         private void btnNewProduct_Click(object sender, RoutedEventArgs e)
@@ -107,7 +106,7 @@ namespace ZeroStock.Pages
 
         private void dateFilter_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            DeliveryGrid.ApplyFilter(dateFilter.SelectedDate.Value);
+            DeliveryGrid.ApplyFilter(string.Empty, dateFilter.SelectedDate);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ZeroCommonClasses.GlobalObjects;
@@ -13,12 +14,21 @@ namespace ZeroGUI
     public partial class ZeroMessageBox : Window
     {
         bool _isDialog = false;
+
         private readonly ZeroAction _acceptAction;
         private readonly ZeroAction _cancelAction;
+
         public ZeroMessageBox()
         {
             InitializeComponent();
-            Owner = Application.Current.Windows[Application.Current.Windows.Count-2];
+            if (Application.Current.Windows.Count > 0)
+            {
+                Owner = Application.Current.Windows[Application.Current.Windows.Count - 2];
+                
+                MaxWidth = Application.Current.Windows[0].ActualWidth;
+                MaxHeight = Application.Current.Windows[0].ActualHeight;
+                
+            }
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             lblCaption.DataContext = this;
             _acceptAction = new ZeroAction(null, ActionType.BackgroudAction, "cancel", Accept);
@@ -44,6 +54,12 @@ namespace ZeroGUI
             set
             {
                 contentpress.Content = value;
+                if(Content is UserControl)
+                {
+                    ((UserControl) Content).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
+                    ((UserControl)Content).HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    ((UserControl)Content).VerticalContentAlignment = System.Windows.VerticalAlignment.Stretch;
+                }
                 if (Content is IZeroPage)
                 {
                     _acceptAction.RuleToSatisfy = ((IZeroPage)value).CanAccept;
@@ -54,18 +70,41 @@ namespace ZeroGUI
 
         private void Accept()
         {
+            try
+            {
             if (_isDialog)
                 DialogResult = true;
+            }
+            catch { }
 
-            this.Close();
+            Close();
         }
 
         private void Cancel()
         {
-            if (_isDialog)
-                DialogResult = false;
+            try
+            {
+                if (_isDialog)
+                    DialogResult = false;
+            }
+            catch{}
+            
 
-            this.Close();
+            Close();
+        }
+
+        private void ZeroMessageBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            
+            if (e.Key == Key.Enter &&
+                e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                if (_acceptAction.CanExecute(null))
+                {
+                    _acceptAction.Execute(null);
+                }
+            }
         }
 
         private void CurrentMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -174,6 +213,6 @@ namespace ZeroGUI
         }
 
         #endregion Statics
-
+        
     }
 }

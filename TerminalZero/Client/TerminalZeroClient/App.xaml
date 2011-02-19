@@ -52,9 +52,8 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="ClipboardCopyMode" Value="IncludeHeader"/>
-            <Setter Property="GridLinesVisibility" Value="All"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
             <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource DarkBlueBrushKey}"/>
-            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="AlternatingRowBackground" Value="{StaticResource BlueBrushKey}"/>
             <Setter Property="CellStyle">

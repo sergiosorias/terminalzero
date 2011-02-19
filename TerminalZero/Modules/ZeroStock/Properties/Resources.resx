@@ -131,4 +131,10 @@
 	<data name="MsgSelectSupplierPlease">
 		<value xml:space="preserve">Por favor seleccione un proveedor.</value>
 	</data>
+	<data name="WrongYear">
+		<value xml:space="preserve">Año incorrecto</value>
+	</data>
+	<data name="NewDeliveryNote">
+		<value xml:space="preserve">Nuevo remito</value>
+	</data>
 </root>

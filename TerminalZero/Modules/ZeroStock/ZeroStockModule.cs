@@ -24,7 +24,7 @@ namespace ZeroStock
         {
             OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
             OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView, "ValidateTerminalZero"));
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView));
+            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView, "ValidateTerminalZero"));
             OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Remitos de salida", OpenDeliveryNoteView, "ValidateTerminalZero"));
         }
 
@@ -133,13 +133,13 @@ namespace ZeroStock
 
         private void openNewStockView()
         {
-            var view = new StockView(OwnerTerminal, 0);
+            var view = new CreateStockView(OwnerTerminal, 0);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openModifyStockView()
         {
-            var view = new StockView(OwnerTerminal, 1);
+            var view = new CreateStockView(OwnerTerminal, 1);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 

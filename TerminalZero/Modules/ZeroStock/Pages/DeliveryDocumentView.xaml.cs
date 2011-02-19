@@ -14,34 +14,19 @@ namespace ZeroStock.Pages
     /// </summary>
     public partial class DeliveryDocumentView : UserControl, IZeroPage
     {
-        private ITerminal Terminal;
+        private readonly ITerminal Terminal;
         public DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
 
         public DeliveryDocumentView(ITerminal terminal)
         {
+            Mode = Mode.New;
             InitializeComponent();
             Terminal = terminal;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (Mode)
-            {
-                case Mode.New:
-                    break;
-                case Mode.Update:
-                    break;
-                case Mode.Delete:
-                    break;
-                case Mode.ReadOnly:
-                    break;
-                case Mode.Selection:
-                    
-                    break;
-                default:
-                    break;
-            }
-            // Do not load your data at design time.
+             // Do not load your data at design time.
              if (!DesignerProperties.GetIsInDesignMode(this))
              {
              	//Load your data here and assign the result to the CollectionViewSource.
@@ -55,18 +40,7 @@ namespace ZeroStock.Pages
 
         #region IZeroPage Members
 
-        Mode _Mode = Mode.New;
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public Mode Mode { get; set; }
 
         public bool CanAccept(object parameter)
         {
@@ -94,14 +68,13 @@ namespace ZeroStock.Pages
 
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
-            DeliveryGrid.ApplyFilter(e.Criteria);
-            e.Matches = DeliveryGrid.deliveryDocumentHeadersDataGrid.Items.Count;
+            e.Matches = DeliveryGrid.ApplyFilter(e.Criteria, dateFilter.SelectedDate); ;
         }
 
         private void btnNewProduct_Click(object sender, RoutedEventArgs e)
         {
             var det = new DocumentDeliveryDetail(Terminal);
-            bool? res = ZeroMessageBox.Show(det, "Nuevo remito");
+            bool? res = ZeroMessageBox.Show(det, Properties.Resources.NewDeliveryNote);
             if (res.HasValue && res.Value)
             {
                 DeliveryGrid.AddDeliveryDocumentHeader(det.CurrentDocumentDelivery);
@@ -110,7 +83,25 @@ namespace ZeroStock.Pages
 
         private void dateFilter_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            DeliveryGrid.ApplyFilter(dateFilter.SelectedDate.Value);
+            DeliveryGrid.ApplyFilter(string.Empty, dateFilter.SelectedDate); ;
+        }
+
+        private void DeliveryGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            switch (Mode)
+            {
+                case Mode.New:
+                    break;
+                case Mode.Update:
+                    break;
+                case Mode.Delete:
+                    break;
+                case Mode.ReadOnly:
+                    break;
+                case Mode.Selection:
+                    DeliveryGrid.ApplyFilter(string.Empty, DateTime.Now.Date);
+                    break;
+            }
         }
     }
 }

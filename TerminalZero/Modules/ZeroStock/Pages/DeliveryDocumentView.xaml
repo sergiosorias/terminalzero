@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             d:DesignHeight="300" d:DesignWidth="600" xmlns:my="clr-namespace:ZeroStock.Entities" Loaded="UserControl_Loaded"
+             d:DesignHeight="300" d:DesignWidth="600" Loaded="UserControl_Loaded"
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
              xmlns:controls="clr-namespace:ZeroStock.Pages.Controls"
              mc:Ignorable="d">
@@ -28,7 +28,7 @@
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>
-                <controls:DeliveryDocumentGrid x:Name="DeliveryGrid" />
+                <controls:DeliveryDocumentGrid x:Name="DeliveryGrid" Loaded="DeliveryGrid_Loaded"  />
             </ContentPresenter.Content>
         </ContentPresenter>
     </Grid>

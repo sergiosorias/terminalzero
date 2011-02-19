@@ -124,6 +124,15 @@ namespace ZeroStock.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nuevo remito.
+        /// </summary>
+        internal static string NewDeliveryNote {
+            get {
+                return ResourceManager.GetString("NewDeliveryNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ¿Desea guardar los datos ingresados?.
         /// </summary>
         internal static string QuestionSaveCurrentData {
@@ -156,6 +165,15 @@ namespace ZeroStock.Properties {
         internal static string WrongMonth {
             get {
                 return ResourceManager.GetString("WrongMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Año incorrecto.
+        /// </summary>
+        internal static string WrongYear {
+            get {
+                return ResourceManager.GetString("WrongYear", resourceCulture);
             }
         }
     }

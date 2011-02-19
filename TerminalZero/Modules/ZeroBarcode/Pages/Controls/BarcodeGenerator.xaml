@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Height="150" Width="180">
+    <Grid Height="240" Width="190">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
@@ -14,8 +14,33 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DatePicker SelectedDateChanged="DatePicker_SelectedDateChanged" Name="date"/>
-        <TextBlock x:Name="BarcodeText" FontFamily="Code EAN13" Margin="10" Grid.Row="1" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button Content="Imprimir.." Click="Button_Click" Grid.Row="2"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="35"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock  Text="Fecha" Margin="2"/>
+            <DatePicker Grid.Column="1" SelectedDateChanged="DatePicker_SelectedDateChanged" Name="date"/>
+            <TextBlock Grid.Row="1"  Text="Tamaño" Margin="2"/>
+            <Slider Grid.Row="1" Grid.Column="1" Maximum="64" SmallChange="1" Name="slFontSize" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="18" Value="41"/>
+            <TextBlock Grid.Row="1"  Grid.Column="2" Text="{Binding ElementName=slFontSize, Path=Value}" Margin="2"/>
+            <TextBlock Grid.Row="2" Text="Margen D/I" Margin="2"/>
+            <Slider Grid.Row="2" Grid.Column="1" Maximum="10" SmallChange="0.001" Name="slMarginRL" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="1" Value="7.70" ValueChanged="slMarginRL_ValueChanged"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Margin="2" Text="{Binding ElementName=slMarginRL, Path=Value}"/>
+            <TextBlock Grid.Row="3" Text="Margen A/A" Margin="2"/>
+            <Slider Grid.Row="3" Grid.Column="1" Maximum="10" SmallChange="0.001" Name="slMarginUD" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" Minimum="1" Value="7.632" ValueChanged="slMarginUD_ValueChanged"/>
+            <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding ElementName=slMarginUD, Path=Value}" Margin="2"/>
+        </Grid>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="BarcodeText" Text="1AHGFHHAAASSAS" FontFamily="Code EAN13" Margin="5" FontSize="{Binding ElementName=slFontSize, Path=Value}"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Vista Previa" Click="Button_Click" />
+        </StackPanel>
     </Grid>
 </UserControl>

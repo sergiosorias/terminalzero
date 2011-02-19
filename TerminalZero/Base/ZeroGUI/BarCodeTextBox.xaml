@@ -21,8 +21,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <SolidColorBrush x:Key="ErrorBrush" Opacity="0.7"/>
-        <SolidColorBrush x:Key="OkBrush" Opacity="0.7"/>
         <SolidColorBrush x:Key="NormalBrush" Color="White"/>
     </UserControl.Resources>
     <TextBox x:Name="barCode" Background="{StaticResource NormalBrush}" TextChanged="barCode_TextChanged" b:Masking.Mask="^[0-9]{0,13}$"

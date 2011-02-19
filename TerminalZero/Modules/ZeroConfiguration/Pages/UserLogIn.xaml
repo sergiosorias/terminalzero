@@ -14,8 +14,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Name="tbName" Text="Nombre:" Margin="3"/>
-        <TextBox Name="nameText" Grid.Column="1" Width="150" Margin="1" Text="{Binding UserName}"/>
+        <TextBox Name="nameText" Grid.Column="1" Width="150" Margin="1" KeyDown="nameText_KeyDown" Text="{Binding UserName}"/>
         <TextBlock Name="tbPass" Grid.Row="1" Text="Contraseña:" Margin="3"/>
-        <PasswordBox Name="namePass" Grid.Row="1" Grid.Column="1" Width="150" Margin="1" PasswordChanged="namePass_PasswordChanged"/>
+        <PasswordBox Name="namePass" Grid.Row="1" Grid.Column="1" Width="150" Margin="1" PreviewKeyDown="namePass_PreviewKeyDown" PasswordChanged="namePass_PasswordChanged"/>
     </Grid>
 </UserControl>

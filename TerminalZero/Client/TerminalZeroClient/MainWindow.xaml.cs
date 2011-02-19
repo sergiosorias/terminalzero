@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Threading;
+using TerminalZeroClient.Extras;
+using TerminalZeroClient.Pages;
+using TerminalZeroClient.Properties;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using System.Collections.Generic;
-using MenuItem = System.Windows.Controls.MenuItem;
+using ContextMenu = System.Windows.Forms.ContextMenu;
+using MenuItem = System.Windows.Forms.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -21,7 +25,7 @@ namespace TerminalZeroClient
     /// </summary>
     public partial class MainWindow : Window, IProgressNotifier
     {
-        private object _lastViewShown = null;
+        private object _lastViewShown;
         public MainWindow()
         {
             InitializeComponent();
@@ -54,13 +58,16 @@ namespace TerminalZeroClient
         private void LoadConfigs()
         {
             mainMenu.Items.Clear();
-            MenuItem item = new MenuItem();
+            var item = new System.Windows.Controls.MenuItem();
             item.Style = (Style)Resources["masterMenuItem"];
             item.Header = Properties.Resources.Home;
             ZeroAction actionInit = null;
+            ZeroAction actionMenu = null;
             if (!App.Instance.Manager.ExistsAction(ApplicationActions.Home, out actionInit))
             {
                 actionInit = new ZeroAction(null,ActionType.BackgroudAction, ApplicationActions.Home,OpenHome);
+                //actionMenu = new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Home, () => item.Focus());
+                //MenuShorcut.Command = actionMenu;
                 App.Instance.Session.AddAction(actionInit);
                 App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
                 App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Exit, ForceClose));
@@ -73,14 +80,14 @@ namespace TerminalZeroClient
         
         private void OpenHome()
         {
-            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
-            args.ControlToShow = new Pages.Home();
+            var args = new ModuleNotificationEventArgs();
+            args.ControlToShow = new Home();
             m_Notifing(null, args);
         }
 
         private void GoBack()
         {
-            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
+            var args = new ModuleNotificationEventArgs();
             args.ControlToShow = _lastViewShown;
             m_Notifing(null, args);
         }
@@ -89,7 +96,7 @@ namespace TerminalZeroClient
         {
             if (e.SomethingToShow)
             {
-                if (e.ControlToShow is ZeroGUI.ZeroMessageBox)
+                if (e.ControlToShow is ZeroMessageBox)
                 {
                     ((ZeroMessageBox) e.ControlToShow).Owner = this;
                     ((ZeroMessageBox) e.ControlToShow).Top = Top + 1;
@@ -119,11 +126,11 @@ namespace TerminalZeroClient
             }
         }
 
-        private static void InternalBuildMenu(TerminalZeroClient.Extras.ZeroMenu menu, ItemCollection items)
+        private static void InternalBuildMenu(ZeroMenu menu, ItemCollection items)
         {
             foreach (var item in menu)
             {
-                MenuItem menuitem = new MenuItem();
+                var menuitem = new System.Windows.Controls.MenuItem();
                 menuitem.Header = item.Key;
                 if (item.Value.Count > 0)
                     InternalBuildMenu(item.Value, menuitem.Items);
@@ -138,14 +145,14 @@ namespace TerminalZeroClient
 
         private void btnGetMoreStatusInfo_Click(object sender, RoutedEventArgs e)
         {
-            TextBox tb = new TextBox();
+            var tb = new TextBox();
             tb.Text = "";
             while (Messages.Count>0)
             {
                 tb.Text += Environment.NewLine + Messages.Dequeue();
             }
             
-            btnGetMoreStatusInfo.Visibility = System.Windows.Visibility.Hidden;
+            btnGetMoreStatusInfo.Visibility = Visibility.Hidden;
             tb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             tb.TextWrapping = TextWrapping.Wrap;
             ZeroMessageBox.Show(tb, "Información");
@@ -153,22 +160,22 @@ namespace TerminalZeroClient
 
         #region TryIcon
 
-        private System.Windows.Forms.NotifyIcon _notifyIcon;
-        private System.Windows.Forms.MenuItem _notifyIconMenuItem;
+        private NotifyIcon _notifyIcon;
+        private MenuItem _notifyIconMenuItem;
         
-        private bool _isNotifyIconOpen = false;
+        private bool _isNotifyIconOpen;
         private void InitTryIcon()
         {
-            _notifyIcon = new System.Windows.Forms.NotifyIcon();
-            _notifyIcon.BalloonTipTitle = Properties.Settings.Default.ApplicationName;
+            _notifyIcon = new NotifyIcon();
+            _notifyIcon.BalloonTipTitle = Settings.Default.ApplicationName;
             _notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
             _notifyIcon.Text = App.Instance.Name;
             _notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
-            _notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            _notifyIcon.Click += m_notifyIcon_Click;
             _notifyIcon.Visible = true;
-            _notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
-            _notifyIcon.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
-            _notifyIconMenuItem = new System.Windows.Forms.MenuItem("Mostrar Notificaciones", (o, e) => { _notifyIconMenuItem.Checked = !_notifyIconMenuItem.Checked; });
+            _notifyIcon.ContextMenu = new ContextMenu();
+            _notifyIcon.ContextMenu.Popup += ContextMenu_Popup;
+            _notifyIconMenuItem = new MenuItem("Mostrar Notificaciones", (o, e) => { _notifyIconMenuItem.Checked = !_notifyIconMenuItem.Checked; });
             _notifyIconMenuItem.Checked = true;
             _notifyIcon.ContextMenu.MenuItems.Add(_notifyIconMenuItem);
 
@@ -183,7 +190,7 @@ namespace TerminalZeroClient
         {
             if (WindowState == WindowState.Minimized && !_isNotifyIconOpen)
             {
-                WindowState = System.Windows.WindowState.Maximized;
+                WindowState = WindowState.Maximized;
                 Show();
             }
             if(_isNotifyIconOpen)
@@ -204,13 +211,13 @@ namespace TerminalZeroClient
         
         #endregion
 
-        private bool _isForced = false;
+        private bool _isForced;
         private void ForceClose()
         {
             _isForced = true;
             Close();
         }
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (!_isForced)
             {
@@ -262,7 +269,7 @@ namespace TerminalZeroClient
 
         public void SetProcess(string newProgress)
         {
-            Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate() { statusMsg.Content = newProgress; }), null);
+            Dispatcher.Invoke(new MethodInvoker(delegate { statusMsg.Content = newProgress; }), null);
             Messages.Enqueue(GetStamp() + newProgress);
         }
 
@@ -273,30 +280,29 @@ namespace TerminalZeroClient
 
         public void SetProgress(int newProgress)
         {
-            Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate() { statusBar.Value = newProgress; }), null);
+            Dispatcher.Invoke(new MethodInvoker(delegate { statusBar.Value = newProgress; }), null);
         }
 
         public void SetUserMessage(bool isMandatory, string message)
         {
-            this.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate()
-            {
-                btnGetMoreStatusInfo.Visibility = isMandatory ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            Dispatcher.Invoke(new MethodInvoker(delegate {
+                btnGetMoreStatusInfo.Visibility = isMandatory ? Visibility.Visible : Visibility.Hidden;
             }), null);
 
             LastMessage = message;
-            this.Messages.Enqueue(GetStamp() + LastMessage);
+            Messages.Enqueue(GetStamp() + LastMessage);
             Log(TraceLevel.Verbose, GetStamp() + LastMessage);
         }
 
         public void SendNotification(string message)
         {
-            BackgroundWorker worker = new BackgroundWorker();
+            var worker = new BackgroundWorker();
             worker.DoWork+=(sender, args)=>{
-            this.Dispatcher.Invoke(new System.Windows.Forms.MethodInvoker(delegate()
-                {
-                    if (WindowState != System.Windows.WindowState.Minimized)
+            Dispatcher.Invoke(new MethodInvoker(delegate
+                                                                         {
+                    if (WindowState != WindowState.Minimized)
                     {
-                        System.Windows.MessageBox.Show(message, "Informacion importante", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(message, "Informacion importante", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
@@ -312,7 +318,7 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            Trace.WriteLineIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.Level >= level, GetStamp() + message);
+            Trace.WriteLineIf(ContextBuilder.LogLevel.Level >= level, GetStamp() + message);
         }
 
         #endregion

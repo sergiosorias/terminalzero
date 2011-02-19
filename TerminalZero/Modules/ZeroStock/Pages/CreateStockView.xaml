@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ZeroStock.Pages.StockView"
+﻿<UserControl x:Class="ZeroStock.Pages.CreateStockView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -18,12 +18,24 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
-                                             BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="MMDDPPPQQQQQQ"/>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Label Content="Lote:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
+                <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode" BarcodeValidating="lotBarcode_BarcodeValidating" 
+                                            BarcodeReceived="lotBarcode_BarcodeReceived" Composition="NNNYYYYMMDDNN"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
+                <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
+                                            BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN"/>
+            </StackPanel>
+            
             <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Button Content="Guardar" x:Name="btnSave" Click="btnSave_Click"/>
                 <Button Content="Cancelar" x:Name="btnCancel" Click="btnCancel_Click"/>
