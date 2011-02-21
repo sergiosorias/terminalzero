@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace ZeroUpdateManager.Database.ScriptLines
@@ -22,7 +21,7 @@ namespace ZeroUpdateManager.Database.ScriptLines
         public string NewValue
         {
             get { return newalue; }
-            set { this.newalue = value; }
+            set { newalue = value; }
         }
 
         public string Key
@@ -33,22 +32,20 @@ namespace ZeroUpdateManager.Database.ScriptLines
         public SetVarScriptLine(string Line)
             : base("setvar")
         {
-            string[] lineParams = Line.Split(' ');
+            string[] lineParams = Line.Split(" ".ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
             key = lineParams[1];
 
-            int start = Line.IndexOf('"');
-            int end = Line.LastIndexOf('"');
-            this.Value = Line.Substring(start + 1, end - start - 1);
+            Value = lineParams[2].Replace("\"","");
         }
 
         public override void Execute(DeployFile deployFile,ref StringBuilder outputFile)
         {
-            outputFile.Replace("$(" + this.key + ")", this.NewValue);
+            outputFile.Replace("$(" + key + ")", NewValue);
         }
 
-        public bool ReplaceAlways()
+        public bool ReplaceAlways
         {
-            return (string.Equals(this.Key, "databasename",StringComparison.OrdinalIgnoreCase));
+            get { return (string.Equals(Key, "databasename", StringComparison.OrdinalIgnoreCase)); }
         }
     }
 }

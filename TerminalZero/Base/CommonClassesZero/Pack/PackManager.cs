@@ -231,7 +231,7 @@ namespace ZeroCommonClasses.Pack
                 ExtractZip(ImportPackPath);
                 DeserializePackInfo();
                 if (PackInfo == null)
-                    PackInfo = new PackInfoBase {TerminalCode = PackInfo.TerminalCode, ModuleCode = GetModule(ImportPackPath), Path = ImportPackPath, Stamp = DateTime.Now, TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack)) };
+                    PackInfo = new PackInfoBase {TerminalCode = -1, ModuleCode = GetModule(ImportPackPath), Path = ImportPackPath, Stamp = DateTime.Now, TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack)) };
                 
                  if (!aPack.IsMasterData.HasValue)
                     aPack.IsMasterData = false;

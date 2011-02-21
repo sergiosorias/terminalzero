@@ -13,6 +13,7 @@ namespace ZeroStock.Pages.Controls
     public partial class DeliveryDocumentGrid : UserControl
     {
         internal StockEntities DataProvider {get;set;}
+        public bool NotUsedOnly { get; set; }
 
         internal DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
 
@@ -29,11 +30,7 @@ namespace ZeroStock.Pages.Controls
              {
                  if(DataProvider==null)
                  DataProvider = new StockEntities();
-             	//Load your data here and assign the result to the CollectionViewSource.
-                 foreach (var item in DataProvider.DeliveryDocumentHeaders)
-                 {
-                     deliveryDocumentHeadersDataGrid.Items.Add(item);
-                 }
+                 NotUsedOnly = true;
              }
         }
 
@@ -46,15 +43,22 @@ namespace ZeroStock.Pages.Controls
         {
             deliveryDocumentHeadersDataGrid.Items.Clear();
 
-            foreach (var item in DataProvider.DeliveryDocumentHeaders.Where(p => criteria == null ||
-                criteria == "" ||
+            foreach (var item in DataProvider.DeliveryDocumentHeaders.Where(p => string.IsNullOrEmpty(criteria) ||
                 p.Supplier.Name1.Contains(criteria) ||
                 p.Supplier.Name2.Contains(criteria) ||
                 p.Note.Contains(criteria)))
             {
-                if ((!criteria2.HasValue || item.Date.Date == criteria2.Value.Date))
+                if (!criteria2.HasValue || item.Date.Date == criteria2.Value.Date)
                 {
-                    deliveryDocumentHeadersDataGrid.Items.Add(item);
+                    if (!item.Used.HasValue)
+                    {
+                        deliveryDocumentHeadersDataGrid.Items.Add(item);
+                    }
+                    else if (!NotUsedOnly || (NotUsedOnly && !item.Used.Value))
+                    {
+                        deliveryDocumentHeadersDataGrid.Items.Add(item);
+                    }
+                    
                 }
             }
 

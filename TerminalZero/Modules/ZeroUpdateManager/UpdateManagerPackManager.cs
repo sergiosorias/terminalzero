@@ -37,7 +37,7 @@ namespace ZeroUpdateManager
                     command.Transaction = tran;
                     foreach (var file in filesToProcess)
                     {
-                        DeployFile deployFile = DeployFile.LoadFrom(file);
+                        DeployFile deployFile = DeployFile.LoadFrom(file,e.Pack.Code,e.PackInfo.TerminalCode);
                         foreach (var item in deployFile.GetStatements(conn.Database))
                         {
                             lastScript = item;

@@ -20,9 +20,9 @@ namespace ZeroMasterData.Pages
             var detail = new Controls.ProductDetail(productList.DataProvider);
 
             bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.NewProduct);
-            if (ret.HasValue && ret.Value)
+            if (ret.HasValue && ret.Value && detail.Mode == Mode.New)
             {
-                
+                productList.AddProduct(detail.CurrentProduct);
             }
         }
 

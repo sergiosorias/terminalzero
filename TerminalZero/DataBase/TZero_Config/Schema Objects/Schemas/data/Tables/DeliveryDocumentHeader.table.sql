@@ -9,5 +9,6 @@
 	[Date] datetime NOT NULL,
 	[UserCode] uniqueidentifier NULL,
 	[SupplierCode] INT,
-	[Note] Text
+	[Note] Text,
+	[Used] bit NULL CONSTRAINT DF_DeliveryDocumentHeader_Used DEFAULT (0)
 )

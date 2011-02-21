@@ -679,6 +679,30 @@ namespace ZeroStock.Entities
         private global::System.Int32 _TerminalToCode;
         partial void OnTerminalToCodeChanging(global::System.Int32 value);
         partial void OnTerminalToCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Used
+        {
+            get
+            {
+                return _Used;
+            }
+            set
+            {
+                OnUsedChanging(value);
+                ReportPropertyChanging("Used");
+                _Used = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Used");
+                OnUsedChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Used;
+        partial void OnUsedChanging(Nullable<global::System.Boolean> value);
+        partial void OnUsedChanged();
 
         #endregion
     

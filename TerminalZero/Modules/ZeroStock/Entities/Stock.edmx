@@ -101,6 +101,7 @@
           <Property Name="UserCode" Type="uniqueidentifier" />
           <Property Name="SupplierCode" Type="int" />
           <Property Name="Note" Type="text" />
+          <Property Name="Used" Type="bit" />
         </EntityType>
         <EntityType Name="DeliveryDocumentItem">
           <Key>
@@ -473,7 +474,7 @@
             <End Role="StockItem" EntitySet="StockItems" />
           </AssociationSet>
           <FunctionImport Name="GetExportTerminal" ReturnType="Collection(TZeroMasterModel.ExportTerminal)">
-            <Parameter Name="TerminalCode" Mode="In" Type="Int32" />
+          <Parameter Name="TerminalCode" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Price">
@@ -699,6 +700,7 @@
           <NavigationProperty Name="StockHeaders" Relationship="TZeroMasterModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="StockHeader" />
           <NavigationProperty Name="DeliveryDocumentItems" Relationship="TZeroMasterModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="DeliveryDocumentItem" />
           <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
+          <Property Type="Boolean" Name="Used" />
         </EntityType>
         <Association Name="FK_DeliveryDocumentHeader_Supplier">
           <End Type="TZeroMasterModel.Supplier" Role="Supplier" Multiplicity="0..1" />
@@ -952,6 +954,7 @@
           <EntitySetMapping Name="DeliveryDocumentHeaders">
             <EntityTypeMapping TypeName="TZeroMasterModel.DeliveryDocumentHeader">
               <MappingFragment StoreEntitySet="DeliveryDocumentHeader">
+                <ScalarProperty Name="Used" ColumnName="Used" />
                 <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />

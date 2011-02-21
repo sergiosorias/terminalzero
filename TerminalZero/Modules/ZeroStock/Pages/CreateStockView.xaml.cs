@@ -53,8 +53,7 @@ namespace ZeroStock.Pages
                     if (res.HasValue && res.Value)
                     {
                         _header.DeliveryDocumentHeader =(DeliveryDocumentHeader)_context.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
-                        //_header.DeliveryDocumentHeaderCode = view.SelectedDeliveryDocumentHeader.Code;
-                        //_header.TerminalToCode = view.SelectedDeliveryDocumentHeader.TerminalToCode;
+                        _header.TerminalToCode = _header.DeliveryDocumentHeader.TerminalToCode;
                     }
                     else
                     {
@@ -97,6 +96,50 @@ namespace ZeroStock.Pages
             _header.StockType = _context.StockTypes.FirstOrDefault(st => st.Code == stockType);
             _context.AddToStockHeaders(_header);
 
+        }
+
+        private StockItem AddNewStockItem(Product prod, double qty)
+        {
+            StockItem item = StockItem.CreateStockItem(_itemsCount++,
+                                                       _terminal.TerminalCode,
+                                                       _header.Code,
+                                                       true,
+                                                       0,
+                                                       _lot,
+                                                       prod.Code,
+                                                       prod.MasterCode,
+                                                       prod.ByWeight,
+                                                       prod.Price1 != null ? prod.Price1.Value : 0,
+                                                       prod.ByWeight ? qty : 1,
+                                                       _header.TerminalToCode);
+
+            _header.StockItems.Add(item);
+            stockGrid.Add(item);
+            return item;
+        }
+
+        private DeliveryDocumentItem AddNewDeliveryDocumentItem(Product prod, double qty)
+        {
+            DeliveryDocumentItem item = null;
+            if (_header.DeliveryDocumentHeader != null)
+            {
+                item = DeliveryDocumentItem.CreateDeliveryDocumentItem
+                    (_itemsCount++,
+                    _terminal.TerminalCode,
+                    _header.Code,
+                    true,
+                    0,
+                    _lot,
+                    prod.Code,
+                    prod.MasterCode,
+                    prod.ByWeight,
+                    prod.Price1 != null ? prod.Price1.Value : 0,
+                    prod.ByWeight ? qty : 1, _header.TerminalToCode);
+
+                _header.DeliveryDocumentHeader.DeliveryDocumentItems.Add(item);
+            }
+
+            return item;
         }
 
         #region IZeroPage Members
@@ -158,7 +201,7 @@ namespace ZeroStock.Pages
                 if (prod == null)
                 {
                     Part.IsValid = false;
-                    e.Error = Properties.Resources.UnexistentProduct;
+                    e.Error = string.Format(Properties.Resources.UnexistentProduct+" - {0}",Part.Code);
                 }
             }
         }
@@ -171,6 +214,10 @@ namespace ZeroStock.Pages
                 Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
                 if (prod != null)
                 {
+                    if (!_header.DeliveryDocumentHeaderReference.IsLoaded)
+                    {
+                        _header.DeliveryDocumentHeaderReference.Load();
+                    }
                     if (!prod.Price1Reference.IsLoaded)
                     {
                         prod.Price1Reference.Load();
@@ -182,23 +229,8 @@ namespace ZeroStock.Pages
 
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
                     
-                    StockItem item = StockItem.CreateStockItem(_itemsCount++,
-                        _terminal.TerminalCode,
-                        _header.Code,
-                        true,
-                        0,
-                        _lot,
-                        prod.Code,
-                        prod.MasterCode,
-                        prod.ByWeight,
-                        prod.Price1 != null ? prod.Price1.Value : 0,
-                        prod.ByWeight ? partQty.Code : 1,
-                        _header.TerminalToCode);
-
-                    _header.StockItems.Add(item);
-                    //TODO:
-                    //_header.DeliveryDocumentHeader.DeliveryDocumentItems.Add()
-                    stockGrid.Add(item);
+                    AddNewStockItem(prod, partQty.Code);
+                    AddNewDeliveryDocumentItem(prod, partQty.Code);
                     _lot = "";
                     lotBarcode.SetFocus();
                 }
@@ -210,6 +242,10 @@ namespace ZeroStock.Pages
             bool ret = false;
             try
             {
+                if(_header.DeliveryDocumentHeader!=null)
+                {
+                    _header.DeliveryDocumentHeader.Used = true;
+                }
                 _context.SaveChanges();
                 MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 ret = true;
