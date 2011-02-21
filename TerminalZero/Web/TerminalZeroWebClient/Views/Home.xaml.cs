@@ -19,6 +19,7 @@ namespace TerminalZeroWebClient.Views
             _client = new ServiceHelperReference.ServiceHelperClient();
             
             _client.GetTerminalsStatusCompleted += ClientGetTerminalsStatusCompleted;
+            
             _client.GetTerminalsStatusAsync();
             waitCursorHome.Start();
         }

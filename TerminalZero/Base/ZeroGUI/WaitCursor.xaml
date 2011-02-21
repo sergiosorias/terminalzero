@@ -54,7 +54,7 @@
             </Canvas>
         </Border>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Cargando.." Foreground="#FF5C769B"/>
+            <TextBlock Text="Loading.." Foreground="#FF5C769B"/>
         </StackPanel>
         
     </Grid>

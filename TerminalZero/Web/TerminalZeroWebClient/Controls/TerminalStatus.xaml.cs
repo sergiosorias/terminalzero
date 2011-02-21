@@ -20,10 +20,12 @@ namespace TerminalZeroWebClient.Controls
             if (DataContext != null)
             {
                 popUpMoreInfo.IsOpen = false;
-                Terminal ter = DataContext as Terminal;
+// ReSharper disable SuggestUseVarKeywordEvident
+                ServiceHelperReference.TerminalStatus ter = DataContext as ServiceHelperReference.TerminalStatus;
+// ReSharper restore SuggestUseVarKeywordEvident
                 if (ter != null)
                 {
-                    if (!ter.IsSyncronized.GetValueOrDefault())
+                    if (!ter.Terminal.IsSyncronized.GetValueOrDefault())
                     {
                         LinearGradientBrush b = BackBorder.Background as LinearGradientBrush;
                         b.GradientStops[2].Color = (Color)Resources["invalidRed"];
@@ -32,11 +34,12 @@ namespace TerminalZeroWebClient.Controls
                         
                     }
 
-                    TerminalProperty prop = ter.TerminalProperties.FirstOrDefault(tp => tp.Code == "SYNC_EVERY");
+                    TerminalProperty prop = ter.Terminal.TerminalProperties.FirstOrDefault(tp => tp.Code == "SYNC_EVERY");
                     if (prop != null)
                     {
                         MessageBoxPopUp.Text += string.Format("Conexiones cada {0} minutos.",  prop.Value);
                     }
+                    MessageBox2PopUp.Text = ter.Info ?? "Sin Información";
                 }
             }
         }
@@ -53,6 +56,7 @@ namespace TerminalZeroWebClient.Controls
 
         readonly SolidColorBrush _borderActive = new SolidColorBrush(Colors.Gray);
         readonly SolidColorBrush _borderInactive = new SolidColorBrush(Colors.Transparent);
+
         private void LayoutRoot_MouseEnter(object sender, MouseEventArgs e)
         {
             BackBorder.BorderBrush = _borderActive;

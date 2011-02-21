@@ -42,12 +42,12 @@ namespace TerminalZeroWebClient.Classes
         string _FriendlyName;
         DataServiceCollection<T> _Collection;
         DataServiceQuery<T> query;
-        public DataServiceEntity(string name, string friendlyName, System.Data.Services.Client.DataServiceContext context)
+        public DataServiceEntity(string name, string friendlyName, DataServiceContext context)
         {
             _EntityName = name;
             _FriendlyName = friendlyName;
             _Collection = new DataServiceCollection<T>();
-            _Collection.LoadCompleted += new EventHandler<LoadCompletedEventArgs>(Collection_LoadCompleted);
+            _Collection.LoadCompleted += Collection_LoadCompleted;
             query = context.CreateQuery<T>(_EntityName);
         }
 

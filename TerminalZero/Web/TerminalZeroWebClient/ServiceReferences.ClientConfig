@@ -14,18 +14,12 @@
             </customBinding>
         </bindings>
         <client>
-          <endpoint address="http://tzhost.dyndns-server.com/tzserver/services/ServiceHelper.svc"
-                binding="customBinding" bindingConfiguration="WSHttpBinding_ServiceHelper"
-                contract="ServiceHelperReference.ServiceHelper" name="WSHttpBinding_ServiceHelper" />
-          <endpoint address="http://tzhost.dyndns-server.com/tzserver/services/FileTransfer.svc"
-              binding="customBinding" bindingConfiguration="WSHttpBinding_IFileTransfer"
-              contract="FileTranferReference.IFileTransfer" name="WSHttpBinding_IFileTransfer" />
-            <!--<endpoint address="http://sebas-note/TZeroHost/services/ServiceHelper.svc"
-                binding="customBinding" bindingConfiguration="WSHttpBinding_ServiceHelper"
-                contract="ServiceHelperReference.ServiceHelper" name="WSHttpBinding_ServiceHelper" />
             <endpoint address="http://sebas-note/TZeroHost/Services/FileTransfer.svc"
                 binding="customBinding" bindingConfiguration="WSHttpBinding_IFileTransfer"
-                contract="FileTranferReference.IFileTransfer" name="WSHttpBinding_IFileTransfer" />-->
+                contract="FileTranferReference.IFileTransfer" name="WSHttpBinding_IFileTransfer" />
+            <endpoint address="http://sebas-note/TZeroHost/Services/ServiceHelper.svc"
+                binding="customBinding" bindingConfiguration="WSHttpBinding_ServiceHelper"
+                contract="ServiceHelperReference.ServiceHelper" name="WSHttpBinding_ServiceHelper" />
         </client>
     </system.serviceModel>
 </configuration>

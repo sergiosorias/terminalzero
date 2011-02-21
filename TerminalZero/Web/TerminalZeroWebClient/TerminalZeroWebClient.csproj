@@ -228,7 +228,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper1.disco" />
     <None Include="Service References\FileTranferReference\FileTransfer.disco" />
     <None Include="Service References\FileTranferReference\configuration91.svcinfo" />
     <None Include="Service References\FileTranferReference\configuration.svcinfo" />
@@ -236,34 +235,40 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="ServiceReferences.ClientConfig" />
+    <None Include="Service References\ServiceHelperReference\ServiceHelper.disco" />
+    <Content Include="ServiceReferences.ClientConfig">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\DataService\service.edmx" />
-    <None Include="Service References\ServiceHelperReference\ServiceHelper1.wsdl" />
+    <None Include="Service References\ServiceHelperReference\ServiceHelper.wsdl" />
+    <None Include="Service References\ServiceHelperReference\ServiceHelper.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceHelperReference\ServiceHelper8.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ServiceHelperReference\ServiceHelper9.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper91.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper92.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper93.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper94.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper95.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper96.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper97.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ServiceHelperReference\ServiceHelper98.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.Pack.datasource">
@@ -272,7 +277,7 @@
     <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.VirtualLogEntry.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN.datasource">
+    <None Include="Service References\ServiceHelperReference\TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
