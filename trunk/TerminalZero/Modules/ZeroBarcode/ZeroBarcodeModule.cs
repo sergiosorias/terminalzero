@@ -15,7 +15,7 @@ namespace ZeroBarcode
     public class ZeroBarcodeModule : ZeroModule
     {
         public ZeroBarcodeModule(ITerminal terminal)
-            :base(terminal,5,"Generador de Códigos de barras")
+            :base(terminal,6,"Generador de Códigos de barras")
         {
             OwnerTerminal.Session.AddAction(new ZeroAction(OwnerTerminal.Session, ActionType.MenuItem, "Configuración@Generar Códigos de lote", OpenCodebarView));
         }

@@ -52,7 +52,7 @@ namespace TerminalZeroClient
 
         void Manager_ConfigurationRequired(object sender, EventArgs e)
         {
-            Dispatcher.BeginInvoke(new MethodInvoker(() => { LoadConfigs(); }), null);
+            Dispatcher.BeginInvoke(new MethodInvoker(LoadConfigs), null);
         }
 
         private void LoadConfigs()
@@ -62,7 +62,6 @@ namespace TerminalZeroClient
             item.Style = (Style)Resources["masterMenuItem"];
             item.Header = Properties.Resources.Home;
             ZeroAction actionInit = null;
-            ZeroAction actionMenu = null;
             if (!App.Instance.Manager.ExistsAction(ApplicationActions.Home, out actionInit))
             {
                 actionInit = new ZeroAction(null,ActionType.BackgroudAction, ApplicationActions.Home,OpenHome);
@@ -87,9 +86,17 @@ namespace TerminalZeroClient
 
         private void GoBack()
         {
-            var args = new ModuleNotificationEventArgs();
-            args.ControlToShow = _lastViewShown;
-            m_Notifing(null, args);
+            try
+            {
+                var args = new ModuleNotificationEventArgs();
+                args.ControlToShow = _lastViewShown;
+                m_Notifing(null, args);
+            }
+            catch
+            {
+                OpenHome();
+            }
+            
         }
 
         private void m_Notifing(object sender, ModuleNotificationEventArgs e)
@@ -117,7 +124,6 @@ namespace TerminalZeroClient
         private void ShowObject(ModuleNotificationEventArgs e)
         {
             _lastViewShown = PrimaryWindow.Content;
-
             PrimaryWindow.Content = e.ControlToShow;
             if (e.ControlToShow is UIElement)
             {

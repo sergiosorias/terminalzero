@@ -1,10 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -13,25 +17,26 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class ProductDetail : UserControl, IZeroPage
     {
-        public ProductDetail(Entities.MasterDataEntities dataProvider)
+        public ProductDetail(MasterDataEntities dataProvider)
         {
+            Mode = Mode.New;
             InitializeComponent();
             DataProvider = dataProvider;
         }
 
-        public ProductDetail(Entities.MasterDataEntities dataProvider, int productCode)
+        public ProductDetail(MasterDataEntities dataProvider, int productCode)
             : this(dataProvider)
         {
             CurrentProduct = DataProvider.Products.First(p => p.Code == productCode);
-            Mode = ZeroCommonClasses.Interfaces.Mode.Update;
+            Mode = Mode.Update;
         }
 
-        Entities.MasterDataEntities DataProvider;
-        public Entities.Product CurrentProduct { get; private set; }
+        MasterDataEntities DataProvider;
+        public Product CurrentProduct { get; private set; }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 LoadProduct();
                 LoadTaxes();
@@ -69,7 +74,7 @@ namespace ZeroMasterData.Pages.Controls
                 weightBox.Items.Add(item);
             }
 
-            if (Mode == ZeroCommonClasses.Interfaces.Mode.Update
+            if (Mode == Mode.Update
                 && CurrentProduct.PriceCode.HasValue)
             {
                 if (!CurrentProduct.PriceReference.IsLoaded)
@@ -88,7 +93,7 @@ namespace ZeroMasterData.Pages.Controls
             foreach (var item in DataProvider.ProductGroups)
             {
                 groupBox.Items.Add(item);
-                if (Mode == ZeroCommonClasses.Interfaces.Mode.Update && CurrentProduct.Group1 == item.Code)
+                if (Mode == Mode.Update && CurrentProduct.Group1 == item.Code)
                 {
                     groupBox.SelectedItem = item;
                 }
@@ -97,16 +102,16 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadProduct()
         {
-            Entities.Price P = null;
+            Price P = null;
 
             switch (Mode)
             {
                 case Mode.New:
-                    CurrentProduct = Entities.Product.CreateProduct(
+                    CurrentProduct = Product.CreateProduct(
                         DataProvider.Products.Count()
                         , true, DataProvider.GetNextProductCode(), true);
 
-                    P = Entities.Price.CreatePrice(
+                    P = Price.CreatePrice(
                         DataProvider.Prices.Count(),
                         true, 0);
                     break;
@@ -115,7 +120,7 @@ namespace ZeroMasterData.Pages.Controls
                         P = DataProvider.Prices.First(p => p.Code == CurrentProduct.PriceCode);
                     else
                     {
-                        P = Entities.Price.CreatePrice(
+                        P = Price.CreatePrice(
                         DataProvider.Prices.Count(),
                         true, 0);
                     }
@@ -140,7 +145,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void groupBtn_Click(object sender, RoutedEventArgs e)
         {
-            ProductGroupDetail pgd = new ProductGroupDetail(DataProvider);
+            var pgd = new ProductGroupDetail(DataProvider);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewGroup);
             if (res.HasValue && res.Value)
             {
@@ -153,7 +158,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void weightBtn_Click(object sender, RoutedEventArgs e)
         {
-            WeightDetail pgd = new WeightDetail(DataProvider);
+            var pgd = new WeightDetail(DataProvider);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewMeasurementUnit);
             if (res.HasValue && res.Value)
             {
@@ -209,7 +214,7 @@ namespace ZeroMasterData.Pages.Controls
             {
                 if (p == 0)
                 {
-                    switch (System.Windows.MessageBox.Show("¿Esta seguro que desea dejar el valor en cero?", "Precaución", MessageBoxButton.YesNo, MessageBoxImage.Question))
+                    switch (MessageBox.Show("¿Esta seguro que desea dejar el valor en cero?", "Precaución", MessageBoxButton.YesNo, MessageBoxImage.Question))
                     {
                         case MessageBoxResult.Cancel:
                         case MessageBoxResult.No:
@@ -227,7 +232,7 @@ namespace ZeroMasterData.Pages.Controls
             }
             else
             {
-                System.Windows.MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 ret = false;
             }
 
@@ -255,7 +260,7 @@ namespace ZeroMasterData.Pages.Controls
                 }
                 catch (Exception wx)
                 {
-                    global::System.Windows.Forms.MessageBox.Show(wx.ToString());
+                    System.Windows.Forms.MessageBox.Show(wx.ToString());
                 }
 
             }
@@ -266,32 +271,20 @@ namespace ZeroMasterData.Pages.Controls
 
         public bool CanCancel(object parameter)
         {
-            EntityObject obj = CurrentProduct as EntityObject;
-            if (obj.EntityState == System.Data.EntityState.Modified)
-                DataProvider.Refresh(System.Data.Objects.RefreshMode.StoreWins, CurrentProduct);
+            EntityObject obj = CurrentProduct;
+            if (obj.EntityState == EntityState.Modified)
+                DataProvider.Refresh(RefreshMode.StoreWins, CurrentProduct);
             return true;
         }
 
-        private Mode _Mode = Mode.New;
-
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public Mode Mode { get; set; }
 
         #endregion
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {
-            int t = (int)((Button)sender).DataContext;
-            ProductGroupDetail pgd = new ProductGroupDetail(DataProvider);
+            var t = (int)((Button)sender).DataContext;
+            var pgd = new ProductGroupDetail(DataProvider);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
@@ -302,8 +295,8 @@ namespace ZeroMasterData.Pages.Controls
 
         private void weightBoxItemButton_Click(object sender, RoutedEventArgs e)
         {
-            int t = (int)((Button)sender).DataContext;
-            WeightDetail pgd = new WeightDetail(DataProvider,
+            var t = (int)((Button)sender).DataContext;
+            var pgd = new WeightDetail(DataProvider,
                 DataProvider.Weights.First(w => w.Code == t));
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
@@ -316,12 +309,12 @@ namespace ZeroMasterData.Pages.Controls
         private void weightBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CurrentProduct.Price1 != null)
-                CurrentProduct.Price1.SaleWeightCode = ((Entities.Weight)weightBox.SelectedItem).Code;
+                CurrentProduct.Price1.SaleWeightCode = ((Weight)weightBox.SelectedItem).Code;
         }
 
         private void groupBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentProduct.ProductGroup = (Entities.ProductGroup)groupBox.SelectedItem;
+            CurrentProduct.ProductGroup = (ProductGroup)groupBox.SelectedItem;
         }
 
         private void taxesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

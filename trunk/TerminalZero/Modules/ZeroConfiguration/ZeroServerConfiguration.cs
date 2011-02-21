@@ -137,8 +137,6 @@ namespace ZeroConfiguration
         public Dictionary<int, int> GetPacksToSend(int terminalCode)
         {
             var ret = new Dictionary<int, int>();
-            Terminal ter = _currentContext.Context.Terminals.First(t => t.Code == terminalCode);
-            
             using (var ent = new CommonEntities())
             {
                 var query = ent.GetPacksToSend(terminalCode);
@@ -148,10 +146,6 @@ namespace ZeroConfiguration
                     if (int.TryParse(item.PackName.Substring(0, item.PackName.IndexOf('_')), out module))
                     {
                         ret.Add(item.PackCode, module);
-                    }
-                    else
-                    {
-                        module = -1;
                     }
                 }
             }

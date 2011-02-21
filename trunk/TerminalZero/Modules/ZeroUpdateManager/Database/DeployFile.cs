@@ -12,9 +12,10 @@ namespace ZeroUpdateManager.Database
     /// </summary>
     public class DeployFile
     {
-        private DeployFile()
+        private DeployFile(int packCode, int terminalCode)
         {
-                
+            _terminalCode = terminalCode;
+            _packCode = packCode;
         }
         private string text;
         private ScriptLineCollection scriptLines;
@@ -22,6 +23,9 @@ namespace ZeroUpdateManager.Database
         {
             get { return scriptLines; }
         }
+
+        private int _terminalCode = -1;
+        private int _packCode = -1;
         
         public string Text
         {
@@ -34,11 +38,12 @@ namespace ZeroUpdateManager.Database
         /// </summary>
         /// <param name="path">Path al archivo .sql</param>
         /// <returns></returns>
-        public static DeployFile LoadFrom(string path)
+        public static DeployFile LoadFrom(string path, int packCode, int terminalCode)
         {
-            DeployFile deployFile = new DeployFile();
+            DeployFile deployFile = new DeployFile(packCode,terminalCode);
             deployFile.Text = File.ReadAllText(path);
             deployFile.LoadScriptsLines();
+            
             return deployFile;
         }
 
@@ -48,7 +53,7 @@ namespace ZeroUpdateManager.Database
             scriptLines = new ScriptLineCollection();
             using (StringReader strReader = new StringReader(this.Text))
             {
-                string line = line = strReader.ReadLine();
+                string line = strReader.ReadLine();
                 while (line != null)
                 {
                     if (line.StartsWith(":"))
@@ -79,6 +84,14 @@ namespace ZeroUpdateManager.Database
                     if (string.Compare(sbsl.Key, "DatabaseName", true) == 0)
                     {
                         sbsl.NewValue = currentDatabase;
+                    }
+                    else if (string.Compare(sbsl.Key, "TerminalCode", true) == 0)
+                    {
+                        sbsl.NewValue = _terminalCode.ToString();
+                    }
+                    else if (string.Compare(sbsl.Key, "PackCode", true) == 0)
+                    {
+                        sbsl.NewValue = _packCode.ToString();
                     }
                 }
                 item.Execute(this,ref sb);
