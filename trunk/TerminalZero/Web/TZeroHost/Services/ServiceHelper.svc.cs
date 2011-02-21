@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using TZeroHost.Classes;
 using ZeroCommonClasses.GlobalObjects;
+using ZeroConfiguration;
 using ZeroConfiguration.Entities;
 using ZeroCommonClasses.Entities;
 
@@ -51,29 +53,52 @@ namespace TZeroHost.Services
         }
 
         [OperationContract]
-        public ZeroResponse<List<Terminal>> GetTerminalsStatus()
+        public ZeroResponse<List<TerminalStatus>> GetTerminalsStatus()
         {
-            ZeroResponse<List<Terminal>> ret = new ZeroResponse<List<Terminal>>();
+            ZeroResponse<List<TerminalStatus>> ret = new ZeroResponse<List<TerminalStatus>>();
             try
             {
+                ZeroServerConfiguration conf = new ZeroServerConfiguration();
+                
                 using (ConfigurationEntities ent = new ConfigurationEntities())
                 {
                     ent.ContextOptions.LazyLoadingEnabled = false;
-                    ret.Result = new List<Terminal>();
-                    ret.Result.AddRange(ent.Terminals);
-                    foreach (var item in ret.Result)
+                    ret.Result = new List<TerminalStatus>();
+                    foreach (var terminal in ent.Terminals)
                     {
-                        TerminalProperty prop = ent.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == item.Code && tp.Code == "SYNC_EVERY");
-                        if (prop != null)
+                        TerminalStatus tst = new TerminalStatus();
+                        tst.Terminal = terminal;
+                        var tt = conf.GetPacksToSend(tst.Terminal.Code);
+                        if (tt.Count > 0)
                         {
-                            if (item.LastSync.HasValue)
+                            tst.Info += string.Format("Packs pendientes: {0}\n", tt.Count);
+                            foreach (var i in tt)
                             {
-                                item.IsSyncronized = item.LastSync.Value.AddMinutes(int.Parse(prop.Value)) > DateTime.Now;
+                                tst.Info += string.Format("Módulo: {0}(Pack: {1})\n", i.Value, i.Key);
                             }
                         }
 
+                        ret.Result.Add(tst);
                     }
+
+                    foreach (var item in ret.Result)
+                    {
+                        TerminalProperty prop =
+                            ent.TerminalProperties.FirstOrDefault(
+                                tp => tp.TerminalCode == item.Terminal.Code && tp.Code == "SYNC_EVERY");
+                        if (prop != null)
+                        {
+                            if (item.Terminal.LastSync.HasValue)
+                            {
+                                item.Terminal.IsSyncronized = item.Terminal.LastSync.Value.AddMinutes(int.Parse(prop.Value)) >
+                                                     DateTime.Now;
+                            }
+                        }
+                        
+                    }
+                    
                 }
+
                 ret.IsValid = true;
             }
             catch (Exception ex)
@@ -84,7 +109,6 @@ namespace TZeroHost.Services
 
             return ret;
         }
-
-
+        
     }
 }

@@ -589,6 +589,8 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
         
         private System.Nullable<bool> IsSyncronizedField;
         
+        private bool IsTerminalZeroField;
+        
         private System.Nullable<System.DateTime> LastSyncField;
         
         private System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Module> ModulesField;
@@ -658,6 +660,19 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
                 if ((this.IsSyncronizedField.Equals(value) != true)) {
                     this.IsSyncronizedField = value;
                     this.RaisePropertyChanged("IsSyncronized");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsTerminalZero {
+            get {
+                return this.IsTerminalZeroField;
+            }
+            set {
+                if ((this.IsTerminalZeroField.Equals(value) != true)) {
+                    this.IsTerminalZeroField = value;
+                    this.RaisePropertyChanged("IsTerminalZero");
                 }
             }
         }
@@ -1159,18 +1174,23 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="EntityKeyMember", Namespace="http://schemas.datacontract.org/2004/07/System.Data")]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityKey))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.EntityKeyMember>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.VirtualLogEntry>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.VirtualLogEntry))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Pack>))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Pack))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Connection))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.PackPending>))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.PackPending))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.PackStatu))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<string>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.VirtualLogEntry>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.VirtualLogEntry))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Terminal))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Connection1>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Connection1))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.ConnectionStatu))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Module>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Module))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Terminal>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.TerminalProperty>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.TerminalProperty))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityObject))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.StructuralObject))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityReferenceOfConnectionAMTtCmoD))]
@@ -1180,15 +1200,12 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityReferenceOfPackStatuAMTtCmoD))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityReferenceOfConnectionStatunM6hmTEN))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityReferenceOfTerminalnM6hmTEN))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Terminal>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Terminal))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Connection1>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Connection1))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.ConnectionStatu))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Module>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.Module))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.TerminalProperty>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.TerminalProperty))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.EntityKey))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.EntityKeyMember>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<string>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.TerminalStatus>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(TerminalZeroWebClient.ServiceHelperReference.TerminalStatus))]
     public partial class EntityKeyMember : object, System.ComponentModel.INotifyPropertyChanged {
         
         private string KeyField;
@@ -1217,66 +1234,6 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ZeroResponseOfArrayOfTerminalnM6hmTEN", Namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects")]
-    public partial class ZeroResponseOfArrayOfTerminalnM6hmTEN : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private bool IsValidField;
-        
-        private string MessageField;
-        
-        private System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Terminal> ResultField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public bool IsValid {
-            get {
-                return this.IsValidField;
-            }
-            set {
-                if ((this.IsValidField.Equals(value) != true)) {
-                    this.IsValidField = value;
-                    this.RaisePropertyChanged("IsValid");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string Message {
-            get {
-                return this.MessageField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
-                    this.MessageField = value;
-                    this.RaisePropertyChanged("Message");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Terminal> Result {
-            get {
-                return this.ResultField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
-                    this.ResultField = value;
-                    this.RaisePropertyChanged("Result");
                 }
             }
         }
@@ -1356,6 +1313,111 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
     public partial class EntityReferenceOfTerminalnM6hmTEN : TerminalZeroWebClient.ServiceHelperReference.EntityReference {
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG", Namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects")]
+    public partial class ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private bool IsValidField;
+        
+        private string MessageField;
+        
+        private System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.TerminalStatus> ResultField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool IsValid {
+            get {
+                return this.IsValidField;
+            }
+            set {
+                if ((this.IsValidField.Equals(value) != true)) {
+                    this.IsValidField = value;
+                    this.RaisePropertyChanged("IsValid");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.TerminalStatus> Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TerminalStatus", Namespace="http://schemas.datacontract.org/2004/07/TZeroHost.Classes")]
+    public partial class TerminalStatus : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string InfoField;
+        
+        private TerminalZeroWebClient.ServiceHelperReference.Terminal TerminalField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Info {
+            get {
+                return this.InfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.InfoField, value) != true)) {
+                    this.InfoField = value;
+                    this.RaisePropertyChanged("Info");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public TerminalZeroWebClient.ServiceHelperReference.Terminal Terminal {
+            get {
+                return this.TerminalField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TerminalField, value) != true)) {
+                    this.TerminalField = value;
+                    this.RaisePropertyChanged("Terminal");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceHelperReference.ServiceHelper")]
     public interface ServiceHelper {
@@ -1378,7 +1440,7 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/ServiceHelper/GetTerminalsStatus", ReplyAction="http://tempuri.org/ServiceHelper/GetTerminalsStatusResponse")]
         System.IAsyncResult BeginGetTerminalsStatus(System.AsyncCallback callback, object asyncState);
         
-        TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN EndGetTerminalsStatus(System.IAsyncResult result);
+        TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG EndGetTerminalsStatus(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1453,10 +1515,10 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
             this.results = results;
         }
         
-        public TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN Result {
+        public TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG Result {
             get {
                 base.RaiseExceptionIfNecessary();
-                return ((TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN)(this.results[0]));
+                return ((TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG)(this.results[0]));
             }
         }
     }
@@ -1700,7 +1762,7 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN TerminalZeroWebClient.ServiceHelperReference.ServiceHelper.EndGetTerminalsStatus(System.IAsyncResult result) {
+        TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG TerminalZeroWebClient.ServiceHelperReference.ServiceHelper.EndGetTerminalsStatus(System.IAsyncResult result) {
             return base.Channel.EndGetTerminalsStatus(result);
         }
         
@@ -1709,7 +1771,7 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
         }
         
         private object[] OnEndGetTerminalsStatus(System.IAsyncResult result) {
-            TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN retVal = ((TerminalZeroWebClient.ServiceHelperReference.ServiceHelper)(this)).EndGetTerminalsStatus(result);
+            TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG retVal = ((TerminalZeroWebClient.ServiceHelperReference.ServiceHelper)(this)).EndGetTerminalsStatus(result);
             return new object[] {
                     retVal};
         }
@@ -1860,9 +1922,9 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
                 return _result;
             }
             
-            public TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN EndGetTerminalsStatus(System.IAsyncResult result) {
+            public TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG EndGetTerminalsStatus(System.IAsyncResult result) {
                 object[] _args = new object[0];
-                TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN _result = ((TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalnM6hmTEN)(base.EndInvoke("GetTerminalsStatus", _args, result)));
+                TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG _result = ((TerminalZeroWebClient.ServiceHelperReference.ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG)(base.EndInvoke("GetTerminalsStatus", _args, result)));
                 return _result;
             }
         }

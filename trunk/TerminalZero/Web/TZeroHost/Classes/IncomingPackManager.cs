@@ -99,7 +99,7 @@ namespace TZeroHost.Classes
                     {
                         using (var ent = new ConfigurationEntities())
                         {
-                            foreach (var item in ent.Terminals.Where(t=>t.Code != e.PackInfo.TerminalCode))
+                            foreach (var item in ent.Terminals.Where(t => t.Code != e.PackInfo.TerminalCode))
                             {
                                 Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", item.Code), "Verbose");
                                 PackPending pp = PackPending.CreatePackPending(e.Pack.Code, item.Code);
@@ -112,7 +112,8 @@ namespace TZeroHost.Classes
                 }
                 else
                 {
-                    if (e.PackInfo.TerminalToCodes.Count > 0)
+
+                    if (e.PackInfo != null && e.PackInfo.TerminalToCodes.Count > 0)
                     {
                         using (var packEnt = new CommonEntities())
                         {

@@ -12,13 +12,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Name="topGrid">
             <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1" Margin="2">
                 <myControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
             </Border>
-            <TextBox x:Name="uriContent" IsReadOnly="True">
-                
-            </TextBox>
         </StackPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -26,7 +23,10 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <sdk:DataGrid AutoGenerateColumns="False" AlternatingRowBackground="#FFA6B8BF" SelectionMode="Single" SelectionChanged="entitiesGrid_SelectionChanged" Grid.Column="0" HorizontalAlignment="Stretch" Name="entitiesGrid" 
-                      VerticalAlignment="Stretch">
+                      VerticalAlignment="Stretch" ToolTipService.Placement="Bottom">
+                <ToolTipService.ToolTip>
+                    <TextBox x:Name="uriContent" IsReadOnly="True" Height="22" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </ToolTipService.ToolTip>
                 <sdk:DataGrid.Columns>
                     <sdk:DataGridTextColumn Header="Tabla" Binding="{Binding Path=FriendlyName}"/>
                 </sdk:DataGrid.Columns>

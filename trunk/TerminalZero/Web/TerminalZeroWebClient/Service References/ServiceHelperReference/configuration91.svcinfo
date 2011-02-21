@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="q6Cutc1QCv8VvLRyOE0K81wsrVU=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="aT8HGGM80zoueWD4BzvDOKQQg1Y=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="customBinding" name="WSHttpBinding_ServiceHelper">
       <properties>
@@ -118,10 +118,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="WSHttpBinding_ServiceHelper" contract="ServiceHelperReference.ServiceHelper" bindingType="customBinding" address="http://sebas-note/TZeroHost/services/ServiceHelper.svc" bindingConfiguration="WSHttpBinding_ServiceHelper">
+    <endpoint name="WSHttpBinding_ServiceHelper" contract="ServiceHelperReference.ServiceHelper" bindingType="customBinding" address="http://sebas-note/TZeroHost/Services/ServiceHelper.svc" bindingConfiguration="WSHttpBinding_ServiceHelper">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://sebas-note/TZeroHost/services/ServiceHelper.svc</serializedValue>
+          <serializedValue>http://sebas-note/TZeroHost/Services/ServiceHelper.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

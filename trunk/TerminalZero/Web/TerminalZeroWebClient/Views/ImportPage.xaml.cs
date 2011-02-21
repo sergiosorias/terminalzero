@@ -58,12 +58,13 @@ namespace TerminalZeroWebClient.Views
             bool? res = ofdlg.ShowDialog();
             if (res.HasValue && res.Value)
             {
-                UploadFile(ofdlg.File, ofdlg.File.OpenRead());
+                BinaryReader br = new BinaryReader(ofdlg.File.OpenRead());
+                UploadFile(ofdlg.File.Name, br.ReadBytes((int)ofdlg.File.Length));
             }
             
         }
 
-        private void UploadFile(FileInfo fileName, Stream data)
+        private void UploadFile(string fileName, byte[] data)
         {
             //UriBuilder ub = new UriBuilder(new Uri(Application.Current.Host.Source, "../filereceiver.ashx"));
             //ub.Query = string.Format("filename={0}", fileName.Name);
@@ -77,8 +78,7 @@ namespace TerminalZeroWebClient.Views
             //};
             //c.OpenWriteAsync(ub.Uri);
             //OperationContext.Current.OutgoingMessageHeaders
-            BinaryReader br = new BinaryReader(data);
-            _uploadClient.UploadFileSilverlightAsync(fileName.Name, br.ReadBytes((int)fileName.Length));
+            _uploadClient.UploadFileSilverlightAsync(fileName, data);
         }
         
         private void _uploadClient_UploadFileSilverlightCompleted(object sender, UploadFileSilverlightCompletedEventArgs e)
@@ -133,10 +133,16 @@ namespace TerminalZeroWebClient.Views
             {
                 using (Stream fs = sfd.OpenFile())
                 {
-                    var file = (byte[])((Button)sender).DataContext;
-                    fs.Write(file, 0, file.Length);
+                    Pack pack = ((Pack)packDataGrid.SelectedItem);
+                    fs.Write(pack.Data, 0, pack.Data.Length);
                 }
             }
+        }
+
+        private void Button2_Click(object sender, RoutedEventArgs e)
+        {
+            Pack pack = ((Pack) packDataGrid.SelectedItem);
+            UploadFile(pack.Name, pack.Data);
         }
 
         private void packDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

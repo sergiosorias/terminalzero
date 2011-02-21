@@ -9,15 +9,16 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ZeroLogHandle.Classes" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.Entities" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/System.Data" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ZeroLogHandle.Classes" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.Entities" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/System.Data" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ServiceHelper_GetLogsStr_InputMessage">
@@ -104,9 +105,9 @@
   </wsdl:binding>
   <wsdl:service name="ServiceHelper">
     <wsdl:port name="WSHttpBinding_ServiceHelper" binding="tns:WSHttpBinding_ServiceHelper">
-      <soap12:address location="http://sebas-note/TZeroHost/services/ServiceHelper.svc" />
+      <soap12:address location="http://sebas-note/TZeroHost/Services/ServiceHelper.svc" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://sebas-note/TZeroHost/services/ServiceHelper.svc</wsa10:Address>
+        <wsa10:Address>http://sebas-note/TZeroHost/Services/ServiceHelper.svc</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Dns>localhost</Dns>
         </Identity>

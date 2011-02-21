@@ -49,7 +49,7 @@
             </StackPanel>
             
             <Grid Grid.Row="1">
-                <sdk:DataGrid AutoGenerateColumns="False" IsReadOnly="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Margin="6,2,0,0" Name="packDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected"  VerticalAlignment="Stretch">
+                <sdk:DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Margin="6,2,0,0" Name="packDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected"  VerticalAlignment="Stretch">
                     <sdk:DataGrid.Columns>
                         <sdk:DataGridTextColumn x:Name="codeColumn" Binding="{Binding Path=Code}" Header="Code" Width="SizeToHeader" CanUserResize="False"/>
                         <sdk:DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Name" Width="190" />
@@ -72,7 +72,14 @@
                         <sdk:DataGridTemplateColumn Header="" Width="30" CanUserResize="False">
                             <sdk:DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="LightSkyBlue" DataContext="{Binding Data}" Click="Button_Click"/>
+                                    <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="LightSkyBlue" Click="Button_Click"/>
+                                </DataTemplate>
+                            </sdk:DataGridTemplateColumn.CellTemplate>
+                        </sdk:DataGridTemplateColumn>
+                        <sdk:DataGridTemplateColumn Header="" Width="30" CanUserResize="False">
+                            <sdk:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="Blue" Click="Button2_Click"/>
                                 </DataTemplate>
                             </sdk:DataGridTemplateColumn.CellTemplate>
                         </sdk:DataGridTemplateColumn>

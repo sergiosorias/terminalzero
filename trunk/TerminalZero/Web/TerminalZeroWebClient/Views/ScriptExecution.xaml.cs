@@ -43,7 +43,7 @@ namespace TerminalZeroWebClient.Views
                 IQueryableEntity ent = item as IQueryableEntity;
                 if (ent != null)
                 {
-                    ent.LoadCompleted += new EventHandler(ent_LoadCompleted);
+                    ent.LoadCompleted += ent_LoadCompleted;
                 }
             }
             entitiesGrid.ItemsSource = entitiesAllowed;            

@@ -177,6 +177,7 @@
   <ItemGroup>
     <Compile Include="Classes\IncomingPackManager.cs" />
     <Compile Include="Classes\PackManagerBuilder.cs" />
+    <Compile Include="Classes\TerminalStatus.cs" />
     <Compile Include="Default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>Default.aspx</DependentUpon>

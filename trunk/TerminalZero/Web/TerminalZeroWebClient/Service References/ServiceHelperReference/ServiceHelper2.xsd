@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://sebas-note/TZeroHost/services/ServiceHelper.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
-  <xs:complexType name="ZeroResponseOfArrayOfTerminalnM6hmTEN">
+  <xs:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" />
+  <xs:complexType name="ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG">
     <xs:annotation>
       <xs:appinfo>
         <GenericType Name="ZeroResponseOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="ArrayOfTerminal" Namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
+          <GenericParameter Name="ArrayOfTerminalStatus" Namespace="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" />
         </GenericType>
       </xs:appinfo>
     </xs:annotation>
@@ -18,7 +18,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" minOccurs="0" name="Result" nillable="true" type="q1:ArrayOfTerminal">
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" minOccurs="0" name="Result" nillable="true" type="q1:ArrayOfTerminalStatus">
         <xs:annotation>
           <xs:appinfo>
             <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
@@ -27,5 +27,5 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ZeroResponseOfArrayOfTerminalnM6hmTEN" nillable="true" type="tns:ZeroResponseOfArrayOfTerminalnM6hmTEN" />
+  <xs:element name="ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG" nillable="true" type="tns:ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG" />
 </xs:schema>
