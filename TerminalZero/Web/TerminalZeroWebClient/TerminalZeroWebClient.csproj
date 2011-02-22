@@ -99,7 +99,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\DataServiceEntity.cs" />
+    <Compile Include="Classes\Extentions.cs" />
     <Compile Include="Classes\FileStreamProgress.cs" />
     <Compile Include="Classes\IQueryableEntity.cs" />
     <Compile Include="Controls\TerminalStatus.xaml.cs">

@@ -141,47 +141,21 @@ namespace TerminalZeroWebClient.Views
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            Pack pack = ((Pack) packDataGrid.SelectedItem);
-            UploadFile(pack.Name, pack.Data);
-        }
-
-        private void packDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
+            Button ele = sender as Button;
+            DataGridRow row = Classes.Extensions.FindAncestor<DataGridRow>(ele);
+            if (row != null)
             {
-                // the original source is what was clicked.  For example  
-                // a button. 
-                DependencyObject dep = (DependencyObject)e.OriginalSource;
-
-                // iteratively traverse the visual tree upwards looking for 
-                // the clicked row. 
-                while ((dep != null) && !(dep is DataGridRow))
-                {
-                    dep = VisualTreeHelper.GetParent(dep);
-                }
-
-                // if we found the clicked row 
-                if (dep != null && dep is DataGridRow)
-                {
-                    // get the row 
-                    DataGridRow row = (DataGridRow)dep;
-
-                    // change the details visibility 
-                    if (row.DetailsVisibility == Visibility.Collapsed)
-                    {
-                        row.DetailsVisibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        row.DetailsVisibility = Visibility.Collapsed;
-                    }
-                }
+                row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             }
-            catch (System.Exception)
-            {
-            } 
-
         }
 
+        private void Button3_Click(object sender, RoutedEventArgs e)
+        {
+            Pack pack = ((Pack) packDataGrid.SelectedItem);
+            if(MessageBox.Show("¿Esta seguro de reprocesar el paquete?",string.Format("Re-proceso pack {0}",pack.Code),MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                UploadFile(pack.Name, pack.Data);
+        }
+
+        
     }
 }
