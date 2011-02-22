@@ -76,7 +76,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <asp:HyperLink ID="HyperLink1" CssClass="menuLink" NavigateUrl="./TerminalZeroWebClientTestPage.aspx"
+                                <asp:HyperLink ID="HyperLink1" CssClass="menuLink" NavigateUrl="./TerminalZero.aspx"
                                     runat="server">Terminal Zero</asp:HyperLink>
                             </td>
                         </tr>

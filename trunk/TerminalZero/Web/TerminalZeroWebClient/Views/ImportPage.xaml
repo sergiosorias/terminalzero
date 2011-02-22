@@ -6,15 +6,19 @@
            mc:Ignorable="d" xmlns:Mycontrols="clr-namespace:ZeroGUI"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
            Title="ImportPage Page" 
-           xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+           xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" 
+                 xmlns:local="clr-namespace:TerminalZeroWebClient.Classes">
+    <navigation:Page.Resources>
+        <local:StatusFormatter x:Key="StatusToVisivilityConv"/>
+    </navigation:Page.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2">
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2">
                 <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1">
                     <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="5,2,2,0">
                         <Mycontrols:RefreshTimer Tick="RefreshTimer_Tick" RefreshEvery="20"/>
@@ -36,20 +40,23 @@
                 <Line Width="5" />
                 <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="4" BorderThickness="1">
                     <StackPanel Orientation="Horizontal">
-                        <Button Style="{StaticResource DownloadButtonStyle}" RenderTransformOrigin="0.5,0.5" Height="22" Width="22" Background="LightGreen" DataContext="{Binding Data}" Name="btnUpload" Click="btnUpload_Click">
+                        <Button Style="{StaticResource DownloadButtonStyle}" ToolTipService.ToolTip="Upload Pack" RenderTransformOrigin="0.5,0.5" Height="22" Width="22" Background="LightGreen" DataContext="{Binding Data}" Name="btnUpload" Click="btnUpload_Click">
                             <Button.RenderTransform>
                                 <TransformGroup>
                                     <RotateTransform Angle="180"/>
                                 </TransformGroup>
                             </Button.RenderTransform>
                         </Button>
-                        <ProgressBar Name="fileProgress" Width="100" Margin="2"/>
+                        <Grid>
+                            <ProgressBar Name="fileProgress" Width="100" Margin="2"/>
+                            <TextBlock Text="{Binding Path=Value, ElementName=fileProgress}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
                     </StackPanel>
                 </Border>
             </StackPanel>
-            
+
             <Grid Grid.Row="1">
-                <sdk:DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Margin="6,2,0,0" Name="packDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected"  VerticalAlignment="Stretch">
+                <sdk:DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" HorizontalAlignment="Stretch" ItemsSource="{Binding}" Margin="6,2,0,0" Name="packDataGrid" RowDetailsVisibilityMode="Collapsed"  VerticalAlignment="Stretch">
                     <sdk:DataGrid.Columns>
                         <sdk:DataGridTextColumn x:Name="codeColumn" Binding="{Binding Path=Code}" Header="Code" Width="SizeToHeader" CanUserResize="False"/>
                         <sdk:DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Name" Width="190" />
@@ -72,23 +79,34 @@
                         <sdk:DataGridTemplateColumn Header="" Width="30" CanUserResize="False">
                             <sdk:DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="LightSkyBlue" Click="Button_Click"/>
+                                    <Button Style="{StaticResource DownloadButtonStyle}" ToolTipService.ToolTip="Download Pack" Height="22" Width="22" Background="LightSkyBlue" Click="Button_Click"/>
                                 </DataTemplate>
                             </sdk:DataGridTemplateColumn.CellTemplate>
                         </sdk:DataGridTemplateColumn>
                         <sdk:DataGridTemplateColumn Header="" Width="30" CanUserResize="False">
                             <sdk:DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource DownloadButtonStyle}" Height="22" Width="22" Background="Blue" Click="Button2_Click"/>
+                                    <Button Visibility="{Binding Path=Status, Converter={StaticResource StatusToVisivilityConv}}" Style="{StaticResource MoreButtonStyle}" Height="22" Width="22" Background="{StaticResource BodyTextColorBrush}" Click="Button2_Click"/>
                                 </DataTemplate>
                             </sdk:DataGridTemplateColumn.CellTemplate>
                         </sdk:DataGridTemplateColumn>
                     </sdk:DataGrid.Columns>
                     <sdk:DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <ScrollViewer BorderBrush="Transparent" Margin="0" Padding="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="120">
-                                <TextBox Text="{Binding Result}" IsReadOnly="True"/>
-                            </ScrollViewer>
+                            <Grid MaxHeight="150" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*" MaxHeight="128"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Re-Procesar" Height="22" Margin="2" Background="Blue" Click="Button3_Click"/>
+                                    <Button Content="Copiar" Height="22" Margin="2" Background="Blue" Click="Button3_Click"/>
+                                </StackPanel>
+                                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                    <TextBox Text="{Binding Result}" IsReadOnly="True"/>    
+                                </ScrollViewer>
+                                
+                            </Grid>
                         </DataTemplate>
                     </sdk:DataGrid.RowDetailsTemplate>
                 </sdk:DataGrid>
