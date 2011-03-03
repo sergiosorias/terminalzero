@@ -22,3 +22,4 @@ Post-Deployment Script Template
 :r .\InitData\data\TaxPosition.sql
 :r .\InitData\data\StockType.sql
 :r .\InitData\data\PaymentInstrument.sql
+:r .\InitData\data\SaleType.sql

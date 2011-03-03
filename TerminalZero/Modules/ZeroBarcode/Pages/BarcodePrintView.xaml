@@ -3,46 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <FlowDocumentPageViewer>
-        <FlowDocument Name="document">
-            <Table Name="barcodeTable">
-                <TableRowGroup Name="barcodeTableRow">
-                    <!--<TableRow>
-                        <TableCell>
-                            <Paragraph>
-                                <TextBlock Text="asdasdasd"/>
-                            </Paragraph>
-                        </TableCell>
-                        <TableCell>
-                            <Paragraph>
-                                <TextBlock Text="asdasdasd"/>
-                            </Paragraph>
-                        </TableCell>
-                        <TableCell>
-                            <Paragraph>
-                                <TextBlock Text="asdasdasd"/>
-                            </Paragraph>
-                        </TableCell>
-                        <TableCell>
-                            <Paragraph>
-                                <TextBlock Text="asdasdasd"/>
-                            </Paragraph>
-                        </TableCell>
-                        <TableCell>
-                            <Paragraph>
-                                <TextBlock Text="asdasdasd"/>
-                            </Paragraph>
-                        </TableCell>
-                        <TableCell>
-                            <Paragraph>
-                                <TextBlock Text="asdasdasd"/>
-                            </Paragraph>
-                        </TableCell>
-                    </TableRow>-->
-                </TableRowGroup>
-            </Table>
-        </FlowDocument>
-    </FlowDocumentPageViewer>
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             xmlns:controls="clr-namespace:ZeroBarcode.Pages.Controls"
+             d:DesignHeight="300" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <controls:BarcodeGenerator x:Name="generator" PreviewClick="BarcodeGenerator_PreviewClick" Loaded="generator_Loaded"/>
+        <Border Grid.Column="1" Padding="2" Margin="2" CornerRadius="4" BorderThickness="1" BorderBrush="Black">
+            <DocumentViewer>
+                <FixedDocument Name="document">
+
+                </FixedDocument>
+            </DocumentViewer>
+        </Border>
+    </Grid>
+
 </UserControl>

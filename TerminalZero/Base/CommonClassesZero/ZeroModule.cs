@@ -84,6 +84,10 @@ namespace ZeroCommonClasses
 
         protected ITerminal OwnerTerminal { get; private set; }
 
+        /// <summary>
+        /// Returns file list to be send to the Server
+        /// </summary>
+        /// <returns></returns>
         public abstract string[] GetFilesToSend();
 
         /// <summary>

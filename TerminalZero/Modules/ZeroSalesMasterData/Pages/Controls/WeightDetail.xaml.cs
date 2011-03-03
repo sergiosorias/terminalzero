@@ -16,6 +16,7 @@ namespace ZeroMasterData.Pages.Controls
         MasterDataEntities DataProvider;
         public WeightDetail(MasterDataEntities dataProvider)
         {
+            Mode = Mode.New;
             InitializeComponent();
             DataProvider = dataProvider;
         }
@@ -62,19 +63,7 @@ namespace ZeroMasterData.Pages.Controls
             return ret;
         }
 
-        private Mode _Mode = Mode.New;
-
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public Mode Mode { get; set; }
 
         public bool CanCancel(object parameter)
         {

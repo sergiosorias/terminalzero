@@ -45,7 +45,7 @@
                 </MenuItem>
             </MenuItem>-->
         </Menu>
-        <Border Grid.Row="1" Margin="3" BorderBrush="{StaticResource titleBackground}" Background="{DynamicResource mainBackground}" BorderThickness="2" Padding="2,0,2,0" CornerRadius="3">
+        <Border Grid.Row="1"  Margin="3" BorderBrush="{StaticResource titleBackground}" Background="{DynamicResource mainBackground}" BorderThickness="2" Padding="2,0,2,0" CornerRadius="3">
             <ContentControl  x:Name="PrimaryWindow" IsTabStop="False">
                 <my:Home IsTabStop="False"/>
             </ContentControl>

@@ -1,0 +1,20 @@
+﻿CREATE TABLE [data].[SaleHeader]
+(
+	[TerminalCode] int NOT NULL CONSTRAINT DF_SaleHeader_TerminalCode DEFAULT(0),
+	[Code] int NOT NULL, 
+	[Stamp] datetime NULL CONSTRAINT DF_SaleHeader_Stamp DEFAULT (Getdate()),
+	[Enable] bit NOT NULL CONSTRAINT DF_SaleHeader_Enable DEFAULT (1),
+	[Status] smallint NOT NULL CONSTRAINT DF_SaleHeader_Status DEFAULT (0),
+	[TerminalToCode] int NOT NULL,
+	[Date] datetime NOT NULL,
+	[UserCode] uniqueidentifier NULL,
+	[SaleTypeCode] int NOT NULL,
+	[PaymentInstrumentCode] int NOT NULL,
+	[PrintMode] INT NULL,
+	[CustomerCode] INT NULL,
+	[PriceSumValue] float NOT NULL,
+	[TaxSumValue] float NOT NULL,
+	[Tax1SumValue] float NOT NULL,
+	[Summarized] bit NOT NULL CONSTRAINT DF_SaleHeader_Summarized DEFAULT (0),
+	[Historized] bit NOT NULL CONSTRAINT DF_SaleHeader_Historized DEFAULT (0),
+)

@@ -284,11 +284,16 @@ namespace ZeroMasterData.Pages.Controls
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {
             var t = (int)((Button)sender).DataContext;
-            var pgd = new ProductGroupDetail(DataProvider);
+            ProductGroup pgroup = DataProvider.ProductGroups.First(pg => pg.Code == t);
+            var pgd = new ProductGroupDetail(DataProvider, pgroup);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
                 DataProvider.SaveChanges();
+            }
+            else
+            {
+                DataProvider.Refresh(RefreshMode.StoreWins, pgroup);
             }
 
         }
@@ -296,12 +301,17 @@ namespace ZeroMasterData.Pages.Controls
         private void weightBoxItemButton_Click(object sender, RoutedEventArgs e)
         {
             var t = (int)((Button)sender).DataContext;
+            var algo = DataProvider.Weights.First(w => w.Code == t);
             var pgd = new WeightDetail(DataProvider,
-                DataProvider.Weights.First(w => w.Code == t));
+                algo);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
             {
                 DataProvider.SaveChanges();
+            }
+            else
+            {
+                DataProvider.Refresh(RefreshMode.StoreWins, algo);
             }
 
         }

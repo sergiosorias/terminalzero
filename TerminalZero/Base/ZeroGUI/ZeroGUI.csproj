@@ -63,6 +63,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ZeroToolBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WaitCursor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -98,6 +102,9 @@
     </Compile>
     <Compile Include="SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ZeroToolBar.xaml.cs">
+      <DependentUpon>ZeroToolBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="WaitCursor.xaml.cs">
       <DependentUpon>WaitCursor.xaml</DependentUpon>
