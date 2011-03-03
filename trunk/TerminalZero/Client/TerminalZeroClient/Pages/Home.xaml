@@ -40,7 +40,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="False">
-            <WrapPanel x:Name="ButtonsContent">
+            <WrapPanel x:Name="ButtonsContent" >
                 
             </WrapPanel>
         </ScrollViewer>

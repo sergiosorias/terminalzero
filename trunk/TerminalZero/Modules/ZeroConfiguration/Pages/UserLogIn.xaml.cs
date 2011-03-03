@@ -28,16 +28,17 @@ namespace ZeroConfiguration.Pages
             nameText.Focus();
         }
 
-        private void namePass_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void namePass_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }
         }
 
-        private void nameText_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void nameText_KeyDown(object sender, KeyEventArgs e)
         {
+            
             if(e.Key == Key.Enter)
             {
                 namePass.Focus();

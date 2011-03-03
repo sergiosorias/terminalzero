@@ -1,0 +1,21 @@
+﻿CREATE TABLE [data].[SaleItem]
+(
+	[Code] int NOT NULL, 
+	[TerminalCode] int NOT NULL ,
+	[SaleHeaderCode] int NOT NULL,
+	[Stamp] datetime NULL CONSTRAINT DF_SaleItem_Stamp DEFAULT (Getdate()),
+	[Enable] bit NOT NULL CONSTRAINT DF_SaleItem_Enable DEFAULT (1),
+	[Status] smallint NOT NULL CONSTRAINT DF_SaleItem_Status DEFAULT (0),
+	[TerminalToCode] int NOT NULL,
+	[Batch] varchar(10) NOT NULL,
+	[ProductCode] int NOT NULL,
+	[ProductMasterCode] int NOT NULL,
+	[ProductByWeight] bit NOT NULL,
+	[PriceValue] float NOT NULL,
+	[UnitWeightQuantity] FLOAT NULL,
+	[SaleWeightQuantity] FLOAT NULL,
+	[Quantity] FLOAT NOT NULL,
+	[TaxValue] float NOT NULL,
+	[Tax1Value] float NOT NULL,
+	[NetPriceValue] float NOT NULL,
+)

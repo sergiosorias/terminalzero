@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroStock.Pages.Controls" 
-             xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+             xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" IsTabStop="False"
+             Loaded="UserControl_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -13,7 +13,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Style="{StaticResource titleLabelStyle}" x:Name="lblStockType"/>
+        <Label Style="{StaticResource titleLabelStyle}" x:Name="lblStockType" Content="Title"/>
+        
         <Grid HorizontalAlignment="Stretch" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -35,11 +36,8 @@
                 <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
                                             BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN"/>
             </StackPanel>
+            <baseControls:ZeroToolBar Grid.Column="1" HorizontalAlignment="Right" NewBtnVisible="False" VerticalAlignment="Center" Save="btnSave_Click" Cancel="btnCancel_Click"/>
             
-            <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Content="Guardar" x:Name="btnSave" Click="btnSave_Click"/>
-                <Button Content="Cancelar" x:Name="btnCancel" Click="btnCancel_Click"/>
-            </WrapPanel>
         </Grid>
 
         <myControls:StockGrid Grid.Row="2" x:Name="stockGrid">

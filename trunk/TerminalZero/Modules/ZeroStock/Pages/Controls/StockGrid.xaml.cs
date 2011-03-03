@@ -13,13 +13,8 @@ namespace ZeroStock.Pages.Controls
     {
         public StockGrid()
         {
+            Mode = Mode.New;
             InitializeComponent();
-        }
-
-        public class Barcode
-        {
-            public string Code { get; set; }
-            public string Product { get; set; }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -52,18 +47,8 @@ namespace ZeroStock.Pages.Controls
         }
         
         #region IZeroPage Members
-        private Mode _Mode = Mode.New;
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+
+        public Mode Mode { get; set; }
 
         public bool CanAccept(object parameter)
         {

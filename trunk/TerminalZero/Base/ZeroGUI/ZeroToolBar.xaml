@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="ZeroGUI.ZeroToolBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Height="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Column="1">
+            <Button Content="Nuevo" MinWidth="50" x:Name="btnNew" Click="btnNew_Click"/>
+            <Rectangle Width="1"  Fill="{DynamicResource BlueBrushKey}" Margin="2,4" Name="btnSaveLine"/>
+            <Button Content="Guardar" MinWidth="50" x:Name="btnSave" Click="btnSave_Click"/>
+            <Rectangle Width="1" Fill="{DynamicResource BlueBrushKey}" Margin="2,4" Name="btnCancelLine"/>
+            <Button Content="Cancelar" MinWidth="50" x:Name="btnCancel" Click="btnCancel_Click"/>
+        </WrapPanel>
+    </Grid>
+</UserControl>

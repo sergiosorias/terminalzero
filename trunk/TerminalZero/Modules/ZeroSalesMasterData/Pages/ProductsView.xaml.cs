@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Pages
 {
@@ -17,7 +18,7 @@ namespace ZeroMasterData.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var detail = new Controls.ProductDetail(productList.DataProvider);
+            var detail = new ProductDetail(productList.DataProvider);
 
             bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.NewProduct);
             if (ret.HasValue && ret.Value && detail.Mode == Mode.New)
@@ -66,16 +67,18 @@ namespace ZeroMasterData.Pages
                 case Mode.Delete:
                     break;
                 case Mode.ReadOnly:
-                    btnNewProduct.Visibility = Visibility.Hidden;
+                    toolbar.NewBtnVisible = false;
                     break;
                 default:
                     break;
             }
         }
 
-        private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
+        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
             e.Matches = productList.ApplyFilter(e.Criteria);
         }
+
+        
     }
 }

@@ -1,4 +1,9 @@
-﻿<UserControl x:Class="ZeroConfiguration.Pages.Properties" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" Unloaded="UserControlUnloaded" d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControlLoaded">
+﻿<UserControl x:Class="ZeroConfiguration.Pages.Properties" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+             mc:Ignorable="d" Unloaded="UserControlUnloaded" d:DesignHeight="300" d:DesignWidth="300">
 	<Grid Loaded="Grid_Loaded">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -25,7 +30,9 @@
 
 			</ComboBox>
 		</Grid>
-		<TabControl Grid.Row="1" Margin="0,5,0,0">
+        <base:ZeroToolBar Height="Auto" Grid.Row="1" NewBtnVisible="False" CancelBtnVisible="False" Save="ZeroToolBar_Save" HorizontalAlignment="Right" Margin="4"/>
+            
+        <TabControl Grid.Row="1" Margin="0,7,0,0">
 			<TabItem Header="Propiedades">
 				<Grid>
 					<Grid.RowDefinitions>
@@ -57,7 +64,7 @@
 						<Label Grid.Column="5" Grid.Row="1" x:Name="lblNectSynclabel" HorizontalAlignment="Right" VerticalAlignment="Center">Siguiente:</Label>
 						<Label Grid.Column="6" Grid.Row="1" x:Name="lblNextSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
 					</Grid>
-					<DataGrid Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" Name="terminalPropertiesDataGrid" SelectionChanged="TerminalPropertiesDataGridSelectionChanged" CanUserAddRows="False" RowDetailsVisibilityMode="VisibleWhenSelected">
+					<DataGrid Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" Name="terminalPropertiesDataGrid" CanUserAddRows="False" RowDetailsVisibilityMode="VisibleWhenSelected">
 						<DataGrid.Columns>
 							<DataGridTextColumn x:Name="descriptionColumn" Binding="{Binding Path=Description}" Header="Descripción" IsReadOnly="True" />
 							<DataGridTextColumn x:Name="valueColumn" Binding="{Binding Path=Value}" Header="Valor" Width="SizeToHeader" />

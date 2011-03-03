@@ -33,8 +33,9 @@ namespace ZeroBarcode
         #region Handlers
         private void OpenCodebarView()
         {
-            ZeroMessageBox.Show(new BarcodeGenerator(), "Generar Código", SizeToContent.WidthAndHeight,
-                                ResizeMode.NoResize, MessageBoxButton.OK);
+            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs
+                                                   {ControlToShow = new Pages.BarcodePrintView()};
+            OnModuleNotifing(args);
         }
         #endregion
     }

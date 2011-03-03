@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using ZeroCommonClasses.Interfaces;
+using ZeroConfiguration.Entities;
 
 namespace ZeroConfiguration.Pages
 {
@@ -12,7 +14,7 @@ namespace ZeroConfiguration.Pages
     /// </summary>
     public partial class Properties : IZeroPage
     {
-        Entities.ConfigurationEntities _dataProvider;
+        ConfigurationEntities _dataProvider;
         readonly ITerminal _terminal;
         public Properties(ITerminal terminal)
         {
@@ -24,9 +26,9 @@ namespace ZeroConfiguration.Pages
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                _dataProvider = new Entities.ConfigurationEntities();
+                _dataProvider = new ConfigurationEntities();
                 switch (Mode)
                 {
                     case Mode.New:
@@ -53,8 +55,8 @@ namespace ZeroConfiguration.Pages
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int terminal = (int)cbTerminals.SelectedValue;
-            Entities.Terminal T = _dataProvider.Terminals.First(c => c.Code == terminal);
+            var terminal = (int)cbTerminals.SelectedValue;
+            Terminal T = _dataProvider.Terminals.First(c => c.Code == terminal);
             tbTerminal.DataContext = T;
             if (T.LastSync != null)
             {
@@ -62,7 +64,7 @@ namespace ZeroConfiguration.Pages
                 lblLastSync.Content = T.LastSync.GetValueOrDefault(DateTime.MinValue).ToString("dd/MM hh:mm:ss tt");
             }
             else
-                lblLastSynclabel.Visibility = System.Windows.Visibility.Hidden;
+                lblLastSynclabel.Visibility = Visibility.Hidden;
 
             cbTerminalIsActive.DataContext = T;
             cbsendMasterData.DataContext = T;
@@ -120,28 +122,9 @@ namespace ZeroConfiguration.Pages
                     }), null);
         }
 
-        private void UserControlLoaded(object sender, RoutedEventArgs e)
+        private void ZeroToolBar_Save(object sender, RoutedEventArgs e)
         {
-
-            // Do not load your data at design time.
-            // if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            // {
-            // 	//Load your data here and assign the result to the CollectionViewSource.
-            // 	System.Windows.Data.CollectionViewSource myCollectionViewSource = (System.Windows.Data.CollectionViewSource)this.Resources["Resource Key for CollectionViewSource"];
-            // 	myCollectionViewSource.Source = your data
-            // }
-            // Do not load your data at design time.
-            // if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            // {
-            // 	//Load your data here and assign the result to the CollectionViewSource.
-            // 	System.Windows.Data.CollectionViewSource myCollectionViewSource = (System.Windows.Data.CollectionViewSource)this.Resources["Resource Key for CollectionViewSource"];
-            // 	myCollectionViewSource.Source = your data
-            // }
-        }
-
-        private void TerminalPropertiesDataGridSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            _dataProvider.SaveChanges();
         }
     }
 }

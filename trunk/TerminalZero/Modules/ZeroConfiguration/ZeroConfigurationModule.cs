@@ -94,7 +94,7 @@ namespace ZeroConfiguration
             }
             else
             {
-                ZeroMessageBox.Show(Resources.MsgLogInPlease+"\n El sistema se cerrara.", Resources.Fail, ResizeMode.NoResize, MessageBoxButton.OK);
+                ZeroMessageBox.Show(Resources.MsgLogInPlease+"\nEl sistema se cerrara.", Resources.Fail, ResizeMode.NoResize, MessageBoxButton.OK);
                 ZeroAction action;
                 if(ExistsAction(ApplicationActions.Exit,out action))
                 {

@@ -42,12 +42,13 @@ namespace TerminalZeroClient
             try
             {
                 App.Instance.Session.ModuleList.ForEach(m => m.Init());
+                OpenHome();
             }
             catch (Exception ex)
             {
                 SendNotification(string.Format("Error on Init. Error: {0}",ex));
             }
-            OpenHome();
+            
         }
 
         void Manager_ConfigurationRequired(object sender, EventArgs e)
@@ -68,7 +69,8 @@ namespace TerminalZeroClient
                 //actionMenu = new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Home, () => item.Focus());
                 //MenuShorcut.Command = actionMenu;
                 App.Instance.Session.AddAction(actionInit);
-                App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
+                App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, OpenHome));
+                //App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
                 App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Exit, ForceClose));
             }
             ShortCutHome.Command = actionInit;
