@@ -11,6 +11,7 @@ using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
 using ZeroGUI.Classes;
 using ZeroSales.Entities;
 
@@ -158,12 +159,31 @@ namespace ZeroSales.Pages
                 if (prod != null)
                 {
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
-
+                    currentProd.Text = prod.Description;
+                    CreateResTimer();
                     saleGrid.Add(_header.AddNewSaleItem(prod, partQty.Code,_lot));
+                    lblItemsCount.Text = _header.SaleItems.Count.ToString();
                     _lot = "";
                     lotBarcode.SetFocus();
+                    
                 }
             }
+        }
+
+        private System.Threading.Timer cleanResTimer = null;
+
+        private void CreateResTimer()
+        {
+            cleanResTimer = new System.Threading.Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+        }
+
+        void cleanResTimer_Elapsed(object o)
+        {
+            cleanResTimer.Dispose();
+            Dispatcher.BeginInvoke(new Update(
+                () => { currentProd.Text = ""; }
+                ), null);
+
         }
 
         private bool SaveData()
@@ -172,6 +192,7 @@ namespace ZeroSales.Pages
             try
             {
                _context.SaveChanges();
+                currentProd.Text = "";
                 MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 ret = true;
             }
@@ -218,7 +239,8 @@ namespace ZeroSales.Pages
             if(item!=null)
             {
                 saleGrid.Remove(item);
-                _header.SaleItems.Remove(item);
+                _header.RemoveSaleItem(item);
+                lblItemsCount.Text = _header.SaleItems.Count.ToString();
             }
         }
     }

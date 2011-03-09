@@ -58,7 +58,7 @@ namespace ZeroGUI
                     }
                     else
                     {
-                        quantity.Text = string.Format("No hay resultados", search.Matches);
+                        quantity.Text = string.Format("No hay resultados");
                     }
                     quantityPopup.IsOpen = true;
                     CreateResTimer();

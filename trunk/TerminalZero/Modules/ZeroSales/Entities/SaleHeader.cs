@@ -65,6 +65,17 @@ namespace ZeroSales.Entities
             return item;
         }
 
+        public void RemoveSaleItem(Product prod, double qty, string lot)
+        {
+            
+        }
+
+        public void RemoveSaleItem(SaleItem item)
+        {
+            SaleItems.Remove(item);
+            CalculateValues();
+        }
+
         #region Implementation of IExportableEntity
 
         public int TerminalDestination

@@ -1,8 +1,12 @@
-﻿using System.Web.Security;
-using System.Windows.Controls;
+﻿using System;
+using System.ComponentModel;
+using System.Web.Security;
 using System.Windows;
+using System.Windows.Controls;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
+using ZeroConfiguration.Pages.Controls;
+using ZeroGUI;
 
 namespace ZeroConfiguration.Pages
 {
@@ -11,7 +15,7 @@ namespace ZeroConfiguration.Pages
     /// </summary>
     public partial class Users : UserControl
     {
-        private System.Web.Security.MembershipUserCollection _userCol;
+        private MembershipUserCollection _userCol;
         private readonly ITerminal _terminal;
         public Users(ITerminal terminal)
         {
@@ -31,7 +35,7 @@ namespace ZeroConfiguration.Pages
                 btnChangePassword.IsEnabled = false;
             }
 
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 LoadUsers();
             }
@@ -40,7 +44,7 @@ namespace ZeroConfiguration.Pages
         private void LoadUsers()
         {
             users.Items.Clear();
-            _userCol = System.Web.Security.Membership.GetAllUsers();
+            _userCol = Membership.GetAllUsers();
 
             foreach (MembershipUser user in _userCol)
             {
@@ -50,29 +54,37 @@ namespace ZeroConfiguration.Pages
 
         private void btnEditUser_Click(object sender, RoutedEventArgs e)
         {
-            var ud = new Controls.UserDetail();
-            MembershipUser usr = null;
-            foreach (MembershipUser user in _userCol)
+            try
             {
-                if (user.ProviderUserKey.Equals(((Button)sender).DataContext))
+                var ud = new UserDetail();
+                MembershipUser usr = null;
+                foreach (MembershipUser user in _userCol)
                 {
-                    usr = user;
-                    break;
+                    if (user.ProviderUserKey.Equals(((Button)sender).DataContext))
+                    {
+                        usr = user;
+                        break;
+                    }
+                }
+
+                ud.DataContext = usr;
+                if (ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.EditUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
+                {
+                    users.UpdateLayout();
                 }
             }
-            
-            ud.DataContext = usr;
-            if(ZeroGUI.ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.EditUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
+            catch (Exception ex)
             {
-                users.UpdateLayout();
+                ZeroMessageBox.Show(ex, "Error", ResizeMode.NoResize, MessageBoxButton.OK);
             }
+            
         }
 
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
-            var ud = new Controls.UserDetail();
+            var ud = new UserDetail();
             ud.Mode = Mode.New;
-            if (ZeroGUI.ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.NewUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
+            if (ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.NewUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
             {
                 LoadUsers();
             }
