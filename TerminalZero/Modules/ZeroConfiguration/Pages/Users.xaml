@@ -24,7 +24,7 @@
                 <DataGrid AutoGenerateColumns="True" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" 
                       Name="users" RowDetailsVisibilityMode="VisibleWhenSelected">
                     <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="userNameColumn" Binding="{Binding Path=UserName}" Header="Nombre" Width="150" />
+                        <DataGridTextColumn x:Name="userNameColumn" Binding="{Binding Path=UserName, Mode=OneWay}" Header="Nombre" Width="150" />
                         <DataGridTextColumn x:Name="emailColumn" Binding="{Binding Path=Email}" Header="E-Mail" Width="250" />
                         <DataGridCheckBoxColumn x:Name="isApprovedColumn" Binding="{Binding Path=IsApproved}" Header="Activo" Width="60" CanUserResize="False">
                             <DataGridCheckBoxColumn.CellStyle>

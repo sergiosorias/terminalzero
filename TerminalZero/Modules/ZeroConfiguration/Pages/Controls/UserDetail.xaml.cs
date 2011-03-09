@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZeroCommonClasses.Interfaces;
-using ZeroGUI;
 
 namespace ZeroConfiguration.Pages.Controls
 {
@@ -25,21 +15,25 @@ namespace ZeroConfiguration.Pages.Controls
         public UserDetail()
         {
             InitializeComponent();
-            Mode = ZeroCommonClasses.Interfaces.Mode.Update;
+            Mode = Mode.Update;
         }
 
         private void grid1_Loaded(object sender, RoutedEventArgs e)
         {
+            var a = new System.Windows.Data.Binding("UserName");
+            
             switch (Mode)
             {
                 case Mode.New:
-                    lblNameTextBox.Visibility = System.Windows.Visibility.Visible;
-                    nameTextBox.Visibility = System.Windows.Visibility.Visible;
-                    chbIsApproved.Visibility = System.Windows.Visibility.Collapsed;
-                    btnResetPassword.Visibility = System.Windows.Visibility.Collapsed;
+                    lblNameTextBox.Visibility = Visibility.Visible;
+                    nameTextBox.Visibility = Visibility.Visible;
+                    chbIsApproved.Visibility = Visibility.Collapsed;
+                    btnResetPassword.Visibility = Visibility.Collapsed;
+                    a.Mode = System.Windows.Data.BindingMode.TwoWay;
                     break;
                 default:
                     emailTextBox.DataContext = DataContext;
+                    a.Mode = System.Windows.Data.BindingMode.OneWay;
                     break;
             }
         }
@@ -48,10 +42,10 @@ namespace ZeroConfiguration.Pages.Controls
         {
             if(MessageBox.Show("Esta a punto de cambiar la contraseña por una nueva, ¿esta seguro?","Precaución",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                MembershipUser usr = ((MembershipUser)DataContext);
+                var usr = ((MembershipUser)DataContext);
                 usr.ChangePassword(usr.GetPassword(), usr.UserName.ToLower());
                 MessageBox.Show("La nueva contraseña es: " + usr.UserName.ToLower(), ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
-                System.Diagnostics.Trace.WriteLine(string.Format("User {0} Password Changed",usr.ProviderName));
+                Trace.WriteLine(string.Format("User {0} Password Changed",usr.ProviderName));
             }
         }
 
@@ -80,7 +74,7 @@ namespace ZeroConfiguration.Pages.Controls
                     }
                     break;
                 default:
-                    MembershipUser usr = ((MembershipUser)DataContext);
+                    var usr = ((MembershipUser)DataContext);
                     Membership.UpdateUser(usr);
                     ret = true;
                     break;

@@ -55,7 +55,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Stock.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Entities\StockEntitiesClass.cs" />
+    <Compile Include="Entities\StockEntities.cs" />
     <Compile Include="Entities\StockHeader.cs" />
     <Compile Include="Pages\Controls\DeliveryDocumentGrid.xaml.cs">
       <DependentUpon>DeliveryDocumentGrid.xaml</DependentUpon>

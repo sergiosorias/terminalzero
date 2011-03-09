@@ -39,13 +39,23 @@ namespace ZeroStock.Pages
             {
 
                 _context = new StockEntities();
-                LoadHeader(_stockType, _context.StockHeaders.Count() > 0 ? _context.GetNextStockHeaderCode() : 1, _terminal.TerminalCode);
+
+                Guid g = new Guid();
+                ZeroActionParameterBase param =
+                _terminal.Session.GetParameter<MembershipUser>();
+                if (param != null)
+                {
+                    g = (Guid)((MembershipUser)param.Value).ProviderUserKey;
+                }
+
+                _header = _context.CreateStockHeader(_terminal.TerminalCode, _stockType, _context.GetNextStockHeaderCode(), _terminal.TerminalCode, g);
+
                 lblStockType.Content = _header.StockType != null &&
                                        !string.IsNullOrWhiteSpace(_header.StockType.Description)
                                            ? _header.StockType.Description
                                            : "Stock";
 
-                if (IsDeliveryDocumentMandatory())
+                if (_context.IsDeliveryDocumentMandatory(_stockType))
                 {
                     var view = new DeliveryDocumentView(_terminal);
                     view.Mode = Mode.Selection;
@@ -75,72 +85,7 @@ namespace ZeroStock.Pages
             }
         }
 
-        private bool IsDeliveryDocumentMandatory()
-        {
-            return _stockType == 0;
-        }
-
-        private void LoadHeader(int stockType, int code, int terminalTo)
-        {
-            _header = StockHeader.CreateStockHeader(
-                _terminal.TerminalCode,
-                code,
-                true,
-                0, DateTime.Now.Date, terminalTo);
-            ZeroActionParameterBase param =
-                _terminal.Session.GetParameter<MembershipUser>();
-            if (param != null)
-            {
-                _header.UserCode = (Guid)((MembershipUser)param.Value).ProviderUserKey;
-            }
-            _header.StockType = _context.StockTypes.FirstOrDefault(st => st.Code == stockType);
-            _context.AddToStockHeaders(_header);
-
-        }
-
-        private StockItem AddNewStockItem(Product prod, double qty)
-        {
-            StockItem item = StockItem.CreateStockItem(_itemsCount++,
-                                                       _terminal.TerminalCode,
-                                                       _header.Code,
-                                                       true,
-                                                       0,
-                                                       _lot,
-                                                       prod.Code,
-                                                       prod.MasterCode,
-                                                       prod.ByWeight,
-                                                       prod.Price1 != null ? prod.Price1.Value : 0,
-                                                       prod.ByWeight ? qty : 1,
-                                                       _header.TerminalToCode);
-
-            _header.StockItems.Add(item);
-            stockGrid.Add(item);
-            return item;
-        }
-
-        private DeliveryDocumentItem AddNewDeliveryDocumentItem(Product prod, double qty)
-        {
-            DeliveryDocumentItem item = null;
-            if (_header.DeliveryDocumentHeader != null)
-            {
-                item = DeliveryDocumentItem.CreateDeliveryDocumentItem
-                    (_itemsCount++,
-                    _terminal.TerminalCode,
-                    _header.Code,
-                    true,
-                    0,
-                    _lot,
-                    prod.Code,
-                    prod.MasterCode,
-                    prod.ByWeight,
-                    prod.Price1 != null ? prod.Price1.Value : 0,
-                    prod.ByWeight ? qty : 1, _header.TerminalToCode);
-
-                _header.DeliveryDocumentHeader.DeliveryDocumentItems.Add(item);
-            }
-
-            return item;
-        }
+        
 
         #region IZeroPage Members
 
@@ -191,7 +136,6 @@ namespace ZeroStock.Pages
 
         #endregion
 
-        private int _itemsCount;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
             BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
@@ -228,9 +172,12 @@ namespace ZeroStock.Pages
                     }
 
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
-                    
-                    AddNewStockItem(prod, partQty.Code);
-                    AddNewDeliveryDocumentItem(prod, partQty.Code);
+
+                    stockGrid.Add(_header.AddNewStockItem(prod, partQty.Code, _lot));
+
+                    if(_header.DeliveryDocumentHeader!=null)
+                        _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(prod, partQty.Code,_lot);
+
                     _lot = "";
                     lotBarcode.SetFocus();
                 }

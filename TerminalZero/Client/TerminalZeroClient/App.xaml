@@ -42,7 +42,9 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
-        
+        <Style  x:Key="{x:Type DataGridColumnHeader}" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
         <Style  x:Key="{x:Type DataGrid}" TargetType="DataGrid">
             <Setter Property="SelectionUnit" Value="FullRow"/>
             <Setter Property="SelectionMode" Value="Single"/>

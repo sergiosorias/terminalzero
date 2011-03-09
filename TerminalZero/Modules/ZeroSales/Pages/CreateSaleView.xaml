@@ -34,7 +34,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
                 <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
-                                            BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN" TabIndex="1"/>
+                                            BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN" TabIndex="1"/>              
             </StackPanel>
             <baseControls:ZeroToolBar Grid.Column="1" HorizontalAlignment="Right" NewBtnVisible="False" VerticalAlignment="Center" Save="btnSave_Click" Cancel="btnCancel_Click"/>
         </Grid>
@@ -44,14 +44,18 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto" MinWidth="100"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto" MinWidth="200"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1" Text="IVA:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="2" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=TaxSumValue}"/>
-            <TextBlock Grid.Column="3" Text="Total:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="4" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=PriceSumValue}"/>
+            <TextBlock Grid.Column="0" Text="" FontSize="48" FontWeight="Heavy" Name="currentProd" Margin="5,0,0,0"/>
+            <TextBlock Grid.Column="1" Text="Items:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Heavy" Text="0" Name="lblItemsCount"/>
+            <TextBlock Grid.Column="3" Text="Total:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center">
+                <TextBlock FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="$" Margin="5" Foreground="#FFC52C19" />
+                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=PriceSumValue, FallbackValue=0}" Foreground="#FFC52C19" />
+            </StackPanel>
             
         </Grid>
             

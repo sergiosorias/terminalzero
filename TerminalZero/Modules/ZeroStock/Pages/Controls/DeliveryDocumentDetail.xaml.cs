@@ -22,6 +22,7 @@ namespace ZeroStock.Pages.Controls
 
         public DocumentDeliveryDetail(ITerminal terminal)
         {
+            Mode = Mode.New;
             InitializeComponent();
             _terminal = terminal;
         }
@@ -32,28 +33,11 @@ namespace ZeroStock.Pages.Controls
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 DataProvider = new StockEntities();
-                
-                CurrentDocumentDelivery = DeliveryDocumentHeader.CreateDeliveryDocumentHeader(
-                    _terminal.TerminalCode,
-                    DataProvider.DeliveryDocumentHeaders.Count() + 1,
-                    true,
-                    (short) EntityStatus.New,
-                    DateTime.Now, _terminal.TerminalCode);
 
-                DataProvider.DeliveryDocumentHeaders.AddObject(CurrentDocumentDelivery);
+                CurrentDocumentDelivery = DataProvider.CreateDeliveryDocumentHeader(_terminal.TerminalCode);
                 grid1.DataContext = CurrentDocumentDelivery;
                 supplierBox.ItemsSource = DataProvider.Suppliers;
                 cbTerminals.ItemsSource = DataProvider.GetExportTerminal(_terminal.TerminalCode);
-            }
-        }
-
-        private void TryGoHome()
-        {
-            ZeroAction action;
-            if (!_terminal.Manager.ExistsAction(ApplicationActions.Back, out action)
-                || !_terminal.Manager.ExecuteAction(action))
-            {
-                IsEnabled = false;
             }
         }
 
@@ -64,18 +48,7 @@ namespace ZeroStock.Pages.Controls
 
         #region IZeroPage Members
 
-        Mode _Mode = Mode.New;
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public Mode Mode { get; set; }
 
         public bool CanAccept(object parameter)
         {
