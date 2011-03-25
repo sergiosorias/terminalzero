@@ -10,21 +10,21 @@ namespace ZeroConfiguration.Pages.Controls
     /// <summary>
     /// Interaction logic for UserDetail.xaml
     /// </summary>
-    public partial class UserDetail : UserControl, IZeroPage
+    public partial class UserDetail : ZeroGUI.ZeroBasePage
     {
         public UserDetail()
         {
             InitializeComponent();
-            Mode = Mode.Update;
+            ControlMode = ControlMode.Update;
         }
 
         private void grid1_Loaded(object sender, RoutedEventArgs e)
         {
             var a = new System.Windows.Data.Binding("UserName");
             
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     lblNameTextBox.Visibility = Visibility.Visible;
                     nameTextBox.Visibility = Visibility.Visible;
                     chbIsApproved.Visibility = Visibility.Collapsed;
@@ -49,15 +49,12 @@ namespace ZeroConfiguration.Pages.Controls
             }
         }
 
-        #region Implementation of IZeroPage
-
-        public Mode Mode { get; set; }
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
             bool ret = false;
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     if (string.IsNullOrWhiteSpace(nameTextBox.Text))
                     {
                         MessageBox.Show("Por favos ingrese un nombre!","Error");
@@ -139,11 +136,6 @@ namespace ZeroConfiguration.Pages.Controls
             }
         }
         
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
+       
     }
 }

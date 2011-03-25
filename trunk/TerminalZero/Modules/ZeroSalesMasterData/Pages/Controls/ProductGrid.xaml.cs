@@ -4,32 +4,34 @@ using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
     /// <summary>
     /// Interaction logic for ProductGrid.xaml
     /// </summary>
-    public partial class ProductGrid : UserControl, IZeroPage
+    public partial class ProductGrid : ZeroBasePage
     {
-        public Entities.MasterDataEntities DataProvider { get; set; }
+        public MasterDataEntities DataProvider { get; set; }
         public ProductGrid()
         {
+            ControlMode = ControlMode.New;
             InitializeComponent();
-            
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (Mode)
+            
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     break;
-                case Mode.Update:
+                case ControlMode.Update:
                     break;
-                case Mode.Delete:
+                case ControlMode.Delete:
                     break;
-                case Mode.ReadOnly:
+                case ControlMode.ReadOnly:
                     editItemCollum.Visibility = Visibility.Hidden;
                     activeProductcollumn.Visibility = Visibility.Hidden;
                     break;
@@ -39,7 +41,7 @@ namespace ZeroMasterData.Pages.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                DataProvider = new Entities.MasterDataEntities();
+                DataProvider = new MasterDataEntities();
                 
                 foreach (var item in DataProvider.Products.OrderBy(p => p.Name))
                 {
@@ -48,17 +50,17 @@ namespace ZeroMasterData.Pages.Controls
             }
         }
 
-        public void AddProduct(Entities.Product product)
+        public void AddProduct(Product product)
         {
             productsListView2.Items.Add(product);
         }
 
         private void btnEditProduct_Click(object sender, RoutedEventArgs e)
         {
-            int t = (int)((Button)sender).DataContext;
-            Controls.ProductDetail detail = new Controls.ProductDetail(DataProvider, t);
+            var t = (int)((Button)sender).DataContext;
+            var detail = new ProductDetail(DataProvider, t);
 
-            bool? ret = ZeroMessageBox.Show(detail, "Editar producto");
+            bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.ProductEdit);
             if (ret.HasValue && ret.Value)
             {
                
@@ -67,19 +69,7 @@ namespace ZeroMasterData.Pages.Controls
 
         #region IZeroPage Members
 
-        private Mode _Mode = Mode.New;
-
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
+        public ControlMode ControlMode { get; set; }
 
         public bool CanAccept(object parameter)
         {
@@ -96,8 +86,8 @@ namespace ZeroMasterData.Pages.Controls
         internal int ApplyFilter(string criteria)
         {
             productsListView2.Items.Clear();
-
-            foreach (var item in DataProvider.Products.Where(p => p.Name.Contains(criteria) || p.Description.Contains(criteria) || p.ShortDescription.Contains(criteria)))
+            
+            foreach (var item in DataProvider.Products.Where(p =>  p.Name.Contains(criteria) || p.Description.Contains(criteria) || p.ShortDescription.Contains(criteria)))
             {
                 productsListView2.Items.Add(item);
             }

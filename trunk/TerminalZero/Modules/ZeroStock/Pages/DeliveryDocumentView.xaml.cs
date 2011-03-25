@@ -12,14 +12,14 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for DeliveryDocumentView.xaml
     /// </summary>
-    public partial class DeliveryDocumentView : UserControl, IZeroPage
+    public partial class DeliveryDocumentView : ZeroBasePage
     {
         private readonly ITerminal Terminal;
         public DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
 
         public DeliveryDocumentView(ITerminal terminal)
         {
-            Mode = Mode.New;
+            ControlMode = ControlMode.New;
             InitializeComponent();
             Terminal = terminal;
         }
@@ -38,14 +38,11 @@ namespace ZeroStock.Pages
              }
         }
 
-        #region IZeroPage Members
-
-        public Mode Mode { get; set; }
-
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
+            base.CanAccept(parameter);
             bool ret = true;
-            if (Mode == Mode.Selection)
+            if (ControlMode == ControlMode.Selection)
             {
                 SelectedDeliveryDocumentHeader = DeliveryGrid.SelectedDeliveryDocumentHeader;
                 ret = (SelectedDeliveryDocumentHeader != null);
@@ -58,13 +55,6 @@ namespace ZeroStock.Pages
 
             return ret;
         }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
 
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
@@ -88,17 +78,17 @@ namespace ZeroStock.Pages
 
         private void DeliveryGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     break;
-                case Mode.Update:
+                case ControlMode.Update:
                     break;
-                case Mode.Delete:
+                case ControlMode.Delete:
                     break;
-                case Mode.ReadOnly:
+                case ControlMode.ReadOnly:
                     break;
-                case Mode.Selection:
+                case ControlMode.Selection:
                     DeliveryGrid.ApplyFilter(string.Empty, DateTime.Now.Date);
                     break;
             }

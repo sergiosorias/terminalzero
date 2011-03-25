@@ -1,11 +1,12 @@
 ﻿using System.Data.Objects;
+using System.Data.SqlClient;
 
 namespace ZeroCommonClasses.Context
 {
     public class EntitiesContext<T> 
         where T : ObjectContext, new()
     {
-        private T _Context = null;
+        private T _Context;
         public T Context
         {
             get
@@ -16,12 +17,7 @@ namespace ZeroCommonClasses.Context
                 return _Context;
             }
         }
-        public System.Data.SqlClient.SqlConnection SQLConnection;
-       
-        public EntitiesContext()
-        {
-            
-        }
+        public SqlConnection SQLConnection;
 
         public T CreateContext()
         {

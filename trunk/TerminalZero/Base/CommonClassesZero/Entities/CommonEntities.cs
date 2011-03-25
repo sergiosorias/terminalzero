@@ -1,4 +1,6 @@
 ﻿
+using ZeroCommonClasses.Context;
+
 namespace ZeroCommonClasses.Entities
 {
     public class CommonEntities : Entities
@@ -12,7 +14,7 @@ namespace ZeroCommonClasses.Entities
         }
 
         public CommonEntities()
-            : base(ZeroCommonClasses.Context.ContextBuilder.GetConnectionForCurrentEnvironment("DBCommonTables"))
+            : base(ContextInfo.GetConnectionForCurrentEnvironment("DBCommonTables"))
         {
             
         }

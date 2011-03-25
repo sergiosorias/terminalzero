@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.Serialization;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -14,7 +16,7 @@ namespace ZeroCommonClasses
     };
 
     [DataContract]
-    public abstract partial class ZeroModule
+    public abstract class ZeroModule
     {
         public const string KInFolderName = "In";
 
@@ -56,10 +58,10 @@ namespace ZeroCommonClasses
             set
             {
                 _workingDirectory = value;
-                if (!System.IO.Directory.Exists(_workingDirectory))
-                    System.IO.Directory.CreateDirectory(_workingDirectory);
+                if (!Directory.Exists(_workingDirectory))
+                    Directory.CreateDirectory(_workingDirectory);
 
-                WorkingDirectoryIn = System.IO.Path.Combine(_workingDirectory, KInFolderName);
+                WorkingDirectoryIn = Path.Combine(_workingDirectory, KInFolderName);
 
                 
             }
@@ -77,8 +79,8 @@ namespace ZeroCommonClasses
             private set
             {
                 _workingDirectoryIn = value;
-                if (!System.IO.Directory.Exists(_workingDirectoryIn))
-                    System.IO.Directory.CreateDirectory(_workingDirectoryIn);
+                if (!Directory.Exists(_workingDirectoryIn))
+                    Directory.CreateDirectory(_workingDirectoryIn);
             }
         }
 
@@ -98,7 +100,7 @@ namespace ZeroCommonClasses
         public virtual void NewPackReceived(string path)
         {
             if (OwnerTerminal.Session != null && OwnerTerminal.Session.Notifier != null)
-                OwnerTerminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
+                OwnerTerminal.Session.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
         }
                 
     }

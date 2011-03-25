@@ -78,7 +78,10 @@
           <Property Name="Country" Type="nvarchar" MaxLength="250" />
           <Property Name="State" Type="nvarchar" MaxLength="100" />
           <Property Name="City" Type="nvarchar" MaxLength="250" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
           <Property Name="Street" Type="nvarchar" MaxLength="100" />
+          <Property Name="Floor" Type="int" />
+          <Property Name="DepNumber" Type="varchar" MaxLength="10" />
           <Property Name="Number" Type="nvarchar" MaxLength="50" />
           <Property Name="E-Mail1" Type="varchar" MaxLength="250" />
           <Property Name="E-Mail2" Type="varchar" MaxLength="250" />
@@ -99,6 +102,7 @@
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="PrintModeDefault" Type="int" />
         </EntityType>
         <EntityType Name="Price">
           <Key>
@@ -418,6 +422,7 @@
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Suppliers" Relationship="TZero_ConfigModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Supplier" />
           <NavigationProperty Name="Customers" Relationship="TZero_ConfigModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Customer" />
+          <Property Type="Int32" Name="PrintModeDefault" />
         </EntityType>
         <EntityType Name="Price">
           <Key>
@@ -686,6 +691,9 @@
           <Property Type="String" Name="LegalCode" MaxLength="15" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="TaxPosition" Relationship="TZero_ConfigModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="Customer" ToRole="TaxPosition" />
           <NavigationProperty Name="PaymentInstrument" Relationship="TZero_ConfigModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="Customer" ToRole="PaymentInstrument" />
+          <Property Type="String" Name="PostalCode" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Floor" />
+          <Property Type="String" Name="DepNumber" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_TaxPositionCode_Customer_TaxPosition">
           <End Type="TZero_ConfigModel.TaxPosition" Role="TaxPosition" Multiplicity="0..1" />
@@ -718,7 +726,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TZero_ConfigModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="PaymentInstruments"><EntityTypeMapping TypeName="TZero_ConfigModel.PaymentInstrument"><MappingFragment StoreEntitySet="PaymentInstrument">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="PrintModeDefault" ColumnName="PrintModeDefault" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -806,6 +815,9 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="TZero_ConfigModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="DepNumber" ColumnName="DepNumber" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
                 <ScalarProperty Name="LegalCode" ColumnName="LegalCode" />
                 <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
                 <ScalarProperty Name="TaxPositionCode" ColumnName="TaxPositionCode" />

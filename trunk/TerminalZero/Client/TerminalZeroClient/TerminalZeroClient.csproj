@@ -135,6 +135,10 @@
       <Project>{2AC599DD-4010-49A3-B595-715FE549C6B9}</Project>
       <Name>ZeroCommonClasses</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Base\ZeroBusiness\ZeroBusiness.csproj">
+      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
+      <Name>ZeroBusiness</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Base\ZeroGUI\ZeroGUI.csproj">
       <Project>{C5EE22F8-88E6-4E39-839F-B274B28A1FE1}</Project>
       <Name>ZeroGUI</Name>

@@ -55,7 +55,7 @@
     <Compile Include="ZeroBarcodeModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ean13.ttf">
+    <Content Include="Extras\ean13.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -73,6 +73,11 @@
     <ProjectReference Include="..\..\Base\CommonClassesZero\ZeroCommonClasses.csproj">
       <Project>{2AC599DD-4010-49A3-B595-715FE549C6B9}</Project>
       <Name>ZeroCommonClasses</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Base\ZeroBusiness\ZeroBusiness.csproj">
+      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
+      <Name>ZeroBusiness</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Base\ZeroGUI\ZeroGUI.csproj">

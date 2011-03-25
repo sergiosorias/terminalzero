@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using TerminalZeroClient.Extras;
 using TerminalZeroClient.Pages;
 using TerminalZeroClient.Properties;
-using ZeroCommonClasses;
+using ZeroBusiness;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -63,15 +63,15 @@ namespace TerminalZeroClient
             item.Style = (Style)Resources["masterMenuItem"];
             item.Header = Properties.Resources.Home;
             ZeroAction actionInit = null;
-            if (!App.Instance.Manager.ExistsAction(ApplicationActions.Home, out actionInit))
+            if (!App.Instance.Manager.ExistsAction(Actions.AppHome, out actionInit))
             {
-                actionInit = new ZeroAction(null,ActionType.BackgroudAction, ApplicationActions.Home,OpenHome);
+                actionInit = new ZeroAction( ActionType.BackgroudAction, Actions.AppHome, OpenHome);
                 //actionMenu = new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Home, () => item.Focus());
                 //MenuShorcut.Command = actionMenu;
                 App.Instance.Session.AddAction(actionInit);
-                App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, OpenHome));
+                App.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppBack, OpenHome));
                 //App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
-                App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Exit, ForceClose));
+                App.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppExit, ForceClose));
             }
             ShortCutHome.Command = actionInit;
             item.Command = actionInit;
@@ -111,11 +111,14 @@ namespace TerminalZeroClient
                     ((ZeroMessageBox) e.ControlToShow).Top = Top + 1;
                     ((ZeroMessageBox) e.ControlToShow).ShowDialog();
                 }
-                else if (!(PrimaryWindow.Content is IZeroPage))
+                else if (Content is ZeroBasePage)
                 {
-                    ShowObject(e);
+                    if (((ZeroBasePage)PrimaryWindow.Content).CanAccept(null))
+                    {
+                        ShowObject(e);
+                    }
                 }
-                else if (((IZeroPage) PrimaryWindow.Content).CanAccept(null))
+                else
                 {
                     ShowObject(e);
                 }
@@ -163,7 +166,7 @@ namespace TerminalZeroClient
             btnGetMoreStatusInfo.Visibility = Visibility.Hidden;
             tb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             tb.TextWrapping = TextWrapping.Wrap;
-            ZeroMessageBox.Show(tb, "Información");
+            ZeroMessageBox.Show(tb, "Información",ResizeMode.CanResize,MessageBoxButton.OK);
         }
 
         #region TryIcon
@@ -326,7 +329,7 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            Trace.WriteLineIf(ContextBuilder.LogLevel.Level >= level, GetStamp() + message);
+            Trace.WriteLineIf(ContextInfo.LogLevel.Level >= level, GetStamp() + message);
         }
 
         #endregion

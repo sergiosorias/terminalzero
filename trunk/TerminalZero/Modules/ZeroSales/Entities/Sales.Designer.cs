@@ -31,7 +31,9 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_SaleHeader_SaleType", "SaleType", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroSales.Entities.SaleType), "SaleHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.SaleHeader), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_SaleItem_SaleHeader", "SaleHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroSales.Entities.SaleHeader), "SaleItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.SaleItem), true)]
 [assembly: EdmRelationshipAttribute("TZeroMasterModel", "PK_PaymentInstrumentCode_Customer_PaymentInstrument", "PaymentInstrument", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroSales.Entities.PaymentInstrument), "Customer", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.Customer), true)]
-[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockHeader_PaymentInstrument", "PaymentInstrument", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroSales.Entities.PaymentInstrument), "SaleHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.SaleHeader), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_StockHeader_PaymentInstrument1", "PaymentInstrument", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroSales.Entities.PaymentInstrument), "SalePaymentItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.SalePaymentItem), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_SaleHeader_SalePaymentHeader", "SalePaymentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroSales.Entities.SalePaymentHeader), "SaleHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.SaleHeader), true)]
+[assembly: EdmRelationshipAttribute("TZeroMasterModel", "FK_SalePaymentItem_SalePaymentHeader", "SalePaymentHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroSales.Entities.SalePaymentHeader), "SalePaymentItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroSales.Entities.SalePaymentItem), true)]
 
 #endregion
 
@@ -290,6 +292,38 @@ namespace ZeroSales.Entities
             }
         }
         private ObjectSet<PaymentInstrument> _PaymentInstruments;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SalePaymentHeader> SalePaymentHeaders
+        {
+            get
+            {
+                if ((_SalePaymentHeaders == null))
+                {
+                    _SalePaymentHeaders = base.CreateObjectSet<SalePaymentHeader>("SalePaymentHeaders");
+                }
+                return _SalePaymentHeaders;
+            }
+        }
+        private ObjectSet<SalePaymentHeader> _SalePaymentHeaders;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SalePaymentItem> SalePaymentItems
+        {
+            get
+            {
+                if ((_SalePaymentItems == null))
+                {
+                    _SalePaymentItems = base.CreateObjectSet<SalePaymentItem>("SalePaymentItems");
+                }
+                return _SalePaymentItems;
+            }
+        }
+        private ObjectSet<SalePaymentItem> _SalePaymentItems;
 
         #endregion
         #region AddTo Methods
@@ -396,6 +430,22 @@ namespace ZeroSales.Entities
         public void AddToPaymentInstruments(PaymentInstrument paymentInstrument)
         {
             base.AddObject("PaymentInstruments", paymentInstrument);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SalePaymentHeaders EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSalePaymentHeaders(SalePaymentHeader salePaymentHeader)
+        {
+            base.AddObject("SalePaymentHeaders", salePaymentHeader);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SalePaymentItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSalePaymentItems(SalePaymentItem salePaymentItem)
+        {
+            base.AddObject("SalePaymentItems", salePaymentItem);
         }
 
         #endregion
@@ -1208,18 +1258,18 @@ namespace ZeroSales.Entities
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_PaymentInstrument", "SaleHeader")]
-        public EntityCollection<SaleHeader> SaleHeaders
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_PaymentInstrument1", "SalePaymentItem")]
+        public EntityCollection<SalePaymentItem> SalePaymentItems
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<SaleHeader>("TZeroMasterModel.FK_StockHeader_PaymentInstrument", "SaleHeader");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<SalePaymentItem>("TZeroMasterModel.FK_StockHeader_PaymentInstrument1", "SalePaymentItem");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SaleHeader>("TZeroMasterModel.FK_StockHeader_PaymentInstrument", "SaleHeader", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SalePaymentItem>("TZeroMasterModel.FK_StockHeader_PaymentInstrument1", "SalePaymentItem", value);
                 }
             }
         }
@@ -2600,13 +2650,13 @@ namespace ZeroSales.Entities
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="date">Initial value of the Date property.</param>
         /// <param name="saleTypeCode">Initial value of the SaleTypeCode property.</param>
-        /// <param name="paymentInstrumentCode">Initial value of the PaymentInstrumentCode property.</param>
         /// <param name="priceSumValue">Initial value of the PriceSumValue property.</param>
         /// <param name="taxSumValue">Initial value of the TaxSumValue property.</param>
         /// <param name="tax1SumValue">Initial value of the Tax1SumValue property.</param>
         /// <param name="summarized">Initial value of the Summarized property.</param>
         /// <param name="historized">Initial value of the Historized property.</param>
-        public static SaleHeader CreateSaleHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.DateTime date, global::System.Int32 saleTypeCode, global::System.Int32 paymentInstrumentCode, global::System.Double priceSumValue, global::System.Double taxSumValue, global::System.Double tax1SumValue, global::System.Boolean summarized, global::System.Boolean historized)
+        /// <param name="payIsComplete">Initial value of the PayIsComplete property.</param>
+        public static SaleHeader CreateSaleHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.DateTime date, global::System.Int32 saleTypeCode, global::System.Double priceSumValue, global::System.Double taxSumValue, global::System.Double tax1SumValue, global::System.Boolean summarized, global::System.Boolean historized, global::System.Boolean payIsComplete)
         {
             SaleHeader saleHeader = new SaleHeader();
             saleHeader.TerminalCode = terminalCode;
@@ -2616,12 +2666,12 @@ namespace ZeroSales.Entities
             saleHeader.TerminalToCode = terminalToCode;
             saleHeader.Date = date;
             saleHeader.SaleTypeCode = saleTypeCode;
-            saleHeader.PaymentInstrumentCode = paymentInstrumentCode;
             saleHeader.PriceSumValue = priceSumValue;
             saleHeader.TaxSumValue = taxSumValue;
             saleHeader.Tax1SumValue = tax1SumValue;
             saleHeader.Summarized = summarized;
             saleHeader.Historized = historized;
+            saleHeader.PayIsComplete = payIsComplete;
             return saleHeader;
         }
 
@@ -2853,30 +2903,6 @@ namespace ZeroSales.Entities
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 PaymentInstrumentCode
-        {
-            get
-            {
-                return _PaymentInstrumentCode;
-            }
-            set
-            {
-                OnPaymentInstrumentCodeChanging(value);
-                ReportPropertyChanging("PaymentInstrumentCode");
-                _PaymentInstrumentCode = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("PaymentInstrumentCode");
-                OnPaymentInstrumentCodeChanged();
-            }
-        }
-        private global::System.Int32 _PaymentInstrumentCode;
-        partial void OnPaymentInstrumentCodeChanging(global::System.Int32 value);
-        partial void OnPaymentInstrumentCodeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Int32> PrintMode
@@ -3041,6 +3067,54 @@ namespace ZeroSales.Entities
         private global::System.Boolean _Historized;
         partial void OnHistorizedChanging(global::System.Boolean value);
         partial void OnHistorizedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> SalePaymentHeaderCode
+        {
+            get
+            {
+                return _SalePaymentHeaderCode;
+            }
+            set
+            {
+                OnSalePaymentHeaderCodeChanging(value);
+                ReportPropertyChanging("SalePaymentHeaderCode");
+                _SalePaymentHeaderCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SalePaymentHeaderCode");
+                OnSalePaymentHeaderCodeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _SalePaymentHeaderCode;
+        partial void OnSalePaymentHeaderCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnSalePaymentHeaderCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean PayIsComplete
+        {
+            get
+            {
+                return _PayIsComplete;
+            }
+            set
+            {
+                OnPayIsCompleteChanging(value);
+                ReportPropertyChanging("PayIsComplete");
+                _PayIsComplete = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PayIsComplete");
+                OnPayIsCompleteChanged();
+            }
+        }
+        private global::System.Boolean _PayIsComplete;
+        partial void OnPayIsCompleteChanging(global::System.Boolean value);
+        partial void OnPayIsCompleteChanged();
 
         #endregion
     
@@ -3112,16 +3186,16 @@ namespace ZeroSales.Entities
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_PaymentInstrument", "PaymentInstrument")]
-        public PaymentInstrument PaymentInstrument
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_SaleHeader_SalePaymentHeader", "SalePaymentHeader")]
+        public SalePaymentHeader SalePaymentHeader
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument", "PaymentInstrument").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SaleHeader_SalePaymentHeader", "SalePaymentHeader").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument", "PaymentInstrument").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SaleHeader_SalePaymentHeader", "SalePaymentHeader").Value = value;
             }
         }
         /// <summary>
@@ -3129,17 +3203,17 @@ namespace ZeroSales.Entities
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<PaymentInstrument> PaymentInstrumentReference
+        public EntityReference<SalePaymentHeader> SalePaymentHeaderReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument", "PaymentInstrument");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SaleHeader_SalePaymentHeader", "SalePaymentHeader");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument", "PaymentInstrument", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SaleHeader_SalePaymentHeader", "SalePaymentHeader", value);
                 }
             }
         }
@@ -3716,6 +3790,611 @@ namespace ZeroSales.Entities
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SaleHeader>("TZeroMasterModel.FK_SaleItem_SaleHeader", "SaleHeader", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="SalePaymentHeader")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class SalePaymentHeader : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SalePaymentHeader object.
+        /// </summary>
+        /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="enable">Initial value of the Enable property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        /// <param name="totalQuantity">Initial value of the TotalQuantity property.</param>
+        public static SalePaymentHeader CreateSalePaymentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.Double totalQuantity)
+        {
+            SalePaymentHeader salePaymentHeader = new SalePaymentHeader();
+            salePaymentHeader.TerminalCode = terminalCode;
+            salePaymentHeader.Code = code;
+            salePaymentHeader.Enable = enable;
+            salePaymentHeader.Status = status;
+            salePaymentHeader.TerminalToCode = terminalToCode;
+            salePaymentHeader.TotalQuantity = totalQuantity;
+            return salePaymentHeader;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalCode
+        {
+            get
+            {
+                return _TerminalCode;
+            }
+            set
+            {
+                if (_TerminalCode != value)
+                {
+                    OnTerminalCodeChanging(value);
+                    ReportPropertyChanging("TerminalCode");
+                    _TerminalCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalCode");
+                    OnTerminalCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalCode;
+        partial void OnTerminalCodeChanging(global::System.Int32 value);
+        partial void OnTerminalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                OnTerminalToCodeChanging(value);
+                ReportPropertyChanging("TerminalToCode");
+                _TerminalToCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TerminalToCode");
+                OnTerminalToCodeChanged();
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double TotalQuantity
+        {
+            get
+            {
+                return _TotalQuantity;
+            }
+            set
+            {
+                OnTotalQuantityChanging(value);
+                ReportPropertyChanging("TotalQuantity");
+                _TotalQuantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TotalQuantity");
+                OnTotalQuantityChanged();
+            }
+        }
+        private global::System.Double _TotalQuantity;
+        partial void OnTotalQuantityChanging(global::System.Double value);
+        partial void OnTotalQuantityChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_SaleHeader_SalePaymentHeader", "SaleHeader")]
+        public EntityCollection<SaleHeader> SaleHeaders
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<SaleHeader>("TZeroMasterModel.FK_SaleHeader_SalePaymentHeader", "SaleHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SaleHeader>("TZeroMasterModel.FK_SaleHeader_SalePaymentHeader", "SaleHeader", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_SalePaymentItem_SalePaymentHeader", "SalePaymentItem")]
+        public EntityCollection<SalePaymentItem> SalePaymentItems
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<SalePaymentItem>("TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader", "SalePaymentItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SalePaymentItem>("TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader", "SalePaymentItem", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZeroMasterModel", Name="SalePaymentItem")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class SalePaymentItem : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SalePaymentItem object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
+        /// <param name="salePaymentHeaderCode">Initial value of the SalePaymentHeaderCode property.</param>
+        /// <param name="enable">Initial value of the Enable property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
+        /// <param name="paymentInstrumentCode">Initial value of the PaymentInstrumentCode property.</param>
+        /// <param name="quantity">Initial value of the Quantity property.</param>
+        public static SalePaymentItem CreateSalePaymentItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 salePaymentHeaderCode, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.Int32 paymentInstrumentCode, global::System.Double quantity)
+        {
+            SalePaymentItem salePaymentItem = new SalePaymentItem();
+            salePaymentItem.Code = code;
+            salePaymentItem.TerminalCode = terminalCode;
+            salePaymentItem.SalePaymentHeaderCode = salePaymentHeaderCode;
+            salePaymentItem.Enable = enable;
+            salePaymentItem.Status = status;
+            salePaymentItem.TerminalToCode = terminalToCode;
+            salePaymentItem.PaymentInstrumentCode = paymentInstrumentCode;
+            salePaymentItem.Quantity = quantity;
+            return salePaymentItem;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalCode
+        {
+            get
+            {
+                return _TerminalCode;
+            }
+            set
+            {
+                if (_TerminalCode != value)
+                {
+                    OnTerminalCodeChanging(value);
+                    ReportPropertyChanging("TerminalCode");
+                    _TerminalCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TerminalCode");
+                    OnTerminalCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TerminalCode;
+        partial void OnTerminalCodeChanging(global::System.Int32 value);
+        partial void OnTerminalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 SalePaymentHeaderCode
+        {
+            get
+            {
+                return _SalePaymentHeaderCode;
+            }
+            set
+            {
+                if (_SalePaymentHeaderCode != value)
+                {
+                    OnSalePaymentHeaderCodeChanging(value);
+                    ReportPropertyChanging("SalePaymentHeaderCode");
+                    _SalePaymentHeaderCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("SalePaymentHeaderCode");
+                    OnSalePaymentHeaderCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _SalePaymentHeaderCode;
+        partial void OnSalePaymentHeaderCodeChanging(global::System.Int32 value);
+        partial void OnSalePaymentHeaderCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TerminalToCode
+        {
+            get
+            {
+                return _TerminalToCode;
+            }
+            set
+            {
+                OnTerminalToCodeChanging(value);
+                ReportPropertyChanging("TerminalToCode");
+                _TerminalToCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TerminalToCode");
+                OnTerminalToCodeChanged();
+            }
+        }
+        private global::System.Int32 _TerminalToCode;
+        partial void OnTerminalToCodeChanging(global::System.Int32 value);
+        partial void OnTerminalToCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 PaymentInstrumentCode
+        {
+            get
+            {
+                return _PaymentInstrumentCode;
+            }
+            set
+            {
+                OnPaymentInstrumentCodeChanging(value);
+                ReportPropertyChanging("PaymentInstrumentCode");
+                _PaymentInstrumentCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PaymentInstrumentCode");
+                OnPaymentInstrumentCodeChanged();
+            }
+        }
+        private global::System.Int32 _PaymentInstrumentCode;
+        partial void OnPaymentInstrumentCodeChanging(global::System.Int32 value);
+        partial void OnPaymentInstrumentCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Quantity
+        {
+            get
+            {
+                return _Quantity;
+            }
+            set
+            {
+                OnQuantityChanging(value);
+                ReportPropertyChanging("Quantity");
+                _Quantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Quantity");
+                OnQuantityChanged();
+            }
+        }
+        private global::System.Double _Quantity;
+        partial void OnQuantityChanging(global::System.Double value);
+        partial void OnQuantityChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_StockHeader_PaymentInstrument1", "PaymentInstrument")]
+        public PaymentInstrument PaymentInstrument
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument1", "PaymentInstrument").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument1", "PaymentInstrument").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<PaymentInstrument> PaymentInstrumentReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument1", "PaymentInstrument");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<PaymentInstrument>("TZeroMasterModel.FK_StockHeader_PaymentInstrument1", "PaymentInstrument", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroMasterModel", "FK_SalePaymentItem_SalePaymentHeader", "SalePaymentHeader")]
+        public SalePaymentHeader SalePaymentHeader
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader", "SalePaymentHeader").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader", "SalePaymentHeader").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<SalePaymentHeader> SalePaymentHeaderReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader", "SalePaymentHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SalePaymentHeader>("TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader", "SalePaymentHeader", value);
                 }
             }
         }

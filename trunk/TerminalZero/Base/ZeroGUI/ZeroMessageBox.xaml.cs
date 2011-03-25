@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ZeroBusiness;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 
@@ -13,7 +14,7 @@ namespace ZeroGUI
     /// </summary>
     public partial class ZeroMessageBox : Window
     {
-        bool _isDialog = false;
+        bool _isDialog;
 
         private readonly ZeroAction _acceptAction;
         private readonly ZeroAction _cancelAction;
@@ -31,8 +32,8 @@ namespace ZeroGUI
             }
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             lblCaption.DataContext = this;
-            _acceptAction = new ZeroAction(null, ActionType.BackgroudAction, "cancel", Accept);
-            _cancelAction = new ZeroAction(null, ActionType.BackgroudAction, "accept", Cancel);
+            _acceptAction = new ZeroAction( ActionType.BackgroudAction, "cancel", Accept);
+            _cancelAction = new ZeroAction( ActionType.BackgroudAction, "accept", Cancel);
             btnAccept.Command = ShortCutAccept.Command = _acceptAction;
             btnCancel.Command = ShortCutCancel.Command = _cancelAction;
             
@@ -57,13 +58,13 @@ namespace ZeroGUI
                 if(Content is UserControl)
                 {
                     ((UserControl) Content).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
-                    ((UserControl)Content).HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch;
-                    ((UserControl)Content).VerticalContentAlignment = System.Windows.VerticalAlignment.Stretch;
+                    ((UserControl)Content).HorizontalContentAlignment = HorizontalAlignment.Stretch;
+                    ((UserControl)Content).VerticalContentAlignment = VerticalAlignment.Stretch;
                 }
-                if (Content is IZeroPage)
+                if(Content is ZeroBasePage)
                 {
-                    _acceptAction.RuleToSatisfy = ((IZeroPage)value).CanAccept;
-                    _cancelAction.RuleToSatisfy = ((IZeroPage)value).CanCancel;
+                    _acceptAction.RuleToSatisfy = ((ZeroBasePage)value).CanAccept;
+                    _cancelAction.RuleToSatisfy = ((ZeroBasePage)value).CanCancel;
                 }
             }
         }
@@ -114,7 +115,7 @@ namespace ZeroGUI
 
         private void CurrentLoaded(object sender, RoutedEventArgs e)
         {
-            if (Content is IZeroPage)
+            if (Content is ZeroBasePage)
             {
                 
             }
@@ -178,7 +179,7 @@ namespace ZeroGUI
 
         public static bool? Show(object content, string caption, SizeToContent sizeToContent, ResizeMode resizeMode, MessageBoxButton mboxButtons)
         {
-            ZeroMessageBox MB = new ZeroMessageBox(true);
+            var MB = new ZeroMessageBox(true);
             MB.Content = content;
             MB.ResizeMode = resizeMode;
             if(resizeMode == ResizeMode.NoResize)

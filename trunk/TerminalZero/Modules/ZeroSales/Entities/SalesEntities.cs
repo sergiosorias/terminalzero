@@ -9,7 +9,7 @@ namespace ZeroSales.Entities
     public class SalesEntities : Entities
     {
         public SalesEntities()
-            : base(ZeroCommonClasses.Context.ContextBuilder.GetConnectionForCurrentEnvironment("Sales"))
+            : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("Sales"))
         {
             
         }

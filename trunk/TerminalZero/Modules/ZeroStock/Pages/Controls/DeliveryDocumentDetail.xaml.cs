@@ -7,6 +7,7 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
 using ZeroStock.Entities;
 
 namespace ZeroStock.Pages.Controls
@@ -14,7 +15,7 @@ namespace ZeroStock.Pages.Controls
     /// <summary>
     /// Interaction logic for DocumentDeliveryDetail.xaml
     /// </summary>
-    public partial class DocumentDeliveryDetail : UserControl, IZeroPage
+    public partial class DocumentDeliveryDetail : ZeroBasePage
     {
         private StockEntities DataProvider;
         private readonly ITerminal _terminal;
@@ -22,7 +23,6 @@ namespace ZeroStock.Pages.Controls
 
         public DocumentDeliveryDetail(ITerminal terminal)
         {
-            Mode = Mode.New;
             InitializeComponent();
             _terminal = terminal;
         }
@@ -46,12 +46,9 @@ namespace ZeroStock.Pages.Controls
             CurrentDocumentDelivery.SupplierCode = ((Supplier)supplierBox.SelectedValue).Code;
         }
 
-        #region IZeroPage Members
-
-        public Mode Mode { get; set; }
-
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
+            base.CanAccept(parameter);
             string msg = string.Empty;
 
             if (!CurrentDocumentDelivery.SupplierCode.HasValue)
@@ -81,13 +78,6 @@ namespace ZeroStock.Pages.Controls
             MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
 
         private void supplierBox_Unloaded(object sender, RoutedEventArgs e)
         {

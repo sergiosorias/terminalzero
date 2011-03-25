@@ -1,34 +1,35 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.EntityClient;
 using System.Diagnostics;
+using System.IO;
 using System.ServiceModel;
 using ZeroCommonClasses.Interfaces.Services;
 
 namespace ZeroCommonClasses.Context
 {
-    public static class ContextBuilder
+    public static class ContextInfo
     {
         public static TraceSwitch LogLevel { get; private set; }
-        public static System.Configuration.ConnectionStringSettings ServerConnectionString { get; private set; }
-        public static System.Configuration.ConnectionStringSettings ClientConnectionString { get; private set; }
-        public static System.Configuration.ConnectionStringSettings UsersConnectionString { get; private set; }
+        public static bool IsOnServer { get; private set; }
+        public static ConnectionStringSettings ServerConnectionString { get; private set; }
+        public static ConnectionStringSettings ClientConnectionString { get; private set; }
+        public static ConnectionStringSettings UsersConnectionString { get; private set; }
 
-        static ContextBuilder()
+        static ContextInfo()
         {
-            ServerConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.ConfigConn"];
-            ClientConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TerminalZeroClient.Properties.Settings.ConfigConn"];
-            UsersConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.UsersConn"];
+            ServerConnectionString = ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.ConfigConn"];
+            IsOnServer = ServerConnectionString != null;
+            ClientConnectionString = ConfigurationManager.ConnectionStrings["TerminalZeroClient.Properties.Settings.ConfigConn"];
+            UsersConnectionString = ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.UsersConn"];
             LogLevel = new TraceSwitch("ZeroLogLevelSwitch", "Zero Log Level Switch", "Error");
         }
 
-        public static System.Configuration.ConnectionStringSettings GetConnectionForCurrentEnvironment()
+        public static ConnectionStringSettings GetConnectionForCurrentEnvironment()
         {
-            System.Configuration.ConnectionStringSettings set;
+            ConnectionStringSettings set;
 
-            if (ServerConnectionString != null)
-                set = ServerConnectionString;
-            else
-                set = ClientConnectionString;
+            set = IsOnServer ? ServerConnectionString : ClientConnectionString;
             
             if (set == null)
                 throw new Exception("Connection String not found");
@@ -38,10 +39,10 @@ namespace ZeroCommonClasses.Context
 
         public static EntityConnection GetConnectionForCurrentEnvironment(string modelName)
         {
-            System.Configuration.ConnectionStringSettings set = GetConnectionForCurrentEnvironment();
+            ConnectionStringSettings set = GetConnectionForCurrentEnvironment();
             
-            EntityConnectionStringBuilder conStrIntegratedSecurity = new EntityConnectionStringBuilder()
-            {
+            var conStrIntegratedSecurity = new EntityConnectionStringBuilder
+                                                                         {
                 Metadata = "res://*/Entities." + modelName + ".csdl|"
                 + "res://*/Entities." + modelName + ".ssdl|"
                 + "res://*/Entities." + modelName + ".msl",
@@ -82,7 +83,7 @@ namespace ZeroCommonClasses.Context
         
         public static ISyncService CreateSyncConnection()
         {
-            ChannelFactory<ISyncService> channelFactory = new ChannelFactory<ISyncService>("BasicHttpBinding_ISyncService");
+            var channelFactory = new ChannelFactory<ISyncService>("BasicHttpBinding_ISyncService");
             ISyncService ret = channelFactory.CreateChannel();
             ((ICommunicationObject)ret).Open();
             return ret;
@@ -90,11 +91,40 @@ namespace ZeroCommonClasses.Context
 
         public static IFileTransfer CreateFileTranferConnection()
         {
-            ChannelFactory<IFileTransfer> channelFactory = new ChannelFactory<IFileTransfer>("BasicHttpBinding_IFileTransfer");
+            var channelFactory = new ChannelFactory<IFileTransfer>("BasicHttpBinding_IFileTransfer");
             IFileTransfer ret = channelFactory.CreateChannel();
             ((ICommunicationObject)ret).Open();
             return ret;
         }
+
+        #region Nested type: Directories
+
+        public class Directories
+        {
+            public const string WorkingDirSubfix = ".WD";
+
+            static Directories()
+            {
+
+                if (!Directory.Exists(ModulesFolder))
+                    Directory.CreateDirectory(ModulesFolder);
+                if (!Directory.Exists(UpgradeFolder))
+                    Directory.CreateDirectory(UpgradeFolder);
+
+            }
+
+            public static string ModulesFolder
+            {
+                get { return Path.Combine(Environment.CurrentDirectory, "Modules"); }
+            }
+
+            public static string UpgradeFolder
+            {
+                get { return Path.Combine(Environment.CurrentDirectory, "Upgrade"); }
+            }
+        }
+
+        #endregion
 
     }
 }

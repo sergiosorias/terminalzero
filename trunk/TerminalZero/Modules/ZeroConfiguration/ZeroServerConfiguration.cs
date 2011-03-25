@@ -41,7 +41,7 @@ namespace ZeroConfiguration
         {
             bool ret = true;
             msg = "";
-            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceVerbose, string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
+            Trace.WriteLineIf(ContextInfo.LogLevel.TraceVerbose, string.Format("Name: {0}, Code: {1}", tcode, tname), "ValidateTerminal");
             Terminal T = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == tcode);
             if (T == default(Terminal))
             {

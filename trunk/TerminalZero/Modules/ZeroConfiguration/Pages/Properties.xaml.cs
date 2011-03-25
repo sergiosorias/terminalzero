@@ -12,13 +12,14 @@ namespace ZeroConfiguration.Pages
     /// <summary>
     /// Interaction logic for Properties.xaml
     /// </summary>
-    public partial class Properties : IZeroPage
+    [ToolboxItem(false)]
+    public partial class Properties : ZeroGUI.ZeroBasePage
     {
         ConfigurationEntities _dataProvider;
         readonly ITerminal _terminal;
         public Properties(ITerminal terminal)
         {
-            Mode = Mode.ReadOnly;
+            ControlMode = ControlMode.ReadOnly;
             _dataProvider = null;
             InitializeComponent();
             _terminal = terminal;
@@ -29,14 +30,14 @@ namespace ZeroConfiguration.Pages
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _dataProvider = new ConfigurationEntities();
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
-                    case Mode.Update:
-                    case Mode.Delete:
+                    case ControlMode.New:
+                    case ControlMode.Update:
+                    case ControlMode.Delete:
                         cbTerminals.ItemsSource = _dataProvider.Terminals;
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         cbTerminals.ItemsSource = _dataProvider.Terminals.Where(t => t.Code == _terminal.TerminalCode);
                         cbTerminals.IsEnabled = false;
                         terminalPropertiesDataGrid.IsEnabled = false;
@@ -76,20 +77,18 @@ namespace ZeroConfiguration.Pages
         }
 
         #region IZeroPage Members
-        
-        public bool CanAccept(object parameter)
+
+        public override bool CanAccept(object parameter)
         {
             _dataProvider.SaveChanges();
             return true;
         }
 
-        public bool CanCancel(object parameter)
+        public override bool CanCancel(object parameter)
         {
             _dataProvider.SaveChanges();
             return true;
         }
-
-        public Mode Mode { get; set; }
 
         #endregion
 
@@ -111,13 +110,14 @@ namespace ZeroConfiguration.Pages
         {
             Dispatcher.Invoke(
                 new MethodInvoker(
-                    () => {
+                    () =>
+                    {
                         if (e.RemainingTime.TotalSeconds < 1)
                         {
                             lblNextSync.Content = "Sincronizando!";
                         }
                         else
-                        lblNextSync.Content = string.Format("{0:00}:{1:00}:{2:00}", e.RemainingTime.Hours, e.RemainingTime.Minutes, e.RemainingTime.Seconds);
+                            lblNextSync.Content = string.Format("{0:00}:{1:00}:{2:00}", e.RemainingTime.Hours, e.RemainingTime.Minutes, e.RemainingTime.Seconds);
 
                     }), null);
         }

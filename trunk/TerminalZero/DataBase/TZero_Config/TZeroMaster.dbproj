@@ -528,13 +528,34 @@
     <Build Include="Schema Objects\Schemas\data\Tables\SaleType.table.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\data\Tables\Keys\SaleHeader.FK_StockHeader_PaymentInstrument.fkey.sql">
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\SalePaymentItem.FK_SalePaymentItem_PaymentInstrument.fkey.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\Keys\SaleHeader.FK_SaleHeader_SaleType.fkey.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\data\Tables\Keys\SaleType.PK_SaleType.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\SalePaymentHeader.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\SalePaymentItem.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\SalePaymentHeader.PK_SalePaymentHeader.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\SalePaymentItem.PK_SalePaymentItem.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\SaleHeader.FK_SaleHeader_SalePaymentHeader.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\SalePaymentItem.FK_SalePaymentItem_SalePaymentHeader.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Triggers\SalePaymentItem.TR_SalePaymentItem_UpdateIsPayComplete.trigger.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>

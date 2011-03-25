@@ -42,6 +42,7 @@
     <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Windows.Forms" />
@@ -55,6 +56,7 @@
     <Compile Include="ConfigurationPackManager.cs" />
     <Compile Include="Entities\Module.cs" />
     <Compile Include="Entities\Terminal.cs" />
+    <Compile Include="Helpers\IpFinder.cs" />
     <Compile Include="Pages\Controls\UserChangePassword.xaml.cs">
       <DependentUpon>UserChangePassword.xaml</DependentUpon>
     </Compile>
@@ -91,6 +93,11 @@
     <ProjectReference Include="..\..\Base\CommonClassesZero\ZeroCommonClasses.csproj">
       <Project>{2AC599DD-4010-49A3-B595-715FE549C6B9}</Project>
       <Name>ZeroCommonClasses</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Base\ZeroBusiness\ZeroBusiness.csproj">
+      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
+      <Name>ZeroBusiness</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Base\ZeroGUI\ZeroGUI.csproj">

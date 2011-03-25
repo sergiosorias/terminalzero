@@ -5,7 +5,7 @@ namespace ZeroMasterData.Entities
     public class MasterDataEntities : Entities
     {
         public MasterDataEntities()
-            : base(ZeroCommonClasses.Context.ContextBuilder.GetConnectionForCurrentEnvironment("MasterData"))
+            : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("MasterData"))
         {
 
                 

@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using TerminalZeroClient.Extras;
+using ZeroBusiness;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 
-
 namespace TerminalZeroClient.Business
 {
-    internal partial class ZeroClient
+    internal class ZeroClient
     {
         public bool IsAllOK { get; private set; }
-        private ILogBuilder Logger = null;
+        private ILogBuilder Logger;
         private ITerminalManager Manager { get; set; }
         
         internal ZeroClient()
@@ -28,7 +31,7 @@ namespace TerminalZeroClient.Business
             try
             {
                 App.Instance.Session.Notifier.SetProgress(5);
-                string[] Modules = Directory.GetFiles(App.Directories.ModulesFolder, "*.dll");
+                string[] Modules = Directory.GetFiles(ContextInfo.Directories.ModulesFolder, "*.dll");
                 App.Instance.Session.Notifier.SetProgress(10);
                 canContinue = Modules.Length != 0;
                 if (!canContinue)
@@ -100,7 +103,7 @@ namespace TerminalZeroClient.Business
             }
             catch (Exception ex)
             {
-                App.Instance.Session.Notifier.SetUserMessage(false, "ERROR: " + ex.ToString());
+                App.Instance.Session.Notifier.SetUserMessage(false, "ERROR: " + ex);
                 ret = false;
             }
 
@@ -119,18 +122,18 @@ namespace TerminalZeroClient.Business
                 {
                     aux = Path.GetFileNameWithoutExtension(item);
                     App.Instance.Session.Notifier.SetUserMessage(false, "Inicializando " + aux);
-                    System.Reflection.Assembly ass = System.Reflection.Assembly.LoadFrom(item);
-                    Type ty = ass.GetExportedTypes().FirstOrDefault(t => t.BaseType == typeof(ZeroCommonClasses.ZeroModule));
+                    Assembly ass = Assembly.LoadFrom(item);
+                    Type ty = ass.GetExportedTypes().FirstOrDefault(t => t.BaseType == typeof(ZeroModule));
                     
-                    object obj = ass.CreateInstance(ty.ToString(), false, System.Reflection.BindingFlags.CreateInstance,
-                        null, new object[] { App.Instance as ITerminal }, System.Globalization.CultureInfo.InstalledUICulture, null);
+                    object obj = ass.CreateInstance(ty.ToString(), false, BindingFlags.CreateInstance,
+                        null, new object[] { App.Instance }, CultureInfo.InstalledUICulture, null);
 
                     TryAddModule(obj, item);
 
                 }
                 catch (Exception ex)
                 {
-                    App.Instance.Session.Notifier.SetUserMessage(false, "Assembly '" + item + "' no es un modulo válido, error: " + ex.ToString());
+                    App.Instance.Session.Notifier.SetUserMessage(false, "Assembly '" + item + "' no es un modulo válido, error: " + ex);
                 }
             }
             App.Instance.Session.Notifier.SetProgress(30);
@@ -147,10 +150,10 @@ namespace TerminalZeroClient.Business
 
             if (obj is ZeroModule)
             {
-                ZeroModule mod = obj as ZeroModule;
+                var mod = obj as ZeroModule;
                 mod.TerminalStatus = ModuleStatus.Unknown;
                 mod.UserStatus = ModuleStatus.Unknown;
-                mod.WorkingDirectory = path + App.Directories.WorkingDirSubfix;
+                mod.WorkingDirectory = path + ContextInfo.Directories.WorkingDirSubfix;
                 App.Instance.Session.AddModule(mod);
                 App.Instance.Session.Notifier.SetUserMessage(false, "Módulo ensamblado --> ''" + mod.Description + "''");
 
@@ -170,7 +173,7 @@ namespace TerminalZeroClient.Business
         public ZeroMenu BuildMenu()
         {
             List<ZeroAction> validActions = App.Instance.Manager.BuilSessionActions();
-            ZeroMenu menu = new ZeroMenu();
+            var menu = new ZeroMenu();
             string aux = "", current = "";
             int pos = 0;
             ZeroMenu currentlevel;

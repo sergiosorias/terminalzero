@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Security;
 using System.Windows;
-using System.Windows.Media;
+using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
@@ -35,22 +35,21 @@ namespace ZeroConfiguration
         {
             //actions.Add(new ZeroAction(ActionType.MenuItem, "Reload", (rule) => { OnConfigurationRequired(); }));
             
-            SyncAction = new ZeroAction(OwnerTerminal.Session, ActionType.BackgroudAction, "Configuración@Sincronizar", StartSync);
+            SyncAction = new ZeroAction( ActionType.BackgroudAction, Actions.ExecSync, StartSync);
             SyncAction.Parameters.Add(new ZeroActionParameterBase(typeof(ISyncService), true));
-            SyncAction.Parameters.Add(new ZeroActionParameterBase("ExistingModules", true));
+            SyncAction.Parameters.Add(new ZeroActionParameterBase(ActionParameters.Modules, true));
             OwnerTerminal.Session.AddAction(SyncAction);
-            OwnerTerminal.Session.AddAction(new ZeroAction(OwnerTerminal.Session,ActionType.MenuItem, "Configuración@Propiedades", OpenConfiguration));
-            OwnerTerminal.Session.AddAction(new ZeroAction(OwnerTerminal.Session, ActionType.MenuItem, "Configuración@Usuarios@Lista de Usuarios", OpenUsers, "ValidateUser"));
-            var changePassAction = new ZeroAction(OwnerTerminal.Session, ActionType.MenuItem,
-                                                         "Configuración@Usuarios@Cambiar contraseña", OpenChangePassword);
+            OwnerTerminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, Actions.OpenPropertiesView, OpenConfiguration));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenUserListView, OpenUsers, Rules.IsValidUser));
+            var changePassAction = new ZeroAction( ActionType.MenuItem, Actions.OpenUserPasswordChangeMessage, OpenChangePassword);
             changePassAction.Parameters.Add(new ZeroActionParameterBase(typeof (MembershipUser), true));
             OwnerTerminal.Session.AddAction(changePassAction);
         }
 
         private void BuildRulesActions()
-        {
-            OwnerTerminal.Session.AddRule("ValidateUser", CanOpenConfiguration);
-            OwnerTerminal.Session.AddRule("ValidateTerminalZero", IsTerminalZero);
+        {   
+            OwnerTerminal.Session.AddRule(Rules.IsValidUser, CanOpenConfiguration);
+            OwnerTerminal.Session.AddRule(Rules.IsTerminalZero, IsTerminalZero);
         }
 
         public override string[] GetFilesToSend()
@@ -96,7 +95,7 @@ namespace ZeroConfiguration
             {
                 ZeroMessageBox.Show(Resources.MsgLogInPlease+"\nEl sistema se cerrara.", Resources.Fail, ResizeMode.NoResize, MessageBoxButton.OK);
                 ZeroAction action;
-                if(ExistsAction(ApplicationActions.Exit,out action))
+                if(ExistsAction(Actions.AppExit,out action))
                 {
                     ExecuteAction(action);
                 }
@@ -164,8 +163,8 @@ namespace ZeroConfiguration
             var P = new Pages.Properties(OwnerTerminal);
             // ReSharper restore RedundantNameQualifier
             P.UpdateTimeRemaining(_sync);
-            if (OwnerTerminal.Manager.ValidateRule("ValidateTerminalZero"))
-                P.Mode = Mode.Update;
+            if (OwnerTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
+                P.ControlMode = ControlMode.Update;
 
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
         }
@@ -223,12 +222,15 @@ namespace ZeroConfiguration
                 {
                     Terminal.AddNewTerminal(conf, OwnerTerminal.TerminalCode, OwnerTerminal.TerminalName);
                 }
-                else if(OwnerTerminal.TerminalCode == 0 && !T.IsTerminalZero)
+                else 
                 {
-                    T.IsTerminalZero = true;
-                    conf.SaveChanges();
+                    _isTerminalZero = T.IsTerminalZero;
+                    if(OwnerTerminal.TerminalCode == 0 && !T.IsTerminalZero)
+                    {
+                        T.IsTerminalZero = true;
+                        conf.SaveChanges();
+                    }
                 }
-                _isTerminalZero = T.IsTerminalZero;
                 ConfigurationEntities.CreateTerminalProperties(conf, OwnerTerminal.TerminalCode);
             }
 
@@ -275,7 +277,7 @@ namespace ZeroConfiguration
                 action = OwnerTerminal.Session.SystemActions[actionName];
                 return true;
             }
-            Trace.WriteLineIf(ContextBuilder.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
+            Trace.WriteLineIf(ContextInfo.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
             return false;
         }
         

@@ -3,13 +3,14 @@ using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
 using System.Data.Objects.DataClasses;
+using ZeroGUI;
 
 namespace ZeroMasterData.Pages.Controls
 {
     /// <summary>
     /// Interaction logic for SupplierDetail.xaml
     /// </summary>
-    public partial class SupplierDetail : UserControl, IZeroPage
+    public partial class SupplierDetail : ZeroBasePage
     {
         private Entities.Supplier _SupplierNew;
         public Entities.Supplier CurrentSupplier 
@@ -32,7 +33,7 @@ namespace ZeroMasterData.Pages.Controls
             : this(dataProvider)
         {
             _SupplierNew = DataProvider.Suppliers.First(s => s.Code == supplierCode);
-            Mode = ZeroCommonClasses.Interfaces.Mode.Update;
+            ControlMode = ZeroCommonClasses.Interfaces.ControlMode.Update;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -41,23 +42,23 @@ namespace ZeroMasterData.Pages.Controls
             {
                 taxPositionCodeComboBox.ItemsSource = DataProvider.TaxPositions;
                 paymentInstrumentCodeComboBox.ItemsSource = DataProvider.PaymentInstruments;
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
+                    case ControlMode.New:
                         _SupplierNew = Entities.Supplier.CreateSupplier(
                             DataProvider.Suppliers.Count()
                             , true);
                         paymentInstrumentCodeComboBox.SelectedIndex = 0;
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         if (!_SupplierNew.TaxPositionReference.IsLoaded)
                             _SupplierNew.TaxPositionReference.Load();
                         taxPositionCodeComboBox.SelectedItem = _SupplierNew.TaxPosition;
                         paymentInstrumentCodeComboBox.SelectedItem = _SupplierNew.PaymentInstrument;
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         break;
                     default:
                         break;
@@ -68,25 +69,25 @@ namespace ZeroMasterData.Pages.Controls
             }
         }
         
-        #region IZeroPage Members
+        
 
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
             bool ret = true;
 
             if (ret)
             {
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
+                    case ControlMode.New:
                         DataProvider.AddToSuppliers(CurrentSupplier);
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         DataProvider.Suppliers.ApplyCurrentValues(CurrentSupplier);
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         break;
                     default:
                         break;
@@ -98,7 +99,7 @@ namespace ZeroMasterData.Pages.Controls
             return ret;
         }
 
-        public bool CanCancel(object parameter)
+        public override bool CanCancel(object parameter)
         {
             EntityObject obj = CurrentSupplier as EntityObject;
             if (obj.EntityState == System.Data.EntityState.Modified)
@@ -106,22 +107,6 @@ namespace ZeroMasterData.Pages.Controls
 
             return true;
         }
-
-        private Mode _Mode = Mode.New;
-
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
-
-        #endregion
 
         private void paymentInstrumentCodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

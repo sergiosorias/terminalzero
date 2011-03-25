@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using ZeroBusiness;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
 using ZeroStock.Entities;
 
 namespace ZeroStock.Pages
@@ -10,7 +13,7 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for CurrentStockView.xaml
     /// </summary>
-    public partial class CurrentStockView : UserControl
+    public partial class CurrentStockView : ZeroBasePage
     {
         private readonly ITerminal _terminal;
 
@@ -20,15 +23,15 @@ namespace ZeroStock.Pages
             InitializeComponent();
         }
 
-        Entities.StockEntities MyEntities;
+        StockEntities MyEntities;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
 
             // Do not load your data at design time.
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                MyEntities = new Entities.StockEntities();
-                if(_terminal.Manager.ValidateRule("ValidateTerminalZero"))
+                MyEntities = new StockEntities();
+                if (_terminal.Manager.ValidateRule(Rules.IsTerminalZero))
                 {
                     terminalFilterContent.Visibility = Visibility.Visible;
                     var expter = MyEntities.GetExportTerminal(_terminal.TerminalCode).ToList();
@@ -40,20 +43,15 @@ namespace ZeroStock.Pages
             }
         }
 
-        void cvs3_Filter(object sender, FilterEventArgs e)
-        {
-            
-        }
-
-        private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
+        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
             int tCode = _terminal.TerminalCode;
             if (cbTerminals.SelectedValue != null) tCode = ((int)cbTerminals.SelectedValue);
-            CollectionViewSource cvs1 = Resources["cvs1"] as CollectionViewSource;
+            var cvs1 = Resources["cvs1"] as CollectionViewSource;
             cvs1.Source = MyEntities.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
-            CollectionViewSource cvs2 = Resources["cvs2"] as CollectionViewSource;
+            var cvs2 = Resources["cvs2"] as CollectionViewSource;
             cvs2.Source = MyEntities.StockCreateSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
-            CollectionViewSource cvs3 = Resources["cvs3"] as CollectionViewSource;
+            var cvs3 = Resources["cvs3"] as CollectionViewSource;
             cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
         }
 
@@ -64,11 +62,11 @@ namespace ZeroStock.Pages
 
         private void FilterPerTerminal(int tCode)
         {
-            CollectionViewSource cvs1 = Resources["cvs1"] as CollectionViewSource;
+            var cvs1 = Resources["cvs1"] as CollectionViewSource;
             cvs1.Source = MyEntities.StockSummaries.Where(s => s.TerminalToCode == tCode);
-            CollectionViewSource cvs2 = Resources["cvs2"] as CollectionViewSource;
+            var cvs2 = Resources["cvs2"] as CollectionViewSource;
             cvs2.Source = MyEntities.StockCreateSummaries.Where(s => s.TerminalToCode == tCode);
-            CollectionViewSource cvs3 = Resources["cvs3"] as CollectionViewSource;
+            var cvs3 = Resources["cvs3"] as CollectionViewSource;
             cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.TerminalToCode == tCode);
             UpdateLayout();
         }

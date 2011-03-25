@@ -25,12 +25,6 @@ namespace ZeroCommonClasses.Pack
             Error = 3,
         }
 
-        private enum Mode
-        {
-            Export,
-            Import,
-        }
-
         #region Statics
         public static PackManager GetDefaultManager()
         {
@@ -58,7 +52,7 @@ namespace ZeroCommonClasses.Pack
 
         private static int[] GetTerminalDestinationList(Entities.Pack aPack)
         {
-            List<int> ret = new List<int>();
+            var ret = new List<int>();
             string[] parts = aPack.Name.Split('_');
             if (parts.Length > 1)
             {
@@ -205,7 +199,7 @@ namespace ZeroCommonClasses.Pack
         {
             var events = new FastZipEvents();
             var zip = new FastZip(events);
-            StringBuilder terminals = new StringBuilder();
+            var terminals = new StringBuilder();
             foreach (var terminal in PackInfo.TerminalToCodes)
             {
                 terminals.AppendFormat("T{0}",terminal);
@@ -242,7 +236,7 @@ namespace ZeroCommonClasses.Pack
                 OnImporting(args);
                 UpdatePackStatus(aPack, dbent, PackStatus.Imported, null);
                 OnImported(args);
-
+                
                 Clean();
 
             }
@@ -266,7 +260,7 @@ namespace ZeroCommonClasses.Pack
         {
             aPack.Stamp = DateTime.Now;
             aPack.PackStatusCode = (int)newStatus;
-            aPack.Result = message;
+            aPack.Result = message != null ? aPack.Result +"\n"+ message : aPack.Result;
             dbent.SaveChanges();
         }
 

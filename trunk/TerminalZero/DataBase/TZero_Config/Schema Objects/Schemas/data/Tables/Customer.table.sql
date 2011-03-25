@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [data].[Customer]
 (
 	Code int NOT NULL, 
-	TerminalCode int NOT NULL DEFAULT(0),
+	TerminalCode int NOT NULL CONSTRAINT DF_Customer_TerminalCode DEFAULT(0),
 	[Stamp] datetime NULL CONSTRAINT DF_Customer_Stamp DEFAULT (Getdate()),
 	[Enable] bit NOT NULL CONSTRAINT DF_Customer_Enable DEFAULT (1),
 	[Name1] nvarchar(100) NULL,
@@ -9,7 +9,10 @@
 	[Country] nvarchar(250) NULL,
 	[State] nvarchar(100) NULL,
 	[City] nvarchar(250) NULL,
+	[PostalCode] varchar(20) NULL,
 	[Street] nvarchar(100) NULL,
+	[Floor] int NULL,
+	[DepNumber] varchar(10) NULL,
 	[Number] nvarchar(50) NULL,
 	[E-Mail1] varchar(250) NULL,
 	[E-Mail2] varchar(250) NULL,

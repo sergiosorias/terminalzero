@@ -9,7 +9,7 @@ namespace ZeroMasterData.Pages
     /// <summary>
     /// Interaction logic for Product.xaml
     /// </summary>
-    public partial class ProductsView : UserControl, IZeroPage
+    public partial class ProductsView : ZeroBasePage
     {
         public ProductsView()
         {
@@ -21,52 +21,29 @@ namespace ZeroMasterData.Pages
             var detail = new ProductDetail(productList.DataProvider);
 
             bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.NewProduct);
-            if (ret.HasValue && ret.Value && detail.Mode == Mode.New)
+            if (ret.HasValue && ret.Value && detail.ControlMode == ControlMode.New)
             {
                 productList.AddProduct(detail.CurrentProduct);
             }
         }
 
-        #region IZeroPage Members
-
-        private Mode _Mode = Mode.New;
-
-        public Mode Mode
+        protected override void OnModeChanged()
         {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-                productList.Mode = value;
-            }
+ 	         base.OnModeChanged();
+             productList.ControlMode = ControlMode;
         }
-
-        public bool CanAccept(object parameter)
-        {
-            return true;
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     break;
-                case Mode.Update:
+                case ControlMode.Update:
                     break;
-                case Mode.Delete:
+                case ControlMode.Delete:
                     break;
-                case Mode.ReadOnly:
+                case ControlMode.ReadOnly:
                     toolbar.NewBtnVisible = false;
                     break;
                 default:

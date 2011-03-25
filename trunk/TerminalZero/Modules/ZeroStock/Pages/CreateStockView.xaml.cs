@@ -19,7 +19,7 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for NewStockView.xaml
     /// </summary>
-    public partial class CreateStockView : UserControl, IZeroPage
+    public partial class CreateStockView : ZeroBasePage
     {
         private readonly ITerminal _terminal;
         private StockHeader _header;
@@ -58,7 +58,7 @@ namespace ZeroStock.Pages
                 if (_context.IsDeliveryDocumentMandatory(_stockType))
                 {
                     var view = new DeliveryDocumentView(_terminal);
-                    view.Mode = Mode.Selection;
+                    view.ControlMode = ControlMode.Selection;
                     bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
                     {
@@ -78,32 +78,16 @@ namespace ZeroStock.Pages
         private void TryGoHome()
         {
             ZeroAction action;
-            if (!_terminal.Manager.ExistsAction(ApplicationActions.Back, out action)
+            if (!_terminal.Manager.ExistsAction(ZeroBusiness.Actions.AppHome, out action)
                 || !_terminal.Manager.ExecuteAction(action))
             {
                 IsEnabled = false;
             }
         }
-
         
-
-        #region IZeroPage Members
-
-        private Mode _Mode = Mode.New;
-        public Mode Mode
+        public override bool CanAccept(object parameter)
         {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                Mode = value;
-            }
-        }
-
-        public bool CanAccept(object parameter)
-        {
+            base.CanAccept(parameter);
             bool ret = true;
             if (_header != null && _header.EntityState != EntityState.Unchanged && _header.StockItems != null && _header.StockItems.Count > 0 &&  _header.StockItems.All(si => si.EntityState != EntityState.Unchanged))
             {
@@ -128,13 +112,6 @@ namespace ZeroStock.Pages
             }
             return ret;
         }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
 
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {

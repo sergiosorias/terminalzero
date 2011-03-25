@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Markup;
-using ZeroGUI;
 
 namespace ZeroBarcode.Pages.Controls
 {
@@ -31,6 +28,7 @@ namespace ZeroBarcode.Pages.Controls
             {
                 string chain = string.Format("{0:0000000}{1:00}{2:00}0", date.SelectedDate.Value.Year, date.SelectedDate.Value.Month, date.SelectedDate.Value.Day);
                 BarcodeText.Text = EANBarcode.Instance.EAN13(chain) + EANBarcode.Instance.AddOn(chain);
+                Button_Click(null, null);
             }
         }
 
@@ -49,11 +47,16 @@ namespace ZeroBarcode.Pages.Controls
             {
                 MessageBox.Show(ex.ToString(), "Error");
             }
-            catch (Exception ex2)
+            catch 
             {
 
             }
 
+        }
+
+        private void slFontSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Button_Click(null, null);
         }
 
         private void slMarginUD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -75,5 +78,7 @@ namespace ZeroBarcode.Pages.Controls
                 e.NewValue,
                 BarcodeText.Margin.Bottom);
         }
+
+        
     }
 }

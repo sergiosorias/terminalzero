@@ -821,6 +821,78 @@ namespace ZeroMasterData.Entities
         private global::System.String _LegalCode;
         partial void OnLegalCodeChanging(global::System.String value);
         partial void OnLegalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PostalCode
+        {
+            get
+            {
+                return _PostalCode;
+            }
+            set
+            {
+                OnPostalCodeChanging(value);
+                ReportPropertyChanging("PostalCode");
+                _PostalCode = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PostalCode");
+                OnPostalCodeChanged();
+            }
+        }
+        private global::System.String _PostalCode;
+        partial void OnPostalCodeChanging(global::System.String value);
+        partial void OnPostalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Floor
+        {
+            get
+            {
+                return _Floor;
+            }
+            set
+            {
+                OnFloorChanging(value);
+                ReportPropertyChanging("Floor");
+                _Floor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Floor");
+                OnFloorChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Floor;
+        partial void OnFloorChanging(Nullable<global::System.Int32> value);
+        partial void OnFloorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DepNumber
+        {
+            get
+            {
+                return _DepNumber;
+            }
+            set
+            {
+                OnDepNumberChanging(value);
+                ReportPropertyChanging("DepNumber");
+                _DepNumber = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DepNumber");
+                OnDepNumberChanged();
+            }
+        }
+        private global::System.String _DepNumber;
+        partial void OnDepNumberChanging(global::System.String value);
+        partial void OnDepNumberChanged();
 
         #endregion
     
@@ -1053,6 +1125,30 @@ namespace ZeroMasterData.Entities
         private global::System.String _Description;
         partial void OnDescriptionChanging(global::System.String value);
         partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> PrintModeDefault
+        {
+            get
+            {
+                return _PrintModeDefault;
+            }
+            set
+            {
+                OnPrintModeDefaultChanging(value);
+                ReportPropertyChanging("PrintModeDefault");
+                _PrintModeDefault = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PrintModeDefault");
+                OnPrintModeDefaultChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _PrintModeDefault;
+        partial void OnPrintModeDefaultChanging(Nullable<global::System.Int32> value);
+        partial void OnPrintModeDefaultChanged();
 
         #endregion
     

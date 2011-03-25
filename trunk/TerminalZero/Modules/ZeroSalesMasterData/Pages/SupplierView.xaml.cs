@@ -9,7 +9,7 @@ namespace ZeroMasterData.Pages
     /// <summary>
     /// Interaction logic for SupplierList.xaml
     /// </summary>
-    public partial class SupplierView : UserControl
+    public partial class SupplierView : ZeroBasePage
     {
         public SupplierView()
         {

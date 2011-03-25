@@ -9,7 +9,7 @@ namespace ZeroStock.Entities
     internal class StockEntities : ZeroStock.Entities.Entities
     {
         public StockEntities()
-            : base(ZeroCommonClasses.Context.ContextBuilder.GetConnectionForCurrentEnvironment("Stock"))
+            : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("Stock"))
         {
 
         }

@@ -21,23 +21,53 @@ namespace ZeroUpdateManager
         private void UpdateManagerPackManager_Importing(object sender, PackEventArgs e)
         {
             e.Pack.IsUpgrade = true;
-            SqlTransaction tran = null;
-            SqlConnection conn = null;
+            
             string[] filesToProcess = Directory.GetFiles(e.WorkingDirectory, "*" + Resources.ScripFileExtention);
             if (filesToProcess.Length > 0)
             {
-                string lastScript = "";
                 e.Pack.Result = "SQL";
+                ProcessScripts(filesToProcess,e.Pack.Code,e.PackInfo.TerminalCode);
+            }
+
+            if (e.PackInfo != null && !ContextInfo.IsOnServer)
+            {
+                string dir = Path.Combine(e.WorkingDirectory, "App");
+                if(Directory.Exists(dir))
+                {
+                    ProcessUpgrade(dir,e.Pack.Code);
+                }
+            }
+        }
+
+        private void ProcessUpgrade(string dir, int packCode)
+        {
+            try
+            {
+                Directory.Move(dir, Path.Combine(ContextInfo.Directories.UpgradeFolder,packCode.ToString()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error executing update pack import - MOVING FILES: " +  ex);    
+            }
+        }
+
+        private void ProcessScripts(string[] filesToProcess, int packCode, int terminalCode)
+        {
+            SqlTransaction tran = null;
+            SqlConnection conn = null;
+            if (filesToProcess.Length > 0)
+            {
+                string lastScript = "";
                 try
                 {
-                    conn = new SqlConnection(ContextBuilder.GetConnectionForCurrentEnvironment().ConnectionString);
+                    conn = new SqlConnection(ContextInfo.GetConnectionForCurrentEnvironment().ConnectionString);
                     conn.Open();
                     tran = conn.BeginTransaction();
                     IDbCommand command = conn.CreateCommand();
                     command.Transaction = tran;
                     foreach (var file in filesToProcess)
                     {
-                        DeployFile deployFile = DeployFile.LoadFrom(file,e.Pack.Code,e.PackInfo.TerminalCode);
+                        DeployFile deployFile = DeployFile.LoadFrom(file, packCode, terminalCode);
                         foreach (var item in deployFile.GetStatements(conn.Database))
                         {
                             lastScript = item;
@@ -47,7 +77,7 @@ namespace ZeroUpdateManager
                     }
 
                     tran.Commit();
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -56,7 +86,7 @@ namespace ZeroUpdateManager
                         tran.Rollback();
                         tran.Dispose();
                     }
-                    throw new Exception("Error executing update pack import - LAST SCRIPT: "+ lastScript,ex);
+                    throw new Exception("Error executing update pack import - LAST SCRIPT: " + lastScript, ex);
                 }
                 finally
                 {
@@ -66,7 +96,6 @@ namespace ZeroUpdateManager
                     }
                 }
             }
-            
         }
     }
 }

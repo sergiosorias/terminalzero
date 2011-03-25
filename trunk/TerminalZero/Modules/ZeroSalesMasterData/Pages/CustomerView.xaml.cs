@@ -1,26 +1,27 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Pages
 {
     /// <summary>
     /// Interaction logic for SupplierList.xaml
     /// </summary>
-    public partial class CustomerView : UserControl, IZeroPage
+    public partial class CustomerView : ZeroBasePage
     {
         public CustomerView()
         {
-            Mode = Mode.ReadOnly;
+            ControlMode = ControlMode.ReadOnly;
             InitializeComponent();
         }
 
         private void btnNewSupplier_Click(object sender, RoutedEventArgs e)
         {
-            Controls.CustomerDetail detail = new Controls.CustomerDetail(customerGrid.DataProvider);
-            bool? ret = ZeroMessageBox.Show(detail);
+            var detail = new CustomerDetail(customerGrid.DataProvider);
+            bool? ret = ZeroMessageBox.Show(detail,Properties.Resources.CustomerNew,ResizeMode.NoResize, MessageBoxButton.OKCancel);
             if (ret.HasValue && ret.Value)
             {
                 try
@@ -30,11 +31,12 @@ namespace ZeroMasterData.Pages
                 catch (Exception wx)
                 {
                     MessageBox.Show(wx.ToString());
+                    Trace.TraceError("Error updating Customer {0}", detail.CurrentCustomer);
                 }
             }
         }
 
-        private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
+        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
             customerGrid.ApplyFilter(e.Criteria);
         }
@@ -43,23 +45,6 @@ namespace ZeroMasterData.Pages
         {
            
         }
-
-        #region IZeroPage Members
-
-        public Mode Mode { get; set; }
-
-        public bool CanAccept(object parameter)
-        {
-            return true;
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
-                
         
     }
 }

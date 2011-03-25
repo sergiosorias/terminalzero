@@ -34,7 +34,7 @@ namespace TerminalZeroClient
         void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Action action;
-            if (App.Instance.CurrentClient.IsAllOK && !ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceVerbose)
+            if (App.Instance.CurrentClient.IsAllOK && !ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceVerbose)
             {
                 action = delegate() { btnState_Click(null, null); };
             }

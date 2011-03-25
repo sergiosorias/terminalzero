@@ -6,7 +6,7 @@ namespace ZeroConfiguration.Entities
     public class ConfigurationEntities : Entities
     {
         public ConfigurationEntities()
-            : base(ZeroCommonClasses.Context.ContextBuilder.GetConnectionForCurrentEnvironment("Configuration"))
+            : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("Configuration"))
         {
             
         }

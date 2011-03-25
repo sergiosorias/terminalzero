@@ -61,6 +61,15 @@ namespace ZeroMasterData.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cliente Nuevo.
+        /// </summary>
+        internal static string CustomerNew {
+            get {
+                return ResourceManager.GetString("CustomerNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Editar grupo.
         /// </summary>
         internal static string EditGroup {
@@ -111,6 +120,15 @@ namespace ZeroMasterData.Properties {
         internal static string NewSupplier {
             get {
                 return ResourceManager.GetString("NewSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editar producto.
+        /// </summary>
+        internal static string ProductEdit {
+            get {
+                return ResourceManager.GetString("ProductEdit", resourceCulture);
             }
         }
         

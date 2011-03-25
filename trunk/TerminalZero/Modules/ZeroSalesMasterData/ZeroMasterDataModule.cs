@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -24,24 +25,12 @@ namespace ZeroMasterData
 
         private void BuildPosibleActions()
         {
-            var openProducList = new ZeroAction(null, ActionType.MenuItem,
-                                                "Tablas Maestras@Productos@Lista de Productos",
-                                                OpenProductView);
+            var openProducList = new ZeroAction( ActionType.MenuItem, Actions.OpenProductsView, OpenProductView);
             OwnerTerminal.Session.AddAction(openProducList);
-
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Productos@Consulta",
-                                                      OpenProductMessage));
-
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Proveedores",
-                                                      OpenSupplierView, "ValidateTerminalZero"));
-
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Tablas Maestras@Clientes",
-                                                      OpenCustomerView));
-
-            //IFileTransfer
-            var ac = new ZeroAction(OwnerTerminal.Session, ActionType.MenuItem, "Tablas Maestras@Exportar Datos",
-                                    ExportMasterDataPack, "ValidateTerminalZero");
-            OwnerTerminal.Session.AddAction(ac);
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenProductMessage,OpenProductMessage));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCustomersView,OpenCustomerView));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
         }
 
         public override string[] GetFilesToSend()
@@ -81,20 +70,21 @@ namespace ZeroMasterData
         private void OpenProductView()
         {
             var P = new ProductsView();
-            if (OwnerTerminal.TerminalCode != 0)
-                P.Mode = Mode.ReadOnly;
+            if (!OwnerTerminal.Manager.ValidateRule(Rules.IsTerminalZero)) 
+                P.ControlMode = ControlMode.ReadOnly;
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
         private void OpenProductMessage()
         {
-            var mb = new ZeroMessageBox();
-            var view = new ProductGrid();
-            view.Mode = Mode.ReadOnly;
-            mb.Content = view;
-            mb.SizeToContent = SizeToContent.WidthAndHeight;
-            mb.ShowActivated = true;
-            mb.Topmost = true;
+            var view = new ProductsView { ControlMode = ControlMode.ReadOnly };
+            var mb = new ZeroMessageBox
+                         {
+                             Content = view,
+                             SizeToContent = SizeToContent.WidthAndHeight,
+                             ShowActivated = true,
+                             Topmost = true
+                         };
             mb.Show();
         }
 
@@ -107,9 +97,9 @@ namespace ZeroMasterData
         private void OpenCustomerView()
         {
             var P = new CustomerView();
-            if (OwnerTerminal.Manager.ValidateRule("ValidateTerminalZero"))
+            if (OwnerTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
             {
-                P.Mode = Mode.Update;
+                P.ControlMode = ControlMode.Update;
             }
 
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});

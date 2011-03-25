@@ -142,4 +142,10 @@
 	<data name="NewGroup">
 		<value xml:space="preserve">Nuevo Grupo</value>
 	</data>
+	<data name="ProductEdit">
+		<value xml:space="preserve">Editar producto</value>
+	</data>
+	<data name="CustomerNew">
+		<value xml:space="preserve">Cliente Nuevo</value>
+	</data>
 </root>
