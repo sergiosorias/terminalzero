@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ZeroBusiness;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 
@@ -14,7 +15,7 @@ namespace ZeroCommonClasses
             SystemActions = new Dictionary<string, ZeroAction>();
             SystemRules = new Dictionary<string, Predicate<object>>();
             ModuleList = new List<ZeroModule>();
-            AddNavigationParameter(new ZeroActionParameter<List<ZeroModule>>("ExistingModules",true,ModuleList));
+            AddNavigationParameter(new ZeroActionParameter<List<ZeroModule>>(ActionParameters.Modules, true, ModuleList));
         }
 
         public IProgressNotifier Notifier { get; set; }
@@ -66,7 +67,7 @@ namespace ZeroCommonClasses
 
         public ZeroActionParameter<T> GetParameter<T>()
         {
-            ZeroActionParameter<T> param = (ZeroActionParameter<T>)SessionParams.Select(p => p.Value).FirstOrDefault(C => C.ParameterType == typeof(T));
+            var param = (ZeroActionParameter<T>)SessionParams.Select(p => p.Value).FirstOrDefault(C => C.ParameterType == typeof(T));
             if (param != null && param.IsVolatile)
                 SessionParams.Remove(param.Name);
 

@@ -18,9 +18,9 @@ namespace ZeroSales.Entities
         {
             if(SaleItems != null && SaleItems.Count > 0)
             {
-                PriceSumValue = SaleItems.Sum(it => it.PriceValue);
-                TaxSumValue = SaleItems.Sum(it => it.TaxValue);
-                Tax1SumValue = SaleItems.Sum(it => it.Tax1Value);
+                PriceSumValue = Math.Round(SaleItems.Sum(it => it.PriceValue),2);
+                TaxSumValue = Math.Round(SaleItems.Sum(it => it.TaxValue),2);
+                Tax1SumValue = Math.Round(SaleItems.Sum(it => it.Tax1Value), 2);
             }
             else
             {

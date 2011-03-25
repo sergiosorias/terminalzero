@@ -5,7 +5,7 @@ namespace ZeroCommonClasses.GlobalObjects
     public class ModuleNotificationEventArgs : EventArgs
     {
         public bool SomethingToShow { get; private set; }
-        private object _ControlToShow = null;
+        private object _ControlToShow;
         public object ControlToShow
         {
             get

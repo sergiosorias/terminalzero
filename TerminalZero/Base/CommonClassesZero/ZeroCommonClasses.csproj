@@ -52,7 +52,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\ContextBuilder.cs" />
+    <Compile Include="Context\ContextInfo.cs" />
     <Compile Include="Context\EntitiesContext.cs" />
     <Compile Include="Entities\CommonEntities.cs" />
     <Compile Include="Entities\DBCommonTables.Designer.cs">
@@ -62,7 +62,6 @@
     </Compile>
     <Compile Include="Entities\EntityStatus.cs" />
     <Compile Include="GlobalObjects\ActionRequest.cs" />
-    <Compile Include="ApplicationActions.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
     <Compile Include="Interfaces\IExportableEntity.cs" />
@@ -112,10 +111,12 @@
       <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
       <Name>SharpZipLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZeroBusiness\ZeroBusiness.csproj">
+      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
+      <Name>ZeroBusiness</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

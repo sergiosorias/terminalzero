@@ -10,7 +10,7 @@ namespace ZeroStock.Pages.Controls
     /// <summary>
     /// Interaction logic for DeliveryDocumentGrid.xaml
     /// </summary>
-    public partial class DeliveryDocumentGrid : UserControl
+    public partial class DeliveryDocumentGrid : ZeroGUI.ZeroBasePage
     {
         internal StockEntities DataProvider {get;set;}
         public bool NotUsedOnly { get; set; }

@@ -9,7 +9,7 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for DeliveryDocumentView.xaml
     /// </summary>
-    public partial class DeliveryNoteView : UserControl, ZeroCommonClasses.Interfaces.IZeroPage
+    public partial class DeliveryNoteView : ZeroGUI.ZeroBasePage
     {
         private ITerminal Terminal;
         public Entities.DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
@@ -22,17 +22,17 @@ namespace ZeroStock.Pages
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     break;
-                case Mode.Update:
+                case ControlMode.Update:
                     break;
-                case Mode.Delete:
+                case ControlMode.Delete:
                     break;
-                case Mode.ReadOnly:
+                case ControlMode.ReadOnly:
                     break;
-                case Mode.Selection:
+                case ControlMode.Selection:
                     
                     break;
                 default:
@@ -52,23 +52,11 @@ namespace ZeroStock.Pages
 
         #region IZeroPage Members
 
-        ZeroCommonClasses.Interfaces.Mode _Mode = ZeroCommonClasses.Interfaces.Mode.New;
-        public ZeroCommonClasses.Interfaces.Mode Mode
+        public override bool CanAccept(object parameter)
         {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
-
-        public bool CanAccept(object parameter)
-        {
+            base.CanAccept(parameter);
             bool ret = true;
-            if (Mode == Mode.Selection)
+            if (ControlMode == ControlMode.Selection)
             {
                 SelectedDeliveryDocumentHeader = DeliveryGrid.SelectedDeliveryDocumentHeader;
                 ret = (SelectedDeliveryDocumentHeader != null);
@@ -80,11 +68,6 @@ namespace ZeroStock.Pages
             }
 
             return ret;
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
         }
 
         #endregion

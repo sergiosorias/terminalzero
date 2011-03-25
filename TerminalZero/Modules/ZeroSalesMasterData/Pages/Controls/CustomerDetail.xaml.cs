@@ -1,18 +1,23 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Data;
+using System.Data.Objects;
+using System.Data.Objects.DataClasses;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
-using System.Data.Objects.DataClasses;
+using ZeroGUI;
+using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
     /// <summary>
     /// Interaction logic for SupplierDetail.xaml
     /// </summary>
-    public partial class CustomerDetail : UserControl, IZeroPage
+    public partial class CustomerDetail : ZeroBasePage
     {
-        private Entities.Customer _CustomerNew;
-        public Entities.Customer CurrentCustomer 
+        private Customer _CustomerNew;
+        public Customer CurrentCustomer 
         {
             get
             {
@@ -21,72 +26,73 @@ namespace ZeroMasterData.Pages.Controls
             
         }
 
-        Entities.MasterDataEntities DataProvider;
-        public CustomerDetail(Entities.MasterDataEntities dataProvider)
+        MasterDataEntities DataProvider;
+        public CustomerDetail(MasterDataEntities dataProvider)
         {
+            ControlMode = ControlMode.New;
             InitializeComponent();
             DataProvider = dataProvider;
+            DataContext = this;
         }
 
-        public CustomerDetail(Entities.MasterDataEntities dataProvider, int supplierCode)
+        public CustomerDetail(MasterDataEntities dataProvider, int customerCode)
             : this(dataProvider)
         {
-            _CustomerNew = DataProvider.Customers.First(s => s.Code == supplierCode);
-            Mode = ZeroCommonClasses.Interfaces.Mode.Update;
+            _CustomerNew = DataProvider.Customers.First(s => s.Code == customerCode);
+            ControlMode = ControlMode.Update;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 taxPositionCodeComboBox.ItemsSource = DataProvider.TaxPositions;
                 paymentInstrumentCodeComboBox.ItemsSource = DataProvider.PaymentInstruments;
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
-                        _CustomerNew = Entities.Customer.CreateCustomer(
+                    case ControlMode.New:
+                        _CustomerNew = Customer.CreateCustomer(
                             DataProvider.GetNextCustomerCode() ,0
                             , true);
                         paymentInstrumentCodeComboBox.SelectedIndex = 0;
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         if (!_CustomerNew.TaxPositionReference.IsLoaded)
                             _CustomerNew.TaxPositionReference.Load();
                         taxPositionCodeComboBox.SelectedItem = _CustomerNew.TaxPosition;
                         paymentInstrumentCodeComboBox.SelectedItem = _CustomerNew.PaymentInstrument;
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         break;
                     default:
                         break;
                 }
                 
-
                 grid1.DataContext = _CustomerNew;
             }
         }
         
         #region IZeroPage Members
         
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
             bool ret = true;
 
             if (ret)
             {
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
+                    case ControlMode.New:
                         DataProvider.AddToCustomers(CurrentCustomer);
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         DataProvider.Customers.ApplyCurrentValues(CurrentCustomer);
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         break;
                     default:
                         break;
@@ -98,38 +104,25 @@ namespace ZeroMasterData.Pages.Controls
             return ret;
         }
 
-        public bool CanCancel(object parameter)
+        public override bool CanCancel(object parameter)
         {
-            EntityObject obj = CurrentCustomer as EntityObject;
-            if(obj.EntityState == System.Data.EntityState.Modified)
-                DataProvider.Refresh(System.Data.Objects.RefreshMode.StoreWins, CurrentCustomer);
+            EntityObject obj = CurrentCustomer;
+            if(obj!=null && obj.EntityState == EntityState.Modified)
+                DataProvider.Refresh(RefreshMode.StoreWins, CurrentCustomer);
 
             return true;
-        }
-        private Mode _Mode = Mode.New;
-
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
         }
 
         #endregion
 
         private void paymentInstrumentCodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentCustomer.PaymentInstrument = (Entities.PaymentInstrument)paymentInstrumentCodeComboBox.SelectedItem;
+            CurrentCustomer.PaymentInstrument = (PaymentInstrument)paymentInstrumentCodeComboBox.SelectedItem;
         }
 
         private void taxPositionCodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentCustomer.TaxPosition = (Entities.TaxPosition)taxPositionCodeComboBox.SelectedItem;
+            CurrentCustomer.TaxPosition = (TaxPosition)taxPositionCodeComboBox.SelectedItem;
         }
     }
 }

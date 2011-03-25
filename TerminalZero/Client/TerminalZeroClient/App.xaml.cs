@@ -26,8 +26,7 @@ namespace TerminalZeroClient
 
         public App()
         {
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            var set = new AppDomainSetup {PrivateBinPath = Directories.ModulesFolder};
+            var set = new AppDomainSetup { PrivateBinPath = ContextInfo.Directories.ModulesFolder };
             AppDomain.CreateDomain("Modules folder", null, set);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
@@ -38,7 +37,7 @@ namespace TerminalZeroClient
             {
                 if (_currentApp == null)
                 {
-                    _currentApp = (App) Current;
+                    _currentApp = (App)Current;
                     _currentApp.LoadParams();
                 }
 
@@ -50,11 +49,11 @@ namespace TerminalZeroClient
         {
             get
             {
-                return _clientConn ?? (_clientConn = ContextBuilder.CreateSyncConnection());
+                return _clientConn ?? (_clientConn = ContextInfo.CreateSyncConnection());
                 //int times = 3;
                 //while (times > 0 && ((ICommunicationObject)_ClientConn).State == System.ServiceModel.CommunicationState.Faulted)
                 //{
-                //    _ClientConn = ZeroCommonClasses.Context.ContextBuilder.CreateConfigConnection(System.IO.Path.Combine(Environment.CurrentDirectory, "TerminalZeroClient.exe.config"));
+                //    _ClientConn = ZeroCommonClasses.Context.ContextInfo.CreateConfigConnection(System.IO.Path.Combine(Environment.CurrentDirectory, "TerminalZeroClient.exe.config"));
                 //    times--;
                 //}
             }
@@ -113,7 +112,7 @@ namespace TerminalZeroClient
             Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ClientSyncServiceReference,
                                                                                  false));
             Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false,
-                                                                                  ContextBuilder.
+                                                                                  ContextInfo.
                                                                                       CreateFileTranferConnection(),
                                                                                   false));
         }
@@ -123,38 +122,6 @@ namespace TerminalZeroClient
             _manager = zeroManager;
         }
 
-        #region Nested type: Directories
-
-        internal class Directories
-        {
-            public const string WorkingDirSubfix = ".WD";
-
-            static Directories()
-            {
-                try
-                {
-                    if (!Directory.Exists(ModulesFolder))
-                        Directory.CreateDirectory(ModulesFolder);
-                    if (!Directory.Exists(UpgradeFolder))
-                        Directory.CreateDirectory(UpgradeFolder);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-
-            public static string ModulesFolder
-            {
-                get { return Path.Combine(Environment.CurrentDirectory, "Modules"); }
-            }
-
-            public static string UpgradeFolder
-            {
-                get { return Path.Combine(Environment.CurrentDirectory, "Upgrade"); }
-            }
-        }
-
-        #endregion
+        
     }
 }

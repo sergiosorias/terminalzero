@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
 using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
@@ -9,19 +9,19 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for WeightDetail.xaml
     /// </summary>
-    public partial class WeightDetail : UserControl, IZeroPage
+    public partial class WeightDetail : ZeroBasePage
     {
-        public Entities.Weight WeigthNew { get; private set; }
+        public Weight WeigthNew { get; private set; }
 
         MasterDataEntities DataProvider;
         public WeightDetail(MasterDataEntities dataProvider)
         {
-            Mode = Mode.New;
+            ControlMode = ControlMode.New;
             InitializeComponent();
             DataProvider = dataProvider;
         }
 
-        public WeightDetail(MasterDataEntities dataProvider, Entities.Weight Data)
+        public WeightDetail(MasterDataEntities dataProvider, Weight Data)
             : this(dataProvider)
         {
             WeigthNew = Data;
@@ -31,16 +31,14 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (WeigthNew == null)
             {
-                WeigthNew = Entities.Weight.CreateWeight(DataProvider.Weights.Count()
+                WeigthNew = Weight.CreateWeight(DataProvider.Weights.Count()
                     , true, 0);
             }
             grid1.DataContext = WeigthNew;
             quantityTextBox.Text = "";
         }
 
-        #region IZeroPage Members
-
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
             bool ret = true;
 
@@ -58,19 +56,12 @@ namespace ZeroMasterData.Pages.Controls
             }
 
             if (!ret)
-                System.Windows.MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             return ret;
         }
 
-        public Mode Mode { get; set; }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
+ 
 
         private void quantityTextBox_GotFocus(object sender, RoutedEventArgs e)
         {

@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="ZeroMasterData.Pages.Controls.ProductGroupDetail"
+﻿<base:ZeroBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+             x:Class="ZeroMasterData.Pages.Controls.ProductGroupDetail"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" xmlns:my="clr-namespace:ZeroMasterData.Entities">
+             >
     <GroupBox Header="Grupo de productos">
         <Grid Name="grid1" Loaded="UserControl_Loaded">
             <Grid.ColumnDefinitions>
@@ -22,4 +23,4 @@
         </Grid>
     </GroupBox>
         
-</UserControl>
+</base:ZeroBasePage>

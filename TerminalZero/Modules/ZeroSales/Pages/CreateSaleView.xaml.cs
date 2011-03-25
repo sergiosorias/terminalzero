@@ -20,7 +20,7 @@ namespace ZeroSales.Pages
     /// <summary>
     /// Interaction logic for CreateSaleView.xaml
     /// </summary>
-    public partial class CreateSaleView : UserControl
+    public partial class CreateSaleView : ZeroBasePage
     {
         public CreateSaleView(ITerminal terminal, int saleType)
         {
@@ -59,7 +59,7 @@ namespace ZeroSales.Pages
         private void TryGoHome()
         {
             ZeroAction action;
-            if (!_terminal.Manager.ExistsAction(ApplicationActions.Back, out action)
+            if (!_terminal.Manager.ExistsAction(ZeroBusiness.Actions.AppHome, out action)
                 || !_terminal.Manager.ExecuteAction(action))
             {
                 IsEnabled = false;
@@ -75,7 +75,7 @@ namespace ZeroSales.Pages
                 (int)EntityStatus.New,
                 terminalTo,
                 DateTime.Now.Date, 
-                0,0,0,0,0,false,false);
+                0,0,0,0,false,false,false);
             ZeroActionParameterBase param =
                 _terminal.Session.GetParameter<MembershipUser>();
             if (param != null)
@@ -89,16 +89,16 @@ namespace ZeroSales.Pages
 
         #region IZeroPage Members
 
-        private Mode _Mode = Mode.New;
-        public Mode Mode
+        private ControlMode _controlMode = ControlMode.New;
+        public ControlMode ControlMode
         {
             get
             {
-                return _Mode;
+                return _controlMode;
             }
             set
             {
-                Mode = value;
+                ControlMode = value;
             }
         }
 
@@ -191,10 +191,11 @@ namespace ZeroSales.Pages
             bool ret = false;
             try
             {
-               _context.SaveChanges();
-                currentProd.Text = "";
-                MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
-                ret = true;
+               MessageBox.Show("Este Módulo es solo de Prueba por el momento, los datos no se guardaran", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+               //_context.SaveChanges();
+               // currentProd.Text = "";
+               // MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+               // ret = true;
             }
             catch (Exception ex)
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ZeroCommonClasses.GlobalObjects.Barcode
 {
@@ -9,14 +6,14 @@ namespace ZeroCommonClasses.GlobalObjects.Barcode
     {
         public static List<BarCodePart> BuildComposition(string composition, string values)
         {
-            List<BarCodePart> Parts = new List<BarCodePart>();
+            var Parts = new List<BarCodePart>();
             if (composition != null)
             {
                 char[] aux = composition.ToCharArray();
                 int length = 0;
                 for (int i = 0; i < aux.Length; i++)
                 {
-                    BarCodePart ms = new BarCodePart(aux[i]);
+                    var ms = new BarCodePart(aux[i]);
                     for (int j = i + 1; j < aux.Length; j++)
                     {
                         if (aux[i] == aux[j])

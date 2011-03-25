@@ -1,5 +1,4 @@
 ﻿using System;
-using ZeroCommonClasses.Entities;
 
 namespace ZeroCommonClasses.Pack
 {

@@ -6,6 +6,7 @@ using System.Data.Objects.DataClasses;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Serialization;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
 
@@ -15,9 +16,9 @@ namespace ZeroCommonClasses.Helpers
     {
         public static string GetEntitiesAsXMLObjectList<T>(IEnumerable<T> list)
         {
-            var ser = new System.Xml.Serialization.XmlSerializer(typeof(List<T>));
+            var ser = new XmlSerializer(typeof(List<T>));
             string ret;
-            using(StringWriter sw = new StringWriter())
+            using(var sw = new StringWriter())
             {
                 ser.Serialize(sw, list.ToList());
                 ret = sw.ToString();
@@ -28,9 +29,9 @@ namespace ZeroCommonClasses.Helpers
 
         public static IEnumerable<T> GetEntitiesFromXMLObjectList<T>(string list)
         {
-            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(List<T>));
+            var ser = new XmlSerializer(typeof(List<T>));
             List<T> ret = null;
-            using(StringReader sr = new StringReader(list))
+            using(var sr = new StringReader(list))
             {
                 ret = (List<T>) ser.Deserialize(sr);
                 sr.Close();
@@ -40,7 +41,7 @@ namespace ZeroCommonClasses.Helpers
 
         public static DataTable ToADOTable<T>(IEnumerable<T> query)
         {
-            DataTable dtReturn = new DataTable();
+            var dtReturn = new DataTable();
             PropertyInfo[] columnProperties = null;
 
             columnProperties = typeof(T).GetProperties();
@@ -72,7 +73,7 @@ namespace ZeroCommonClasses.Helpers
             return dtReturn;
         }
         
-        public static void Merge<T>(IEnumerable<T> targetList, T mergeItem, Action<T> insertMethod, System.Data.Objects.MergeOption mergeOptions, 
+        public static void Merge<T>(IEnumerable<T> targetList, T mergeItem, Action<T> insertMethod, MergeOption mergeOptions, 
             params string[] PropertiesKey)
             where T : EntityObject
         {
@@ -89,11 +90,11 @@ namespace ZeroCommonClasses.Helpers
                     && cp.PropertyType.BaseType != entobj
                     ).ToDictionary(p=>p.Name);
 
-            MergeItem<T>(targetList, mergeItem, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
+            MergeItem(targetList, mergeItem, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
 
         }
 
-        public static void Merge<T>(IEnumerable<T> targetList, IEnumerable<T> sourceList, Action<T> insertMethod, System.Data.Objects.MergeOption mergeOptions, 
+        public static void Merge<T>(IEnumerable<T> targetList, IEnumerable<T> sourceList, Action<T> insertMethod, MergeOption mergeOptions, 
             params string[] PropertiesKey)
             where T : EntityObject
         {
@@ -114,13 +115,13 @@ namespace ZeroCommonClasses.Helpers
 
             foreach (var item in sourceList)
             {
-                MergeItem<T>(targetList, item, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
+                MergeItem(targetList, item, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
             }
             
 
         }
         
-        private static void MergeItem<T>(IEnumerable<T> list, T mergeItem, Action<T> insertMethod, System.Data.Objects.MergeOption mergeOptions, string[] PropertiesKey, Dictionary<string, PropertyInfo> baseProperties, Dictionary<string, PropertyInfo> columnProperties) 
+        private static void MergeItem<T>(IEnumerable<T> list, T mergeItem, Action<T> insertMethod, MergeOption mergeOptions, string[] PropertiesKey, Dictionary<string, PropertyInfo> baseProperties, Dictionary<string, PropertyInfo> columnProperties) 
             where T : EntityObject
         {
             foreach (var Property in baseProperties.Keys)
@@ -154,7 +155,7 @@ namespace ZeroCommonClasses.Helpers
             {
                 insertMethod.Invoke(mergeItem);
             }
-            else if (mergeOptions != System.Data.Objects.MergeOption.AppendOnly)
+            else if (mergeOptions != MergeOption.AppendOnly)
             {
                 foreach (var property in columnProperties.Keys.Where(p => !PropertiesKey.Contains(p)))
                 {

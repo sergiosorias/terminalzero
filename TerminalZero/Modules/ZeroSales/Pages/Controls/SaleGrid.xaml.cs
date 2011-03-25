@@ -11,7 +11,7 @@ namespace ZeroSales.Pages.Controls
     /// <summary>
     /// Interaction logic for SaleGrid.xaml
     /// </summary>
-    public partial class SaleGrid : UserControl, IZeroPage
+    public partial class SaleGrid : ZeroGUI.ZeroBasePage
     {
         public event RoutedEventHandler Removing;
 
@@ -26,7 +26,6 @@ namespace ZeroSales.Pages.Controls
 
         public SaleGrid()
         {
-            Mode = Mode.New;
             InitializeComponent();
         }
 
@@ -34,15 +33,15 @@ namespace ZeroSales.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                switch (Mode)
+                switch (base.ControlMode)
                 {
-                    case Mode.New:
+                    case ControlMode.New:
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         removeColumn.Visibility = Visibility.Collapsed;
                         break;
                     default:
@@ -69,22 +68,6 @@ namespace ZeroSales.Pages.Controls
         {
             saleItemsDataGrid.Items.Clear();
         }
-
-        #region IZeroPage Members
-
-        public Mode Mode { get; set; }
-
-        public bool CanAccept(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         private void saleItemsDataGrid_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {

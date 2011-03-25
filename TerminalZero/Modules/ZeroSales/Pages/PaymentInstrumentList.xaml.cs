@@ -18,27 +18,11 @@ namespace ZeroSales.Pages
     /// <summary>
     /// Interaction logic for PaymentInstrumentList.xaml
     /// </summary>
-    public partial class PaymentInstrumentList : UserControl, IZeroPage
+    public partial class PaymentInstrumentList : ZeroGUI.ZeroBasePage
     {
         public PaymentInstrumentList()
         {
             InitializeComponent();
         }
-
-        #region Implementation of IZeroPage
-
-        public Mode Mode { get;set;}
-
-        public bool CanAccept(object parameter)
-        {
-            return true;
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
     }
 }

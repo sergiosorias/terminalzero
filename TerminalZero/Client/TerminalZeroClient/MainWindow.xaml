@@ -16,7 +16,8 @@
         <Style TargetType="MenuItem" x:Key="masterMenuItem">
             <Setter Property="Foreground" Value="{StaticResource BrownLightSelectedRow}"/>
             <Setter Property="Background" Value="{StaticResource DarkBlueBrushKey}"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Icon">
                 <Setter.Value>
@@ -27,7 +28,7 @@
     </Window.Resources>
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="23"/>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>

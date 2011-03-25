@@ -15,11 +15,11 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for ProductDetail.xaml
     /// </summary>
-    public partial class ProductDetail : UserControl, IZeroPage
+    public partial class ProductDetail : ZeroBasePage
     {
         public ProductDetail(MasterDataEntities dataProvider)
         {
-            Mode = Mode.New;
+            ControlMode = ControlMode.New;
             InitializeComponent();
             DataProvider = dataProvider;
         }
@@ -28,7 +28,7 @@ namespace ZeroMasterData.Pages.Controls
             : this(dataProvider)
         {
             CurrentProduct = DataProvider.Products.First(p => p.Code == productCode);
-            Mode = Mode.Update;
+            ControlMode = ControlMode.Update;
         }
 
         MasterDataEntities DataProvider;
@@ -48,19 +48,19 @@ namespace ZeroMasterData.Pages.Controls
         private void LoadTaxes()
         {
             taxesComboBox.ItemsSource = DataProvider.Taxes;
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     taxesComboBox.SelectedIndex = 1;
                     break;
-                case Mode.Update:
+                case ControlMode.Update:
                     if (!CurrentProduct.TaxReference.IsLoaded)
                         CurrentProduct.TaxReference.Load();
                     taxesComboBox.SelectedItem = CurrentProduct.Tax;
                     break;
-                case Mode.Delete:
+                case ControlMode.Delete:
                     break;
-                case Mode.ReadOnly:
+                case ControlMode.ReadOnly:
                     break;
                 default:
                     break;
@@ -74,7 +74,7 @@ namespace ZeroMasterData.Pages.Controls
                 weightBox.Items.Add(item);
             }
 
-            if (Mode == Mode.Update
+            if (ControlMode == ControlMode.Update
                 && CurrentProduct.PriceCode.HasValue)
             {
                 if (!CurrentProduct.PriceReference.IsLoaded)
@@ -93,7 +93,7 @@ namespace ZeroMasterData.Pages.Controls
             foreach (var item in DataProvider.ProductGroups)
             {
                 groupBox.Items.Add(item);
-                if (Mode == Mode.Update && CurrentProduct.Group1 == item.Code)
+                if (ControlMode == ControlMode.Update && CurrentProduct.Group1 == item.Code)
                 {
                     groupBox.SelectedItem = item;
                 }
@@ -104,9 +104,9 @@ namespace ZeroMasterData.Pages.Controls
         {
             Price P = null;
 
-            switch (Mode)
+            switch (ControlMode)
             {
-                case Mode.New:
+                case ControlMode.New:
                     CurrentProduct = Product.CreateProduct(
                         DataProvider.Products.Count()
                         , true, DataProvider.GetNextProductCode(), true);
@@ -115,7 +115,7 @@ namespace ZeroMasterData.Pages.Controls
                         DataProvider.Prices.Count(),
                         true, 0);
                     break;
-                case Mode.Update:
+                case ControlMode.Update:
                     if (CurrentProduct.PriceCode.HasValue)
                         P = DataProvider.Prices.First(p => p.Code == CurrentProduct.PriceCode);
                     else
@@ -127,9 +127,9 @@ namespace ZeroMasterData.Pages.Controls
                     masterCodeTextBox.IsReadOnly = true;
                     masterCodeTextBox.IsReadOnlyCaretVisible = true;
                     break;
-                case Mode.Delete:
+                case ControlMode.Delete:
                     break;
-                case Mode.ReadOnly:
+                case ControlMode.ReadOnly:
                     break;
             }
 
@@ -169,9 +169,7 @@ namespace ZeroMasterData.Pages.Controls
             }
         }
 
-        #region IEntitiyValidate Members
-
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
             bool ret = true; ;
             string msg = string.Empty;
@@ -181,7 +179,7 @@ namespace ZeroMasterData.Pages.Controls
                 masterCodeTextBox.SelectAll();
                 masterCodeTextBox.Focus();
             }
-            else if(Mode == Mode.New && DataProvider.Products.FirstOrDefault(pr=>pr.MasterCode.Equals(CurrentProduct.MasterCode))!=null)
+            else if(ControlMode == ControlMode.New && DataProvider.Products.FirstOrDefault(pr=>pr.MasterCode.Equals(CurrentProduct.MasterCode))!=null)
             {
                 msg = "Codigo de product existente!\n Por favor ingrese otro código.";
                 masterCodeTextBox.SelectAll();
@@ -240,17 +238,17 @@ namespace ZeroMasterData.Pages.Controls
             {
                 try
                 {
-                    switch (Mode)
+                    switch (ControlMode)
                     {
-                        case Mode.New:
+                        case ControlMode.New:
                             DataProvider.Products.AddObject(CurrentProduct);
                             break;
-                        case Mode.Update:
+                        case ControlMode.Update:
                             DataProvider.Products.ApplyCurrentValues(CurrentProduct);
                             break;
-                        case Mode.Delete:
+                        case ControlMode.Delete:
                             break;
-                        case Mode.ReadOnly:
+                        case ControlMode.ReadOnly:
                             break;
                         default:
                             break;
@@ -269,17 +267,13 @@ namespace ZeroMasterData.Pages.Controls
             return ret;
         }
 
-        public bool CanCancel(object parameter)
+        public override bool CanCancel(object parameter)
         {
             EntityObject obj = CurrentProduct;
             if (obj.EntityState == EntityState.Modified)
                 DataProvider.Refresh(RefreshMode.StoreWins, CurrentProduct);
             return true;
         }
-
-        public Mode Mode { get; set; }
-
-        #endregion
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {

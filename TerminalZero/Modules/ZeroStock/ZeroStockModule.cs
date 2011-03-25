@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -22,10 +23,10 @@ namespace ZeroStock
 
         private void BuildPosibleActions()
         {
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MenuItem, "Operaciones@Stock@Actual", openStockView));
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Alta", openNewStockView, "ValidateTerminalZero"));
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Stock@Baja", openModifyStockView, "ValidateTerminalZero"));
-            OwnerTerminal.Session.AddAction(new ZeroAction(null, ActionType.MainViewButton, "Operaciones@Remitos de salida", OpenDeliveryNoteView, "ValidateTerminalZero"));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCurrentStockView, openStockView));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenNewStockView, openNewStockView, Rules.IsTerminalZero));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenModifyStockView, openModifyStockView, Rules.IsTerminalZero));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero));
         }
 
         public override void Init()

@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Timers;
+using ZeroBusiness;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Files;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
+using ZeroCommonClasses.Pack;
 using ZeroConfiguration.Entities;
 
 namespace ZeroConfiguration
 {
-    public partial class Synchronizer : IDisposable
+    public class Synchronizer : IDisposable
     {
         private delegate bool SyncStep(SyncStartingEventArgs Config);
 
@@ -61,13 +66,13 @@ namespace ZeroConfiguration
         private const string kSyncFileExtention = "sync";
         private string CurrentConnectionID = "";
         private double SyncEvery = 3600 * 10;
-        private System.Timers.Timer Syncronizer;
-        private System.Timers.Timer SyncronizerStatus;
+        private Timer Syncronizer;
+        private Timer SyncronizerStatus;
 
         private ConfigurationEntities CurrentContext;
         private ITerminal CurrentTerminal;
         private List<SyncStep> Steps;
-        private ZeroSession Session = null;
+        private ZeroSession Session;
 
         /// <summary>
         /// 
@@ -84,8 +89,7 @@ namespace ZeroConfiguration
             CurrentTerminal = currentTerminal;
             SyncEvery = LoadSyncRecurrence(Context);
             Steps.Add(ExecuteHelloCommand);
-
-            if (currentTerminal.Manager.ValidateRule("ValidateTerminalZero"))
+            if (currentTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
             {
                 Steps.Add(SendTerminals);
                 Steps.Add(SendModules);
@@ -128,10 +132,10 @@ namespace ZeroConfiguration
         {
             if (Syncronizer == null)
             {
-                Syncronizer = new System.Timers.Timer(SyncEvery);
-                SyncronizerStatus = new System.Timers.Timer(1000);
-                SyncronizerStatus.Elapsed += new System.Timers.ElapsedEventHandler(SyncronizerStatus_Elapsed);
-                Syncronizer.Elapsed += new System.Timers.ElapsedEventHandler(SyncEntryPoint);
+                Syncronizer = new Timer(SyncEvery);
+                SyncronizerStatus = new Timer(1000);
+                SyncronizerStatus.Elapsed += SyncronizerStatus_Elapsed;
+                Syncronizer.Elapsed += SyncEntryPoint;
                 Syncronizer.Enabled = true;
                 Syncronizer.Start();
                 LastSync = DateTime.Now;
@@ -139,7 +143,7 @@ namespace ZeroConfiguration
             }
         }
 
-        void SyncronizerStatus_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        void SyncronizerStatus_Elapsed(object sender, ElapsedEventArgs e)
         {
             OnSyncCountdownTick(new SyncCountdownTickEventArgs { 
                 RemainingTime = new TimeSpan(LastSync.AddMilliseconds(SyncEvery).Ticks - DateTime.Now.Ticks) }
@@ -148,10 +152,10 @@ namespace ZeroConfiguration
 
         #region Private methods
 
-        private void SyncEntryPoint(object sender, System.Timers.ElapsedEventArgs e)
+        private void SyncEntryPoint(object sender, ElapsedEventArgs e)
         {
             SyncronizerStatus.Enabled = Syncronizer.Enabled = false;
-            SyncStartingEventArgs Config = new SyncStartingEventArgs();
+            var Config = new SyncStartingEventArgs();
             OnSyncStarting(Config);
             if (!Config.Cancel)
                 try
@@ -165,7 +169,7 @@ namespace ZeroConfiguration
                     foreach (var item in Steps)
                     {
                         Config.Notifier.SetProgress(++step * 100 / Steps.Count);
-                        Config.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Executing {0}, step {1}", item.Method,step));
+                        Config.Notifier.Log(TraceLevel.Verbose, string.Format("Executing {0}, step {1}", item.Method,step));
                         finishState = item(Config);
                         if (!finishState)
                             break;
@@ -179,7 +183,7 @@ namespace ZeroConfiguration
                 }
                 catch (Exception ex)
                 {
-                    Config.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Sincronizacion Finalizada con error. {0}", ex));
+                    Config.Notifier.Log(TraceLevel.Error, string.Format("Sincronizacion Finalizada con error. {0}", ex));
                     Config.Notifier.SetUserMessage(true, "Sincronizacion Finalizada con error: " + ex.Message);
                     Config.Notifier.SetProgress(100);
                     Config.Notifier.SetProcess("Error");
@@ -220,16 +224,16 @@ namespace ZeroConfiguration
                         if (Mod != null)
                         {
 
-                            ZeroCommonClasses.Files.ServerFileInfo aFile =
-                            new ZeroCommonClasses.Files.ServerFileInfo
+                            var aFile =
+                            new ServerFileInfo
                             {
                                 Code = item.Key,
                                 IsFromDB = true
                             };
 
-                            ZeroCommonClasses.Files.RemoteFileInfo inf = Config.FileTransferService.DownloadFile(aFile);
+                            RemoteFileInfo inf = Config.FileTransferService.DownloadFile(aFile);
 
-                            string packPath = Path.Combine(Mod.WorkingDirectoryIn, string.Format(ZeroCommonClasses.Pack.PackManager.kPackNameFromat, item.Value, item.Key, DateTime.Now.ToString("yyyyMMddhhmmss")));
+                            string packPath = Path.Combine(Mod.WorkingDirectoryIn, string.Format(PackManager.kPackNameFromat, item.Value, item.Key, DateTime.Now.ToString("yyyyMMddhhmmss")));
                             ret = DownloadFile(Config, packPath, inf);
                             if (ret)
                             {
@@ -246,19 +250,19 @@ namespace ZeroConfiguration
             catch (Exception ex)
             {
                 ret = false;
-                Config.Notifier.SetUserMessage(false, "Error al enviar archivos: " + ex.ToString());
+                Config.Notifier.SetUserMessage(false, "Error al enviar archivos: " + ex);
             }
 
             return ret;
 
         }
 
-        private bool DownloadFile(SyncStartingEventArgs Config, string filePath, ZeroCommonClasses.Files.RemoteFileInfo inf)
+        private bool DownloadFile(SyncStartingEventArgs Config, string filePath, RemoteFileInfo inf)
         {
             bool ret = true;
             int chunkSize = 1024 * 4;
-            byte[] buffer = new byte[chunkSize];
-            using (System.IO.FileStream writeStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create, System.IO.FileAccess.Write))
+            var buffer = new byte[chunkSize];
+            using (var writeStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
                 try
                 {
@@ -278,7 +282,7 @@ namespace ZeroConfiguration
                 catch (Exception exe)
                 {
                     ret = false;
-                    Config.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Error Al recibir archivo. {0} - error {1}",filePath, exe));
+                    Config.Notifier.Log(TraceLevel.Error, string.Format("Error Al recibir archivo. {0} - error {1}",filePath, exe));
                     Config.Notifier.SetProcess("Error Recibiendo Paquetes de datos");
                 }
                 finally
@@ -302,14 +306,14 @@ namespace ZeroConfiguration
                     string[] filesToSend = module.GetFilesToSend();
                     if (filesToSend.Length > 0)
                     {
-                        Config.Notifier.SetUserMessage(false, "Enviando paquetes del módulo N°" + module.ModuleCode.ToString());
-                        Config.Notifier.SetUserMessage(false, "Total " + filesToSend.Length.ToString());
+                        Config.Notifier.SetUserMessage(false, "Enviando paquetes del módulo N°" + module.ModuleCode);
+                        Config.Notifier.SetUserMessage(false, "Total " + filesToSend.Length);
 
                         foreach (var filePath in filesToSend)
                         {
-                            System.IO.FileInfo file = new System.IO.FileInfo(filePath);
-                            ZeroCommonClasses.Files.RemoteFileInfo aFile =
-                            new ZeroCommonClasses.Files.RemoteFileInfo
+                            var file = new FileInfo(filePath);
+                            var aFile =
+                            new RemoteFileInfo
                             {
                                 FileName = filePath,
                                 Length = file.Length,
@@ -317,9 +321,9 @@ namespace ZeroConfiguration
                                 FileByteStream = file.OpenRead()
                             };
 
-                            ZeroCommonClasses.Files.ServerFileInfo inf = Config.FileTransferService.UploadFile(aFile);
+                            ServerFileInfo inf = Config.FileTransferService.UploadFile(aFile);
                             aFile.FileByteStream.Close();
-                            System.IO.File.Move(filePath, System.IO.Path.ChangeExtension(filePath, kSyncFileExtention));
+                            File.Move(filePath, Path.ChangeExtension(filePath, kSyncFileExtention));
 
                         }
                     }
@@ -329,7 +333,7 @@ namespace ZeroConfiguration
             catch (Exception ex)
             {
                 ret = false;
-                Config.Notifier.SetUserMessage(false, "Error al enviar archivos: " + ex.ToString());
+                Config.Notifier.SetUserMessage(false, "Error al enviar archivos: " + ex);
             }
 
             return ret;
@@ -353,6 +357,7 @@ namespace ZeroConfiguration
 
             return ret;
         }
+
 
         private bool ExecuteByeCommand(SyncStartingEventArgs Config)
         {
@@ -382,7 +387,7 @@ namespace ZeroConfiguration
             Config.Notifier.SetProcess("Enviando datos");
             Config.Notifier.SetUserMessage(false, "Enviando datos sobre módulos actuales al servidor.");
             string modulesToSend;
-            if (CurrentTerminal.Manager.ValidateRule("ValidateTerminalZero"))
+            if (CurrentTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
             {
                 modulesToSend = ContextExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Modules);
             }
@@ -430,7 +435,7 @@ namespace ZeroConfiguration
             bool ret = true;
             Config.Notifier.SetProcess("Enviando Terminales");
             
-            ZeroResponse<bool> res1 = Config.SyncService.SendClientTerminals(CurrentConnectionID, ContextExtentions.GetEntitiesAsXMLObjectList<Entities.Terminal>(CurrentContext.Terminals));
+            ZeroResponse<bool> res1 = Config.SyncService.SendClientTerminals(CurrentConnectionID, ContextExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Terminals));
             if (!res1.IsValid)
             {
                 ret = true;
@@ -445,7 +450,7 @@ namespace ZeroConfiguration
             bool ret = true;
             Config.Notifier.SetProcess("Enviando Propiedades");
             
-            ZeroResponse<bool> res1 = Config.SyncService.SendClientProperties(CurrentConnectionID, ContextExtentions.GetEntitiesAsXMLObjectList<Entities.TerminalProperty>(CurrentContext.TerminalProperties));
+            ZeroResponse<bool> res1 = Config.SyncService.SendClientProperties(CurrentConnectionID, ContextExtentions.GetEntitiesAsXMLObjectList(CurrentContext.TerminalProperties));
             if (!res1.IsValid)
             {
                 ret = true;

@@ -14,6 +14,8 @@
           <EntitySet Name="ReturnReason" EntityType="TZeroMasterModel.Store.ReturnReason" store:Type="Tables" Schema="data" />
           <EntitySet Name="SaleHeader" EntityType="TZeroMasterModel.Store.SaleHeader" store:Type="Tables" Schema="data" />
           <EntitySet Name="SaleItem" EntityType="TZeroMasterModel.Store.SaleItem" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SalePaymentHeader" EntityType="TZeroMasterModel.Store.SalePaymentHeader" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SalePaymentItem" EntityType="TZeroMasterModel.Store.SalePaymentItem" store:Type="Tables" Schema="data" />
           <EntitySet Name="SaleType" EntityType="TZeroMasterModel.Store.SaleType" store:Type="Tables" Schema="data" />
           <EntitySet Name="Tax" EntityType="TZeroMasterModel.Store.Tax" store:Type="Tables" Schema="data" />
           <EntitySet Name="TaxPosition" EntityType="TZeroMasterModel.Store.TaxPosition" store:Type="Tables" Schema="data" />
@@ -41,6 +43,10 @@
             <End Role="Price" EntitySet="Price" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
+          <AssociationSet Name="FK_SaleHeader_SalePaymentHeader" Association="TZeroMasterModel.Store.FK_SaleHeader_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeader" />
+            <End Role="SaleHeader" EntitySet="SaleHeader" />
+          </AssociationSet>
           <AssociationSet Name="FK_SaleHeader_SaleType" Association="TZeroMasterModel.Store.FK_SaleHeader_SaleType">
             <End Role="SaleType" EntitySet="SaleType" />
             <End Role="SaleHeader" EntitySet="SaleHeader" />
@@ -53,13 +59,17 @@
             <End Role="SaleHeader" EntitySet="SaleHeader" />
             <End Role="SaleItem" EntitySet="SaleItem" />
           </AssociationSet>
+          <AssociationSet Name="FK_SalePaymentItem_SalePaymentHeader" Association="TZeroMasterModel.Store.FK_SalePaymentItem_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeader" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItem" />
+          </AssociationSet>
           <AssociationSet Name="FK_SaleWeight_Price_Weight" Association="TZeroMasterModel.Store.FK_SaleWeight_Price_Weight">
             <End Role="Weight" EntitySet="Weight" />
             <End Role="Price" EntitySet="Price" />
           </AssociationSet>
           <AssociationSet Name="FK_StockHeader_PaymentInstrument" Association="TZeroMasterModel.Store.FK_StockHeader_PaymentInstrument">
             <End Role="PaymentInstrument" EntitySet="PaymentInstrument" />
-            <End Role="SaleHeader" EntitySet="SaleHeader" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItem" />
           </AssociationSet>
           <AssociationSet Name="FK_Tax1_Product_Tax" Association="TZeroMasterModel.Store.FK_Tax1_Product_Tax">
             <End Role="Tax" EntitySet="Tax" />
@@ -186,7 +196,8 @@
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="UserCode" Type="uniqueidentifier" />
           <Property Name="SaleTypeCode" Type="int" Nullable="false" />
-          <Property Name="PaymentInstrumentCode" Type="int" Nullable="false" />
+          <Property Name="SalePaymentHeaderCode" Type="int" />
+          <Property Name="PayIsComplete" Type="bit" Nullable="false" />
           <Property Name="PrintMode" Type="int" />
           <Property Name="CustomerCode" Type="int" />
           <Property Name="PriceSumValue" Type="float" Nullable="false" />
@@ -219,6 +230,35 @@
           <Property Name="TaxValue" Type="float" Nullable="false" />
           <Property Name="Tax1Value" Type="float" Nullable="false" />
           <Property Name="NetPriceValue" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalePaymentHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="TotalQuantity" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalePaymentItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="SalePaymentHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="SalePaymentHeaderCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="PaymentInstrumentCode" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="SaleType">
           <Key>
@@ -323,6 +363,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SaleHeader_SalePaymentHeader">
+          <End Role="SalePaymentHeader" Type="TZeroMasterModel.Store.SalePaymentHeader" Multiplicity="0..1" />
+          <End Role="SaleHeader" Type="TZeroMasterModel.Store.SaleHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SaleHeader_SaleType">
           <End Role="SaleType" Type="TZeroMasterModel.Store.SaleType" Multiplicity="1" />
           <End Role="SaleHeader" Type="TZeroMasterModel.Store.SaleHeader" Multiplicity="*" />
@@ -361,6 +415,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SalePaymentItem_SalePaymentHeader">
+          <End Role="SalePaymentHeader" Type="TZeroMasterModel.Store.SalePaymentHeader" Multiplicity="1" />
+          <End Role="SalePaymentItem" Type="TZeroMasterModel.Store.SalePaymentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SalePaymentItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SaleWeight_Price_Weight">
           <End Role="Weight" Type="TZeroMasterModel.Store.Weight" Multiplicity="0..1" />
           <End Role="Price" Type="TZeroMasterModel.Store.Price" Multiplicity="*" />
@@ -375,12 +443,12 @@
         </Association>
         <Association Name="FK_StockHeader_PaymentInstrument">
           <End Role="PaymentInstrument" Type="TZeroMasterModel.Store.PaymentInstrument" Multiplicity="1" />
-          <End Role="SaleHeader" Type="TZeroMasterModel.Store.SaleHeader" Multiplicity="*" />
+          <End Role="SalePaymentItem" Type="TZeroMasterModel.Store.SalePaymentItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PaymentInstrument">
               <PropertyRef Name="Code" />
             </Principal>
-            <Dependent Role="SaleHeader">
+            <Dependent Role="SalePaymentItem">
               <PropertyRef Name="PaymentInstrumentCode" />
             </Dependent>
           </ReferentialConstraint>
@@ -515,9 +583,19 @@
             <End Role="PaymentInstrument" EntitySet="PaymentInstruments" />
             <End Role="Customer" EntitySet="Customers" />
           </AssociationSet>
-          <AssociationSet Name="FK_StockHeader_PaymentInstrument" Association="TZeroMasterModel.FK_StockHeader_PaymentInstrument">
+          <EntitySet Name="SalePaymentHeaders" EntityType="TZeroMasterModel.SalePaymentHeader" />
+          <EntitySet Name="SalePaymentItems" EntityType="TZeroMasterModel.SalePaymentItem" />
+          <AssociationSet Name="FK_StockHeader_PaymentInstrument1" Association="TZeroMasterModel.FK_StockHeader_PaymentInstrument1">
             <End Role="PaymentInstrument" EntitySet="PaymentInstruments" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleHeader_SalePaymentHeader" Association="TZeroMasterModel.FK_SaleHeader_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeaders" />
             <End Role="SaleHeader" EntitySet="SaleHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalePaymentItem_SalePaymentHeader" Association="TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeaders" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItems" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Customer">
@@ -628,7 +706,6 @@
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="UserCode" Type="Guid" />
           <Property Name="SaleTypeCode" Type="Int32" Nullable="false" />
-          <Property Name="PaymentInstrumentCode" Type="Int32" Nullable="false" />
           <Property Name="PrintMode" Type="Int32" />
           <Property Name="CustomerCode" Type="Int32" />
           <Property Name="PriceSumValue" Type="Double" Nullable="false" />
@@ -638,7 +715,9 @@
           <Property Name="Historized" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="SaleType" Relationship="TZeroMasterModel.FK_SaleHeader_SaleType" FromRole="SaleHeader" ToRole="SaleType" />
           <NavigationProperty Name="SaleItems" Relationship="TZeroMasterModel.FK_SaleItem_SaleHeader" FromRole="SaleHeader" ToRole="SaleItem" />
-          <NavigationProperty Name="PaymentInstrument" Relationship="TZeroMasterModel.FK_StockHeader_PaymentInstrument" FromRole="SaleHeader" ToRole="PaymentInstrument" />
+          <Property Type="Int32" Name="SalePaymentHeaderCode" />
+          <Property Type="Boolean" Name="PayIsComplete" Nullable="false" />
+          <NavigationProperty Name="SalePaymentHeader" Relationship="TZeroMasterModel.FK_SaleHeader_SalePaymentHeader" FromRole="SaleHeader" ToRole="SalePaymentHeader" />
         </EntityType>
         <EntityType Name="SaleItem">
           <Key>
@@ -882,7 +961,7 @@
           <Property Type="String" Name="Description" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="PrintModeDefault" />
           <NavigationProperty Name="Customers" Relationship="TZeroMasterModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Customer" />
-          <NavigationProperty Name="SaleHeaders" Relationship="TZeroMasterModel.FK_StockHeader_PaymentInstrument" FromRole="PaymentInstrument" ToRole="SaleHeader" />
+          <NavigationProperty Name="SalePaymentItems" Relationship="TZeroMasterModel.FK_StockHeader_PaymentInstrument1" FromRole="PaymentInstrument" ToRole="SalePaymentItem" />
         </EntityType>
         <Association Name="PK_PaymentInstrumentCode_Customer_PaymentInstrument">
           <End Type="TZeroMasterModel.PaymentInstrument" Role="PaymentInstrument" Multiplicity="0..1" />
@@ -896,15 +975,76 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_StockHeader_PaymentInstrument">
+        <EntityType Name="SalePaymentHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Type="Int32" Name="TerminalCode" Nullable="false" />
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="DateTime" Name="Stamp" />
+          <Property Type="Boolean" Name="Enable" Nullable="false" />
+          <Property Type="Int16" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
+          <Property Type="Double" Name="TotalQuantity" Nullable="false" />
+          <NavigationProperty Name="SaleHeaders" Relationship="TZeroMasterModel.FK_SaleHeader_SalePaymentHeader" FromRole="SalePaymentHeader" ToRole="SaleHeader" />
+          <NavigationProperty Name="SalePaymentItems" Relationship="TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader" FromRole="SalePaymentHeader" ToRole="SalePaymentItem" />
+        </EntityType>
+        <EntityType Name="SalePaymentItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="SalePaymentHeaderCode" />
+          </Key>
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="Int32" Name="TerminalCode" Nullable="false" />
+          <Property Type="Int32" Name="SalePaymentHeaderCode" Nullable="false" />
+          <Property Type="DateTime" Name="Stamp" />
+          <Property Type="Boolean" Name="Enable" Nullable="false" />
+          <Property Type="Int16" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="TerminalToCode" Nullable="false" />
+          <Property Type="Int32" Name="PaymentInstrumentCode" Nullable="false" />
+          <Property Type="Double" Name="Quantity" Nullable="false" />
+          <NavigationProperty Name="PaymentInstrument" Relationship="TZeroMasterModel.FK_StockHeader_PaymentInstrument1" FromRole="SalePaymentItem" ToRole="PaymentInstrument" />
+          <NavigationProperty Name="SalePaymentHeader" Relationship="TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader" FromRole="SalePaymentItem" ToRole="SalePaymentHeader" />
+        </EntityType>
+        <Association Name="FK_StockHeader_PaymentInstrument1">
           <End Type="TZeroMasterModel.PaymentInstrument" Role="PaymentInstrument" Multiplicity="1" />
-          <End Type="TZeroMasterModel.SaleHeader" Role="SaleHeader" Multiplicity="*" />
+          <End Type="TZeroMasterModel.SalePaymentItem" Role="SalePaymentItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PaymentInstrument">
               <PropertyRef Name="Code" />
             </Principal>
-            <Dependent Role="SaleHeader">
+            <Dependent Role="SalePaymentItem">
               <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleHeader_SalePaymentHeader">
+          <End Type="TZeroMasterModel.SalePaymentHeader" Role="SalePaymentHeader" Multiplicity="0..1" />
+          <End Type="TZeroMasterModel.SaleHeader" Role="SaleHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalePaymentItem_SalePaymentHeader">
+          <End Type="TZeroMasterModel.SalePaymentHeader" Role="SalePaymentHeader" Multiplicity="1" />
+          <End Type="TZeroMasterModel.SalePaymentItem" Role="SalePaymentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SalePaymentItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -978,7 +1118,9 @@
             <ScalarProperty Name="Description" ColumnName="Description" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="SaleHeaders"><EntityTypeMapping TypeName="TZeroMasterModel.SaleHeader"><MappingFragment StoreEntitySet="SaleHeader">
-            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="PayIsComplete" ColumnName="PayIsComplete" />
+                <ScalarProperty Name="SalePaymentHeaderCode" ColumnName="SalePaymentHeaderCode" />
+                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
             <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
@@ -987,7 +1129,6 @@
             <ScalarProperty Name="Date" ColumnName="Date" />
             <ScalarProperty Name="UserCode" ColumnName="UserCode" />
             <ScalarProperty Name="SaleTypeCode" ColumnName="SaleTypeCode" />
-            <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
             <ScalarProperty Name="PrintMode" ColumnName="PrintMode" />
             <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
             <ScalarProperty Name="PriceSumValue" ColumnName="PriceSumValue" />
@@ -1064,6 +1205,34 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SalePaymentHeaders">
+            <EntityTypeMapping TypeName="TZeroMasterModel.SalePaymentHeader">
+              <MappingFragment StoreEntitySet="SalePaymentHeader">
+                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalePaymentItems">
+            <EntityTypeMapping TypeName="TZeroMasterModel.SalePaymentItem">
+              <MappingFragment StoreEntitySet="SalePaymentItem">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
+                <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="SalePaymentHeaderCode" ColumnName="SalePaymentHeaderCode" />
+                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1084,13 +1253,13 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="Sales" ZoomLevel="60">
+      <Diagram Name="Sales" ZoomLevel="101">
         <EntityTypeShape EntityType="TZeroMasterModel.Customer" Width="1.5" PointX="7.125" PointY="5.875" Height="5.057109375" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.Price" Width="1.5" PointX="2.375" PointY="0.5" Height="3.3263964843749996" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.Product" Width="1.5" PointX="4.625" PointY="0.5" Height="5.2494108072916656" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.ProductGroup" Width="1.5" PointX="0.5" PointY="4.375" Height="2.3648893229166665" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.ReturnReason" Width="1.5" PointX="9.75" PointY="0.5" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="TZeroMasterModel.SaleHeader" Width="1.5" PointX="4.5" PointY="12.25" Height="4.6725065104166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroMasterModel.SaleHeader" Width="1.75" PointX="4.5" PointY="12.25" Height="4.8648079427083353" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.SaleItem" Width="1.5" PointX="7.125" PointY="0.5" Height="4.6725065104166674" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.SaleType" Width="1.5" PointX="1.75" PointY="12.25" Height="2.172587890624996" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroMasterModel.Tax" Width="1.5" PointX="0.5" PointY="7.875" Height="2.7494921874999996" IsExpanded="true" />
@@ -1099,8 +1268,8 @@
         <EntityTypeShape EntityType="TZeroMasterModel.TerminalTo" Width="1.5" PointX="9.75" PointY="3" Height="1.5956835937500031" IsExpanded="true" />
         <AssociationConnector Association="TZeroMasterModel.FK_TaxPositionCode_Customer_TaxPosition" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="9.9612939453125" />
-          <ConnectorPoint PointX="6.666666666666667" PointY="9.9612939453125" />
-          <ConnectorPoint PointX="6.833333333333333" PointY="9.9612939453125" />
+          <ConnectorPoint PointX="6.541666666666667" PointY="9.9612939453125" />
+          <ConnectorPoint PointX="6.708333333333333" PointY="9.9612939453125" />
           <ConnectorPoint PointX="7.125" PointY="9.9612939453125" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_PriceCost_Product_Price" ManuallyRouted="false">
@@ -1150,20 +1319,32 @@
           <ConnectorPoint PointX="4.5" PointY="13.336293945312498" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroMasterModel.FK_SaleItem_SaleHeader" ManuallyRouted="false">
-          <ConnectorPoint PointX="6" PointY="12.251152846153847" />
-          <ConnectorPoint PointX="6.3761528461538468" PointY="11.875" />
-          <ConnectorPoint PointX="6.75" PointY="11.875" />
-          <ConnectorPoint PointX="6.75" PointY="5.5475065104166674" />
-          <ConnectorPoint PointX="7.125" PointY="5.1725065104166674" />
+          <ConnectorPoint PointX="6.25" PointY="12.25" />
+          <ConnectorPoint PointX="6.625" PointY="11.875" />
+          <ConnectorPoint PointX="6.625" PointY="3.87149445782581" />
+          <ConnectorPoint PointX="7.125" PointY="3.87149445782581" />
         </AssociationConnector>
         <EntityTypeShape EntityType="TZeroMasterModel.PaymentInstrument" Width="1.5" PointX="7.375" PointY="13.375" Height="2.5571907552083388" />
         <AssociationConnector Association="TZeroMasterModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" >
           <ConnectorPoint PointX="8" PointY="13.375" />
           <ConnectorPoint PointX="8" PointY="11.124410807291666" />
         </AssociationConnector>
-        <AssociationConnector Association="TZeroMasterModel.FK_StockHeader_PaymentInstrument" >
-          <ConnectorPoint PointX="7.375" PointY="14.653595377604169" />
-          <ConnectorPoint PointX="6" PointY="14.653595377604169" />
+        <EntityTypeShape EntityType="TZeroMasterModel.SalePaymentHeader" Width="2.125" PointX="9.375" PointY="5.75" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="TZeroMasterModel.SalePaymentItem" Width="2.125" PointX="9.625" PointY="13.25" Height="2.9417936197916656" />
+        <AssociationConnector Association="TZeroMasterModel.FK_StockHeader_PaymentInstrument1" >
+          <ConnectorPoint PointX="8.875" PointY="14.653595377604169" />
+          <ConnectorPoint PointX="9.625" PointY="14.653595377604169" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroMasterModel.FK_SaleHeader_SalePaymentHeader" >
+          <ConnectorPoint PointX="9.46875" PointY="8.4994921875" />
+          <ConnectorPoint PointX="9.46875" PointY="12.7500025" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="12.7500025" />
+          <ConnectorPoint PointX="7.916666666666667" PointY="12.7500025" />
+          <ConnectorPoint PointX="6.25" PointY="12.7500025" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroMasterModel.FK_SalePaymentItem_SalePaymentHeader" >
+          <ConnectorPoint PointX="10.5625" PointY="8.4994921875" />
+          <ConnectorPoint PointX="10.5625" PointY="13.25" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

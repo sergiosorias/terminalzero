@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.ServiceModel;
 
 namespace ZeroCommonClasses.Files
@@ -16,7 +17,7 @@ namespace ZeroCommonClasses.Files
         public long Length;
 
         [MessageBodyMember(Order = 1)]
-        public System.IO.Stream FileByteStream;
+        public Stream FileByteStream;
 
         public void Dispose()
         {

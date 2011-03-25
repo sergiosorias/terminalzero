@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics;
+
 namespace ZeroCommonClasses.Interfaces
 {
     public interface IProgressNotifier
@@ -7,6 +9,6 @@ namespace ZeroCommonClasses.Interfaces
         void SetProgress(int newProgress);
         void SetUserMessage(bool isMandatory, string message);
         void SendNotification(string message);
-        void Log(System.Diagnostics.TraceLevel level, string message);
+        void Log(TraceLevel level, string message);
     }
 }

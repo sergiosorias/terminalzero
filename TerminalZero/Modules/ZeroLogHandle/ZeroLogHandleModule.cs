@@ -20,20 +20,6 @@ namespace ZeroLogHandle
 
         #region IModule Members
 
-        private bool _TryUseSameContext = false;
-        public bool TryUseSameContext
-        {
-            get
-            {
-                return _TryUseSameContext;
-
-            }
-            set
-            {
-                _TryUseSameContext = true;
-            }
-        }
-
         public override void Init()
         {
             

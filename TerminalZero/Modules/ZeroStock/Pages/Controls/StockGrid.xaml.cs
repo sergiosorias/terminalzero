@@ -9,11 +9,10 @@ namespace ZeroStock.Pages.Controls
     /// <summary>
     /// Interaction logic for StockGrid.xaml
     /// </summary>
-    public partial class StockGrid : UserControl, IZeroPage
+    public partial class StockGrid : ZeroGUI.ZeroBasePage
     {
         public StockGrid()
         {
-            Mode = Mode.New;
             InitializeComponent();
         }
 
@@ -21,15 +20,15 @@ namespace ZeroStock.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
+                    case ControlMode.New:
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         break;
                     default:
                         break;
@@ -45,21 +44,5 @@ namespace ZeroStock.Pages.Controls
             }
             stockItemsDataGrid.Items.Add(item);    
         }
-        
-        #region IZeroPage Members
-
-        public Mode Mode { get; set; }
-
-        public bool CanAccept(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
     }
 }

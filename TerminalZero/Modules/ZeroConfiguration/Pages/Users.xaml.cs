@@ -26,7 +26,7 @@ namespace ZeroConfiguration.Pages
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             ZeroAction action;
-            if (_terminal.Manager.ExistsAction("Configuración@Usuarios@Cambiar contraseña", out action))
+            if (_terminal.Manager.ExistsAction(ZeroBusiness.Actions.OpenUserPasswordChangeMessage, out action))
             {
                 btnChangePassword.Command = action;
             }
@@ -83,7 +83,7 @@ namespace ZeroConfiguration.Pages
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             var ud = new UserDetail();
-            ud.Mode = Mode.New;
+            ud.ControlMode = ControlMode.New;
             if (ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.NewUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
             {
                 LoadUsers();

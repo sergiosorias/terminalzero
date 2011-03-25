@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Classes\EventArgs.cs" />
     <Compile Include="Classes\Rules.cs" />
+    <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="Masking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -103,6 +104,7 @@
     <Compile Include="SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ZeroBasePage.cs" />
     <Compile Include="ZeroToolBar.xaml.cs">
       <DependentUpon>ZeroToolBar.xaml</DependentUpon>
     </Compile>
@@ -135,6 +137,11 @@
     <ProjectReference Include="..\CommonClassesZero\ZeroCommonClasses.csproj">
       <Project>{2AC599DD-4010-49A3-B595-715FE549C6B9}</Project>
       <Name>ZeroCommonClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZeroBusiness\ZeroBusiness.csproj">
+      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
+      <Name>ZeroBusiness</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

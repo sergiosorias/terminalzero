@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿        using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
+using ZeroSales.Pages;
 
 namespace ZeroSales
 {
@@ -34,14 +32,16 @@ namespace ZeroSales
 
         private void BuildPosibleActions()
         {
-            var action = new ZeroAction(null, ActionType.MenuItem, "Operaciones@Ventas@Nueva", openSaleView);
+            var action = new ZeroAction( ActionType.MenuItem, Actions.OpenNewSaleView, openSaleView);
             OwnerTerminal.Session.AddAction(action);
         }
 
         private void openSaleView()
         {
-            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs();
-            args.ControlToShow = new Pages.CreateSaleView(OwnerTerminal,0);
+            var args = new ModuleNotificationEventArgs
+                           {
+                               ControlToShow = new CreateSaleView(OwnerTerminal, 0)
+                           };
             OnModuleNotifing(args);
         }
 

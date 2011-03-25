@@ -53,5 +53,6 @@ namespace ZeroCommonClasses.Interfaces.Services
             UriTemplate = "/client2serverterminal?id={ID}")]
         [OperationContract]
         ZeroResponse<bool> SendClientTerminals(string ID, string terminals);
+        
     }
 }

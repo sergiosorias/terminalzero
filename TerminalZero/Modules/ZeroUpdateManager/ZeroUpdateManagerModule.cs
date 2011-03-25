@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroUpdateManager.Properties;
 
@@ -14,7 +15,7 @@ namespace ZeroUpdateManager
 
         public void BuildPosibleActions()
         {
-            //OwnerTerminal.Session.AddAction(new ZeroAction(null,ActionType.MenuItem, "Configuración@Actualizaciones@Base de datos", ImportScriptFile));
+            OwnerTerminal.Session.AddAction(new ZeroAction( ZeroBusiness.ActionType.MenuItem, ZeroBusiness.Actions.ExecUpgradeProcess, ImportScriptFile));
         }
 
         public override string[] GetFilesToSend()

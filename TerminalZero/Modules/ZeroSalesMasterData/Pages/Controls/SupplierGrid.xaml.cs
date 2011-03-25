@@ -10,7 +10,7 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for SupplierGrid.xaml
     /// </summary>
-    public partial class SupplierGrid : UserControl, IZeroPage
+    public partial class SupplierGrid : ZeroGUI.ZeroBasePage
     {
         public Entities.MasterDataEntities DataProvider { get; private set; }
         public SupplierGrid()
@@ -23,15 +23,15 @@ namespace ZeroMasterData.Pages.Controls
             // Do not load your data at design time.
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
-                switch (Mode)
+                switch (ControlMode)
                 {
-                    case Mode.New:
+                    case ControlMode.New:
                         break;
-                    case Mode.Update:
+                    case ControlMode.Update:
                         break;
-                    case Mode.Delete:
+                    case ControlMode.Delete:
                         break;
-                    case Mode.ReadOnly:
+                    case ControlMode.ReadOnly:
                         break;
                     default:
                         break;
@@ -60,33 +60,6 @@ namespace ZeroMasterData.Pages.Controls
                 
             }
         }
-
-        #region IZeroPage Members
-
-        private Mode _Mode = Mode.New;
-        public Mode Mode
-        {
-            get
-            {
-                return _Mode;
-            }
-            set
-            {
-                _Mode = value;
-            }
-        }
-
-        public bool CanAccept(object parameter)
-        {
-            return true;
-        }
-
-        public bool CanCancel(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
 
         internal void ApplyFilter(string criteria)
         {

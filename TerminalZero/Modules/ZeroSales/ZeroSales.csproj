@@ -56,6 +56,9 @@
     </Compile>
     <Compile Include="Entities\SalesEntities.cs" />
     <Compile Include="Entities\StockItem.cs" />
+    <Compile Include="Pages\Controls\PaymentInstrumentGrid.xaml.cs">
+      <DependentUpon>PaymentInstrumentGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Controls\SaleGrid.xaml.cs">
       <DependentUpon>SaleGrid.xaml</DependentUpon>
     </Compile>
@@ -80,6 +83,11 @@
       <Name>ZeroCommonClasses</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Base\ZeroBusiness\ZeroBusiness.csproj">
+      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
+      <Name>ZeroBusiness</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Base\ZeroGUI\ZeroGUI.csproj">
       <Project>{C5EE22F8-88E6-4E39-839F-B274B28A1FE1}</Project>
       <Name>ZeroGUI</Name>
@@ -100,6 +108,10 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Pages\Controls\PaymentInstrumentGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Controls\SaleGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -112,6 +124,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\ZeroSales.Entities.Entities.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

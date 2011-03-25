@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Windows.Input;
+using ZeroBusiness;
+using ZeroCommonClasses.Context;
 
 namespace ZeroCommonClasses.GlobalObjects
 {
-    public enum ActionType
-    {
-        MenuItem = 0,
-        MainViewButton = 1,
-        BackgroudAction = 2,
-    }
-
-    public class ZeroAction : System.Windows.Input.ICommand
+    public class ZeroAction : ICommand
     {
         public event EventHandler Finished;
         protected void OnFinished()
@@ -29,18 +26,17 @@ namespace ZeroCommonClasses.GlobalObjects
         public Action ExecuteAction { get; private set; }
         public List<ZeroActionParameterBase> Parameters { get; private set; }
         private bool _canExecute;
-        public ZeroAction(ZeroSession session, ActionType actionType, string name, Action executeAction)
+        public ZeroAction(ActionType actionType, string name, Action executeAction)
         {
             AlwaysVisible = false;
             ActionType = actionType;
             Name = name;
             ExecuteAction = executeAction;
             Parameters = new List<ZeroActionParameterBase>();
-            Session = session;
         }
 
-        public ZeroAction(ZeroSession session, ActionType actionType, string name, Action executeAction, string ruleToSatisfy)
-            : this(session, actionType, name, executeAction)
+        public ZeroAction(ActionType actionType, string name, Action executeAction, string ruleToSatisfy)
+            : this(actionType, name, executeAction)
         {
             RuleToSatisfyName = ruleToSatisfy;
         }
@@ -93,7 +89,7 @@ namespace ZeroCommonClasses.GlobalObjects
                 catch (Exception ex)
                 {
                     if (Session != null) Session.Notifier.SendNotification("Error: "+ex);
-                    System.Diagnostics.Trace.WriteIf(ZeroCommonClasses.Context.ContextBuilder.LogLevel.TraceError,
+                    Trace.WriteIf(ContextInfo.LogLevel.TraceError,
                                                      string.Format("{2} on {1} throws-> {0}",ex,ExecuteAction.Method, ExecuteAction.Target.GetType()), "Error");
                 }
             }
