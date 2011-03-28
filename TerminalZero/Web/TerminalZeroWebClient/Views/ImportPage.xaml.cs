@@ -156,6 +156,11 @@ namespace TerminalZeroWebClient.Views
                 UploadFile(pack.Name, pack.Data);
         }
 
+        private void TextBox_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
+
         
     }
 }

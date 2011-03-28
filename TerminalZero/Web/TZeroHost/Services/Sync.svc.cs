@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Web;
 using TZeroHost.Helpers;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Helpers;
@@ -27,13 +30,31 @@ namespace TZeroHost.Services
                             if (Config.ValidateTerminal(terminal, name, out hlp.StatusMessage))
                             {
                                 ret.Result = Config.CreateConnection(terminal);
-                                Trace.WriteLine(string.Format("Iniciando Conexión con terminal {0} - ID {1} - ConnID {2}", name, terminal, ret.Result));
+                                Trace.WriteLine(string.Format("Iniciando Conexión con terminal {0} - ID {1} - ConnID {2} - IP: {3}", name, terminal, ret.Result, GetWCFMethodCallerIp()));
                             }
                         }
                     });
-
+                
                 ret.IsValid = hlp.IsValid;
                 ret.Message = hlp.StatusMessage;
+            }
+
+            return ret;
+        }
+
+        private string GetWCFMethodCallerIp()
+        {
+            string ret = string.Empty;
+            try
+            {
+                OperationContext context = OperationContext.Current;
+                MessageProperties messageProperties = context.IncomingMessageProperties;
+                RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+
+                ret = endpointProperty.Address;
+            }
+            catch 
+            {
             }
 
             return ret;

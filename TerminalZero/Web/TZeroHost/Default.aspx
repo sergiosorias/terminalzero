@@ -41,22 +41,120 @@
             color: #0066FF;
             text-decoration: none;
         }
+        
+        .headerButton
+        {
+            font-weight: bold;
+            font-family: Tahoma;
+            font-size: 14px;
+            color: White;
+            text-decoration: none;
+        }
+        
+        .headerButtonParent
+        {
+            cursor: hand;
+            text-align:center;
+            top: 1px; 
+            left: 300px; 
+            width:120;
+            height:35;
+            position: absolute; 
+            background-repeat:no-repeat;
+            background-image: url('./images/btnNormal.png');
+        }
     </style>
+    <script type="text/javascript" src="Scripts/jquery-1.4.1.min.js" />
+    <script type="text/javascript" src="Scripts/jquery-1.4.1-vsdoc.js" />
+    <script type="text/javascript" src="Scripts/jquery-1.4.1.js" />
+    <script type="text/javascript">
+        
+
+    </script>
 </head>
 <body>
-    <form id="form1" runat="server" style="height: 100%">
-    <table border="0" cellpadding="0" cellspacing="0" style="height: 100%">
+    <form id="form1" runat="server" style="height: 100%; width: 100%">
+    <div id="menuHeader" class="headerButtonParent">
+        <a class="headerButton">Menu</a>
+    </div>
+    <div id="minimizedHeader" style="display:none" class="headerButtonParent">
+        <a class="headerButton">Show Header</a>
+    </div>
+    <div id="linksDiv" style="background-color:transparent; width:140; display:none" class="headerButtonParent">
+        <table class="cssGrid" style="width: 100%">
+            <tr>
+                <td align="center" class="cssGridHeader">
+                    <p style="">
+                        Links
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <asp:HyperLink ID="HyperLink1" CssClass="menuLink" NavigateUrl="#" runat="server">Web Control</asp:HyperLink>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <asp:HyperLink ID="HyperLink2" CssClass="menuLink" NavigateUrl="#" runat="server">TS - Server</asp:HyperLink>
+                </td>
+            </tr>
+            <tr>
+                <td class="cssGridHeader">
+                    <p>
+                        Downloads
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <asp:HyperLink ID="HyperLink3" CssClass="menuLink" Target="_blank" NavigateUrl="~/Upload/Silverlight_4.exe"
+                        runat="server">Silverlight 4</asp:HyperLink>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+        $(document).ready(function () {
+            $(linksDiv).hover(open, close);
+            $(menuHeader).click(function (event) { event.preventDefault(); open(event) });
+            $(headerContent).click(function (event) { $(headerContent).hide("slow"); close(event); $(minimizedHeader).show("slow"); $(menuHeader).hide("slow") });
+            $(minimizedHeader).click(function () { $(headerContent).show("slow"); $(minimizedHeader).hide("slow"); $(menuHeader).show("slow") });
+            $("#HyperLink1").click(function () {
+                setFrameSource('./TerminalZero.aspx');
+            });
+            $("#HyperLink2").click(function () {
+                setFrameSource('http://tzhost.dyndns-server.com/tsweb');
+            });
+        });
+
+        function close(event) {
+            $(linksDiv).slideUp("fast");
+        }
+
+        function open(event) {
+            $(linksDiv).slideDown("normal");
+            $(linksDiv).offset.left = event.pageX;
+            $(linksDiv).offset.Top = event.pageY;
+        }
+
+        function setFrameSource(source) {
+            $('#linkContent').attr("src", source);
+        }
+    </script>
+    <table border="0" cellpadding="0" cellspacing="0" style="height: 100%; width: 100%">
         <tr>
-            <td colspan="3" class="cssLoginTitle" style="background-color: #4E4F52; height: 42px;">
-                <table>
+            <td id="headerContent" colspan="3" class="cssLoginTitle" style="background-color: #4E4F52; height: 42px;">
+                <table cellpadding="0" cellspacing="0" style="width: 100%" >
                     <tr>
-                        <td style="padding-left: 15px; width: 200px; font-size: 18px; color: White" valign="middle"
+                        <td style="padding-left: 15px; width: 180px; font-size: 18px; color: White" valign="middle"
                             align="left">
-                             <img src="images/logo.png" height="40" width=" 200px" alt="Terminal Zero" />
+                            <img src="images/logo.png" height="40" width="180px" alt="Terminal Zero" />
                         </td>
-                        <td style="width: 100%;" align="right">
+                        <td align="right" style="width: 100%; padding-right: 5px">
                             <div style="font-size: 0.5em;" class="cssAppMain">
-                                Version 1.0.0.1</div>
+                                Version 1.0.0.2</div>
                             <asp:LoginName ID="LoginName" runat="server" FormatString="Bienvenido, {0}" CssClass="cssAppMain" />
                         </td>
                     </tr>
@@ -64,44 +162,8 @@
             </td>
         </tr>
         <tr>
-            <td style="width: 130px" valign="top" align="center">
-                <div style="width: 130px">
-                    <table class="cssGrid" style="width: 100%">
-                        <tr>
-                            <td align="center" class="cssGridHeader">
-                                <p style="">
-                                    Links
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <asp:HyperLink ID="HyperLink1" CssClass="menuLink" NavigateUrl="./TerminalZero.aspx"
-                                    runat="server">Terminal Zero</asp:HyperLink>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div style="width: 130px">
-                    <table class="cssGrid" style="width: 100%">
-                        <tr>
-                            <td class="cssGridHeader">
-                                <p>
-                                    Downloads
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <asp:HyperLink ID="HyperLink2" CssClass="menuLink" NavigateUrl="~/Upload/Silverlight_4.exe"
-                                    runat="server">Silverlight 4</asp:HyperLink>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
             <td style="height: 100%; width: 100%;" valign="top">
-                <iframe src="./TerminalZero.aspx" frameborder="0" style="height: 100%;
+                <iframe id="linkContent" frameborder="0" src="TerminalZero.aspx" style="height: 100%;
                     width: 100%"></iframe>
             </td>
         </tr>

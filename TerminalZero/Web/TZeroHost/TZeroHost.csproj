@@ -66,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroConfiguration.dll</HintPath>
     </Reference>
+    <Reference Include="ZeroGUI">
+      <HintPath>..\..\..\Deploy_Debug\ZeroGUI.dll</HintPath>
+    </Reference>
     <Reference Include="ZeroLogHandle">
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroLogHandle.dll</HintPath>
     </Reference>
@@ -88,6 +91,7 @@
     <Content Include="Images\background_icons.jpg" />
     <Content Include="Images\background_icons_begin.jpg" />
     <Content Include="Images\background_icons_end.jpg" />
+    <Content Include="Images\btnNormal.png" />
     <Content Include="Images\Button1.png" />
     <Content Include="Images\Button2.png" />
     <Content Include="Images\Button3.png" />
