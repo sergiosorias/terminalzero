@@ -15,6 +15,12 @@ namespace TZeroHost.Helpers
         public string StatusMessage;
         public bool IsValid { get; private set; }
 
+        public ServiceLogHelper(System.Reflection.MethodBase method, string connID)
+        {
+            Method = method.Name;
+            Parameters = method.GetParameters();
+        }
+
         public ServiceLogHelper(string method, string connID, params object[] parameters)
         {
             TerminalCode = -1;
@@ -32,7 +38,7 @@ namespace TZeroHost.Helpers
                 action.Invoke();
                 IsValid = true;
                 Trace.Unindent();
-                Trace.WriteLineIf(ContextBuilder.LogLevel.TraceInfo,  string.Format("Terminal: {0}, Service Method -> {1}, Duration: {2}", TerminalCode, Method, DateTime.Now-stamp), "Information");
+                Trace.WriteLineIf(ContextInfo.LogLevel.TraceInfo,  string.Format("Terminal: {0}, Service Method -> {1}, Duration: {2}", TerminalCode, Method, DateTime.Now-stamp), "Information");
             }
             catch (Exception ex)
             {
@@ -48,7 +54,7 @@ namespace TZeroHost.Helpers
                     }
                 }
 
-                Trace.WriteLineIf(ContextBuilder.LogLevel.TraceError,string.Format("Terminal: {0}, Service Method -> {1}, Parameters: {2}, throw {3}", TerminalCode, Method, messageFormat, ex), "Error");
+                Trace.WriteLineIf(ContextInfo.LogLevel.TraceError,string.Format("Terminal: {0}, Service Method -> {1}, Parameters: {2}, throw {3}", TerminalCode, Method, messageFormat, ex), "Error");
             }
 
             Trace.Unindent();

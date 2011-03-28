@@ -65,6 +65,7 @@
 		  <param name="background" value="white" />
 		  <param name="minRuntimeVersion" value="3.0.40818.0" />
 		  <param name="autoUpgrade" value="true" />
+          <param name="windowless" value="true" />
           <%--http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40818.0--%>
 		  <a href="~/Downloads/Basics/Silverlight_4.exe" style="text-decoration:none">
  			  <img src="http://go.microsoft.com/fwlink/?LinkId=161376" alt="Get Microsoft Silverlight" style="border-style:none"/>

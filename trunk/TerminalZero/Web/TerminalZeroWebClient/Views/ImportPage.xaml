@@ -93,20 +93,23 @@
                     </sdk:DataGrid.Columns>
                     <sdk:DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <Grid MaxHeight="150" >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*" MaxHeight="128"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="Re-Procesar" Height="22" Margin="2" Background="Blue" Click="Button3_Click"/>
-                                    <Button Content="Copiar" Height="22" Margin="2" Background="Blue" Click="Button3_Click"/>
-                                </StackPanel>
-                                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                    <TextBox Text="{Binding Result}" IsReadOnly="True"/>    
-                                </ScrollViewer>
-                                
+                            <Grid MaxHeight="150">
+                                <sdk:TabControl>
+                                    <sdk:TabItem Header="Log">
+                                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                            <TextBox ToolTipService.ToolTip="Right Click to Copy" Text="{Binding Result}" IsReadOnly="True" MouseRightButtonDown="TextBox_MouseRightButtonDown"/>
+                                        </ScrollViewer>
+                                    </sdk:TabItem>
+                                    <sdk:TabItem Header="Processes">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Re-Procesar" Height="22" Margin="2" Background="Blue" Click="Button3_Click"/>
+                                            <Button Content="Descargar" Height="22" Margin="2" Background="Blue" Click="Button_Click"/>
+                                        </StackPanel>
+                                    </sdk:TabItem>
+                                </sdk:TabControl>
+
                             </Grid>
+
                         </DataTemplate>
                     </sdk:DataGrid.RowDetailsTemplate>
                 </sdk:DataGrid>
