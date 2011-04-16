@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TZeroHost.Users.Login" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="stylesheet" type="text/css" href="~/Styles/CSS-Styles.css" />
@@ -16,7 +15,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <table style="background-color: Gray Green; width: 100%; height: 100%">
+    <table style="background-color: Gray Green; width: 100%; height: 100%" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center" style="height: 25%;" valign="bottom">
                 <img src="../images/logoLogIn.png" width="393px" alt="Terminal Zero" />

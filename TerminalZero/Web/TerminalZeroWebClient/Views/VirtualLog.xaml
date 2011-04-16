@@ -50,5 +50,6 @@
                 <data:DataGridTextColumn x:Name="messageColumn" Binding="{Binding Path=Message}" Header="Message" Width="Auto" MinWidth="150" />
             </data:DataGrid.Columns>
         </data:DataGrid>
+        <Mycontrols:WaitCursor Grid.ColumnSpan="1" Grid.RowSpan="2" x:Name="waitCursor"/>
     </Grid>
 </navigation:Page>

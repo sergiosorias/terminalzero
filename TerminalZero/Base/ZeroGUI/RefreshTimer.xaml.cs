@@ -15,6 +15,18 @@ namespace ZeroGUI
                 Tick(this, EventArgs.Empty);
             }
         }
+        
+        public bool TickOnStartEnable
+        {
+            get { return (bool)GetValue(TickOnStartEnableProperty); }
+            set { SetValue(TickOnStartEnableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TickOnStartEnable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TickOnStartEnableProperty =
+            DependencyProperty.Register("TickOnStartEnable", typeof(bool), typeof(RefreshTimer), null);
+
+
 
         public int RefreshEvery { get; set; }
 
@@ -65,6 +77,12 @@ namespace ZeroGUI
         private void UpdateBarDel(double newValue)
         {
             remainingTime.Value = newValue;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(TickOnStartEnable)
+                OnTick();
         }
     }
 }

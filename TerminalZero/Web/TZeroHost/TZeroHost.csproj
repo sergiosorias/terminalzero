@@ -159,6 +159,7 @@
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="Scripts\jquery-1.5.1.min.js" />
     <Content Include="Scripts\JScripts.js" />
     <Content Include="Services\DatabaseDataService.svc" />
     <Content Include="Services\ServiceHelper.svc" />

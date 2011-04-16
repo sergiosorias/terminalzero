@@ -17,11 +17,7 @@ namespace TerminalZeroWebClient.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             _client = new ServiceHelperReference.ServiceHelperClient();
-            
             _client.GetTerminalsStatusCompleted += ClientGetTerminalsStatusCompleted;
-            
-            _client.GetTerminalsStatusAsync();
-            waitCursorHome.Start();
         }
 
         protected void ClientGetTerminalsStatusCompleted(object sender, ServiceHelperReference.GetTerminalsStatusCompletedEventArgs e)
@@ -31,11 +27,13 @@ namespace TerminalZeroWebClient.Views
                 terminalContent.Children.Clear();
                 foreach (var item in e.Result.Result)
                 {
-                    Controls.TerminalStatus T = new Controls.TerminalStatus();
-                    T.Margin = new Thickness(1,1.5,1,1.5);
-                    T.DataContext = item;
-                    T.Width = 300;
-                    terminalContent.Children.Add(T);
+                    var terminalStatus = new Controls.TerminalStatus
+                        {
+                            Margin = new Thickness(1, 1.5, 1, 1.5),
+                            DataContext = item,
+                            Width = 300
+                        };
+                    terminalContent.Children.Add(terminalStatus);
                 }
                 
             }
@@ -44,6 +42,7 @@ namespace TerminalZeroWebClient.Views
 
         private void RefreshTimerTick(object sender, EventArgs e)
         {
+            waitCursorHome.Start();
             _client.GetTerminalsStatusAsync();
         }
     }

@@ -46,7 +46,10 @@ namespace TerminalZeroWebClient.Views
                 {
                     searchBox_Search(null, new SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
                 }
+                
             });
+
+            waitCursor.Stop();
         }
 
         private void btnUpload_Click(object sender, RoutedEventArgs e)
@@ -66,6 +69,7 @@ namespace TerminalZeroWebClient.Views
 
         private void UploadFile(string fileName, byte[] data)
         {
+            waitCursor.Start();
             //UriBuilder ub = new UriBuilder(new Uri(Application.Current.Host.Source, "../filereceiver.ashx"));
             //ub.Query = string.Format("filename={0}", fileName.Name);
 
@@ -83,6 +87,7 @@ namespace TerminalZeroWebClient.Views
         
         private void _uploadClient_UploadFileSilverlightCompleted(object sender, UploadFileSilverlightCompletedEventArgs e)
         {
+            waitCursor.Stop();
             fileProgress.Value = 100;
         }
 
@@ -102,6 +107,7 @@ namespace TerminalZeroWebClient.Views
 
         private void RefreshTimer_Tick(object sender, EventArgs e)
         {
+            waitCursor.Start();
             client.GetPackAsync(startDate.SelectedDate.GetValueOrDefault(), endDate.SelectedDate.GetValueOrDefault());
         }
 

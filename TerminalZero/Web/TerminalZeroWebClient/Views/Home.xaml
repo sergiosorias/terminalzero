@@ -15,12 +15,12 @@
 
                     <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
                                    Text="Home"/>
-                    <myControls:RefreshTimer Tick="RefreshTimerTick" RefreshEvery="20" Width="150" HorizontalAlignment="Left"/>
+                    <myControls:RefreshTimer Tick="RefreshTimerTick" TickOnStartEnable="True" RefreshEvery="20" Width="150" HorizontalAlignment="Left"/>
                     <StackPanel Name="terminalContent" HorizontalAlignment="Left">
 
                     </StackPanel>
                 </StackPanel>
-                <myControls:WaitCursor x:Name="waitCursorHome"/>
+                <myControls:WaitCursor x:Name="waitCursorHome" WaitingText="Cargando.."/>
             </Grid>
             
         </ScrollViewer>
