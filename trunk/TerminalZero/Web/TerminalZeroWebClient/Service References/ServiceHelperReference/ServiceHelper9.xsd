@@ -11,6 +11,7 @@
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="IsSyncronized" nillable="true" type="xs:boolean" />
           <xs:element minOccurs="0" name="IsTerminalZero" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LastKnownIP" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="LastSync" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Modules" nillable="true" type="tns:ArrayOfModule" />
           <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />

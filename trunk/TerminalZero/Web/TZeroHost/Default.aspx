@@ -54,14 +54,94 @@
         .headerButtonParent
         {
             cursor: hand;
-            text-align:center;
-            top: 1px; 
-            left: 300px; 
-            width:120;
-            height:35;
-            position: absolute; 
-            background-repeat:no-repeat;
+            text-align: center;
+            top: 1px;
+            left: 300px;
+            width: 120;
+            height: 35;
+            position: absolute;
+            background-repeat: no-repeat;
             background-image: url('./images/btnNormal.png');
+        }
+                
+        ul.topnav
+        {
+            list-style: none;
+            padding: 0 20px;
+            margin: 0;
+            float: left;
+            width: 920px;
+            background: #222;
+            font-size: 1.2em;
+            background: url(topnav_bg.gif) repeat-x;
+        }
+        ul.topnav li
+        {
+            float: left;
+            margin: 0;
+            padding: 0 15px 0 0;
+            position: relative; /*--Declare X and Y axis base for sub navigation--*/
+        }
+        ul.topnav li a
+        {
+            padding: 10px 5px;
+            color: #fff;
+            display: block;
+            text-decoration: none;
+            float: left;
+        }
+        ul.topnav li a:hover
+        {
+            background: url(topnav_hover.gif) no-repeat center top;
+        }
+        ul.topnav li span
+        {
+            /*--Drop down trigger styles--*/
+            width: 17px;
+            height: 55px;
+            float: left;
+            background: url(subnav_btn.gif) no-repeat center top;
+        }
+        ul.topnav li span.subhover
+        {
+            background-position: center bottom;
+            cursor: pointer;
+        }
+        /*--Hover effect for trigger--*/
+        ul.topnav li ul.subnav
+        {
+            list-style: none;
+            position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
+            left: 0;
+            top: 35px;
+            background: #333;
+            margin: 0;
+            padding: 0;
+            display: none;
+            float: left;
+            width: 170px;
+            border: 1px solid #111;
+        }
+        ul.topnav li ul.subnav li
+        {
+            margin: 0;
+            padding: 0;
+            border-top: 1px solid #252525; /*--Create bevel effect--*/
+            border-bottom: 1px solid #444; /*--Create bevel effect--*/
+            clear: both;
+            width: 170px;
+        }
+        html ul.topnav li ul.subnav li a
+        {
+            float: left;
+            width: 145px;
+            background: #333 url(dropdown_linkbg.gif) no-repeat 10px center;
+            padding-left: 20px;
+        }
+        html ul.topnav li ul.subnav li a:hover
+        {
+            /*--Hover effect for subnav links--*/
+            background: #222 url(dropdown_linkbg.gif) no-repeat 10px center;
         }
     </style>
     <script type="text/javascript" src="Scripts/jquery-1.4.1.min.js" />
@@ -74,53 +154,58 @@
 </head>
 <body>
     <form id="form1" runat="server" style="height: 100%; width: 100%">
-    <div id="menuHeader" class="headerButtonParent">
-        <a class="headerButton">Menu</a>
+    <input type="hidden" runat="server" value="" id="filesToShow" />
+    <div id="menuHeader" class="headerButtonParent" style="width: 140; background-image: url('');">
+         <ul class="topnav">
+            <li><a href="#">Links</a>
+                 <ul class="subnav">
+                    <li><a id="HyperLink1" href="#">Web Control</a></li>
+                    <li><a id="HyperLink2" href="#">TS - Server</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Download</a>
+                <ul class="subnav" id="filesToDownload">
+                    
+                </ul>
+            </li>
+        </ul>
     </div>
-    <div id="minimizedHeader" style="display:none" class="headerButtonParent">
+    <div id="minimizedHeader" style="display: none" class="headerButtonParent">
         <a class="headerButton">Show Header</a>
-    </div>
-    <div id="linksDiv" style="background-color:transparent; width:140; display:none" class="headerButtonParent">
-        <table class="cssGrid" style="width: 100%">
-            <tr>
-                <td align="center" class="cssGridHeader">
-                    <p style="">
-                        Links
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <asp:HyperLink ID="HyperLink1" CssClass="menuLink" NavigateUrl="#" runat="server">Web Control</asp:HyperLink>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <asp:HyperLink ID="HyperLink2" CssClass="menuLink" NavigateUrl="#" runat="server">TS - Server</asp:HyperLink>
-                </td>
-            </tr>
-            <tr>
-                <td class="cssGridHeader">
-                    <p>
-                        Downloads
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <asp:HyperLink ID="HyperLink3" CssClass="menuLink" Target="_blank" NavigateUrl="~/Upload/Silverlight_4.exe"
-                        runat="server">Silverlight 4</asp:HyperLink>
-                </td>
-            </tr>
-        </table>
     </div>
     
     <script>
         $(document).ready(function () {
-            $(linksDiv).hover(open, close);
-            $(menuHeader).click(function (event) { event.preventDefault(); open(event) });
-            $(headerContent).click(function (event) { $(headerContent).hide("slow"); close(event); $(minimizedHeader).show("slow"); $(menuHeader).hide("slow") });
+            $("ul.subnav").parent().append("<span/></span>"); //Only shows drop down trigger when js is enabled (Adds empty span tag after ul.subnav*)
+            var array = $("#filesToShow").attr("value").toString().split('|');
+            for (file in array) {
+                if (array[file]) {
+                    $("#filesToDownload").append("<li><a href=\"upload/" + array[file] + "\" target=\"_blank\">" + array[file] + "</a></li>");
+                }
+            }
+            
+            $("ul.topnav li span").click(function () { //When trigger is clicked...
+                //Following events are applied to the subnav itself (moving subnav up and down)
+                $(this).parent().find("ul.subnav").slideDown('fast').show(); //Drop down the subnav on click
+
+                $(this).parent().hover(function () {
+                }, function () {
+                    $(this).parent().find("ul.subnav").slideUp('slow'); //When the mouse hovers out of the subnav, move it back up
+                });
+
+                //Following events are applied to the trigger (Hover events for the trigger)
+            }).hover(function () {
+                $(this).addClass("subhover"); //On hover over, add class "subhover"
+            }, function () {	//On Hover Out
+                $(this).removeClass("subhover"); //On hover out, remove class "subhover"
+            });
+
+        });
+
+        $(document).ready(function () {
+            $(headerContent).click(function (event) { $(headerContent).hide("slow"); $(minimizedHeader).show("slow"); $(menuHeader).hide("slow") });
             $(minimizedHeader).click(function () { $(headerContent).show("slow"); $(minimizedHeader).hide("slow"); $(menuHeader).show("slow") });
+
             $("#HyperLink1").click(function () {
                 setFrameSource('./TerminalZero.aspx');
             });
@@ -129,24 +214,15 @@
             });
         });
 
-        function close(event) {
-            $(linksDiv).slideUp("fast");
-        }
-
-        function open(event) {
-            $(linksDiv).slideDown("normal");
-            $(linksDiv).offset.left = event.pageX;
-            $(linksDiv).offset.Top = event.pageY;
-        }
-
         function setFrameSource(source) {
             $('#linkContent').attr("src", source);
         }
     </script>
     <table border="0" cellpadding="0" cellspacing="0" style="height: 100%; width: 100%">
         <tr>
-            <td id="headerContent" colspan="3" class="cssLoginTitle" style="background-color: #4E4F52; height: 42px;">
-                <table cellpadding="0" cellspacing="0" style="width: 100%" >
+            <td id="headerContent" colspan="3" class="cssLoginTitle" style="background-color: #4E4F52;
+                height: 42px;">
+                <table cellpadding="0" cellspacing="0" style="width: 100%">
                     <tr>
                         <td style="padding-left: 15px; width: 180px; font-size: 18px; color: White" valign="middle"
                             align="left">

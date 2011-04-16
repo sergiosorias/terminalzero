@@ -591,6 +591,8 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
         
         private bool IsTerminalZeroField;
         
+        private string LastKnownIPField;
+        
         private System.Nullable<System.DateTime> LastSyncField;
         
         private System.Collections.ObjectModel.ObservableCollection<TerminalZeroWebClient.ServiceHelperReference.Module> ModulesField;
@@ -673,6 +675,19 @@ namespace TerminalZeroWebClient.ServiceHelperReference {
                 if ((this.IsTerminalZeroField.Equals(value) != true)) {
                     this.IsTerminalZeroField = value;
                     this.RaisePropertyChanged("IsTerminalZero");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastKnownIP {
+            get {
+                return this.LastKnownIPField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastKnownIPField, value) != true)) {
+                    this.LastKnownIPField = value;
+                    this.RaisePropertyChanged("LastKnownIP");
                 }
             }
         }

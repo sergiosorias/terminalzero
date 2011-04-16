@@ -68,6 +68,7 @@ namespace TZeroHost.Services
                     {
                         TerminalStatus tst = new TerminalStatus();
                         tst.Terminal = terminal;
+                        tst.Info += string.Format("IP: {0}\n", terminal.LastKnownIP);
                         var tt = conf.GetPacksToSend(tst.Terminal.Code);
                         if (tt.Count > 0)
                         {

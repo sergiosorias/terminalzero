@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 using System.Windows.Data;
+using System.Windows.Navigation;
 using System.Windows.Printing;
+using TerminalZeroWebClient.ServiceHelperReference;
+using ZeroGUI;
 
 namespace TerminalZeroWebClient.Views
 {
     public partial class VirtualLog : Page
     {
 
-        ServiceHelperReference.ServiceHelperClient _client;
+        ServiceHelperClient _client;
         
         public VirtualLog()
         {
@@ -20,27 +22,27 @@ namespace TerminalZeroWebClient.Views
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _client = new ServiceHelperReference.ServiceHelperClient();
-            _client.GetLogsCompleted += new EventHandler<ServiceHelperReference.GetLogsCompletedEventArgs>(client_GetLogsCompleted);
+            _client = new ServiceHelperClient();
+            _client.GetLogsCompleted += client_GetLogsCompleted;
         }
 
-        void client_GetLogsCompleted(object sender, ServiceHelperReference.GetLogsCompletedEventArgs e)
+        void client_GetLogsCompleted(object sender, GetLogsCompletedEventArgs e)
         {
             Dispatcher.BeginInvoke(() =>
                 {
-                    PagedCollectionView taskListView = new PagedCollectionView(e.Result);
+                    var taskListView = new PagedCollectionView(e.Result);
                     if (taskListView.CanGroup)
                     {
                         if (cbGroupByIndend.IsChecked.HasValue && cbGroupByIndend.IsChecked.Value)
                         {
-                            PropertyGroupDescription group = new PropertyGroupDescription();
+                            var group = new PropertyGroupDescription();
                             group.PropertyName = "IndentLevel";
                             taskListView.GroupDescriptions.Add(group);
                         }
 
                         if (cbGroupByMessage.IsChecked.HasValue && cbGroupByMessage.IsChecked.Value)
                         {
-                            PropertyGroupDescription group = new PropertyGroupDescription();
+                            var group = new PropertyGroupDescription();
                             group.PropertyName = "Message";
                             taskListView.GroupDescriptions.Add(group);
                         }
@@ -50,19 +52,22 @@ namespace TerminalZeroWebClient.Views
                     logEntryEventArgsDataGrid.ItemsSource = taskListView;
                     if(!string.IsNullOrWhiteSpace(searchBox.txtSearchCriteria.Text))
                     {
-                        SearchBox_Search(null, new ZeroGUI.SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
+                        SearchBox_Search(null, new SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
                     }
+
+                    waitCursor.Stop();
                 });
         }
         
         private void RefreshTimer_Tick(object sender, EventArgs e)
         {
+            waitCursor.Start();
             _client.GetLogsAsync(DateTime.Now);
         }
 
-        private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
+        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
-            PagedCollectionView taskListView = logEntryEventArgsDataGrid.ItemsSource as PagedCollectionView;
+            var taskListView = logEntryEventArgsDataGrid.ItemsSource as PagedCollectionView;
 
             if (taskListView!=null)
             {
@@ -70,7 +75,7 @@ namespace TerminalZeroWebClient.Views
                 {
                     taskListView.Filter = new Predicate<object>(i =>
                     {
-                        ServiceHelperReference.VirtualLogEntry entry = i as ServiceHelperReference.VirtualLogEntry;
+                        var entry = i as VirtualLogEntry;
                         return (entry != null && entry.Message.ToUpper().Contains(e.Criteria.ToUpper()));
                     });
 
@@ -81,7 +86,7 @@ namespace TerminalZeroWebClient.Views
 
         private void btnPrint_Click(object sender, RoutedEventArgs e)
         {
-            PrintDocument pd = new PrintDocument();
+            var pd = new PrintDocument();
             pd.PrintPage += (s, args) => 
             {
                 args.PageVisual = logEntryEventArgsDataGrid;

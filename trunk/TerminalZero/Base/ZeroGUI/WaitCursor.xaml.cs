@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
 namespace ZeroGUI
@@ -11,8 +12,20 @@ namespace ZeroGUI
         public WaitCursor()
         {
             InitializeComponent();
+            DataContext = this;
+            
         }
 
+        public string WaitingText
+        {
+            get { return (string)GetValue(WaitingTextProperty); }
+            set { SetValue(WaitingTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for WaitingText.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WaitingTextProperty =
+            DependencyProperty.Register("WaitingText", typeof(string), typeof(WaitCursor), new PropertyMetadata("Loading.."));
+        
         public void Start()
         {
             Visibility = System.Windows.Visibility.Visible;
@@ -32,10 +45,15 @@ namespace ZeroGUI
             }
             Dispatcher.BeginInvoke(new Update(() =>
             {
-                Visibility = System.Windows.Visibility.Collapsed;
+                Visibility = Visibility.Collapsed;
             }), null);
             
             
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Stop();
         }
     }
 }

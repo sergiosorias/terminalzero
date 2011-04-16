@@ -54,8 +54,13 @@
             </Canvas>
         </Border>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Loading.." Foreground="#FF5C769B"/>
+            <TextBlock Text="{Binding Path=WaitingText, Mode=OneWay}" Foreground="#FF5C769B"/>
         </StackPanel>
-        
+        <Button Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Name="btnClose" Click="btnClose_Click" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF5F5454">
+            <Button.Content>
+                <TextBlock Text="X" FontSize="13" FontWeight="Bold"/>
+            </Button.Content>
+            
+        </Button>
     </Grid>
 </UserControl>

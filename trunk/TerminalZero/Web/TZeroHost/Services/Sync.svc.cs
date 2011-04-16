@@ -29,8 +29,9 @@ namespace TZeroHost.Services
                         {
                             if (Config.ValidateTerminal(terminal, name, out hlp.StatusMessage))
                             {
-                                ret.Result = Config.CreateConnection(terminal);
-                                Trace.WriteLine(string.Format("Iniciando Conexión con terminal {0} - ID {1} - ConnID {2} - IP: {3}", name, terminal, ret.Result, GetWCFMethodCallerIp()));
+                                string ip = GetWCFMethodCallerIp();
+                                ret.Result = Config.CreateConnection(terminal, ip);
+                                Trace.WriteLine(string.Format("Iniciando Conexión con terminal {0} - ID {1} - ConnID {2} - IP: {3}", name, terminal, ret.Result, ip));
                             }
                         }
                     });
@@ -51,7 +52,7 @@ namespace TZeroHost.Services
                 MessageProperties messageProperties = context.IncomingMessageProperties;
                 RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
 
-                ret = endpointProperty.Address;
+                if (endpointProperty != null) ret = endpointProperty.Address;
             }
             catch 
             {
