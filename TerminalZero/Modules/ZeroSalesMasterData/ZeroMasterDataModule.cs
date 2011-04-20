@@ -12,13 +12,14 @@ using ZeroGUI;
 using ZeroMasterData.Entities;
 using ZeroMasterData.Pages;
 using ZeroMasterData.Pages.Controls;
+using ZeroMasterData.Properties;
 
 namespace ZeroMasterData
 {
     public class ZeroMasterDataModule : ZeroModule
     {
         public ZeroMasterDataModule(ITerminal iCurrentTerminal)
-            : base(iCurrentTerminal, 3, "ABM de las estructuras necesarias para realizar operaciones diarias")
+            : base(iCurrentTerminal, 3, Resources.MasterDataModuleDescription)
         {
             BuildPosibleActions();
         }

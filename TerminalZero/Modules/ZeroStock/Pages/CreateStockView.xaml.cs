@@ -19,7 +19,7 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for NewStockView.xaml
     /// </summary>
-    public partial class CreateStockView : ZeroBasePage
+    public partial class CreateStockView : NavigationBasePage
     {
         private readonly ITerminal _terminal;
         private StockHeader _header;
@@ -150,7 +150,7 @@ namespace ZeroStock.Pages
 
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
 
-                    stockGrid.Add(_header.AddNewStockItem(prod, partQty.Code, _lot));
+                    stockGrid.AddItem(_header.AddNewStockItem(prod, partQty.Code, _lot));
 
                     if(_header.DeliveryDocumentHeader!=null)
                         _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(prod, partQty.Code,_lot);

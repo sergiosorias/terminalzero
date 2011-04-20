@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using ZeroCommonClasses.Interfaces;
@@ -10,13 +11,12 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for ProductGroupDetail.xaml
     /// </summary>
-    public partial class ProductGroupDetail : ZeroBasePage
+    public partial class ProductGroupDetail : NavigationBasePage
     {
         private MasterDataEntities DataProvider;
         public ProductGroupDetail(MasterDataEntities entities)
         {
             InitializeComponent();
-            ControlMode = ControlMode.New;
             DataProvider = entities;
             ProductGroupNew = ProductGroup.CreateProductGroup(
                     DataProvider.ProductGroups.Count(),
@@ -39,5 +39,6 @@ namespace ZeroMasterData.Pages.Controls
                 grid1.DataContext = ProductGroupNew;
             }
         }
+        
     }
 }

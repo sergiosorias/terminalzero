@@ -60,7 +60,9 @@ namespace ZeroMasterData
                     else if (typeof(Supplier).ToString() == item.RowTypeName)
                         ContextExtentions.MergeEntities(ent, item.DeserializeRows<Supplier>(e.WorkingDirectory));
                     else if (typeof(Customer).ToString() == item.RowTypeName)
+                    {
                         ContextExtentions.MergeEntities(ent, item.DeserializeRows<Customer>(e.WorkingDirectory));
+                    }
                 }
 
                 ent.SaveChanges();

@@ -38,7 +38,6 @@ namespace ZeroConfiguration.Pages
 
         private void nameText_KeyDown(object sender, KeyEventArgs e)
         {
-            
             if(e.Key == Key.Enter)
             {
                 namePass.Focus();

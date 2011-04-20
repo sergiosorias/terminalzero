@@ -21,11 +21,14 @@ namespace ZeroConfiguration
 {
     public class ZeroConfigurationModule : ZeroModule, ITerminalManager
     {
+        private const string K_administrator = "Administrator";
+        private const string K_password = "admin";
+
         private Synchronizer _sync;
         public ZeroAction SyncAction;
         private bool _isTerminalZero;
         public ZeroConfigurationModule(ITerminal iCurrentTerminal)
-            : base(iCurrentTerminal, 2, "Administra configuraciones sobre las terminales")
+            : base(iCurrentTerminal, 2, Resources.ConfigurationModuleDescription)
         {
             BuildPosibleActions();
             BuildRulesActions();
@@ -66,17 +69,17 @@ namespace ZeroConfiguration
 
         private void ValidateAdminUser()
         {
-            if (Membership.GetUser("Administrator") == null)
+            if (Membership.GetUser(K_administrator) == null)
             {
-                Membership.CreateUser("Administrator", "tzadmin");
+                Membership.CreateUser(K_administrator, K_password);
             }
         }
 
         private void OpenLogInDialog()
         {
-//#if DEBUG
-//            OwnerTerminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser("Administrator", true), false));
-//#else
+#if DEBUG
+            OwnerTerminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser(K_administrator, true), false));
+#else
             var view = new UserLogIn();
             bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
             if (dialogResult.GetValueOrDefault())
@@ -100,7 +103,7 @@ namespace ZeroConfiguration
                     ExecuteAction(action);
                 }
             }
-//#endif
+#endif
         }
 
         private void StartSyncronizer()
@@ -324,14 +327,7 @@ namespace ZeroConfiguration
                             actParts = item.Split('|');
                             if (OwnerTerminal.Manager.ExistsAction(actParts[0].Trim(), out act))
                             {
-                                if (actParts.Length > 1)
-                                {
-                                    act.Alias = actParts[1].Trim();
-                                }
-                                else
-                                {
-                                    act.Alias = actParts[0].Substring(actParts[0].LastIndexOf('@') + 1).Trim(); ;
-                                }
+                                act.SetAlias(actParts);
                                 actions.Add(act);
                             }
                         }

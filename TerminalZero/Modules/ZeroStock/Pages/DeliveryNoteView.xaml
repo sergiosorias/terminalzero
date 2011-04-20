@@ -1,4 +1,4 @@
-﻿<base:ZeroBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
                    x:Class="ZeroStock.Pages.DeliveryNoteView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -30,8 +30,8 @@
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>
-                <controls:DeliveryDocumentGrid x:Name="DeliveryGrid" />
+                <controls:DeliveryDocumentList x:Name="DeliveryGrid" />
             </ContentPresenter.Content>
         </ContentPresenter>
     </Grid>
-</base:ZeroBasePage>
+</base:NavigationBasePage>

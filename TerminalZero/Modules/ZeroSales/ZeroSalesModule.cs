@@ -3,13 +3,14 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroSales.Pages;
+        using ZeroSales.Properties;
 
 namespace ZeroSales
 {
     public class ZeroSalesModule : ZeroModule
     {
         public ZeroSalesModule(ITerminal terminal)
-            :base(terminal,7,"Operaciones referentes a ventas")
+            :base(terminal,7,Resources.SalesModuleDescription)
         {
             BuildPosibleActions();
         }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using ZeroBarcode.Pages.Controls;
+using ZeroBarcode.Properties;
 using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
@@ -16,7 +17,7 @@ namespace ZeroBarcode
     public class ZeroBarcodeModule : ZeroModule
     {
         public ZeroBarcodeModule(ITerminal terminal)
-            :base(terminal,6,"Generador de Códigos de barras")
+            :base(terminal,6,Resources.BarcodeModuleDescription)
         {
             OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenBarcodeGeneratorView, OpenCodebarView));
         }

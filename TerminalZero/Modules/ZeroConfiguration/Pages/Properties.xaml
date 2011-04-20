@@ -1,4 +1,4 @@
-﻿<ZeroGUI:ZeroBasePage 
+﻿<ZeroGUI:NavigationBasePage 
     xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI" 
     x:Class="ZeroConfiguration.Pages.Properties" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
@@ -117,4 +117,4 @@
 			</TabItem>
 		</TabControl>
 	</Grid>
-</ZeroGUI:ZeroBasePage>
+</ZeroGUI:NavigationBasePage>

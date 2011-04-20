@@ -19,16 +19,13 @@ namespace ZeroConfiguration.Pages.Controls
     /// <summary>
     /// Interaction logic for UserChangePassword.xaml
     /// </summary>
-    public partial class UserChangePassword : ZeroGUI.ZeroBasePage
+    public partial class UserChangePassword : ZeroGUI.NavigationBasePage
     {
         private MembershipUser _user;
         public UserChangePassword()
         {
             InitializeComponent();
-            ControlMode = ZeroCommonClasses.Interfaces.ControlMode.Update;
         }
-
-        #region Implementation of IZeroPage
 
         public override bool CanAccept(object parameter)
         {
@@ -46,8 +43,6 @@ namespace ZeroConfiguration.Pages.Controls
             
             return ret ;
         }
-
-        #endregion
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

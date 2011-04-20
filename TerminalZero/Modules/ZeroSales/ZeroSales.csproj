@@ -59,8 +59,8 @@
     <Compile Include="Pages\Controls\PaymentInstrumentGrid.xaml.cs">
       <DependentUpon>PaymentInstrumentGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\SaleGrid.xaml.cs">
-      <DependentUpon>SaleGrid.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\SaleList.xaml.cs">
+      <DependentUpon>SaleList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\CreateSaleView.xaml.cs">
       <DependentUpon>CreateSaleView.xaml</DependentUpon>
@@ -112,7 +112,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\SaleGrid.xaml">
+    <Page Include="Pages\Controls\SaleList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -78,6 +78,7 @@
           <Property Name="LastSync" Type="datetime" />
           <Property Name="IsSyncronized" Type="bit" />
           <Property Name="IsTerminalZero" Type="bit" Nullable="false" />
+          <Property Name="LastKnownIP" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Terminal_Module">
           <Key>
@@ -246,6 +247,7 @@
           <NavigationProperty Name="TerminalProperties" Relationship="TZero_ConfigModel.FK_TerminalProperty_Terminal" FromRole="Terminal" ToRole="TerminalProperty" />
           <NavigationProperty Name="Modules" Relationship="TZero_ConfigModel.Terminal_Module" FromRole="Terminal" ToRole="Module" />
           <Property Type="Boolean" Name="IsTerminalZero" Nullable="false" />
+          <Property Type="String" Name="LastKnownIP" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="TerminalProperty">
           <Key>
@@ -327,7 +329,8 @@
             <ScalarProperty Name="Description" ColumnName="Description" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Terminals"><EntityTypeMapping TypeName="TZero_ConfigModel.Terminal"><MappingFragment StoreEntitySet="Terminal">
-            <ScalarProperty Name="IsTerminalZero" ColumnName="IsTerminalZero" />
+            <ScalarProperty Name="LastKnownIP" ColumnName="LastKnownIP" />
+                <ScalarProperty Name="IsTerminalZero" ColumnName="IsTerminalZero" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="Description" ColumnName="Description" />

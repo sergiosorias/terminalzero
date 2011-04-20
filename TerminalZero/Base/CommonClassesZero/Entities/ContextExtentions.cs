@@ -115,6 +115,11 @@ namespace ZeroCommonClasses.Helpers
 
             foreach (var item in sourceList)
             {
+                if(item is IExportableEntity)
+                {
+                    IExportableEntity ent = item as IExportableEntity;
+                    ent.UpdateStatus(EntityStatus.Imported);
+                }
                 MergeItem(targetList, item, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
             }
             

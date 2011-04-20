@@ -64,7 +64,9 @@
     <Compile Include="GlobalObjects\ActionRequest.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
+    <Compile Include="Helpers\ComparisonExtentions.cs" />
     <Compile Include="Interfaces\IExportableEntity.cs" />
+    <Compile Include="Interfaces\ISelectable.cs" />
     <Compile Include="Interfaces\ITerminalManager.cs" />
     <Compile Include="Pack\ExportEntitiesPackInfo.cs" />
     <Compile Include="Pack\PackInfoBase.cs" />

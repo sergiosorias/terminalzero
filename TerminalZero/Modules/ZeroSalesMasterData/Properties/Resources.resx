@@ -148,4 +148,7 @@
 	<data name="CustomerNew">
 		<value xml:space="preserve">Cliente Nuevo</value>
 	</data>
+	<data name="MasterDataModuleDescription">
+		<value xml:space="preserve">ABM de las estructuras necesarias para realizar operaciones diarias</value>
+	</data>
 </root>

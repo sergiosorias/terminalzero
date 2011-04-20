@@ -18,9 +18,8 @@ namespace ZeroCommonClasses.GlobalObjects
         }
         public ZeroSession Session { get; private set; }
         public ActionType ActionType { get; private set; }
-        public bool AlwaysVisible { get; set; }
         public string Name { get; private set; }
-        public string Alias { get; set; }
+        public string Alias { get; private set; }
         public string RuleToSatisfyName { get; private set; }
         public Predicate<object> RuleToSatisfy { get; set; }
         public Action ExecuteAction { get; private set; }
@@ -28,7 +27,6 @@ namespace ZeroCommonClasses.GlobalObjects
         private bool _canExecute;
         public ZeroAction(ActionType actionType, string name, Action executeAction)
         {
-            AlwaysVisible = false;
             ActionType = actionType;
             Name = name;
             ExecuteAction = executeAction;
@@ -117,5 +115,17 @@ namespace ZeroCommonClasses.GlobalObjects
         }
 
         #endregion
+
+        public void SetAlias(string[] nameParts)
+        {
+            if (nameParts.Length > 1)
+            {
+                Alias = nameParts[1].Trim();
+            }
+            else
+            {
+                Alias = nameParts[0].Substring(nameParts[0].LastIndexOf('@') + 1).Trim(); ;
+            }
+        }
     }
 }

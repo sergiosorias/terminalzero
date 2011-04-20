@@ -141,4 +141,7 @@
   <data name="WrongYear" xml:space="preserve">
     <value />
   </data>
+	<data name="SalesModuleDescription">
+		<value xml:space="preserve">Operaciones referentes a ventas</value>
+	</data>
 </root>

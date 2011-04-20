@@ -202,4 +202,7 @@
   <data name="EditUser" xml:space="preserve">
     <value>Editar Usuario</value>
   </data>
+	<data name="ConfigurationModuleDescription">
+		<value xml:space="preserve">Administra configuraciones sobre las terminales</value>
+	</data>
 </root>

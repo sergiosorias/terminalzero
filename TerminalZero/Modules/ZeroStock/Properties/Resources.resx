@@ -137,4 +137,7 @@
 	<data name="NewDeliveryNote">
 		<value xml:space="preserve">Nuevo remito</value>
 	</data>
+	<data name="StockModuleDescription">
+		<value xml:space="preserve">Operaciones referentes al stock de productos</value>
+	</data>
 </root>

@@ -4,7 +4,7 @@ using ZeroCommonClasses.Interfaces;
 
 namespace ZeroStock.Entities
 {
-    public partial class DeliveryDocumentHeader : IExportableEntity
+    public partial class DeliveryDocumentHeader : IExportableEntity, ISelectable
     {
         public int TerminalDestination
         {
@@ -36,6 +36,20 @@ namespace ZeroStock.Entities
 
             return item;
         }
+
+        #region ISelectable Members
+
+        public bool Contains(string data)
+        {
+            return Supplier.Contains(data) || ZeroCommonClasses.Helpers.ComparisonExtentions.ContainsIgnoreCase(data, Note);
+        }
+
+        public bool Contains(DateTime data)
+        {
+            return Date.Date == data.Date;
+        }
+
+        #endregion
     }
 
     public partial class DeliveryDocumentItem : IExportableEntity

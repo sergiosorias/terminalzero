@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroConfiguration.Pages.Controls
@@ -10,32 +11,12 @@ namespace ZeroConfiguration.Pages.Controls
     /// <summary>
     /// Interaction logic for UserDetail.xaml
     /// </summary>
-    public partial class UserDetail : ZeroGUI.ZeroBasePage
+    public partial class UserDetail : ZeroGUI.NavigationBasePage
     {
         public UserDetail()
         {
             InitializeComponent();
             ControlMode = ControlMode.Update;
-        }
-
-        private void grid1_Loaded(object sender, RoutedEventArgs e)
-        {
-            var a = new System.Windows.Data.Binding("UserName");
-            
-            switch (ControlMode)
-            {
-                case ControlMode.New:
-                    lblNameTextBox.Visibility = Visibility.Visible;
-                    nameTextBox.Visibility = Visibility.Visible;
-                    chbIsApproved.Visibility = Visibility.Collapsed;
-                    btnResetPassword.Visibility = Visibility.Collapsed;
-                    a.Mode = System.Windows.Data.BindingMode.TwoWay;
-                    break;
-                default:
-                    emailTextBox.DataContext = DataContext;
-                    a.Mode = System.Windows.Data.BindingMode.OneWay;
-                    break;
-            }
         }
 
         private void btnResetPassword_Click(object sender, RoutedEventArgs e)
@@ -78,6 +59,26 @@ namespace ZeroConfiguration.Pages.Controls
             }
             
             return ret;
+        }
+
+        protected override void OnControlModeChanged(ControlMode newMode)
+        {
+            var a = new Binding("UserName");
+
+            switch (newMode)
+            {
+                case ControlMode.New:
+                    lblNameTextBox.Visibility = Visibility.Visible;
+                    nameTextBox.Visibility = Visibility.Visible;
+                    chbIsApproved.Visibility = Visibility.Collapsed;
+                    btnResetPassword.Visibility = Visibility.Collapsed;
+                    a.Mode = BindingMode.TwoWay;
+                    break;
+                default:
+                    emailTextBox.DataContext = DataContext;
+                    a.Mode = BindingMode.OneWay;
+                    break;
+            }
         }
 
         private bool TryCreateUser(out string msg)

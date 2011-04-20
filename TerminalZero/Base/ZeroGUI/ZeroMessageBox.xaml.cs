@@ -61,10 +61,10 @@ namespace ZeroGUI
                     ((UserControl)Content).HorizontalContentAlignment = HorizontalAlignment.Stretch;
                     ((UserControl)Content).VerticalContentAlignment = VerticalAlignment.Stretch;
                 }
-                if(Content is ZeroBasePage)
+                if(Content is NavigationBasePage)
                 {
-                    _acceptAction.RuleToSatisfy = ((ZeroBasePage)value).CanAccept;
-                    _cancelAction.RuleToSatisfy = ((ZeroBasePage)value).CanCancel;
+                    _acceptAction.RuleToSatisfy = ((NavigationBasePage)value).CanAccept;
+                    _cancelAction.RuleToSatisfy = ((NavigationBasePage)value).CanCancel;
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace ZeroGUI
 
         private void CurrentLoaded(object sender, RoutedEventArgs e)
         {
-            if (Content is ZeroBasePage)
+            if (Content is NavigationBasePage)
             {
                 
             }

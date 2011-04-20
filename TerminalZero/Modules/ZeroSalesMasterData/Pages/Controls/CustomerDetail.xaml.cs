@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
@@ -14,7 +15,7 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for SupplierDetail.xaml
     /// </summary>
-    public partial class CustomerDetail : ZeroBasePage
+    public partial class CustomerDetail : NavigationBasePage
     {
         private Customer _CustomerNew;
         public Customer CurrentCustomer 
