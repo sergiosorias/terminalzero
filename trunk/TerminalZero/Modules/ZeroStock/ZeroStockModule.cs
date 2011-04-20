@@ -10,13 +10,14 @@ using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 using ZeroStock.Entities;
 using ZeroStock.Pages;
+using ZeroStock.Properties;
 
 namespace ZeroStock
 {
     public class ZeroStockModule : ZeroModule
     {
         public ZeroStockModule(ITerminal currentTerminal)
-            : base(currentTerminal, 4, "Operaciones referentes al stock de productos")
+            : base(currentTerminal, 4, Resources.StockModuleDescription)
         {
             BuildPosibleActions();
         }

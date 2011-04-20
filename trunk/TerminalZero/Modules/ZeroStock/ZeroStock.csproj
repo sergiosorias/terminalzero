@@ -57,14 +57,15 @@
     </Compile>
     <Compile Include="Entities\StockEntities.cs" />
     <Compile Include="Entities\StockHeader.cs" />
-    <Compile Include="Pages\Controls\DeliveryDocumentGrid.xaml.cs">
-      <DependentUpon>DeliveryDocumentGrid.xaml</DependentUpon>
+    <Compile Include="Entities\Supplier.cs" />
+    <Compile Include="Pages\Controls\DeliveryDocumentList.xaml.cs">
+      <DependentUpon>DeliveryDocumentList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Controls\DeliveryDocumentDetail.xaml.cs">
       <DependentUpon>DeliveryDocumentDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\StockGrid.xaml.cs">
-      <DependentUpon>StockGrid.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\StockList.xaml.cs">
+      <DependentUpon>StockList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DeliveryNoteView.xaml.cs">
       <DependentUpon>DeliveryNoteView.xaml</DependentUpon>
@@ -105,7 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\Controls\DeliveryDocumentGrid.xaml">
+    <Page Include="Pages\Controls\DeliveryDocumentList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -113,7 +114,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\StockGrid.xaml">
+    <Page Include="Pages\Controls\StockList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

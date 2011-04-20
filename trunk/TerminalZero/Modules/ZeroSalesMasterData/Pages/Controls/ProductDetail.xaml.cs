@@ -15,11 +15,13 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for ProductDetail.xaml
     /// </summary>
-    public partial class ProductDetail : ZeroBasePage
+    public partial class ProductDetail : NavigationBasePage
     {
+        MasterDataEntities DataProvider;
+        public Product CurrentProduct { get; private set; }
+
         public ProductDetail(MasterDataEntities dataProvider)
         {
-            ControlMode = ControlMode.New;
             InitializeComponent();
             DataProvider = dataProvider;
         }
@@ -30,9 +32,6 @@ namespace ZeroMasterData.Pages.Controls
             CurrentProduct = DataProvider.Products.First(p => p.Code == productCode);
             ControlMode = ControlMode.Update;
         }
-
-        MasterDataEntities DataProvider;
-        public Product CurrentProduct { get; private set; }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

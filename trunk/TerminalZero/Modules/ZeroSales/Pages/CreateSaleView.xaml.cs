@@ -20,7 +20,7 @@ namespace ZeroSales.Pages
     /// <summary>
     /// Interaction logic for CreateSaleView.xaml
     /// </summary>
-    public partial class CreateSaleView : ZeroBasePage
+    public partial class CreateSaleView : NavigationBasePage
     {
         public CreateSaleView(ITerminal terminal, int saleType)
         {
@@ -52,17 +52,6 @@ namespace ZeroSales.Pages
 
                 _header.TerminalToCode = _terminal.TerminalCode;
                 DataContext = _header;
-                saleGrid.Clear();
-            }
-        }
-
-        private void TryGoHome()
-        {
-            ZeroAction action;
-            if (!_terminal.Manager.ExistsAction(ZeroBusiness.Actions.AppHome, out action)
-                || !_terminal.Manager.ExecuteAction(action))
-            {
-                IsEnabled = false;
             }
         }
 
@@ -89,20 +78,7 @@ namespace ZeroSales.Pages
 
         #region IZeroPage Members
 
-        private ControlMode _controlMode = ControlMode.New;
-        public ControlMode ControlMode
-        {
-            get
-            {
-                return _controlMode;
-            }
-            set
-            {
-                ControlMode = value;
-            }
-        }
-
-        public bool CanAccept(object parameter)
+        public override bool CanAccept(object parameter)
         {
             bool ret = true;
             if (_header.ExistsDataToSave())
@@ -129,7 +105,7 @@ namespace ZeroSales.Pages
             return ret;
         }
 
-        public bool CanCancel(object parameter)
+        public override bool CanCancel(object parameter)
         {
             return CanAccept(parameter);
         }
@@ -161,7 +137,7 @@ namespace ZeroSales.Pages
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
                     currentProd.Text = prod.Description;
                     CreateResTimer();
-                    saleGrid.Add(_header.AddNewSaleItem(prod, partQty.Code,_lot));
+                    saleGrid.AddItem(_header.AddNewSaleItem(prod, partQty.Code,_lot));
                     lblItemsCount.Text = _header.SaleItems.Count.ToString();
                     _lot = "";
                     lotBarcode.SetFocus();
@@ -209,12 +185,13 @@ namespace ZeroSales.Pages
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveData();
-            TryGoHome();
+            GoHomeOrDisable(_terminal);
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             UserControl_Loaded(null, null);
+            saleGrid.Clear();
         }
 
         private void lotBarcode_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
@@ -234,13 +211,17 @@ namespace ZeroSales.Pages
 
         }
 
-        private void saleGrid_Removing(object sender, RoutedEventArgs e)
+        private void saleGrid_Removing(object sender, ItemActionEventArgs e)
         {
-            SaleItem item = sender as SaleItem;
-            if(item!=null)
+            e.Cancel = !ZeroMessageBox.Show(Properties.Resources.ItemDeletingQuestion, Properties.Resources.Delete,
+                                           SizeToContent.WidthAndHeight, ResizeMode.NoResize, MessageBoxButton.YesNo).GetValueOrDefault();
+        }
+
+        private void saleGrid_ItemRemoved(object sender, ItemActionEventArgs e)
+        {
+            if (e.Item != null)
             {
-                saleGrid.Remove(item);
-                _header.RemoveSaleItem(item);
+                _header.RemoveSaleItem(e.Item as SaleItem);
                 lblItemsCount.Text = _header.SaleItems.Count.ToString();
             }
         }

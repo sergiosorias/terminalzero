@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -63,6 +64,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WaitCursorSimple.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ZeroToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,10 +85,12 @@
     <Compile Include="BarCodeTextBox.xaml.cs">
       <DependentUpon>BarCodeTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Delegates.cs" />
     <Compile Include="Classes\EventArgs.cs" />
     <Compile Include="Classes\Rules.cs" />
     <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
     <Compile Include="Delegates.cs" />
+    <Compile Include="ListNavigationControl.cs" />
     <Compile Include="Masking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -104,7 +111,10 @@
     <Compile Include="SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ZeroBasePage.cs" />
+    <Compile Include="NavigationBasePage.cs" />
+    <Compile Include="WaitCursorSimple.xaml.cs">
+      <DependentUpon>WaitCursorSimple.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ZeroToolBar.xaml.cs">
       <DependentUpon>ZeroToolBar.xaml</DependentUpon>
     </Compile>

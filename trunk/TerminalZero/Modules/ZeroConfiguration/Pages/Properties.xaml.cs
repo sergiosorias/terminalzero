@@ -13,7 +13,7 @@ namespace ZeroConfiguration.Pages
     /// Interaction logic for Properties.xaml
     /// </summary>
     [ToolboxItem(false)]
-    public partial class Properties : ZeroGUI.ZeroBasePage
+    public partial class Properties : ZeroGUI.NavigationBasePage
     {
         ConfigurationEntities _dataProvider;
         readonly ITerminal _terminal;

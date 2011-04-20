@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +14,7 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for CurrentStockView.xaml
     /// </summary>
-    public partial class CurrentStockView : ZeroBasePage
+    public partial class CurrentStockView : NavigationBasePage
     {
         private readonly ITerminal _terminal;
 
@@ -70,6 +71,7 @@ namespace ZeroStock.Pages
             cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.TerminalToCode == tCode);
             UpdateLayout();
         }
+
         
     }
 }

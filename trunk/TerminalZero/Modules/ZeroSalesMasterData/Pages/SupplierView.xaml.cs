@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
 
@@ -9,7 +10,7 @@ namespace ZeroMasterData.Pages
     /// <summary>
     /// Interaction logic for SupplierList.xaml
     /// </summary>
-    public partial class SupplierView : ZeroBasePage
+    public partial class SupplierView : NavigationBasePage
     {
         public SupplierView()
         {
@@ -24,7 +25,7 @@ namespace ZeroMasterData.Pages
             {
                 try
                 {
-                    supplierGrid.RefreshList(detail.CurrentSupplier);
+                    supplierGrid.AddItem(detail.CurrentSupplier);
                 }
                 catch (Exception wx)
                 {
@@ -33,14 +34,11 @@ namespace ZeroMasterData.Pages
             }
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-           
-        }
-
         private void SearchBox_Search(object sender, ZeroGUI.SearchCriteriaEventArgs e)
         {
             supplierGrid.ApplyFilter(e.Criteria);
         }
+
+       
     }
 }

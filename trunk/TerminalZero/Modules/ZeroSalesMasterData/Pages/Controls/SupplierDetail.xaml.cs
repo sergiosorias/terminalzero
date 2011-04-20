@@ -1,19 +1,24 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Objects;
+using System.Data.Objects.DataClasses;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
-using System.Data.Objects.DataClasses;
 using ZeroGUI;
+using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
     /// <summary>
     /// Interaction logic for SupplierDetail.xaml
     /// </summary>
-    public partial class SupplierDetail : ZeroBasePage
+    public partial class SupplierDetail : NavigationBasePage
     {
-        private Entities.Supplier _SupplierNew;
-        public Entities.Supplier CurrentSupplier 
+        private Supplier _SupplierNew;
+        public Supplier CurrentSupplier 
         {
             get
             {
@@ -22,30 +27,30 @@ namespace ZeroMasterData.Pages.Controls
             
         }
 
-        Entities.MasterDataEntities DataProvider;
-        public SupplierDetail(Entities.MasterDataEntities dataProvider)
+        MasterDataEntities DataProvider;
+        public SupplierDetail(MasterDataEntities dataProvider)
         {
             InitializeComponent();
             DataProvider = dataProvider;
         }
 
-        public SupplierDetail(Entities.MasterDataEntities dataProvider,int supplierCode)
+        public SupplierDetail(MasterDataEntities dataProvider,int supplierCode)
             : this(dataProvider)
         {
             _SupplierNew = DataProvider.Suppliers.First(s => s.Code == supplierCode);
-            ControlMode = ZeroCommonClasses.Interfaces.ControlMode.Update;
+            ControlMode = ControlMode.Update;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 taxPositionCodeComboBox.ItemsSource = DataProvider.TaxPositions;
                 paymentInstrumentCodeComboBox.ItemsSource = DataProvider.PaymentInstruments;
                 switch (ControlMode)
                 {
                     case ControlMode.New:
-                        _SupplierNew = Entities.Supplier.CreateSupplier(
+                        _SupplierNew = Supplier.CreateSupplier(
                             DataProvider.Suppliers.Count()
                             , true);
                         paymentInstrumentCodeComboBox.SelectedIndex = 0;
@@ -69,8 +74,6 @@ namespace ZeroMasterData.Pages.Controls
             }
         }
         
-        
-
         public override bool CanAccept(object parameter)
         {
             bool ret = true;
@@ -101,21 +104,21 @@ namespace ZeroMasterData.Pages.Controls
 
         public override bool CanCancel(object parameter)
         {
-            EntityObject obj = CurrentSupplier as EntityObject;
-            if (obj.EntityState == System.Data.EntityState.Modified)
-                DataProvider.Refresh(System.Data.Objects.RefreshMode.StoreWins, CurrentSupplier);
+            EntityObject obj = CurrentSupplier;
+            if (obj.EntityState == EntityState.Modified)
+                DataProvider.Refresh(RefreshMode.StoreWins, CurrentSupplier);
 
             return true;
         }
 
         private void paymentInstrumentCodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentSupplier.PaymentInstrument = (Entities.PaymentInstrument)paymentInstrumentCodeComboBox.SelectedItem;
+            CurrentSupplier.PaymentInstrument = (PaymentInstrument)paymentInstrumentCodeComboBox.SelectedItem;
         }
 
         private void taxPositionCodeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentSupplier.TaxPosition = (Entities.TaxPosition)taxPositionCodeComboBox.SelectedItem;
+            CurrentSupplier.TaxPosition = (TaxPosition)taxPositionCodeComboBox.SelectedItem;
         }
     }
 }

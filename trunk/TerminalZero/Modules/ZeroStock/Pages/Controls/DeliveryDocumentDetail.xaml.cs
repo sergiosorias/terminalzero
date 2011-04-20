@@ -15,7 +15,7 @@ namespace ZeroStock.Pages.Controls
     /// <summary>
     /// Interaction logic for DocumentDeliveryDetail.xaml
     /// </summary>
-    public partial class DocumentDeliveryDetail : ZeroBasePage
+    public partial class DocumentDeliveryDetail : NavigationBasePage
     {
         private StockEntities DataProvider;
         private readonly ITerminal _terminal;

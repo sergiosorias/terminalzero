@@ -1,4 +1,4 @@
-﻿<base:ZeroBasePage x:Class="ZeroMasterData.Pages.Controls.CustomerDetail"
+﻿<base:NavigationBasePage x:Class="ZeroMasterData.Pages.Controls.CustomerDetail"
        xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -97,4 +97,4 @@
         </GroupBox>
     </Grid>
 
-</base:ZeroBasePage>
+</base:NavigationBasePage>

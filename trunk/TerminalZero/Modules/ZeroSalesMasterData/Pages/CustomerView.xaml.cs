@@ -10,7 +10,7 @@ namespace ZeroMasterData.Pages
     /// <summary>
     /// Interaction logic for SupplierList.xaml
     /// </summary>
-    public partial class CustomerView : ZeroBasePage
+    public partial class CustomerView : NavigationBasePage
     {
         public CustomerView()
         {
@@ -26,7 +26,7 @@ namespace ZeroMasterData.Pages
             {
                 try
                 {
-                    customerGrid.RefreshList(detail.CurrentCustomer);
+                    customerGrid.AddItem(detail.CurrentCustomer);
                 }
                 catch (Exception wx)
                 {
@@ -41,10 +41,6 @@ namespace ZeroMasterData.Pages
             customerGrid.ApplyFilter(e.Criteria);
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-           
-        }
-        
+       
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.Objects.DataClasses;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 
 namespace ZeroGUI.Classes
@@ -39,6 +41,16 @@ namespace ZeroGUI.Classes
         {
             Code = code;
             Parts = parts;
+        }
+    }
+
+    public class ItemActionEventArgs : CancelEventArgs
+    {
+        public EntityObject Item { get; protected set; }
+        
+        public ItemActionEventArgs(EntityObject item): base(false)
+        {
+            Item = item;    
         }
     }
 

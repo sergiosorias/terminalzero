@@ -111,9 +111,9 @@ namespace TerminalZeroClient
                     ((ZeroMessageBox) e.ControlToShow).Top = Top + 1;
                     ((ZeroMessageBox) e.ControlToShow).ShowDialog();
                 }
-                else if (Content is ZeroBasePage)
+                else if (Content is NavigationBasePage)
                 {
-                    if (((ZeroBasePage)PrimaryWindow.Content).CanAccept(null))
+                    if (((NavigationBasePage)PrimaryWindow.Content).CanAccept(null))
                     {
                         ShowObject(e);
                     }

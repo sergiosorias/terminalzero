@@ -1,4 +1,4 @@
-﻿<base:ZeroBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
     x:Class="ZeroSales.Pages.CreateSaleView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -40,7 +40,7 @@
             <baseControls:ZeroToolBar Grid.Column="1" HorizontalAlignment="Right" NewBtnVisible="False" VerticalAlignment="Center" Save="btnSave_Click" Cancel="btnCancel_Click"/>
         </Grid>
 
-        <controls:SaleGrid Grid.Row="2" x:Name="saleGrid" Removing="saleGrid_Removing"/>
+        <controls:SaleList Grid.Row="2" x:Name="saleGrid" ItemRemoving="saleGrid_Removing" ItemRemoved="saleGrid_ItemRemoved"/>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -61,4 +61,4 @@
         </Grid>
             
     </Grid>
-</base:ZeroBasePage>
+</base:NavigationBasePage>

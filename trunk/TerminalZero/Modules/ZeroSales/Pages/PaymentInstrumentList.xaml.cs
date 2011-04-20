@@ -18,11 +18,14 @@ namespace ZeroSales.Pages
     /// <summary>
     /// Interaction logic for PaymentInstrumentList.xaml
     /// </summary>
-    public partial class PaymentInstrumentList : ZeroGUI.ZeroBasePage
+    public partial class PaymentInstrumentList : ZeroGUI.ListNavigationControl
     {
         public PaymentInstrumentList()
         {
             InitializeComponent();
+            InitializeList(paymentInstrumentsDataGrid);
+
         }
+        
     }
 }

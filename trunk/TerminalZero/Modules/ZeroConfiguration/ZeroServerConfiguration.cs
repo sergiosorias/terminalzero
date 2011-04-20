@@ -79,10 +79,11 @@ namespace ZeroConfiguration
             return ret;
         }
 
-        public string CreateConnection(int terminalCode)
+        public string CreateConnection(int terminalCode, string externalIp)
         {
             Connection cnn = Connection.CreateConnection(Guid.NewGuid().ToString(), terminalCode, DateTime.Now);
             cnn.Terminal = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == terminalCode);
+            cnn.Terminal.LastKnownIP = externalIp;
             _currentContext.Context.AddToConnections(cnn);
             _currentContext.Context.SaveChanges();
             return cnn.Code;

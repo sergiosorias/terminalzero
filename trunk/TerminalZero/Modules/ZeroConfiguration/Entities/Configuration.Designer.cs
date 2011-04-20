@@ -1021,6 +1021,30 @@ namespace ZeroConfiguration.Entities
         private global::System.Boolean _IsTerminalZero;
         partial void OnIsTerminalZeroChanging(global::System.Boolean value);
         partial void OnIsTerminalZeroChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastKnownIP
+        {
+            get
+            {
+                return _LastKnownIP;
+            }
+            set
+            {
+                OnLastKnownIPChanging(value);
+                ReportPropertyChanging("LastKnownIP");
+                _LastKnownIP = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastKnownIP");
+                OnLastKnownIPChanged();
+            }
+        }
+        private global::System.String _LastKnownIP;
+        partial void OnLastKnownIPChanging(global::System.String value);
+        partial void OnLastKnownIPChanged();
 
         #endregion
     

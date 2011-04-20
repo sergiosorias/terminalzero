@@ -3,7 +3,7 @@
 	Code int NOT NULL,
 	[Stamp] DATETIME NULL CONSTRAINT DF_Product_Stamp DEFAULT (Getdate()),
 	[Enable] BIT NOT NULL CONSTRAINT DF_Product_Enable DEFAULT (1),
-	MasterCode int NOT NULL,
+	MasterCode bigint NOT NULL,
 	Name nvarchar(100) NULL,
 	[Description] nvarchar(300) NULL,
 	[ShortDescription] nvarchar(100) NULL,

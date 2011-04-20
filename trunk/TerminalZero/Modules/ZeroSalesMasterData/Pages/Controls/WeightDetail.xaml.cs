@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
@@ -9,14 +10,13 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for WeightDetail.xaml
     /// </summary>
-    public partial class WeightDetail : ZeroBasePage
+    public partial class WeightDetail : NavigationBasePage
     {
         public Weight WeigthNew { get; private set; }
 
         MasterDataEntities DataProvider;
         public WeightDetail(MasterDataEntities dataProvider)
         {
-            ControlMode = ControlMode.New;
             InitializeComponent();
             DataProvider = dataProvider;
         }
@@ -60,8 +60,6 @@ namespace ZeroMasterData.Pages.Controls
 
             return ret;
         }
-
- 
 
         private void quantityTextBox_GotFocus(object sender, RoutedEventArgs e)
         {

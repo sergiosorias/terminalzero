@@ -12,7 +12,7 @@ namespace ZeroStock.Pages
     /// <summary>
     /// Interaction logic for DeliveryDocumentView.xaml
     /// </summary>
-    public partial class DeliveryDocumentView : ZeroBasePage
+    public partial class DeliveryDocumentView : NavigationBasePage
     {
         private readonly ITerminal Terminal;
         public DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
@@ -29,10 +29,7 @@ namespace ZeroStock.Pages
              // Do not load your data at design time.
              if (!DesignerProperties.GetIsInDesignMode(this))
              {
-             	//Load your data here and assign the result to the CollectionViewSource.
-                //System.Windows.Data.CollectionViewSource myCollectionViewSource = (System.Windows.Data.CollectionViewSource)this.Resources["Resource Key for CollectionViewSource"];
-                //myCollectionViewSource.Source = your data
-                 dateFilter.SelectedDateFormat = DatePickerFormat.Short;
+             	 dateFilter.SelectedDateFormat = DatePickerFormat.Short;
                  dateFilter.DisplayDateEnd = DateTime.Now.AddDays(1);
                  dateFilter.SelectedDateChanged+=dateFilter_SelectedDateChanged;
              }
@@ -44,11 +41,11 @@ namespace ZeroStock.Pages
             bool ret = true;
             if (ControlMode == ControlMode.Selection)
             {
-                SelectedDeliveryDocumentHeader = DeliveryGrid.SelectedDeliveryDocumentHeader;
+                SelectedDeliveryDocumentHeader = DeliveryGrid.SelectedItem as DeliveryDocumentHeader;
                 ret = (SelectedDeliveryDocumentHeader != null);
                 if (!ret)
                 {
-                    MessageBox.Show("Por favor seleccione un documento!", "Atención", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    MessageBox.Show("¡Por favor seleccione un documento!", "Atención", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 }
                 
             }
@@ -58,7 +55,7 @@ namespace ZeroStock.Pages
 
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
-            e.Matches = DeliveryGrid.ApplyFilter(e.Criteria, dateFilter.SelectedDate); ;
+            e.Matches = DeliveryGrid.ApplyFilter(e.Criteria, dateFilter.SelectedDate);
         }
 
         private void btnNewProduct_Click(object sender, RoutedEventArgs e)
@@ -67,30 +64,20 @@ namespace ZeroStock.Pages
             bool? res = ZeroMessageBox.Show(det, Properties.Resources.NewDeliveryNote);
             if (res.HasValue && res.Value)
             {
-                DeliveryGrid.AddDeliveryDocumentHeader(det.CurrentDocumentDelivery);
+                DeliveryGrid.AddItem(det.CurrentDocumentDelivery);
             }
         }
 
         private void dateFilter_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            DeliveryGrid.ApplyFilter(string.Empty, dateFilter.SelectedDate); ;
+            DeliveryGrid.ApplyFilter(string.Empty, dateFilter.SelectedDate);
         }
 
         private void DeliveryGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (ControlMode)
+            if (ControlMode == ControlMode.Selection)
             {
-                case ControlMode.New:
-                    break;
-                case ControlMode.Update:
-                    break;
-                case ControlMode.Delete:
-                    break;
-                case ControlMode.ReadOnly:
-                    break;
-                case ControlMode.Selection:
-                    DeliveryGrid.ApplyFilter(string.Empty, DateTime.Now.Date);
-                    break;
+                DeliveryGrid.ApplyFilter(string.Empty, DateTime.Now.Date);
             }
         }
     }
