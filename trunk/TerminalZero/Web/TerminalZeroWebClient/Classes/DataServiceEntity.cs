@@ -7,7 +7,7 @@ namespace TerminalZeroWebClient.Classes
     {
         #region IQueryableEntity Members
 
-        public event EventHandler LoadCompleted;
+        public event EventHandler<LoadCompletedEventArgs> LoadCompleted;
 
         public string EntityName
         {
@@ -30,11 +30,11 @@ namespace TerminalZeroWebClient.Classes
         }
 
         #endregion
-        private void OnLoadComplete()
+        private void OnLoadComplete(LoadCompletedEventArgs args)
         {
             if (LoadCompleted != null)
             {
-                LoadCompleted(this, EventArgs.Empty);
+                LoadCompleted(this, args);
             }
         }
 
@@ -59,7 +59,7 @@ namespace TerminalZeroWebClient.Classes
             }
             else
             {
-                OnLoadComplete();
+                OnLoadComplete(e);
             }
         }
 

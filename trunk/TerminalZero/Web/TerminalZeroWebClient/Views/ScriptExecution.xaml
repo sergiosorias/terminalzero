@@ -14,7 +14,17 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Name="topGrid">
             <Border CornerRadius="5,0,5,0" BorderBrush="Black" Padding="2" BorderThickness="1" Margin="2">
-                <myControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Name="urlOutOfBrowserContent" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="http://" VerticalAlignment="Center"/>
+                            <TextBox Name="URLOutOfBrowser" Width="200" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <Button Content="Load" Name="btnLoadContext" Click="btnLoadContext_Click" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    
+                    <myControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>    
+                </StackPanel>
             </Border>
         </StackPanel>
         <Grid Grid.Row="2">

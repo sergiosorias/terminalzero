@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Services.Client;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -14,33 +15,40 @@ namespace TerminalZeroWebClient.Views
         public ScriptExecution()
         {
             InitializeComponent();
-            
+            if (App.Current.IsRunningOutOfBrowser)
+                urlOutOfBrowserContent.Visibility = Visibility.Visible;
         }
         
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Uri uri = new Uri(Application.Current.Host.Source, "../Services/DatabaseDataService.svc");
-            uriContent.Text = uri.ToString();
-            _entities = new DataService.Entities(uri);
-            ConfigureEntities();
+            Uri uri = null;
+            if (!App.Current.IsRunningOutOfBrowser)
+            {
+                uri = new Uri(Application.Current.Host.Source, "../Services/DatabaseDataService.svc");
+                uriContent.Text = uri.ToString();
+                _entities = new DataService.Entities(uri);
+                ConfigureEntities();
+            }
         }
 
         private void ConfigureEntities()
         {
-            List<object> entitiesAllowed = new List<object>();
-            entitiesAllowed.Add(new DataServiceEntity<DataService.Weight>("Weights", "Cantidades", _entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.Customer> ("Customers", "Clientes" ,_entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.ProductGroup>("ProductGroups", "Grupos", _entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.Tax>("Taxes", "Impuestos", _entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.Weight>("Prices", "Precios", _entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.Supplier>("Suppliers", "Proveedores", _entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.Product>("Products", "Productos", _entities));
-            entitiesAllowed.Add(new DataServiceEntity<DataService.TaxPosition>("TaxPositions", "Posicion IVA", _entities));
-                                    
+            List<object> entitiesAllowed = new List<object>
+            {
+                new DataServiceEntity<DataService.Weight>("Weights", "Cantidades",_entities),
+                new DataServiceEntity<DataService.Customer>("Customers", "Clientes",_entities),
+                new DataServiceEntity<DataService.ProductGroup>("ProductGroups","Grupos", _entities),
+                new DataServiceEntity<DataService.Tax>("Taxes", "Impuestos",_entities),
+                new DataServiceEntity<DataService.Price>("Prices", "Precios",_entities),
+                new DataServiceEntity<DataService.Supplier>("Suppliers","Proveedores", _entities),
+                new DataServiceEntity<DataService.Product>("Products", "Productos",_entities),
+                new DataServiceEntity<DataService.TaxPosition>("TaxPositions","Posicion IVA",_entities)
+            };
+
             foreach (var item in entitiesAllowed)
             {
-                IQueryableEntity ent = item as IQueryableEntity;
+                var ent = item as IQueryableEntity;
                 if (ent != null)
                 {
                     ent.LoadCompleted += ent_LoadCompleted;
@@ -50,11 +58,18 @@ namespace TerminalZeroWebClient.Views
             entitiesGrid.UpdateLayout();
         }
 
-        private void ent_LoadCompleted(object sender, EventArgs e)
+        private void ent_LoadCompleted(object sender, LoadCompletedEventArgs e)
         {
-            var pcv = new System.Windows.Data.PagedCollectionView(((IQueryableEntity)sender).Collection);
-            dataGrid1.ItemsSource = pcv;
-            dataGrid1.UpdateLayout();
+            if (e.Error != null)
+            {
+                MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButton.OK);
+            }
+            else
+            {
+                var pcv = new System.Windows.Data.PagedCollectionView(((IQueryableEntity) sender).Collection);
+                dataGrid1.ItemsSource = pcv;
+                dataGrid1.UpdateLayout();
+            }
             waitCursor.Stop();
         }
         
@@ -95,6 +110,22 @@ namespace TerminalZeroWebClient.Views
             }
 
             e.Matches = pcv.ItemCount;
+        }
+
+        private void btnLoadContext_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Uri uri = new Uri("http://"+URLOutOfBrowser.Text + "/Services/DatabaseDataService.svc");
+                uriContent.Text = uri.ToString();
+                _entities = new DataService.Entities(uri);
+                ConfigureEntities();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(),"Error",MessageBoxButton.OK);
+            }
+            
         }
                 
 
