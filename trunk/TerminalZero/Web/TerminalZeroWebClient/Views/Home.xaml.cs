@@ -20,6 +20,8 @@ namespace TerminalZeroWebClient.Views
             _client.GetTerminalsStatusCompleted += ClientGetTerminalsStatusCompleted;
         }
 
+        
+
         protected void ClientGetTerminalsStatusCompleted(object sender, ServiceHelperReference.GetTerminalsStatusCompletedEventArgs e)
         {
             if (e.Result.IsValid)

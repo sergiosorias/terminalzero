@@ -53,7 +53,36 @@ namespace TZeroHost.Classes
             }
 
             #endregion
+
+            #region ITerminal Members
+
+            public IZeroClient CurrentClient
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            ITerminalManager ITerminal.Manager
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            #endregion
         }
+
         public static PackManager GetManager(string packPath)
         {
             if (packPath == null) throw new ArgumentNullException("packPath");

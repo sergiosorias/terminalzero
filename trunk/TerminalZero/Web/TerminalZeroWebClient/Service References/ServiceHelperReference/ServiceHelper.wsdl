@@ -18,7 +18,7 @@
       <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/System.Data" />
       <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" />
       <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" />
-      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
+      <xsd:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/ZeroBusiness.Entities.Configuration" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="ServiceHelper_GetLogsStr_InputMessage">

@@ -5,7 +5,7 @@
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
     xmlns:myControls="clr-namespace:ZeroGUI"
-    Title="Home"
+    Title="Home" 
     Style="{StaticResource PageStyle}">
 
     <Grid x:Name="LayoutRoot">
