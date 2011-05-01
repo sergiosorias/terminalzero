@@ -3,12 +3,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d"
-    xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk" 
     Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <Color x:Key="invalidRed">#FFB46161</Color>
+        <Color x:Key="validGreen">#FF727C49</Color>
+        <Storyboard x:Name="Showpoopanim">
+            <DoubleAnimation Duration="00:00:00.3" From="" To="1" Storyboard.TargetName="MyPopUp" Storyboard.TargetProperty="Opacity" >
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="Hidepoopanim" Completed="Hidepoopanim_Completed">
+            <DoubleAnimation Duration="00:00:00.2" From="1" To="0" Storyboard.TargetName="MyPopUp" Storyboard.TargetProperty="Opacity" >
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </UserControl.Resources>
     <Grid x:Name="LayoutRoot" MouseEnter="LayoutRoot_MouseEnter" MouseLeave="LayoutRoot_MouseLeave">
         <Border CornerRadius="10,0,10,0" Padding="5" Name="BackBorder" BorderThickness="2" BorderBrush="Transparent">
@@ -16,7 +29,7 @@
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFEFEFEF" Offset="0" />
                     <GradientStop Color="#FFB8B8BA" Offset="0.253" />
-                    <GradientStop Color="#FF727C49" Offset="0.778" />
+                    <GradientStop Color="{StaticResource validGreen}" Offset="0.778" />
                     <GradientStop Color="#FFEFEFEF" Offset="1" />
                 </LinearGradientBrush>
             </Border.Background>
@@ -40,27 +53,49 @@
                 </StackPanel>
                 <TextBlock Text="Última conexión: " FontWeight="Bold" Height="21" Foreground="White" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Foreground="White" Grid.Row="1" Height="21" HorizontalAlignment="Stretch" Name="lastSyncDatePicker" Text="{Binding Path=Terminal.LastSync, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
-                <Button Style="{StaticResource MoreButtonStyle}" Name="btnMore" Background="#FF727C49" Height="22" Width="22" Grid.Column="2" Grid.RowSpan="2" Click="Button_Click"/>
-                
-                <Popup Name="popUpMoreInfo" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" IsOpen="True" HorizontalOffset="30">
+                <Button Style="{StaticResource MoreButtonStyle}" Name="btnMore" Height="22" Width="22" Grid.Column="2" Grid.RowSpan="2" Click="Button_Click">
+                    <Button.Background>
+                        <SolidColorBrush Color="{StaticResource validGreen}"/>
+                    </Button.Background>
+                </Button>
+                <Popup Name="popUpMoreInfo" Opened="popUpMoreInfo_Opened" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" IsOpen="True">
                     <Popup.Child>
-                        <Border Background="#FFB1B1B1" BorderThickness="2" Padding="4"  CornerRadius="0,5,0,5" MouseLeave="Border_MouseLeave">
-                            <Border.BorderBrush>
-                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                                    <GradientStop Color="#FF539053" Offset="0" />
-                                    <GradientStop Color="#FF424E42" Offset="1" />
-                                </LinearGradientBrush>
-                            </Border.BorderBrush>
-                            <StackPanel>
-                                <TextBlock Text="Información"/>
-                                <Rectangle Height="1" Fill="LightGray" HorizontalAlignment="Stretch"/>
-                                <TextBox IsReadOnly="True" Name="MessageBoxPopUp" Background="Transparent" BorderBrush="Transparent" AcceptsReturn="True"/>
-                                <TextBox IsReadOnly="True" Name="MessageBox2PopUp" Background="Transparent" BorderBrush="Transparent" MaxHeight="150" MaxWidth="150" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Height="Auto" AcceptsReturn="True"/>
-                            </StackPanel>
-                        </Border>
+                        <Grid MouseLeave="Border_MouseLeave" Name="MyPopUp" Background="Transparent">
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Margin="10,-2,0,0" BorderThickness="2" Grid.Row="1" CornerRadius="2" BorderBrush="Gray" Padding="2">
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFB1B1B1" Offset="0" />
+                                            <GradientStop Color="White" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <StackPanel>
+                                        <TextBlock Text="Información"/>
+                                        <Rectangle Height="1" HorizontalAlignment="Stretch">
+                                            <Rectangle.Fill>
+                                                <SolidColorBrush Color="{StaticResource validGreen}"/>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <TextBox IsReadOnly="True" Name="MessageBoxPopUp" Background="{x:Null}" BorderBrush="{x:Null}" AcceptsReturn="True"/>
+                                        <TextBox IsReadOnly="True" Name="MessageBox2PopUp" Text="{Binding Path=Info, Mode=OneWay, FallbackValue='Sin información'}" Background="{x:Null}" BorderBrush="{x:Null}" MaxHeight="150" MaxWidth="150" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Height="Auto" AcceptsReturn="True"/>
+                                    </StackPanel>
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="10"/>
+                                    </Border.Effect>
+                                </Border>
+                                <Path Fill="#FFB1B1B1" x:Name="arrow" Stretch="Fill" Stroke="Gray" StrokeThickness="2" HorizontalAlignment="Left" Margin="40,0,0,0" Width="20" Height="10" Data="M190,84 C203.27403,59.418466 189.83333,83.833001 217.75,33.249609 219.15884,30.696864 246.16667,48.831883 305.83333,84.833012"/>
+                            </Grid>
+                        </Grid>
+
+
                     </Popup.Child>
+
                 </Popup>
             </Grid>
         </Border>
-     </Grid>
+    </Grid>
 </UserControl>

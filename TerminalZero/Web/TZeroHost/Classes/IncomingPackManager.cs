@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Pack;
-using ZeroConfiguration.Entities;
 using ThreadState = System.Threading.ThreadState;
 
 namespace TZeroHost.Classes
@@ -95,9 +95,9 @@ namespace TZeroHost.Classes
 
                 if ((e.Pack.IsMasterData.GetValueOrDefault()) || (e.Pack.IsUpgrade.GetValueOrDefault()))
                 {
-                    using (var packEnt = new CommonEntities())
+                    using (var packEnt = new CommonEntitiesManager())
                     {
-                        using (var ent = new ConfigurationEntities())
+                        using (var ent = new ConfigurationModelManager())
                         {
                             foreach (var item in ent.Terminals.Where(t => t.Code != e.PackInfo.TerminalCode))
                             {
@@ -115,9 +115,9 @@ namespace TZeroHost.Classes
 
                     if (e.PackInfo != null && e.PackInfo.TerminalToCodes.Count > 0)
                     {
-                        using (var packEnt = new CommonEntities())
+                        using (var packEnt = new CommonEntitiesManager())
                         {
-                            using (var ent = new ConfigurationEntities())
+                            using (var ent = new ConfigurationModelManager())
                             {
                                 foreach (int terminal in e.PackInfo.TerminalToCodes.Where(c => c != e.PackInfo.TerminalCode))
                                 {

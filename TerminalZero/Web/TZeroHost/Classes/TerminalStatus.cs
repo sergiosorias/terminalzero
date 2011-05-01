@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
-using ZeroConfiguration.Entities;
+using ZeroBusiness.Entities.Configuration;
 
 namespace TZeroHost.Classes
 {

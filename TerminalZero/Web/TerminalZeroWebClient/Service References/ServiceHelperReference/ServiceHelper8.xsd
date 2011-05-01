@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TZeroHost.Classes" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
+  <xs:import schemaLocation="http://sebas-note/TZeroHost/Services/ServiceHelper.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/ZeroBusiness.Entities.Configuration" />
   <xs:complexType name="ArrayOfTerminalStatus">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminalStatus" nillable="true" type="tns:TerminalStatus" />
@@ -10,7 +10,7 @@
   <xs:complexType name="TerminalStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Info" nillable="true" type="xs:string" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" minOccurs="0" name="Terminal" nillable="true" type="q1:Terminal" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ZeroBusiness.Entities.Configuration" minOccurs="0" name="Terminal" nillable="true" type="q1:Terminal" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TerminalStatus" nillable="true" type="tns:TerminalStatus" />

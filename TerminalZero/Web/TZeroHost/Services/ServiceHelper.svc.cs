@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using TZeroHost.Classes;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroConfiguration;
-using ZeroConfiguration.Entities;
 using ZeroCommonClasses.Entities;
 
 namespace TZeroHost.Services
@@ -43,7 +43,7 @@ namespace TZeroHost.Services
         {
             List<Pack> ret = new List<Pack>();
 
-            using (CommonEntities ent = new CommonEntities())
+            using (ZeroCommonClasses.Entities.CommonEntitiesManager ent = new ZeroCommonClasses.Entities.CommonEntitiesManager())
             {
                 ent.ContextOptions.LazyLoadingEnabled = false;
                 ret.AddRange(ent.Packs.Where(p => p.Stamp >= startDate && p.Stamp <= endDate).ToList());
@@ -60,7 +60,7 @@ namespace TZeroHost.Services
             {
                 ZeroServerConfiguration conf = new ZeroServerConfiguration();
                 
-                using (ConfigurationEntities ent = new ConfigurationEntities())
+                using (var ent = new ConfigurationModelManager())
                 {
                     ent.ContextOptions.LazyLoadingEnabled = false;
                     ret.Result = new List<TerminalStatus>();

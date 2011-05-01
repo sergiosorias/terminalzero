@@ -5,11 +5,11 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Web;
 using TZeroHost.Helpers;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroConfiguration;
-using ZeroConfiguration.Entities;
 
 namespace TZeroHost.Services
 {

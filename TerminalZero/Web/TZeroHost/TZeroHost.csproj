@@ -58,6 +58,10 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="ZeroBusiness, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Deploy_Debug\ZeroBusiness.dll</HintPath>
+    </Reference>
     <Reference Include="ZeroCommonClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Base\CommonClassesZero\bin\Debug\ZeroCommonClasses.dll</HintPath>

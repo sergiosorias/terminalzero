@@ -55,7 +55,7 @@ namespace TZeroHost.Services
             }
             else
             {
-                using (var ent = new CommonEntities())
+                using (var ent = new ZeroCommonClasses.Entities.CommonEntitiesManager())
                 {
 
                     Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);

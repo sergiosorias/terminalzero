@@ -77,11 +77,11 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="EntityReferenceOfPackStatuAMTtCmoD" nillable="true" type="tns:EntityReferenceOfPackStatuAMTtCmoD" />
-  <xs:complexType name="EntityReferenceOfConnectionStatunM6hmTEN">
+  <xs:complexType name="EntityReferenceOfConnectionStatuFEsEur48">
     <xs:annotation>
       <xs:appinfo>
         <GenericType Name="EntityReferenceOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="ConnectionStatu" Namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
+          <GenericParameter Name="ConnectionStatu" Namespace="http://schemas.datacontract.org/2004/07/ZeroBusiness.Entities.Configuration" />
         </GenericType>
       </xs:appinfo>
     </xs:annotation>
@@ -91,12 +91,12 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="EntityReferenceOfConnectionStatunM6hmTEN" nillable="true" type="tns:EntityReferenceOfConnectionStatunM6hmTEN" />
-  <xs:complexType name="EntityReferenceOfTerminalnM6hmTEN">
+  <xs:element name="EntityReferenceOfConnectionStatuFEsEur48" nillable="true" type="tns:EntityReferenceOfConnectionStatuFEsEur48" />
+  <xs:complexType name="EntityReferenceOfTerminalFEsEur48">
     <xs:annotation>
       <xs:appinfo>
         <GenericType Name="EntityReferenceOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/System.Data.Objects.DataClasses" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="Terminal" Namespace="http://schemas.datacontract.org/2004/07/ZeroConfiguration.Entities" />
+          <GenericParameter Name="Terminal" Namespace="http://schemas.datacontract.org/2004/07/ZeroBusiness.Entities.Configuration" />
         </GenericType>
       </xs:appinfo>
     </xs:annotation>
@@ -106,5 +106,5 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="EntityReferenceOfTerminalnM6hmTEN" nillable="true" type="tns:EntityReferenceOfTerminalnM6hmTEN" />
+  <xs:element name="EntityReferenceOfTerminalFEsEur48" nillable="true" type="tns:EntityReferenceOfTerminalFEsEur48" />
 </xs:schema>

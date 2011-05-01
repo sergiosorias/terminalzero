@@ -1,11 +1,12 @@
 ﻿using System.Data.Services;
 using System.Data.Services.Common;
 using System.ServiceModel.Activation;
+using ZeroBusiness.Entities.Data;
 
 namespace TZeroHost.Services
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    public class DatabaseDataService : DataService<ZeroMasterData.Entities.MasterDataEntities>
+    public class DatabaseDataService : DataService<DataModelManager>
     {
         // This method is called only once to initialize service-wide policies.
         public static void InitializeService(DataServiceConfiguration config)

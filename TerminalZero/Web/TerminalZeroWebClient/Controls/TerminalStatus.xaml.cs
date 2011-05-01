@@ -3,16 +3,19 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using SLFramework;
 using TerminalZeroWebClient.ServiceHelperReference;
 
 namespace TerminalZeroWebClient.Controls
 {
     public partial class TerminalStatus : UserControl
     {
+        readonly SolidColorBrush _borderActive = new SolidColorBrush(Colors.Gray);
+        readonly SolidColorBrush _borderInactive = new SolidColorBrush(Colors.Transparent);
+
         public TerminalStatus()
         {
             InitializeComponent();
-            
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -39,23 +42,22 @@ namespace TerminalZeroWebClient.Controls
                     {
                         MessageBoxPopUp.Text += string.Format("Conexiones cada {0} minutos.",  prop.Value);
                     }
-                    MessageBox2PopUp.Text = ter.Info ?? "Sin Información";
                 }
             }
         }
 
         private void Border_MouseLeave(object sender, MouseEventArgs e)
         {
-            popUpMoreInfo.IsOpen = false;
+            Hidepoopanim.Begin();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            popUpMoreInfo.IsOpen = !popUpMoreInfo.IsOpen;
+            Point Position = ControlsExtentions.GetPosition(sender as UIElement, this);
+            popUpMoreInfo.HorizontalOffset = Position.X -60;
+            popUpMoreInfo.VerticalOffset = Position.Y -20;
+            popUpMoreInfo.IsOpen = true;
         }
-
-        readonly SolidColorBrush _borderActive = new SolidColorBrush(Colors.Gray);
-        readonly SolidColorBrush _borderInactive = new SolidColorBrush(Colors.Transparent);
 
         private void LayoutRoot_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -65,6 +67,16 @@ namespace TerminalZeroWebClient.Controls
         private void LayoutRoot_MouseLeave(object sender, MouseEventArgs e)
         {
             BackBorder.BorderBrush = _borderInactive;
+        }
+
+        private void popUpMoreInfo_Opened(object sender, System.EventArgs e)
+        {
+            Showpoopanim.Begin();
+        }
+
+        private void Hidepoopanim_Completed(object sender, System.EventArgs e)
+        {
+            popUpMoreInfo.IsOpen = false;
         }
     }
 }

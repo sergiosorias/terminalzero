@@ -285,7 +285,12 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SLFramework\SLFramework.csproj">
+      <Project>{9F59EFD4-BD4B-4A78-981A-CEC839A47034}</Project>
+      <Name>SLFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
