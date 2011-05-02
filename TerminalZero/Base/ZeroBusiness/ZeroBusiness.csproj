@@ -33,6 +33,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,8 +45,55 @@
   <ItemGroup>
     <Compile Include="ActionParameters.cs" />
     <Compile Include="Actions.cs" />
+    <Compile Include="Entities\Configuration\ConfigurationModelManager.cs" />
+    <Compile Include="Entities\Configuration\ConfigurationModel.Designer.cs">
+      <DependentUpon>ConfigurationModel.edmx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Entities\Configuration\Module.cs" />
+    <Compile Include="Entities\Configuration\SystemProperty.cs" />
+    <Compile Include="Entities\Configuration\Terminal.cs" />
+    <Compile Include="Entities\Data\Customer.cs" />
+    <Compile Include="Entities\Data\DataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Data\DataModelManager.cs" />
+    <Compile Include="Entities\Data\DeliveryDocumentHeader.cs" />
+    <Compile Include="Entities\Data\DeliveryDocumentItem.cs" />
+    <Compile Include="Entities\Data\Price.cs" />
+    <Compile Include="Entities\Data\Product.cs" />
+    <Compile Include="Entities\Data\ProductGroup.cs" />
+    <Compile Include="Entities\Data\SaleHeader.cs" />
+    <Compile Include="Entities\Data\StockHeader.cs" />
+    <Compile Include="Entities\Data\StockItem.cs" />
+    <Compile Include="Entities\Data\Supplier.cs" />
+    <Compile Include="Entities\Data\Weight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonClassesZero\ZeroCommonClasses.csproj">
+      <Project>{2AC599DD-4010-49A3-B595-715FE549C6B9}</Project>
+      <Name>ZeroCommonClasses</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entities\Data\DataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entities\Configuration\ConfigurationModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ConfigurationModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

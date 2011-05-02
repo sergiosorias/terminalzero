@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ZeroGUI
 {
@@ -19,6 +8,12 @@ namespace ZeroGUI
     /// </summary>
     public partial class ZeroToolBar : UserControl
     {
+        public ZeroToolBar()
+        {
+            InitializeComponent();
+            PrintBtnVisible = false;
+        }
+
         public bool NewBtnVisible
         {
             get { return (bool)GetValue(NewBtnVisibleProperty); }
@@ -31,7 +26,7 @@ namespace ZeroGUI
 
         private static void OnNewBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ZeroToolBar tb = d as ZeroToolBar;
+            var tb = d as ZeroToolBar;
             if (tb != null)
             {
                 tb.btnSaveLine.Visibility = tb.btnNew.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
@@ -50,10 +45,10 @@ namespace ZeroGUI
 
         private static void OnSaveBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ZeroToolBar tb = d as ZeroToolBar;
+            var tb = d as ZeroToolBar;
             if(tb!=null)
             {
-                tb.btnSaveLine.Visibility = tb.btnSave.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                tb.btnSave.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -70,11 +65,33 @@ namespace ZeroGUI
 
         private static void OnCancelBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ZeroToolBar tb = d as ZeroToolBar;
+            var tb = d as ZeroToolBar;
             if (tb != null)
             {
-                tb.btnCancelLine.Visibility = tb.btnCancel.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+                tb.btnCancel.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
             }    
+        }
+
+        public bool PrintBtnVisible
+        {
+            get { return (bool)GetValue(PrintActiveProperty); }
+            set
+            {
+                SetValue(PrintActiveProperty, value);
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for CancelBtnVisible.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PrintActiveProperty =
+            DependencyProperty.Register("PrintBtnVisible", typeof(bool), typeof(ZeroToolBar), new UIPropertyMetadata(false, OnPrintBtnVisibleChanged));
+
+        private static void OnPrintBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var tb = d as ZeroToolBar;
+            if (tb != null)
+            {
+                tb.btnPrint.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         public event RoutedEventHandler Save;
@@ -101,9 +118,12 @@ namespace ZeroGUI
             if (handler != null) handler(this, e);
         }
 
-        public ZeroToolBar()
+        public event RoutedEventHandler Print;
+
+        private void OnPrint(RoutedEventArgs e)
         {
-            InitializeComponent();
+            RoutedEventHandler handler = Print;
+            if (handler != null) handler(this, e);
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -119,6 +139,11 @@ namespace ZeroGUI
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             OnNew(e);
+        }
+
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            OnPrint(e);
         }
 
    }

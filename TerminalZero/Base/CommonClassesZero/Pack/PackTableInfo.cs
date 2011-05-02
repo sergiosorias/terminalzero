@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,21 +30,15 @@ namespace ZeroCommonClasses.Pack
         [DataMember]
         public int Part { get; set; }
         [XmlIgnore]
-        private XmlSerializer serializer;
-
+        protected XmlSerializer Serializer;
         [XmlIgnore] 
         private object Rows;
-
-        public IEnumerable<T> GetRowsAs<T>()
-        {
-            return (IEnumerable<T>) Rows;
-        }
 
         private void SetContent<T>(IEnumerable<T> content)
         {
             RowTypeName = typeof(T).ToString();
             RowsCount = content.Count();
-            serializer = new XmlSerializer(typeof(List<T>));
+            Serializer = new XmlSerializer(typeof(List<T>));
             Rows = content.ToList();
         }
 
@@ -52,32 +46,35 @@ namespace ZeroCommonClasses.Pack
         {
             using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(directory, RowTypeName)))
             {
-                serializer.Serialize(xmlwriter, Rows);
+                Serializer.Serialize(xmlwriter, Rows);
                 xmlwriter.Close();
             }
         }
 
-        public IEnumerable<T> DeserializeRows<T>(string fileDirectory)
+        public IEnumerable GetRows()
         {
-            XmlReader file = XmlReader.Create(Path.Combine(fileDirectory, RowTypeName));
-            try
-            {
-                serializer = serializer ?? new XmlSerializer(typeof(List<T>));
-                Rows = serializer.Deserialize(file);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                file.Close();
-            }
+            return (IEnumerable)Rows;
+        }
 
+        public IEnumerable<T> GetRows<T>(string fileDirectory)
+        {
+            if (Rows == null)
+            {
+                XmlReader file = XmlReader.Create(Path.Combine(fileDirectory, RowTypeName));
+                try
+                {
+                    Serializer = Serializer ?? new XmlSerializer(typeof (List<T>));
+                    Rows = Serializer.Deserialize(file);
+                }
+                finally
+                {
+                    file.Close();
+                }
+            }
 
             return Rows as IEnumerable<T>;
         }
-        
+
         public override bool Equals(object obj)
         {
             if(obj.GetType() == typeof(string))

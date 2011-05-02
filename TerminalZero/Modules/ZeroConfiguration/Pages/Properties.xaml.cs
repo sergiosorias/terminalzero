@@ -4,8 +4,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Interfaces;
-using ZeroConfiguration.Entities;
+
 
 namespace ZeroConfiguration.Pages
 {
@@ -15,21 +16,20 @@ namespace ZeroConfiguration.Pages
     [ToolboxItem(false)]
     public partial class Properties : ZeroGUI.NavigationBasePage
     {
-        ConfigurationEntities _dataProvider;
-        readonly ITerminal _terminal;
-        public Properties(ITerminal terminal)
+        ConfigurationModelManager _dataProvider;
+        
+        public Properties()
         {
             ControlMode = ControlMode.ReadOnly;
             _dataProvider = null;
             InitializeComponent();
-            _terminal = terminal;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                _dataProvider = new ConfigurationEntities();
+                _dataProvider = new ConfigurationModelManager();
                 switch (ControlMode)
                 {
                     case ControlMode.New:
@@ -38,7 +38,7 @@ namespace ZeroConfiguration.Pages
                         cbTerminals.ItemsSource = _dataProvider.Terminals;
                         break;
                     case ControlMode.ReadOnly:
-                        cbTerminals.ItemsSource = _dataProvider.Terminals.Where(t => t.Code == _terminal.TerminalCode);
+                        cbTerminals.ItemsSource = _dataProvider.Terminals.Where(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
                         cbTerminals.IsEnabled = false;
                         terminalPropertiesDataGrid.IsEnabled = false;
                         modulesListView.IsEnabled = false;
@@ -50,7 +50,7 @@ namespace ZeroConfiguration.Pages
                         break;
                 }
 
-                cbTerminals.SelectedItem = _dataProvider.Terminals.First(t => t.Code == _terminal.TerminalCode);
+                cbTerminals.SelectedItem = _dataProvider.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
             }
         }
 
@@ -80,8 +80,9 @@ namespace ZeroConfiguration.Pages
 
         public override bool CanAccept(object parameter)
         {
+            bool ret = base.CanAccept(parameter);
             _dataProvider.SaveChanges();
-            return true;
+            return ret;
         }
 
         public override bool CanCancel(object parameter)

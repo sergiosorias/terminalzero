@@ -8,7 +8,7 @@
 	[Status] smallint NOT NULL CONSTRAINT DF_DeliveryNoteItem_Status DEFAULT (0),
 	[Batch] varchar(10) NOT NULL,
 	[ProductCode] int NOT NULL,
-	[ProductMasterCode] int NOT NULL,
+	[ProductMasterCode] varchar(20) NOT NULL,
 	[ProductByWeight] bit NOT NULL,
 	[PriceValue] float NOT NULL,
 	[Quantity] FLOAT NOT NULL

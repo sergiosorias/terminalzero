@@ -50,7 +50,7 @@ namespace ZeroCommonClasses.Pack
 
         }
 
-        private static int[] GetTerminalDestinationList(Entities.Pack aPack)
+        private static IEnumerable<int> GetTerminalDestinationList(Entities.Pack aPack)
         {
             var ret = new List<int>();
             string[] parts = aPack.Name.Split('_');
@@ -70,31 +70,31 @@ namespace ZeroCommonClasses.Pack
 
         #region Events
 
-        public event EventHandler<PackEventArgs> Exporting;
-        public event EventHandler<PackEventArgs> Exported;
-        public event EventHandler<PackEventArgs> Importing;
-        public event EventHandler<PackEventArgs> Imported;
+        public event EventHandler<PackProcessingEventArgs> Exporting;
+        public event EventHandler<PackProcessingEventArgs> Exported;
+        public event EventHandler<PackProcessingEventArgs> Importing;
+        public event EventHandler<PackProcessingEventArgs> Imported;
         public event ErrorEventHandler Error;
 
-        private void OnExporting(PackEventArgs e)
+        private void OnExporting(PackProcessingEventArgs e)
         {
             if (Exporting != null)
                 Exporting(this, e);
         }
 
-        private void OnExported(PackEventArgs e)
+        private void OnExported(PackProcessingEventArgs e)
         {
             if (Exported != null)
                 Exported(this, e);
         }
 
-        private void OnImporting(PackEventArgs e)
+        private void OnImporting(PackProcessingEventArgs e)
         {
             if (Importing != null)
                 Importing(this, e);
         }
 
-        private void OnImported(PackEventArgs e)
+        private void OnImported(PackProcessingEventArgs e)
         {
             if (Imported != null)
                 Imported(this, e);
@@ -109,7 +109,6 @@ namespace ZeroCommonClasses.Pack
         #endregion
 
         private readonly ITerminal _terminal;
-        private string WorkingDirectory = "";
         private string ImportPackPath = "";
         private string _infoFileName = "Info_";
         public string ConnectionID { get; set; }
@@ -133,9 +132,8 @@ namespace ZeroCommonClasses.Pack
             bool ret = true;
             try
             {
-                WorkingDirectory = Path.Combine(Path.GetDirectoryName(packPath), Path.GetFileNameWithoutExtension(packPath));
                 ImportPackPath = packPath;
-                ImportProcess();
+                InternalImport();
             }
             catch (Exception ex)
             {
@@ -149,18 +147,17 @@ namespace ZeroCommonClasses.Pack
 
         public bool Export(PackInfoBase info)
         {
-
             bool ret = true;
             try
             {
                 
                 PackInfo = info;
                 PackInfo.TerminalCode = _terminal.TerminalCode;
-                WorkingDirectory = Path.Combine(PackInfo.Path, Guid.NewGuid().ToString());
-                if (!Directory.Exists(WorkingDirectory))
-                    Directory.CreateDirectory(WorkingDirectory);
+                PackInfo.WorkingDirectory = Path.Combine(PackInfo.RootDirectory, Guid.NewGuid().ToString());
+                if (!Directory.Exists(PackInfo.WorkingDirectory))
+                    Directory.CreateDirectory(PackInfo.WorkingDirectory);
 
-                ExportProcess();
+                InternalExport();
             }
             catch (Exception ex)
             {
@@ -183,57 +180,52 @@ namespace ZeroCommonClasses.Pack
 
         #endregion
 
-        private void ExportProcess()
+        protected virtual void ExportProcess(PackProcessingEventArgs args)
         {
-            var args = new PackEventArgs {PackInfo = PackInfo, WorkingDirectory = WorkingDirectory};
-
             OnExporting(args);
+        }
+
+        protected virtual void ImportProcess(PackProcessingEventArgs args)
+        {
+            OnExporting(args);
+        }
+
+        #region Private methods
+
+        private void InternalExport()
+        {
+            var args = new PackProcessingEventArgs {PackInfo = PackInfo};
+            ExportProcess(args);
             SerializePackInfo();
             CreateZip();
             Clean();
             OnExported(args);
-
         }
 
-        private void CreateZip()
-        {
-            var events = new FastZipEvents();
-            var zip = new FastZip(events);
-            var terminals = new StringBuilder();
-            foreach (var terminal in PackInfo.TerminalToCodes)
-            {
-                terminals.AppendFormat("T{0}",terminal);
-            }
-            zip.CreateZip(Path.Combine(PackInfo.Path, string.Format(kPackNameFromat, PackInfo.ModuleCode, terminals, PackInfo.Stamp.ToString("yyyyMMddhhmmss"))), WorkingDirectory, true, "");
-        }
-        
-        private void ImportProcess()
+        private void InternalImport()
         {
             Entities.Pack aPack = null;
-            CommonEntities dbent = null;
-            var args = new PackEventArgs();
+            CommonEntitiesManager dbent = null;
+            var args = new PackProcessingEventArgs();
             try
             {
-                dbent = new CommonEntities();
-
+                dbent = new CommonEntitiesManager();
+                
                 aPack = InsertPackInDb(ImportPackPath, dbent);
-                args.WorkingDirectory = WorkingDirectory;
+                string workingDirectory = Path.Combine(Path.GetDirectoryName(ImportPackPath), Path.GetFileNameWithoutExtension(ImportPackPath)); ;
 
                 UpdatePackStatus(aPack, dbent, PackStatus.Starting, null);
                 args.Pack = aPack;
 
-                ExtractZip(ImportPackPath);
-                DeserializePackInfo();
-                if (PackInfo == null)
-                    PackInfo = new PackInfoBase {TerminalCode = -1, ModuleCode = GetModule(ImportPackPath), Path = ImportPackPath, Stamp = DateTime.Now, TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack)) };
-                
-                 if (!aPack.IsMasterData.HasValue)
-                    aPack.IsMasterData = false;
-                if (!aPack.IsUpgrade.HasValue)
-                    aPack.IsUpgrade = false;
+                ExtractZip(ImportPackPath, workingDirectory);
+                DeserializePackInfo(workingDirectory);
+                PackInfo.TerminalToCodes = new List<int>(GetTerminalDestinationList(args.Pack));
                 args.PackInfo = PackInfo;
+                
+                aPack.IsMasterData = aPack.IsMasterData.GetValueOrDefault(false);
+                aPack.IsUpgrade = aPack.IsUpgrade.GetValueOrDefault(false);
                 UpdatePackStatus(aPack, dbent, PackStatus.InProgress, null);
-                OnImporting(args);
+                ImportProcess(args);
                 UpdatePackStatus(aPack, dbent, PackStatus.Imported, null);
                 OnImported(args);
                 
@@ -256,7 +248,7 @@ namespace ZeroCommonClasses.Pack
             }
         }
 
-        private static void UpdatePackStatus(Entities.Pack aPack, CommonEntities dbent, PackStatus newStatus, string message)
+        private static void UpdatePackStatus(Entities.Pack aPack, CommonEntitiesManager dbent, PackStatus newStatus, string message)
         {
             aPack.Stamp = DateTime.Now;
             aPack.PackStatusCode = (int)newStatus;
@@ -264,8 +256,9 @@ namespace ZeroCommonClasses.Pack
             dbent.SaveChanges();
         }
 
-        private Entities.Pack InsertPackInDb(string packFilePath, CommonEntities dbent)
+        private Entities.Pack InsertPackInDb(string packFilePath, CommonEntitiesManager dbent)
         {
+            if (dbent == null) throw new ArgumentNullException("dbent");
 
             string name = Path.GetFileName(packFilePath);
             Entities.Pack P = dbent.Packs.FirstOrDefault(p => p.Name == name);
@@ -284,26 +277,38 @@ namespace ZeroCommonClasses.Pack
 
         }
 
-        private void ExtractZip(string packFilePath)
+        private void CreateZip()
         {
             var events = new FastZipEvents();
             var zip = new FastZip(events);
-            zip.ExtractZip(packFilePath, WorkingDirectory, FastZip.Overwrite.Always, null, "", "", false);
+            var terminals = new StringBuilder();
+            foreach (var terminal in PackInfo.TerminalToCodes)
+            {
+                terminals.AppendFormat("T{0}", terminal);
+            }
+            zip.CreateZip(Path.Combine(PackInfo.RootDirectory, string.Format(kPackNameFromat, PackInfo.ModuleCode, terminals, PackInfo.Stamp.ToString("yyyyMMddhhmmss"))), PackInfo.WorkingDirectory, true, "");
+        }
+
+        private void ExtractZip(string packFilePath, string dir)
+        {
+            var events = new FastZipEvents();
+            var zip = new FastZip(events);
+            zip.ExtractZip(packFilePath, dir, FastZip.Overwrite.Always, null, "", "", false);
         }
 
         private void SerializePackInfo()
         {
             var writer = new XmlSerializer(PackInfo.GetType());
-            using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(WorkingDirectory,_infoFileName+ PackInfo.GetType())))
+            using (XmlWriter xmlwriter = XmlWriter.Create(Path.Combine(PackInfo.WorkingDirectory,_infoFileName+ PackInfo.GetType())))
             {
                 writer.Serialize(xmlwriter, PackInfo);
                 xmlwriter.Close();
             }
         }
 
-        private void DeserializePackInfo()
+        private void DeserializePackInfo(string dir)
         {
-            string[] files = Directory.GetFiles(WorkingDirectory, _infoFileName + "*.*");
+            string[] files = Directory.GetFiles(dir, _infoFileName + "*.*");
             if (files.Length > 0)
             {
                 Type infoType = Type.GetType(Path.GetFileName(files[0]).Remove(0, _infoFileName.Length));
@@ -315,16 +320,26 @@ namespace ZeroCommonClasses.Pack
                 }
 
             }
+            else
+            {
+                if (PackInfo == null)
+                    PackInfo = new PackInfoBase { TerminalCode = -1, ModuleCode = GetModule(ImportPackPath), RootDirectory = ImportPackPath, Stamp = DateTime.Now };
+
+            }
+
+            PackInfo.WorkingDirectory = dir;
         }
 
         private void Clean()
         {
-            if (Directory.Exists(WorkingDirectory))
-                Directory.Delete(WorkingDirectory, true);
+            if (Directory.Exists(PackInfo.WorkingDirectory))
+                Directory.Delete(PackInfo.WorkingDirectory, true);
 
             if (!string.IsNullOrEmpty(ImportPackPath) && File.Exists(ImportPackPath))
                 File.Delete(ImportPackPath);
         }
+
+        #endregion
 
     }
 }

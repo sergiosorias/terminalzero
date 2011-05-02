@@ -7,8 +7,8 @@ namespace ZeroLogHandle
 {
     public class ZeroLogHandleModule : ZeroModule, ILogBuilder
     {
-        public ZeroLogHandleModule(ITerminal iCurrentTerminal)
-            : base(iCurrentTerminal, 1, "Guarda un log detallado de las operaciones")
+        public ZeroLogHandleModule()
+            : base(1, "Guarda un log detallado de las operaciones")
         {
             
         }

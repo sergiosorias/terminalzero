@@ -48,14 +48,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\SaleHeader.cs" />
-    <Compile Include="Entities\Sales.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Sales.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\SalesEntities.cs" />
-    <Compile Include="Entities\StockItem.cs" />
     <Compile Include="Pages\Controls\PaymentInstrumentGrid.xaml.cs">
       <DependentUpon>PaymentInstrumentGrid.xaml</DependentUpon>
     </Compile>
@@ -100,12 +92,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="Entities\Sales.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Sales.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Pages\Controls\PaymentInstrumentGrid.xaml">

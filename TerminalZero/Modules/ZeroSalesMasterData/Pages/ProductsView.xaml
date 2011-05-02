@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
-            <baseControls:ZeroToolBar x:Name="toolbar" Grid.Column="2" HorizontalAlignment="Right" SaveBtnVisible="False" CancelBtnVisible="False" New="Button_Click" VerticalAlignment="Center"/>
+            <baseControls:ZeroToolBar x:Name="toolbar" Grid.Column="2" HorizontalAlignment="Right" SaveBtnVisible="False" CancelBtnVisible="False" PrintBtnVisible="True" Print="toolbar_Print" New="Button_Click" VerticalAlignment="Center"/>
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>

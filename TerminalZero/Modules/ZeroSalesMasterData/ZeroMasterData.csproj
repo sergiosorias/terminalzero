@@ -50,15 +50,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\MasterData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MasterData.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\MasterDataEntities.cs" />
-    <Compile Include="Entities\Product.cs" />
-    <Compile Include="Entities\Supplier.cs" />
     <Compile Include="MasterDataPackManager.cs" />
     <Compile Include="Pages\Controls\CustomerDetail.xaml.cs">
       <DependentUpon>CustomerDetail.xaml</DependentUpon>
@@ -98,6 +89,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reporting\ProductListReport.xaml.cs">
+      <DependentUpon>ProductListReport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ZeroMasterDataModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -122,10 +116,6 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Entities\MasterData.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MasterData.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="Properties\DataSources\MasterData.Entities.Entities.datasource" />
     <None Include="Properties\DataSources\ZeroMasterData.Entities.Entities.datasource" />
   </ItemGroup>
@@ -171,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SupplierView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reporting\ProductListReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

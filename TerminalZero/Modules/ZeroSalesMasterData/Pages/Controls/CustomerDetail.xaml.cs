@@ -6,9 +6,9 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -27,8 +27,8 @@ namespace ZeroMasterData.Pages.Controls
             
         }
 
-        MasterDataEntities DataProvider;
-        public CustomerDetail(MasterDataEntities dataProvider)
+        DataModelManager DataProvider;
+        public CustomerDetail(DataModelManager dataProvider)
         {
             ControlMode = ControlMode.New;
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace ZeroMasterData.Pages.Controls
             DataContext = this;
         }
 
-        public CustomerDetail(MasterDataEntities dataProvider, int customerCode)
+        public CustomerDetail(DataModelManager dataProvider, int customerCode)
             : this(dataProvider)
         {
             _CustomerNew = DataProvider.Customers.First(s => s.Code == customerCode);
@@ -79,7 +79,7 @@ namespace ZeroMasterData.Pages.Controls
         
         public override bool CanAccept(object parameter)
         {
-            bool ret = true;
+            bool ret = base.CanAccept(parameter);
 
             if (ret)
             {

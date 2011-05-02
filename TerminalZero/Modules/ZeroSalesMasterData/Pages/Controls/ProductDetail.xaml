@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" HorizontalContentAlignment="Stretch" 
-             VerticalContentAlignment="Stretch" Background="{StaticResource PageBackgroundBrushKey}">
+             xmlns:r="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI"
+             VerticalContentAlignment="Stretch" Background="{DynamicResource PageBackgroundBrushKey}">
     <Grid Name="grid1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,11 +31,30 @@
                 </Grid.RowDefinitions>
                 <Label Content="Código/PLU:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                    <TextBox  Height="23" Width="150" HorizontalAlignment="Stretch" Margin="1,3,1,2" Name="masterCodeTextBox" Text="{Binding Path=MasterCode, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" GotFocus="masterCodeTextBox_GotFocus"/>
+                    <TextBox  Height="23" Width="150" HorizontalAlignment="Stretch" Margin="1,3,1,2" Name="masterCodeTextBox" VerticalAlignment="Center" GotFocus="masterCodeTextBox_GotFocus">
+                        <TextBox.Text>
+                            <Binding Path="MasterCode" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                    <ExceptionValidationRule/>
+                                    <r:MandatoryRule ErrorMessage="Ingrese un Código de Producto"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <CheckBox Margin="10,3,1,2" Content="Activo" Name="enableTextBox" IsChecked="{Binding Path=Enable, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <Label Content="Nombre:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="nameTextBox" Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
+                <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="nameTextBox" VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <Label Content="Descripción:" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Grid.Row="3" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
                 <Label Content="Nombre Ticket:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
@@ -63,7 +83,17 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <ComboBox Margin="2" x:Name="groupBox" TextSearch.TextPath="Name" MaxWidth="250" SelectionChanged="groupBox_SelectionChanged">
+                    <TextBox Margin="2" Height="23" Focusable="False" IsReadOnly="True" HorizontalAlignment="Stretch" Name="group1TextBox" VerticalAlignment="Center">
+                        <TextBox.Text>
+                            <Binding Path="Group1" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                    <ExceptionValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <ComboBox Margin="2" x:Name="groupBox" TextSearch.TextPath="Name" SelectedValuePath="Code" MaxWidth="250" SelectionChanged="groupBox_SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="itemBack" 
@@ -73,7 +103,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Name}" FontSize="13" Height="20" VerticalAlignment="Top" />
-                                    <Button Grid.Column="1" Height="20" Style="{StaticResource editRowButton}" DataContext="{Binding Code}" Name="ClickeableItemButton" Click="ClickeableItemButton_Click"/>
+                                    <Button Grid.Column="1" Height="20" Style="{DynamicResource editRowButton}" DataContext="{Binding Code}" Name="ClickeableItemButton" Click="ClickeableItemButton_Click"/>
                                 </Grid>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBoxItem},Path=IsMouseOver}" Value="True">
@@ -103,8 +133,17 @@
                 <!--<Label Content="Nombre:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox1" Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />-->
                 <Label Content="Pesos:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="valueTextBox" Text="{Binding Path=Value, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" 
-                         VerticalAlignment="Center" />
+                <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="valueTextBox" VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <r:MandatoryRule/>
+                                <r:IsDoubleRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                   
+                </TextBox>
                 <Label Grid.Row="0" Grid.Column="2" Content="Unidad:"/>
                 <Grid Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>

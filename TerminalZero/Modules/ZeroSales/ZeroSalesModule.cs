@@ -1,16 +1,16 @@
-﻿        using ZeroBusiness;
+﻿using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroSales.Pages;
-        using ZeroSales.Properties;
+using ZeroSales.Properties;
 
 namespace ZeroSales
 {
     public class ZeroSalesModule : ZeroModule
     {
-        public ZeroSalesModule(ITerminal terminal)
-            :base(terminal,7,Resources.SalesModuleDescription)
+        public ZeroSalesModule()
+            : base(7, Resources.SalesModuleDescription)
         {
             BuildPosibleActions();
         }
@@ -24,7 +24,7 @@ namespace ZeroSales
 
         public override void Init()
         {
-            
+
         }
 
         #endregion
@@ -33,15 +33,15 @@ namespace ZeroSales
 
         private void BuildPosibleActions()
         {
-            var action = new ZeroAction( ActionType.MenuItem, Actions.OpenNewSaleView, openSaleView);
-            OwnerTerminal.Session.AddAction(action);
+            var action = new ZeroAction(ActionType.MenuItem, Actions.OpenNewSaleView, openSaleView);
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(action);
         }
 
         private void openSaleView()
         {
             var args = new ModuleNotificationEventArgs
                            {
-                               ControlToShow = new CreateSaleView(OwnerTerminal, 0)
+                               ControlToShow = new CreateSaleView(0)
                            };
             OnModuleNotifing(args);
         }

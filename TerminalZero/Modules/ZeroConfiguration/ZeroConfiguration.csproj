@@ -54,8 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationPackManager.cs" />
-    <Compile Include="Entities\Module.cs" />
-    <Compile Include="Entities\Terminal.cs" />
     <Compile Include="Helpers\IpFinder.cs" />
     <Compile Include="Pages\Controls\UserChangePassword.xaml.cs">
       <DependentUpon>UserChangePassword.xaml</DependentUpon>
@@ -72,13 +70,6 @@
     <Compile Include="Pages\Users.xaml.cs">
       <DependentUpon>Users.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Entities\Configuration.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Configuration.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\ConfigurationEntities.cs" />
-    <Compile Include="Namespace.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -129,10 +120,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Entities\Configuration.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Configuration.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="Properties\DataSources\ZeroConfiguration.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

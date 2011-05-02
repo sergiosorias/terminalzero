@@ -6,9 +6,9 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -17,16 +17,16 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class ProductDetail : NavigationBasePage
     {
-        MasterDataEntities DataProvider;
+        DataModelManager DataProvider;
         public Product CurrentProduct { get; private set; }
 
-        public ProductDetail(MasterDataEntities dataProvider)
+        public ProductDetail(DataModelManager dataProvider)
         {
             InitializeComponent();
             DataProvider = dataProvider;
         }
 
-        public ProductDetail(MasterDataEntities dataProvider, int productCode)
+        public ProductDetail(DataModelManager dataProvider, int productCode)
             : this(dataProvider)
         {
             CurrentProduct = DataProvider.Products.First(p => p.Code == productCode);
@@ -41,6 +41,7 @@ namespace ZeroMasterData.Pages.Controls
                 LoadTaxes();
                 LoadPriceWeights();
                 LoadProductGroup();
+                valueTextBox.Text = "";
             }
         }
 
@@ -108,8 +109,8 @@ namespace ZeroMasterData.Pages.Controls
                 case ControlMode.New:
                     CurrentProduct = Product.CreateProduct(
                         DataProvider.Products.Count()
-                        , true, DataProvider.GetNextProductCode(), true);
-
+                        , true, true);
+                    
                     P = Price.CreatePrice(
                         DataProvider.Prices.Count(),
                         true, 0);
@@ -170,96 +171,91 @@ namespace ZeroMasterData.Pages.Controls
 
         public override bool CanAccept(object parameter)
         {
-            bool ret = true; ;
+            bool ret = base.CanAccept(parameter);
             string msg = string.Empty;
-            if (CurrentProduct.MasterCode == 0)
-            {
-                msg = "Por favor ingrese un código de producto.";
-                masterCodeTextBox.SelectAll();
-                masterCodeTextBox.Focus();
-            }
-            else if(ControlMode == ControlMode.New && DataProvider.Products.FirstOrDefault(pr=>pr.MasterCode.Equals(CurrentProduct.MasterCode))!=null)
-            {
-                msg = "Codigo de product existente!\n Por favor ingrese otro código.";
-                masterCodeTextBox.SelectAll();
-                masterCodeTextBox.Focus();
-            }
-
-            if (groupBox.SelectedIndex < 0)
-            {
-                msg += "\nPor favor ingrese un grupo para este product.";
-            }
-
-            if (byWeightCheckBox.IsChecked.HasValue && byWeightCheckBox.IsChecked.Value
-                && weightBox.SelectedIndex < 0)
-            {
-                msg += "\nPor favor ingrese una unidad de medida para el producto.";
-            }
-
-            if (string.IsNullOrWhiteSpace(valueTextBox.Text))
-            {
-                msg += "\nPor favor ingrese un valor de producto.";
-            }
-
-            double p = -1;
-            if (!double.TryParse(valueTextBox.Text, out p))
-            {
-                msg += "\nPor favor ingrese un numero como valor.";
-            }
-
-            if (string.IsNullOrWhiteSpace(msg))
-            {
-                if (p == 0)
-                {
-                    switch (MessageBox.Show("¿Esta seguro que desea dejar el valor en cero?", "Precaución", MessageBoxButton.YesNo, MessageBoxImage.Question))
-                    {
-                        case MessageBoxResult.Cancel:
-                        case MessageBoxResult.No:
-                        case MessageBoxResult.None:
-                            valueTextBox.SelectAll();
-                            valueTextBox.Focus();
-                            ret = false;
-                            break;
-                        case MessageBoxResult.OK:
-                        case MessageBoxResult.Yes:
-                            ret = true;
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                ret = false;
-            }
-
             if (ret)
             {
-                try
+                if (ControlMode == ControlMode.New &&
+                    DataProvider.Products.FirstOrDefault(pr => pr.MasterCode.Equals(CurrentProduct.MasterCode)) != null)
                 {
-                    switch (ControlMode)
+                    msg = "Codigo de product existente!\n Por favor ingrese otro código.";
+                    masterCodeTextBox.SelectAll();
+                    masterCodeTextBox.Focus();
+                }
+
+                if (byWeightCheckBox.IsChecked.HasValue && byWeightCheckBox.IsChecked.Value
+                    && weightBox.SelectedIndex < 0)
+                {
+                    msg += "\nPor favor ingrese una unidad de medida para el producto.";
+                }
+
+                if (string.IsNullOrWhiteSpace(valueTextBox.Text))
+                {
+                    msg += "\nPor favor ingrese un valor de producto.";
+                }
+
+                double p = -1;
+                if (!double.TryParse(valueTextBox.Text, out p))
+                {
+                    msg += "\nPor favor ingrese un numero como valor.";
+                }
+
+                if (string.IsNullOrWhiteSpace(msg))
+                {
+                    if (p == 0)
                     {
-                        case ControlMode.New:
-                            DataProvider.Products.AddObject(CurrentProduct);
-                            break;
-                        case ControlMode.Update:
-                            DataProvider.Products.ApplyCurrentValues(CurrentProduct);
-                            break;
-                        case ControlMode.Delete:
-                            break;
-                        case ControlMode.ReadOnly:
-                            break;
-                        default:
-                            break;
+                        switch (
+                            MessageBox.Show("¿Esta seguro que desea dejar el valor en cero?", "Precaución",
+                                            MessageBoxButton.YesNo, MessageBoxImage.Question))
+                        {
+                            case MessageBoxResult.Cancel:
+                            case MessageBoxResult.No:
+                            case MessageBoxResult.None:
+                                valueTextBox.SelectAll();
+                                valueTextBox.Focus();
+                                ret = false;
+                                break;
+                            case MessageBoxResult.OK:
+                            case MessageBoxResult.Yes:
+                                ret = true;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ret = false;
+                }
+
+                if (ret)
+                {
+                    try
+                    {
+                        switch (ControlMode)
+                        {
+                            case ControlMode.New:
+                                DataProvider.Products.AddObject(CurrentProduct);
+                                break;
+                            case ControlMode.Update:
+                                DataProvider.Products.ApplyCurrentValues(CurrentProduct);
+                                break;
+                            case ControlMode.Delete:
+                                break;
+                            case ControlMode.ReadOnly:
+                                break;
+                            default:
+                                break;
+                        }
+
+                        DataProvider.SaveChanges();
+                    }
+                    catch (Exception wx)
+                    {
+                        System.Windows.Forms.MessageBox.Show(wx.ToString());
                     }
 
-                    DataProvider.SaveChanges();
                 }
-                catch (Exception wx)
-                {
-                    System.Windows.Forms.MessageBox.Show(wx.ToString());
-                }
-
             }
 
 

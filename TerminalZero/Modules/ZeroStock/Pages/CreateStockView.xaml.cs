@@ -6,13 +6,14 @@ using System.Linq;
 using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ZeroGUI.Classes;
-using ZeroStock.Entities;
+
 
 namespace ZeroStock.Pages
 {
@@ -21,15 +22,13 @@ namespace ZeroStock.Pages
     /// </summary>
     public partial class CreateStockView : NavigationBasePage
     {
-        private readonly ITerminal _terminal;
         private StockHeader _header;
-        private StockEntities _context;
+        private DataModelManager _context;
         private string _lot = "";
         readonly int _stockType = -1;
-        public CreateStockView(ITerminal terminal, int stockType)
+        public CreateStockView(int stockType)
         {
             InitializeComponent();
-            _terminal = terminal;
             _stockType = stockType;
         }
 
@@ -38,17 +37,17 @@ namespace ZeroStock.Pages
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
 
-                _context = new StockEntities();
+                _context = new DataModelManager();
 
                 Guid g = new Guid();
                 ZeroActionParameterBase param =
-                _terminal.Session.GetParameter<MembershipUser>();
+                ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>();
                 if (param != null)
                 {
                     g = (Guid)((MembershipUser)param.Value).ProviderUserKey;
                 }
 
-                _header = _context.CreateStockHeader(_terminal.TerminalCode, _stockType, _context.GetNextStockHeaderCode(), _terminal.TerminalCode, g);
+                _header = _context.CreateStockHeader(ZeroCommonClasses.Terminal.Instance.TerminalCode, _stockType, _context.GetNextStockHeaderCode(), ZeroCommonClasses.Terminal.Instance.TerminalCode, g);
 
                 lblStockType.Content = _header.StockType != null &&
                                        !string.IsNullOrWhiteSpace(_header.StockType.Description)
@@ -57,7 +56,7 @@ namespace ZeroStock.Pages
 
                 if (_context.IsDeliveryDocumentMandatory(_stockType))
                 {
-                    var view = new DeliveryDocumentView(_terminal);
+                    var view = new DeliveryDocumentView();
                     view.ControlMode = ControlMode.Selection;
                     bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
@@ -68,28 +67,19 @@ namespace ZeroStock.Pages
                     else
                     {
                         MessageBox.Show(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail);
-                        TryGoHome();
+                        GoHomeOrDisable();
                     }
                 }
 
             }
+            
         }
 
-        private void TryGoHome()
-        {
-            ZeroAction action;
-            if (!_terminal.Manager.ExistsAction(ZeroBusiness.Actions.AppHome, out action)
-                || !_terminal.Manager.ExecuteAction(action))
-            {
-                IsEnabled = false;
-            }
-        }
-        
         public override bool CanAccept(object parameter)
         {
-            base.CanAccept(parameter);
-            bool ret = true;
-            if (_header != null && _header.EntityState != EntityState.Unchanged && _header.StockItems != null && _header.StockItems.Count > 0 &&  _header.StockItems.All(si => si.EntityState != EntityState.Unchanged))
+            bool ret = base.CanAccept(parameter);
+            
+            if (ret && _header != null && _header.EntityState != EntityState.Unchanged && _header.StockItems != null && _header.StockItems.Count > 0 &&  _header.StockItems.All(si => si.EntityState != EntityState.Unchanged))
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -115,49 +105,58 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
-            if (Part != null)
+            Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            if (prod == null)
             {
-                Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
-                if (prod == null)
+                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
+                if (Part != null)
                 {
-                    Part.IsValid = false;
-                    e.Error = string.Format(Properties.Resources.UnexistentProduct+" - {0}",Part.Code);
+                    prod = _context.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
+                    if (prod == null)
+                    {
+                        Part.IsValid = false;
+                        e.Error = string.Format(Properties.Resources.UnexistentProduct + " - {0}", Part.Code);
+                    }
                 }
             }
         }
 
         private void BarCodeTextBox_BarcodeReceived(object sender, BarCodeEventArgs e)
         {
-            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
-            if (Part != null)
+            Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            if (prod == null)
             {
-                Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
-                if (prod != null)
+                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
+                if (Part != null)
                 {
-                    if (!_header.DeliveryDocumentHeaderReference.IsLoaded)
-                    {
-                        _header.DeliveryDocumentHeaderReference.Load();
-                    }
-                    if (!prod.Price1Reference.IsLoaded)
-                    {
-                        prod.Price1Reference.Load();
-                    }
-                    if (!prod.PriceReference.IsLoaded)
-                    {
-                        prod.PriceReference.Load();
-                    }
-
-                    BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
-
-                    stockGrid.AddItem(_header.AddNewStockItem(prod, partQty.Code, _lot));
-
-                    if(_header.DeliveryDocumentHeader!=null)
-                        _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(prod, partQty.Code,_lot);
-
-                    _lot = "";
-                    lotBarcode.SetFocus();
+                    prod = _context.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
                 }
+            }
+
+            if (prod != null)
+            {
+                if (!_header.DeliveryDocumentHeaderReference.IsLoaded)
+                {
+                    _header.DeliveryDocumentHeaderReference.Load();
+                }
+                if (!prod.Price1Reference.IsLoaded)
+                {
+                    prod.Price1Reference.Load();
+                }
+                if (!prod.PriceReference.IsLoaded)
+                {
+                    prod.PriceReference.Load();
+                }
+
+                BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Composition.Equals('Q'));
+
+                stockGrid.AddItem(_header.AddNewStockItem(prod, partQty.Code, _lot));
+
+                if (_header.DeliveryDocumentHeader != null)
+                    _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(prod, partQty.Code, _lot);
+
+                _lot = "";
+                lotBarcode.SetFocus();
             }
         }
 
@@ -178,7 +177,7 @@ namespace ZeroStock.Pages
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                _terminal.Session.Notifier.Log(TraceLevel.Error, ex.ToString());
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
             }
             return ret;
         }
@@ -186,7 +185,7 @@ namespace ZeroStock.Pages
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveData();
-            TryGoHome();
+            GoHomeOrDisable();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

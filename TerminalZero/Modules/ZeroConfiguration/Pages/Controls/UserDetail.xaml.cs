@@ -32,7 +32,7 @@ namespace ZeroConfiguration.Pages.Controls
 
         public override bool CanAccept(object parameter)
         {
-            bool ret = false;
+            bool ret = base.CanAccept(parameter);
             switch (ControlMode)
             {
                 case ControlMode.New:

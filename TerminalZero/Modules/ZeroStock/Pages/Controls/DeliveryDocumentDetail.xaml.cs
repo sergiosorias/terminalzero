@@ -3,12 +3,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroStock.Entities;
 
 namespace ZeroStock.Pages.Controls
 {
@@ -17,14 +17,12 @@ namespace ZeroStock.Pages.Controls
     /// </summary>
     public partial class DocumentDeliveryDetail : NavigationBasePage
     {
-        private StockEntities DataProvider;
-        private readonly ITerminal _terminal;
+        private DataModelManager DataProvider;
         public DeliveryDocumentHeader CurrentDocumentDelivery { get; private set; }
 
-        public DocumentDeliveryDetail(ITerminal terminal)
+        public DocumentDeliveryDetail()
         {
             InitializeComponent();
-            _terminal = terminal;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -32,12 +30,12 @@ namespace ZeroStock.Pages.Controls
             // Do not load your data at design time.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                DataProvider = new StockEntities();
+                DataProvider = new DataModelManager();
 
-                CurrentDocumentDelivery = DataProvider.CreateDeliveryDocumentHeader(_terminal.TerminalCode);
+                CurrentDocumentDelivery = DataProvider.CreateDeliveryDocumentHeader(ZeroCommonClasses.Terminal.Instance.TerminalCode);
                 grid1.DataContext = CurrentDocumentDelivery;
                 supplierBox.ItemsSource = DataProvider.Suppliers;
-                cbTerminals.ItemsSource = DataProvider.GetExportTerminal(_terminal.TerminalCode);
+                cbTerminals.ItemsSource = DataProvider.GetExportTerminal(ZeroCommonClasses.Terminal.Instance.TerminalCode);
             }
         }
 
@@ -48,35 +46,40 @@ namespace ZeroStock.Pages.Controls
 
         public override bool CanAccept(object parameter)
         {
-            base.CanAccept(parameter);
-            string msg = string.Empty;
-
-            if (!CurrentDocumentDelivery.SupplierCode.HasValue)
+            bool ret = base.CanAccept(parameter);
+            if (ret)
             {
-                msg += Properties.Resources.MsgSelectSupplierPlease;
-            }
+                string msg = string.Empty;
 
-            if (cbTerminals.SelectedIndex <0)
-            {
-                msg += "\n"+Properties.Resources.MsgSelectTerminalPlease;
-            }
-
-
-            if (string.IsNullOrWhiteSpace(msg))
-            {
-                try
+                if (!CurrentDocumentDelivery.SupplierCode.HasValue)
                 {
-                    DataProvider.SaveChanges();
-                    return true;
+                    msg += Properties.Resources.MsgSelectSupplierPlease;
+                    ret = false;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
 
-            MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return false;
+                if (cbTerminals.SelectedIndex < 0)
+                {
+                    msg += "\n" + Properties.Resources.MsgSelectTerminalPlease;
+                    ret = false;
+                }
+
+
+                if (ret)
+                {
+                    try
+                    {
+                        DataProvider.SaveChanges();
+                        return ret;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return ret;
         }
 
         private void supplierBox_Unloaded(object sender, RoutedEventArgs e)

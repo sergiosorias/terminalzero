@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Timers;
 using ZeroBusiness;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Files;
 using ZeroCommonClasses.GlobalObjects;
@@ -12,7 +13,6 @@ using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroCommonClasses.Pack;
-using ZeroConfiguration.Entities;
 
 namespace ZeroConfiguration
 {
@@ -69,8 +69,7 @@ namespace ZeroConfiguration
         private Timer Syncronizer;
         private Timer SyncronizerStatus;
 
-        private ConfigurationEntities CurrentContext;
-        private ITerminal CurrentTerminal;
+        private ConfigurationModelManager CurrentContext;
         private List<SyncStep> Steps;
         private ZeroSession Session;
 
@@ -83,13 +82,12 @@ namespace ZeroConfiguration
             Steps = new List<SyncStep>();
         }
 
-        public double LoadConfiguration(ITerminal currentTerminal, ConfigurationEntities Context, ZeroSession session)
+        public double LoadConfiguration(ConfigurationModelManager Context, ZeroSession session)
         {
             Session = session;
-            CurrentTerminal = currentTerminal;
             SyncEvery = LoadSyncRecurrence(Context);
             Steps.Add(ExecuteHelloCommand);
-            if (currentTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
+            if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
             {
                 Steps.Add(SendTerminals);
                 Steps.Add(SendModules);
@@ -109,9 +107,9 @@ namespace ZeroConfiguration
             return SyncEvery;
         }
 
-        private double LoadSyncRecurrence(ConfigurationEntities Context)
+        private double LoadSyncRecurrence(ConfigurationModelManager Context)
         {
-            Terminal ter = Context.Terminals.First(t => t.Code == CurrentTerminal.TerminalCode);
+            var ter = Context.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
             if (!ter.TerminalProperties.IsLoaded)
                 ter.TerminalProperties.Load();
             TerminalProperty value = ter.TerminalProperties.FirstOrDefault(tp => tp.Code == "SYNC_EVERY");
@@ -161,7 +159,7 @@ namespace ZeroConfiguration
                 try
                 {
                     lastNotifier = Config.Notifier;
-                    CurrentContext = new ConfigurationEntities();
+                    CurrentContext = new ConfigurationModelManager();
                     Config.Notifier.SetProcess("Iniciando conexion");
                     bool finishState = false;
                     Config.Notifier.SetProgress(0);
@@ -346,7 +344,7 @@ namespace ZeroConfiguration
             bool ret = true;
             Config.Notifier.SetUserMessage(false, "Enviando 'hola'");
 
-            ZeroResponse<string> r = Config.SyncService.SayHello(CurrentTerminal.TerminalName, CurrentTerminal.TerminalCode);
+            ZeroResponse<string> r = Config.SyncService.SayHello(ZeroCommonClasses.Terminal.Instance.TerminalName, ZeroCommonClasses.Terminal.Instance.TerminalCode);
             msg = r.Message;
             if (r.IsValid)
                 CurrentConnectionID = r.Result;
@@ -369,7 +367,7 @@ namespace ZeroConfiguration
             msg = r.Message;
             if (r.IsValid && r.Result != DateTime.MinValue)
             {
-                CurrentContext.Terminals.First(t => t.Code == CurrentTerminal.TerminalCode).LastSync = DateTime.Now;
+                CurrentContext.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode).LastSync = DateTime.Now;
                 CurrentContext.SaveChanges();
             }
 
@@ -387,13 +385,13 @@ namespace ZeroConfiguration
             Config.Notifier.SetProcess("Enviando datos");
             Config.Notifier.SetUserMessage(false, "Enviando datos sobre módulos actuales al servidor.");
             string modulesToSend;
-            if (CurrentTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
+            if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
             {
                 modulesToSend = ContextExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Modules);
             }
             else
             {
-                Terminal T = CurrentContext.Terminals.First(t=>t.Code == CurrentTerminal.TerminalCode);
+                var T = CurrentContext.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
                 if (!T.Modules.IsLoaded)
                     T.Modules.Load();
 
@@ -495,11 +493,11 @@ namespace ZeroConfiguration
             ZeroResponse<string> res2 = Config.SyncService.GetTerminals(CurrentConnectionID);
             if (res2.IsValid)
             {
-                IEnumerable<Terminal> props = ContextExtentions.GetEntitiesFromXMLObjectList<Terminal>(res2.Result);
+                IEnumerable<ZeroBusiness.Entities.Configuration.Terminal> props = ContextExtentions.GetEntitiesFromXMLObjectList<ZeroBusiness.Entities.Configuration.Terminal>(res2.Result);
 
                 foreach (var item in props)
                 {
-                    Terminal T = CurrentContext.Terminals.FirstOrDefault(t => t.Code == item.Code);
+                    var T = CurrentContext.Terminals.FirstOrDefault(t => t.Code == item.Code);
                     if (T == null)
                     {
                         CurrentContext.Terminals.AddObject(item);
@@ -511,7 +509,7 @@ namespace ZeroConfiguration
                         T.Name = item.Name;
                         T.IsTerminalZero = item.IsTerminalZero;
                     }
-                    ConfigurationEntities.CreateTerminalProperties(CurrentContext, item.Code);
+                    ConfigurationModelManager.CreateTerminalProperties(CurrentContext, item.Code);
                 }
 
                 CurrentContext.SaveChanges();

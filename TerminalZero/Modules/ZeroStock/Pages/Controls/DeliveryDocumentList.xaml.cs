@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ZeroStock.Entities;
+using ZeroBusiness.Entities.Data;
 
 namespace ZeroStock.Pages.Controls
 {
@@ -12,14 +12,14 @@ namespace ZeroStock.Pages.Controls
     /// </summary>
     public partial class DeliveryDocumentList : ZeroGUI.ListNavigationControl
     {
-        internal StockEntities DataProvider {get;set;}
+        internal DataModelManager DataProvider { get; set; }
         public bool NotUsedOnly { get; set; }
 
         public DeliveryDocumentList()
         {
             InitializeComponent();
             if (DataProvider == null)
-                DataProvider = new StockEntities();
+                DataProvider = new DataModelManager();
             NotUsedOnly = true;
             InitializeList(deliveryDocumentHeadersDataGrid);
         }

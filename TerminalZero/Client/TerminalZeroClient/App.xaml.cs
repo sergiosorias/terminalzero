@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using TerminalZeroClient.Business;
 using TerminalZeroClient.Properties;
@@ -15,113 +14,37 @@ namespace TerminalZeroClient
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application, ITerminal
+    public partial class App : Application
     {
-        private static App _currentApp;
-
-        private ISyncService _clientConn;
-        private ITerminalManager _manager;
-        private ZeroSession _session;
-        private int _terminalCode = -1;
-
         public App()
         {
             var set = new AppDomainSetup { PrivateBinPath = ContextInfo.Directories.ModulesFolder };
             AppDomain.CreateDomain("Modules folder", null, set);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            ZeroCommonClasses.Terminal.Instance.CurrentClient = new TerminalClient();
         }
 
-        public static App Instance
+        void App_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            get
-            {
-                if (_currentApp == null)
-                {
-                    _currentApp = (App)Current;
-                    _currentApp.LoadParams();
-                }
-
-                return _currentApp;
-            }
+            
         }
 
-        private ISyncService ClientSyncServiceReference
-        {
-            get
-            {
-                return _clientConn ?? (_clientConn = ContextInfo.CreateSyncConnection());
-                //int times = 3;
-                //while (times > 0 && ((ICommunicationObject)_ClientConn).State == System.ServiceModel.CommunicationState.Faulted)
-                //{
-                //    _ClientConn = ZeroCommonClasses.Context.ContextInfo.CreateConfigConnection(System.IO.Path.Combine(Environment.CurrentDirectory, "TerminalZeroClient.exe.config"));
-                //    times--;
-                //}
-            }
-        }
-
-        internal ZeroClient CurrentClient { get; private set; }
-
-        public string Name
+        public static string Name
         {
             get { return TerminalZeroClient.Properties.Resources.AppName; }
         }
 
-        #region ITerminal Members
-
-        public int TerminalCode
-        {
-            get { return _terminalCode; }
-        }
-
-        public string TerminalName
-        {
-            get { return Environment.MachineName; }
-        }
-
-        public ZeroSession Session
-        {
-            get { return _session; }
-        }
-
-        public ITerminalManager Manager
-        {
-            get { return _manager; }
-        }
-
-        #endregion
-
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            Trace.TraceError(Name, e.ToString());
             EventLog.WriteEntry(Name, e.ToString());
-        }
-
-        private void LoadParams()
-        {
-            CurrentClient = new ZeroClient();
-            SetSession(new ZeroSession());
-            _terminalCode = Settings.Default.TerminalCode;
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
         }
 
-        internal void SetSession(ZeroSession zeroSession)
-        {
-            _session = zeroSession;
-            Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ClientSyncServiceReference,
-                                                                                 false));
-            Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false,
-                                                                                  ContextInfo.
-                                                                                      CreateFileTranferConnection(),
-                                                                                  false));
-        }
-
-        internal void SetManager(ITerminalManager zeroManager)
-        {
-            _manager = zeroManager;
-        }
-
+        
         
     }
 }

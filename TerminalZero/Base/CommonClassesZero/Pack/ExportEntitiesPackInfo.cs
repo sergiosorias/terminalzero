@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using ZeroCommonClasses.Entities;
+using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses.Pack
 {
     [DataContract]
-    public class ExportEntitiesPackInfo : PackInfoBase
+    public class ExportEntitiesPackInfo : PackInfoBase 
     {
         public ExportEntitiesPackInfo()
         {
@@ -14,7 +17,7 @@ namespace ZeroCommonClasses.Pack
         public ExportEntitiesPackInfo(int moduleCode, string workingDir)
         {
             ModuleCode = moduleCode;
-            Path = workingDir;
+            RootDirectory = workingDir;
             Tables = new List<PackTableInfo>();
         }
 
@@ -22,6 +25,12 @@ namespace ZeroCommonClasses.Pack
         public int TableCount { get; set; }
 
         [IgnoreDataMember]
+        public bool SomeEntityHasRows 
+        {
+            get { return TableCount > 0; }
+        }
+
+        [DataMember]
         public List<PackTableInfo> Tables { get; set; }
 
         public void AddTable<T>(IEnumerable<T> entity)
@@ -38,5 +47,39 @@ namespace ZeroCommonClasses.Pack
 
             }
         }
+
+        public bool ContainsTable<T>()
+        {
+            string typeToSearch = typeof(T).ToString();
+            return Tables.Count>0 && Tables.FirstOrDefault(table => table.RowTypeName == typeToSearch)!=null;
+        }
+
+        public IEnumerable<T> GetTable<T>()
+        {
+            string typeToSearch = typeof(T).ToString();
+            return Tables.FirstOrDefault(table => table.RowTypeName == typeToSearch).GetRows<T>(WorkingDirectory);
+        }
+
+        public void ExportTables()
+        {
+            foreach (PackTableInfo info in Tables)
+            {
+                info.SerializeRows(WorkingDirectory);
+
+                foreach (IExportableEntity exportable in info.GetRows().OfType<IExportableEntity>())
+                {
+                    exportable.UpdateStatus(EntityStatus.Exported);
+                    if (!TerminalToCodes.Contains(exportable.TerminalDestination))
+                    {
+                        TerminalToCodes.Add(exportable.TerminalDestination);
+                    }
+                }
+            }
+
+            
+        }
+
+        
+
     }
 }

@@ -1,8 +1,7 @@
-﻿using System.Data.Objects.DataClasses;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Entities.Data;
 using ZeroGUI;
 
 namespace ZeroMasterData.Pages.Controls
@@ -12,12 +11,15 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class CustomerList : ListNavigationControl
     {
-        public Entities.MasterDataEntities DataProvider { get; private set; }
+        public DataModelManager DataProvider { get; private set; }
         public CustomerList()
         {
             InitializeComponent();
-            DataProvider = new Entities.MasterDataEntities();
-            InitializeList(customerDataGrid, DataProvider.Customers);
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                DataProvider = new DataModelManager();
+                InitializeList(customerDataGrid, DataProvider.Customers);
+            }
         }
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)

@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using TerminalZeroClient.Extras;
 using TerminalZeroClient.Pages;
 using TerminalZeroClient.Properties;
 using ZeroBusiness;
+using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -36,12 +36,12 @@ namespace TerminalZeroClient
         {
             InitTryIcon();
             LoadConfigs();
-            App.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
-            App.Instance.Session.Notifier = this;
-            App.Instance.Session.ModuleList.ForEach(m => m.Notifing += m_Notifing);
+            Terminal.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
+            Terminal.Instance.CurrentClient.Notifier = this;
+            Terminal.Instance.CurrentClient.ModuleList.ForEach(m => m.Notifing += m_Notifing);
             try
             {
-                App.Instance.Session.ModuleList.ForEach(m => m.Init());
+                Terminal.Instance.CurrentClient.ModuleList.ForEach(m => m.Init());
                 OpenHome();
             }
             catch (Exception ex)
@@ -63,20 +63,20 @@ namespace TerminalZeroClient
             item.Style = (Style)Resources["masterMenuItem"];
             item.Header = Properties.Resources.Home;
             ZeroAction actionInit = null;
-            if (!App.Instance.Manager.ExistsAction(Actions.AppHome, out actionInit))
+            if (!Terminal.Instance.Manager.ExistsAction(Actions.AppHome, out actionInit))
             {
                 actionInit = new ZeroAction( ActionType.BackgroudAction, Actions.AppHome, OpenHome);
                 //actionMenu = new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Home, () => item.Focus());
                 //MenuShorcut.Command = actionMenu;
-                App.Instance.Session.AddAction(actionInit);
-                App.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppBack, OpenHome));
-                //App.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
-                App.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppExit, ForceClose));
+                Terminal.Instance.Session.AddAction(actionInit);
+                Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppBack, OpenHome));
+                //Terminal.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
+                Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppExit, ForceClose));
             }
             ShortCutHome.Command = actionInit;
             item.Command = actionInit;
             mainMenu.Items.Add(item);
-            InternalBuildMenu(App.Instance.CurrentClient.BuildMenu(), mainMenu.Items);
+            InternalBuildMenu(Terminal.Instance.CurrentClient.MainMenu, mainMenu.Items);
         }
         
         private void OpenHome()
@@ -180,7 +180,7 @@ namespace TerminalZeroClient
             _notifyIcon = new NotifyIcon();
             _notifyIcon.BalloonTipTitle = Settings.Default.ApplicationName;
             _notifyIcon.BalloonTipClicked += (o, e) => { m_notifyIcon_Click(null, null); };
-            _notifyIcon.Text = App.Instance.Name;
+            _notifyIcon.Text = App.Name;
             _notifyIcon.Icon = Properties.Resources.ZeroAppIcon;
             _notifyIcon.Click += m_notifyIcon_Click;
             _notifyIcon.Visible = true;

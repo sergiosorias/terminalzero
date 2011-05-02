@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <baseControls:SearchBox Search="SearchBox_Search"/>
-            <baseControls:ZeroToolBar New="btnNewSupplier_Click" SaveBtnVisible="False" CancelBtnVisible="False" Grid.Column="2" HorizontalAlignment="Right"/>
+            <baseControls:ZeroToolBar New="btnNewSupplier_Click" SaveBtnVisible="False" CancelBtnVisible="False" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using ZeroCommonClasses;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.Entities;
-using ZeroConfiguration.Entities;
 using ZeroConfiguration.Properties;
-using Connection = ZeroConfiguration.Entities.Connection;
 
 namespace ZeroConfiguration
 {
@@ -23,12 +21,12 @@ namespace ZeroConfiguration
         }
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
-        private EntitiesContext<ConfigurationEntities> _currentContext;
+        private EntitiesContext<ConfigurationModelManager> _currentContext;
 // ReSharper restore FieldCanBeMadeReadOnly.Local
         private const int MaxConnectioMinutes = 10;
         public ZeroServerConfiguration()
         {
-            _currentContext = new EntitiesContext<ConfigurationEntities>();
+            _currentContext = new EntitiesContext<ConfigurationModelManager>();
 
         }
 
@@ -81,7 +79,7 @@ namespace ZeroConfiguration
 
         public string CreateConnection(int terminalCode, string externalIp)
         {
-            Connection cnn = Connection.CreateConnection(Guid.NewGuid().ToString(), terminalCode, DateTime.Now);
+            var cnn = ZeroBusiness.Entities.Configuration.Connection.CreateConnection(Guid.NewGuid().ToString(), terminalCode, DateTime.Now);
             cnn.Terminal = _currentContext.Context.Terminals.FirstOrDefault(c => c.Code == terminalCode);
             cnn.Terminal.LastKnownIP = externalIp;
             _currentContext.Context.AddToConnections(cnn);
@@ -92,10 +90,10 @@ namespace ZeroConfiguration
         public bool ValidateConnection(string connId, out int terminalCode, out string msg)
         {
             bool ret = false;
-            Connection cnn = _currentContext.Context.Connections.FirstOrDefault(c => c.Code == connId);
+            var cnn = _currentContext.Context.Connections.FirstOrDefault(c => c.Code == connId);
             terminalCode = -1;
             msg = "";
-            if (cnn != default(Connection))
+            if (cnn != default(ZeroBusiness.Entities.Configuration.Connection))
             {
                 DateTime d = cnn.Stamp.AddMinutes(MaxConnectioMinutes);
 
@@ -117,7 +115,7 @@ namespace ZeroConfiguration
 
         public void UpdateConnectionStatus(string connId, ConnectionState state)
         {
-            Connection con = _currentContext.Context.Connections.First(c => c.Code == connId);
+            var con = _currentContext.Context.Connections.First(c => c.Code == connId);
             con.ConnectionStatu = _currentContext.Context.ConnectionStatus.First(cs => cs.Code == (int)state);
             if (state == ConnectionState.Ended) //Correcto
             {
@@ -130,7 +128,7 @@ namespace ZeroConfiguration
             _currentContext.Context.SaveChanges();
         }
 
-        public void InsertModule(int terminalCode, ZeroModule module)
+        public void InsertModule(int terminalCode, ZeroCommonClasses.ZeroModule module)
         {
             Module.AddNewModule(_currentContext.Context, terminalCode, module.ModuleCode, "", module.Description);
         }
@@ -138,7 +136,7 @@ namespace ZeroConfiguration
         public Dictionary<int, int> GetPacksToSend(int terminalCode)
         {
             var ret = new Dictionary<int, int>();
-            using (var ent = new CommonEntities())
+            using (var ent = new CommonEntitiesManager())
             {
                 var query = ent.GetPacksToSend(terminalCode);
                 foreach (var item in query)
@@ -162,7 +160,7 @@ namespace ZeroConfiguration
 
         public IEnumerable<TerminalProperty> GetTerminalProperties(int tCode)
         {
-            if (ConfigurationEntities.IsTerminalZero(_currentContext.Context, tCode))
+            if (ConfigurationModelManager.IsTerminalZero(_currentContext.Context, tCode))
                 return _currentContext.Context.TerminalProperties;
 
             return _currentContext.Context.TerminalProperties.Where(tp => tp.TerminalCode == tCode);
@@ -171,7 +169,7 @@ namespace ZeroConfiguration
         public void MarkPackReceived(int terminalCode,int packCode)
         {
             PackPending packPending;
-            using (var ent = new CommonEntities())
+            using (var ent = new CommonEntitiesManager())
             {
                 packPending = ent.PackPendings.FirstOrDefault(pp => pp.PackCode == packCode && pp.TerminalCode == terminalCode);
                 if (packPending != null)
@@ -208,7 +206,7 @@ namespace ZeroConfiguration
             {
                 if (_currentContext.Context.TerminalProperties.FirstOrDefault(m => m.Code == item.Code && m.TerminalCode == item.TerminalCode) == null)
                     _currentContext.Context.TerminalProperties.AddObject(item);
-                else if (ConfigurationEntities.IsTerminalZero(_currentContext.Context,terminalCode))
+                else if (ConfigurationModelManager.IsTerminalZero(_currentContext.Context,terminalCode))
                     _currentContext.Context.TerminalProperties.ApplyCurrentValues(item);
             }
 

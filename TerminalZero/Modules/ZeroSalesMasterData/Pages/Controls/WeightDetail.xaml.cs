@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
-using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Entities.Data;
 using ZeroGUI;
-using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -14,14 +12,14 @@ namespace ZeroMasterData.Pages.Controls
     {
         public Weight WeigthNew { get; private set; }
 
-        MasterDataEntities DataProvider;
-        public WeightDetail(MasterDataEntities dataProvider)
+        DataModelManager DataProvider;
+        public WeightDetail(DataModelManager dataProvider)
         {
             InitializeComponent();
             DataProvider = dataProvider;
         }
 
-        public WeightDetail(MasterDataEntities dataProvider, Weight Data)
+        public WeightDetail(DataModelManager dataProvider, Weight Data)
             : this(dataProvider)
         {
             WeigthNew = Data;
@@ -40,32 +38,12 @@ namespace ZeroMasterData.Pages.Controls
 
         public override bool CanAccept(object parameter)
         {
-            bool ret = true;
+            bool ret = base.CanAccept(parameter);
 
-            string msg = "";
-            if (string.IsNullOrWhiteSpace(nameTextBox.Text))
-            {
-                msg = "Por favor ingrese un nombre para la unidad de medida.";
-                ret = false;
-            }
-
-            if (string.IsNullOrWhiteSpace(quantityTextBox.Text))
-            {
-                msg += "Por favor ingrese una cantidad.";
-                ret = false;
-            }
-
-            if (!ret)
-                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //if (!ret)
+            //    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             return ret;
         }
-
-        private void quantityTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            quantityTextBox.SelectAll();
-            
-        }
-
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
-using ZeroStock.Entities;
 
 namespace ZeroStock
 {
@@ -14,81 +15,79 @@ namespace ZeroStock
         public ZeroStockPackMaganer(ITerminal termminal)
             : base(termminal)
         {
-            Importing += ZeroStockPackMaganer_Importing;
-            Exporting += ZeroStockPackMaganer_Exporting;
+            
         }
 
-        private void ZeroStockPackMaganer_Importing(object sender, PackEventArgs e)
+        protected override void ImportProcess(PackProcessingEventArgs args)
         {
-            e.Pack.IsMasterData = false;
-            e.Pack.IsUpgrade = false;
-            ImportEntities(e);
+ 	        base.ImportProcess(args);
+            args.Pack.IsMasterData = false;
+            args.Pack.IsUpgrade = false;
+            ImportEntities(args);
         }
 
-        private void ZeroStockPackMaganer_Exporting(object sender, PackEventArgs e)
+        protected override void ExportProcess(PackProcessingEventArgs args)
         {
-            foreach (var item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
-            {
-                item.SerializeRows(e.WorkingDirectory);
-            }
+            base.ExportProcess(args);
+            var packInfo = (ExportEntitiesPackInfo)args.PackInfo;
+            packInfo.ExportTables();
+
         }
 
-        private void ImportEntities(PackEventArgs e)
+        private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            
-            using (var ent = new StockEntities())
+            using (var ent = new DataModelManager())
             {
-                var a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(StockHeader).ToString());
-                if (a != null)
+                if (packInfo.ContainsTable<StockHeader>())
                 {
-                    ImportStockHeader(e.WorkingDirectory, ent, a);
-                    a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(StockItem).ToString());
-
-                    if (a != null) ImportStockItem(e.WorkingDirectory, ent, a);
+                    ImportStockHeader(ent, packInfo.GetTable<StockHeader>());
+                    if (packInfo.ContainsTable<StockHeader>())
+                    {
+                        ImportStockItem(ent, packInfo.GetTable<StockItem>());
+                    }
                 }
 
-                a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(DeliveryDocumentHeader).ToString());
-                if (a != null)
+                if (packInfo.ContainsTable<DeliveryDocumentHeader>())
                 {
-                    ImportDeliveryDocumentHeader(e.WorkingDirectory, ent, a);
-                    a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(DeliveryDocumentItem).ToString());
-                    if (a != null) ImportDeliveryDocumentItem(e.WorkingDirectory, ent, a);
+                    ImportDeliveryDocumentHeader(ent, packInfo.GetTable<DeliveryDocumentHeader>());
+                    if (packInfo.ContainsTable<DeliveryDocumentItem>()) 
+                        ImportDeliveryDocumentItem(ent, packInfo.GetTable<DeliveryDocumentItem>());
                 }
                 ent.SaveChanges();
             }
         }
 
-        private static void ImportDeliveryDocumentHeader(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportDeliveryDocumentHeader(DataModelManager ent, IEnumerable<DeliveryDocumentHeader> items)
         {
-            foreach (var item in a.DeserializeRows<DeliveryDocumentHeader>(p))
+            foreach (var item in items)
             {
                 item.Stamp = DateTime.Now;
                 ent.DeliveryDocumentHeaders.AddObject(item);
             }
         }
 
-        private static void ImportDeliveryDocumentItem(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportDeliveryDocumentItem(DataModelManager ent, IEnumerable<DeliveryDocumentItem> items)
         {
-            foreach (var item in a.DeserializeRows<DeliveryDocumentItem>(p))
+            foreach (var item in items)
             {
                 item.Stamp = DateTime.Now;
                 ent.DeliveryDocumentItems.AddObject(item);
             }
         }
 
-        private static void ImportStockItem(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportStockItem(DataModelManager ent, IEnumerable<StockItem> items)
         {
-            foreach (var item in a.DeserializeRows<StockItem>(p))
+            foreach (var item in items)
             {
                 item.Stamp = DateTime.Now;
                 ent.StockItems.AddObject(item);
             }
         }
 
-        private static void ImportStockHeader(string p, StockEntities ent, PackTableInfo a)
+        private static void ImportStockHeader(DataModelManager ent, IEnumerable<StockHeader> items)
         {
-            foreach (var item in a.DeserializeRows<StockHeader>(p))
+            foreach (var item in items)
             {
                 item.Stamp = DateTime.Now;
                 ent.StockHeaders.AddObject(item);

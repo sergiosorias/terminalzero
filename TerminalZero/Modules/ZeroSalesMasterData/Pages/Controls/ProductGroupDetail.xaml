@@ -17,7 +17,15 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Content="Nombre:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
-            <TextBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" VerticalAlignment="Center" >
+                <TextBox.Text>
+                    <Binding Path="Name" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <Label Content="Descripción:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
             <TextBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
         </Grid>

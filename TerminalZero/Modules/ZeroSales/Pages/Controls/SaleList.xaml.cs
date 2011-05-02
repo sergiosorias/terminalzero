@@ -4,8 +4,8 @@ using System.Data.Objects.DataClasses;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
-using ZeroSales.Entities;
 
 namespace ZeroSales.Pages.Controls
 {

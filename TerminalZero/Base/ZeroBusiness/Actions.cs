@@ -1,12 +1,5 @@
 ﻿namespace ZeroBusiness
 {
-    public enum ActionType
-    {
-        MenuItem = 0,
-        MainViewButton = 1,
-        BackgroudAction = 2,
-    }
-
     public class Actions
     {
         public const string AppBack                         = "Application@Back";
