@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
@@ -38,6 +39,12 @@ namespace ZeroMasterData.Pages
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
             e.Matches = productList.ApplyFilter(e.Criteria);
+        }
+
+        private void toolbar_Print(object sender, RoutedEventArgs e)
+        {
+            PrintDialog pd = new PrintDialog();
+            pd.PrintVisual(productList, "Lista de productos");
         }
         
     }

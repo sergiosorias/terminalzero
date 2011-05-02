@@ -6,9 +6,9 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -27,14 +27,14 @@ namespace ZeroMasterData.Pages.Controls
             
         }
 
-        MasterDataEntities DataProvider;
-        public SupplierDetail(MasterDataEntities dataProvider)
+        DataModelManager DataProvider;
+        public SupplierDetail(DataModelManager dataProvider)
         {
             InitializeComponent();
             DataProvider = dataProvider;
         }
 
-        public SupplierDetail(MasterDataEntities dataProvider,int supplierCode)
+        public SupplierDetail(DataModelManager dataProvider,int supplierCode)
             : this(dataProvider)
         {
             _SupplierNew = DataProvider.Suppliers.First(s => s.Code == supplierCode);
@@ -53,7 +53,6 @@ namespace ZeroMasterData.Pages.Controls
                         _SupplierNew = Supplier.CreateSupplier(
                             DataProvider.Suppliers.Count()
                             , true);
-                        paymentInstrumentCodeComboBox.SelectedIndex = 0;
                         break;
                     case ControlMode.Update:
                         if (!_SupplierNew.TaxPositionReference.IsLoaded)
@@ -76,7 +75,7 @@ namespace ZeroMasterData.Pages.Controls
         
         public override bool CanAccept(object parameter)
         {
-            bool ret = true;
+            bool ret = base.CanAccept(parameter);
 
             if (ret)
             {

@@ -6,25 +6,7 @@
              xmlns:b="clr-namespace:ZeroGUI"
              xmlns:r="clr-namespace:ZeroGUI.Classes"
              mc:Ignorable="d" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="UserControl_Loaded">
-    <UserControl.Resources>
-        <ControlTemplate x:Key="validationTemplate">
-            <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="16" Margin="1,2,0,0" VerticalAlignment="Center" 
-                           Text="{Binding ElementName=MyAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
-                <AdornedElementPlaceholder Name="MyAdorner"/>
-            </DockPanel>
-        </ControlTemplate>
-        <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="true">
-                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <SolidColorBrush x:Key="NormalBrush" Color="White"/>
-    </UserControl.Resources>
-    <TextBox x:Name="barCode" Background="{StaticResource NormalBrush}" TextChanged="barCode_TextChanged" b:Masking.Mask="^[0-9]{0,13}$"
-             Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}">
+    <TextBox x:Name="barCode" TextChanged="barCode_TextChanged" b:Masking.Mask="^[0-9]{0,13}$">
         <TextBox.Text>
             <Binding Path="Text"  UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
                 <Binding.ValidationRules>

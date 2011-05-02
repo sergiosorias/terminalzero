@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
-using ZeroSales.Entities;
 
 namespace ZeroSales
 {
@@ -11,58 +12,48 @@ namespace ZeroSales
         public ZeroSalesPackManager(ITerminal terminal)
             :base(terminal)
         {
-            Importing += ZeroSalesPackManager_Importing;
-            Exporting += ZeroSalesPackManager_Exporting;
+            
         }
 
-        void ZeroSalesPackManager_Exporting(object sender, PackEventArgs e)
+        protected override void ExportProcess(PackProcessingEventArgs args)
         {
-            foreach (var item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
-            {
-                item.SerializeRows(e.WorkingDirectory);
-            }
+            ((ExportEntitiesPackInfo)args.PackInfo).ExportTables();
         }
-
-        void ZeroSalesPackManager_Importing(object sender, PackEventArgs e)
+        
+        protected override void ImportProcess(PackProcessingEventArgs args)
         {
-            e.Pack.IsMasterData = false;
-            e.Pack.IsUpgrade = false;
-            ImportEntities(e);
+            args.Pack.IsMasterData = false;
+            args.Pack.IsUpgrade = false;
+            ImportEntities(args);
         }
-
-        private void ImportEntities(PackEventArgs e)
+        
+        private static void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-
-            using (var ent = new SalesEntities())
+            using (var ent = new DataModelManager())
             {
-                var a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(SaleHeader).ToString());
-                if (a != null)
+                if (packInfo.ContainsTable<SaleHeader>())
                 {
-                    ImportSaleHeader(e.WorkingDirectory, ent, a);
-                    a = packInfo.Tables.FirstOrDefault(T => T.RowTypeName == typeof(SaleItem).ToString());
-
-                    if (a != null) ImportSaleItem(e.WorkingDirectory, ent, a);
+                    ImportSaleHeader(ent, packInfo.GetTable<SaleHeader>());
+                    if (packInfo.ContainsTable<SaleItem>()) ImportSaleItem(ent, packInfo.GetTable<SaleItem>());
                 }
                 ent.SaveChanges();
             }
         }
 
-        private static void ImportSaleItem(string p, SalesEntities ent, PackTableInfo a)
+        private static void ImportSaleItem(DataModelManager ent, IEnumerable<SaleItem> items)
         {
-            foreach (var item in a.DeserializeRows<SaleItem>(p))
+            foreach (var item in items)
             {
                 item.Stamp = DateTime.Now;
                 ent.SaleItems.AddObject(item);
                 
             }
         }
-
         
-
-        private static void ImportSaleHeader(string p, SalesEntities ent, PackTableInfo a)
+        private static void ImportSaleHeader(DataModelManager ent, IEnumerable<SaleHeader> items)
         {
-            foreach (var item in a.DeserializeRows<SaleHeader>(p))
+            foreach (var item in items)
             {
                 item.Stamp = DateTime.Now;
                 ent.SaleHeaders.AddObject(item);

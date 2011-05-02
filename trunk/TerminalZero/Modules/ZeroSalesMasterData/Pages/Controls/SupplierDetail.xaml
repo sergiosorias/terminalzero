@@ -4,8 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Background="{StaticResource PageBackgroundBrushKey}"
-             xmlns:my="clr-namespace:ZeroMasterData.Entities">
+             mc:Ignorable="d" Background="{DynamicResource PageBackgroundBrushKey}"
+             xmlns:Classes="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI">
 
     <Grid HorizontalAlignment="Stretch" Name="grid1" Loaded="UserControl_Loaded">
         <Grid.RowDefinitions>
@@ -38,7 +38,16 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Razón social:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="name1TextBox" Text="{Binding Path=Name1, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
+                    <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="name1TextBox" VerticalAlignment="Center">
+                        <TextBox.Text>
+                            <Binding Path="Name1" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                    <ExceptionValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <Label Content="Nombre:" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
                     <TextBox Grid.Column="3" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="name2TextBox" Text="{Binding Path=Name2, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
                     <Label Content="CUIT:" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
@@ -59,8 +68,28 @@
                 <Label Content="Teléfono 3:" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
                 <TextBox Grid.Column="3" Grid.Row="3" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="telephone3TextBox" Text="{Binding Path=Telephone3, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
                 <Label Content="Posición IVA:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
-                <ComboBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="taxPositionCodeComboBox" DisplayMemberPath="Name" VerticalAlignment="Center" SelectionChanged="taxPositionCodeComboBox_SelectionChanged" />
+                <TextBox Grid.Column="1" Focusable="False" IsEnabled="False" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="taxPositionCodeTextBox" VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="TaxPositionCode" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <ComboBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="taxPositionCodeComboBox" DisplayMemberPath="Name" SelectedValuePath="Code" VerticalAlignment="Center" SelectionChanged="taxPositionCodeComboBox_SelectionChanged"/>
                 <Label Content="Forma de Pago:" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+                <TextBox Grid.Column="3" Grid.Row="4" Focusable="False" IsEnabled="False" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="paymentInstrumentCodeTextBox" VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="PaymentInstrumentCode" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <ComboBox Grid.Column="3" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="paymentInstrumentCodeComboBox" DisplayMemberPath="Name"  VerticalAlignment="Center" SelectionChanged="paymentInstrumentCodeComboBox_SelectionChanged" />
             </Grid>
         </GroupBox>

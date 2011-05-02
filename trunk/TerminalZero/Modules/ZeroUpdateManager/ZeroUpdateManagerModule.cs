@@ -7,15 +7,15 @@ namespace ZeroUpdateManager
 {
     public class ZeroUpdateManagerModule : ZeroCommonClasses.ZeroModule
     {
-        public ZeroUpdateManagerModule(ITerminal terminal)
-            : base(terminal, 5, "Maneja las actualizaciones del sistema")
+        public ZeroUpdateManagerModule()
+            : base(5, "Maneja las actualizaciones del sistema")
         {
             BuildPosibleActions();
         }
 
         public void BuildPosibleActions()
         {
-            OwnerTerminal.Session.AddAction(new ZeroAction( ZeroBusiness.ActionType.MenuItem, ZeroBusiness.Actions.ExecUpgradeProcess, ImportScriptFile));
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, ZeroBusiness.Actions.ExecUpgradeProcess, ImportScriptFile));
         }
 
         public override string[] GetFilesToSend()
@@ -42,22 +42,22 @@ namespace ZeroUpdateManager
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new UpdateManagerPackManager(OwnerTerminal);
-            PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { OwnerTerminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
+            var PackReceived = new UpdateManagerPackManager(ZeroCommonClasses.Terminal.Instance);
+            PackReceived.Imported += (o, e) => { try { System.IO.File.Delete(path); } catch { ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(System.Diagnostics.TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
             PackReceived.Error += PackReceived_Error;
             if (PackReceived.Import(path))
             {
-                OwnerTerminal.Session.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
             }
             else
             {
-                OwnerTerminal.Session.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
             }
         }
 
         private void PackReceived_Error(object sender, System.IO.ErrorEventArgs e)
         {
-            OwnerTerminal.Session.Notifier.Log(System.Diagnostics.TraceLevel.Error, e.GetException().ToString());
+            ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(System.Diagnostics.TraceLevel.Error, e.GetException().ToString());
         }
 
     }

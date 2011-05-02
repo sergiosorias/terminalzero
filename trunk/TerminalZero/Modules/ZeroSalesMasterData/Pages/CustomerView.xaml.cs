@@ -18,10 +18,15 @@ namespace ZeroMasterData.Pages
             InitializeComponent();
         }
 
-        private void btnNewSupplier_Click(object sender, RoutedEventArgs e)
+        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
+        {
+            customerGrid.ApplyFilter(e.Criteria);
+        }
+
+        private void toolbar_New(object sender, RoutedEventArgs e)
         {
             var detail = new CustomerDetail(customerGrid.DataProvider);
-            bool? ret = ZeroMessageBox.Show(detail,Properties.Resources.CustomerNew,ResizeMode.NoResize, MessageBoxButton.OKCancel);
+            bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.CustomerNew, ResizeMode.NoResize, MessageBoxButton.OKCancel);
             if (ret.HasValue && ret.Value)
             {
                 try
@@ -34,11 +39,6 @@ namespace ZeroMasterData.Pages
                     Trace.TraceError("Error updating Customer {0}", detail.CurrentCustomer);
                 }
             }
-        }
-
-        private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
-        {
-            customerGrid.ApplyFilter(e.Criteria);
         }
 
        

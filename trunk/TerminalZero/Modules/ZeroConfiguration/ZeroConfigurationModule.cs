@@ -6,20 +6,20 @@ using System.Text;
 using System.Web.Security;
 using System.Windows;
 using ZeroBusiness;
-using ZeroCommonClasses;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
-using ZeroConfiguration.Entities;
 using ZeroConfiguration.Pages;
 using ZeroConfiguration.Pages.Controls;
 using ZeroConfiguration.Properties;
 using ZeroGUI;
+using ActionParameters = ZeroCommonClasses.GlobalObjects.ActionParameters;
 
 namespace ZeroConfiguration
 {
-    public class ZeroConfigurationModule : ZeroModule, ITerminalManager
+    public class ZeroConfigurationModule : ZeroCommonClasses.ZeroModule, ITerminalManager
     {
         private const string K_administrator = "Administrator";
         private const string K_password = "admin";
@@ -27,11 +27,12 @@ namespace ZeroConfiguration
         private Synchronizer _sync;
         public ZeroAction SyncAction;
         private bool _isTerminalZero;
-        public ZeroConfigurationModule(ITerminal iCurrentTerminal)
-            : base(iCurrentTerminal, 2, Resources.ConfigurationModuleDescription)
+        public ZeroConfigurationModule()
+            : base(2, Resources.ConfigurationModuleDescription)
         {
             BuildPosibleActions();
             BuildRulesActions();
+            ZeroCommonClasses.Terminal.Instance.Manager = this;
         }
 
         private void BuildPosibleActions()
@@ -41,18 +42,18 @@ namespace ZeroConfiguration
             SyncAction = new ZeroAction( ActionType.BackgroudAction, Actions.ExecSync, StartSync);
             SyncAction.Parameters.Add(new ZeroActionParameterBase(typeof(ISyncService), true));
             SyncAction.Parameters.Add(new ZeroActionParameterBase(ActionParameters.Modules, true));
-            OwnerTerminal.Session.AddAction(SyncAction);
-            OwnerTerminal.Session.AddAction(new ZeroAction(ActionType.MenuItem, Actions.OpenPropertiesView, OpenConfiguration));
-            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenUserListView, OpenUsers, Rules.IsValidUser));
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(SyncAction);
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction(ActionType.MenuItem, Actions.OpenPropertiesView, OpenConfiguration));
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenUserListView, OpenUsers, Rules.IsValidUser));
             var changePassAction = new ZeroAction( ActionType.MenuItem, Actions.OpenUserPasswordChangeMessage, OpenChangePassword);
             changePassAction.Parameters.Add(new ZeroActionParameterBase(typeof (MembershipUser), true));
-            OwnerTerminal.Session.AddAction(changePassAction);
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(changePassAction);
         }
 
         private void BuildRulesActions()
         {   
-            OwnerTerminal.Session.AddRule(Rules.IsValidUser, CanOpenConfiguration);
-            OwnerTerminal.Session.AddRule(Rules.IsTerminalZero, IsTerminalZero);
+            ZeroCommonClasses.Terminal.Instance.Session.AddRule(Rules.IsValidUser, CanOpenConfiguration);
+            ZeroCommonClasses.Terminal.Instance.Session.AddRule(Rules.IsTerminalZero, IsTerminalZero);
         }
 
         public override string[] GetFilesToSend()
@@ -78,7 +79,7 @@ namespace ZeroConfiguration
         private void OpenLogInDialog()
         {
 #if DEBUG
-            OwnerTerminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser(K_administrator, true), false));
+            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser(K_administrator, true), false));
 #else
             var view = new UserLogIn();
             bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
@@ -86,7 +87,7 @@ namespace ZeroConfiguration
             {
                 if (Membership.ValidateUser(view.UserName, view.UserPass))
                 {
-                    OwnerTerminal.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false,Membership.GetUser(view.UserName,true), false));
+                    ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false,Membership.GetUser(view.UserName,true), false));
                 }
                 else
                 {
@@ -110,12 +111,12 @@ namespace ZeroConfiguration
         {
             _sync = new Synchronizer();
             double milsec;
-            using (var conf = new ConfigurationEntities())
+            using (var conf = new ConfigurationModelManager())
             {
-                milsec = _sync.LoadConfiguration(OwnerTerminal, conf, OwnerTerminal.Session);    
+                milsec = _sync.LoadConfiguration(conf, ZeroCommonClasses.Terminal.Instance.Session);    
             }
 
-            OwnerTerminal.Session.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
+            ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
             _sync.SyncStarting += SyncSyncStarting;
             _sync.SyncFinished += _sync_SyncFinished;
             
@@ -123,24 +124,24 @@ namespace ZeroConfiguration
             if (SyncAction.CanExecute(sb))
                 SyncAction.Execute(null);
             else
-                OwnerTerminal.Session.Notifier.SendNotification(sb.ToString());
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(sb.ToString());
         }
 
         void _sync_SyncFinished(object sender, EventArgs e)
         {
-            using (var conf = new ConfigurationEntities())
+            using (var conf = new ConfigurationModelManager())
             {
-                _isTerminalZero = ConfigurationEntities.IsTerminalZero(conf, OwnerTerminal.TerminalCode);
+                _isTerminalZero = ConfigurationModelManager.IsTerminalZero(conf, ZeroCommonClasses.Terminal.Instance.TerminalCode);
             }
             OnConfigurationRequired();
         }
 
         private void SyncSyncStarting(object sender, Synchronizer.SyncStartingEventArgs e)
         {
-            e.Notifier = OwnerTerminal.Session.Notifier;
-            e.SyncService = OwnerTerminal.Session.GetParameter<ISyncService>().Value;
-            e.FileTransferService = OwnerTerminal.Session.GetParameter<IFileTransfer>().Value;
-            e.Modules = OwnerTerminal.Session.GetParameter<List<ZeroModule>>().Value;
+            e.Notifier = ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier;
+            e.SyncService = ZeroCommonClasses.Terminal.Instance.Session.GetParameter<ISyncService>().Value;
+            e.FileTransferService = ZeroCommonClasses.Terminal.Instance.Session.GetParameter<IFileTransfer>().Value;
+            e.Modules = ZeroCommonClasses.Terminal.Instance.CurrentClient.ModuleList;
         }
 
         private void StartSync()
@@ -150,23 +151,23 @@ namespace ZeroConfiguration
 
         private void OpenUsers()
         {
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = new Users(OwnerTerminal) });
+            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = new Users() });
         }
 
         private void OpenChangePassword()
         {
             var pswChange = new UserChangePassword();
-            pswChange.DataContext = OwnerTerminal.Session.GetParameter<MembershipUser>().Value;
+            pswChange.DataContext = ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>().Value;
             ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize);
         }
 
         private void OpenConfiguration()
         {
             // ReSharper disable RedundantNameQualifier
-            var P = new Pages.Properties(OwnerTerminal);
+            var P = new Pages.Properties();
             // ReSharper restore RedundantNameQualifier
             P.UpdateTimeRemaining(_sync);
-            if (OwnerTerminal.Manager.ValidateRule(Rules.IsTerminalZero))
+            if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
                 P.ControlMode = ControlMode.Update;
 
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
@@ -188,8 +189,8 @@ namespace ZeroConfiguration
         private bool IsTerminalZero(object param)
         {
             bool ret = false;
-            if (OwnerTerminal != null && _isTerminalZero)
-                ret = (TerminalStatus == ModuleStatus.Valid || TerminalStatus == ModuleStatus.NeedsSync);
+            if (_isTerminalZero)
+                ret = (TerminalStatus == ZeroCommonClasses.ModuleStatus.Valid || TerminalStatus == ZeroCommonClasses.ModuleStatus.NeedsSync);
 
             if (param != null)
                 if (param is StringBuilder)
@@ -211,38 +212,38 @@ namespace ZeroConfiguration
                 ConfigurationRequired(this, EventArgs.Empty);
         }
 
-        public ModuleStatus GetModuleStatus(ZeroModule module)
+        public ZeroCommonClasses.ModuleStatus GetModuleStatus(ZeroCommonClasses.ZeroModule module)
         {
-            return ConfigurationEntities.GetTerminalModuleStatus(new ConfigurationEntities(), OwnerTerminal.TerminalCode, module);
+            return ConfigurationModelManager.GetTerminalModuleStatus(new ConfigurationModelManager(), ZeroCommonClasses.Terminal.Instance.TerminalCode, module);
         }
 
         public void InitializeTerminal()
         {
-            using (var conf = new ConfigurationEntities())
+            using (var conf = new ConfigurationModelManager())
             {
-                Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == OwnerTerminal.TerminalCode);
+                Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
                 if (T == null)
                 {
-                    Terminal.AddNewTerminal(conf, OwnerTerminal.TerminalCode, OwnerTerminal.TerminalName);
+                    Terminal.AddNewTerminal(conf, ZeroCommonClasses.Terminal.Instance.TerminalCode, ZeroCommonClasses.Terminal.Instance.TerminalName);
                 }
                 else 
                 {
                     _isTerminalZero = T.IsTerminalZero;
-                    if(OwnerTerminal.TerminalCode == 0 && !T.IsTerminalZero)
+                    if(ZeroCommonClasses.Terminal.Instance.TerminalCode == 0 && !T.IsTerminalZero)
                     {
                         T.IsTerminalZero = true;
                         conf.SaveChanges();
                     }
                 }
-                ConfigurationEntities.CreateTerminalProperties(conf, OwnerTerminal.TerminalCode);
+                ConfigurationModelManager.CreateTerminalProperties(conf,ZeroCommonClasses.Terminal.Instance.TerminalCode);
             }
 
         }
 
         public bool ValidateRule(string ruleName)
         {
-            return OwnerTerminal.Session.SystemRules.ContainsKey(ruleName) &&
-                   OwnerTerminal.Session.SystemRules[ruleName].Invoke(null);
+            return ZeroCommonClasses.Terminal.Instance.Session.SystemRules.ContainsKey(ruleName) &&
+                   ZeroCommonClasses.Terminal.Instance.Session.SystemRules[ruleName].Invoke(null);
         }
 
         public bool ExecuteAction(ZeroAction action)
@@ -258,15 +259,15 @@ namespace ZeroConfiguration
                 }
                 else
                 {
-                    OwnerTerminal.Session.Notifier.Log(TraceLevel.Verbose, string.Format("Action {0} Error: {1}", action.Name, result));
-                    OwnerTerminal.Session.Notifier.SendNotification(string.Format(Resources.CannotExecuteAction + "\n\nProblemas: {0} ", result));
+                    ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Action {0} Error: {1}", action.Name, result));
+                    ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(string.Format(Resources.CannotExecuteAction + "\n\nProblemas: {0} ", result));
                 }
 
             }
             catch (Exception ex)
             {
-                OwnerTerminal.Session.Notifier.Log(TraceLevel.Error, string.Format("Action {0} Error: {1}", action.Name, ex));
-                OwnerTerminal.Session.Notifier.SendNotification(Resources.UnexpectedError + ".\n " + Resources.ContactSystemAdministrator);
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, string.Format("Action {0} Error: {1}", action.Name, ex));
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.UnexpectedError + ".\n " + Resources.ContactSystemAdministrator);
             }
 
             return ret;
@@ -275,9 +276,9 @@ namespace ZeroConfiguration
         public bool ExistsAction(string actionName, out ZeroAction action)
         {
             action = null;
-            if (OwnerTerminal.Session.SystemActions.ContainsKey(actionName))
+            if (ZeroCommonClasses.Terminal.Instance.Session.SystemActions.ContainsKey(actionName))
             {
-                action = OwnerTerminal.Session.SystemActions[actionName];
+                action = ZeroCommonClasses.Terminal.Instance.Session.SystemActions[actionName];
                 return true;
             }
             Trace.WriteLineIf(ContextInfo.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
@@ -291,13 +292,13 @@ namespace ZeroConfiguration
             //asocian a las reglas con sus respectias acciones
 
             //despues de haber cargado las reglas, ahora asocio las acciones finales a las reglas a validar
-            foreach (var item in OwnerTerminal.Session.SystemActions)
+            foreach (var item in ZeroCommonClasses.Terminal.Instance.Session.SystemActions)
             {
                 if (!string.IsNullOrEmpty(item.Value.RuleToSatisfyName))
                 {
-                    if (OwnerTerminal.Session.SystemRules.ContainsKey(item.Value.RuleToSatisfyName))
+                    if (ZeroCommonClasses.Terminal.Instance.Session.SystemRules.ContainsKey(item.Value.RuleToSatisfyName))
                     {
-                        item.Value.RuleToSatisfy = OwnerTerminal.Session.SystemRules[item.Value.RuleToSatisfyName];
+                        item.Value.RuleToSatisfy = ZeroCommonClasses.Terminal.Instance.Session.SystemRules[item.Value.RuleToSatisfyName];
                     }
                 }
 
@@ -312,9 +313,9 @@ namespace ZeroConfiguration
         {
             var actions = new List<ZeroAction>();
             var ret = new string[] { };
-            using (var conf = new ConfigurationEntities())
+            using (var conf = new ConfigurationModelManager())
             {
-                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == OwnerTerminal.TerminalCode && tp.Code == Namespace.Properties.HomeShorcuts);
+                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == ZeroCommonClasses.Terminal.Instance.TerminalCode && tp.Code == SystemProperty.HomeShortcut.Code);
                 if (prop != null)
                 {
                     if (prop.LargeValue != null)
@@ -325,7 +326,7 @@ namespace ZeroConfiguration
                         foreach (var item in ret)
                         {
                             actParts = item.Split('|');
-                            if (OwnerTerminal.Manager.ExistsAction(actParts[0].Trim(), out act))
+                            if (ZeroCommonClasses.Terminal.Instance.Manager.ExistsAction(actParts[0].Trim(), out act))
                             {
                                 act.SetAlias(actParts);
                                 actions.Add(act);

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -13,7 +14,6 @@ using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ZeroGUI.Classes;
-using ZeroSales.Entities;
 
 namespace ZeroSales.Pages
 {
@@ -22,17 +22,15 @@ namespace ZeroSales.Pages
     /// </summary>
     public partial class CreateSaleView : NavigationBasePage
     {
-        public CreateSaleView(ITerminal terminal, int saleType)
+        public CreateSaleView(int saleType)
         {
             InitializeComponent();
             InitializeComponent();
-            _terminal = terminal;
             _saleType = saleType;
         }
 
-        private readonly ITerminal _terminal;
         private SaleHeader _header;
-        private SalesEntities _context;
+        private DataModelManager _context;
         private string _lot = "";
         readonly int _saleType = -1;
         
@@ -43,14 +41,14 @@ namespace ZeroSales.Pages
                 if (_context != null)
                     _context.Dispose();
 
-                _context = new SalesEntities();
-                LoadHeader(_saleType, _context.SaleHeaders.Count() > 0 ? _context.GetNextSaleHeaderCode(_terminal) : 1, _terminal.TerminalCode);
+                _context = new DataModelManager();
+                LoadHeader(_saleType, _context.SaleHeaders.Count() > 0 ? _context.GetNextSaleHeaderCode(ZeroCommonClasses.Terminal.Instance.TerminalCode) : 1, ZeroCommonClasses.Terminal.Instance.TerminalCode);
                 lblsaleType.Content = _header.SaleType != null &&
                                        !string.IsNullOrWhiteSpace(_header.SaleType.Description)
                                            ? _header.SaleType.Description
                                            : "Venta";
 
-                _header.TerminalToCode = _terminal.TerminalCode;
+                _header.TerminalToCode = ZeroCommonClasses.Terminal.Instance.TerminalCode;
                 DataContext = _header;
             }
         }
@@ -58,15 +56,15 @@ namespace ZeroSales.Pages
         private void LoadHeader(int saleType, int code, int terminalTo)
         {
             _header = SaleHeader.CreateSaleHeader(
-                _terminal.TerminalCode,
+                ZeroCommonClasses.Terminal.Instance.TerminalCode,
                 code,
                 true,
                 (int)EntityStatus.New,
                 terminalTo,
                 DateTime.Now.Date, 
-                0,0,0,0,false,false,false);
+                _saleType,false,0,0,0,false,false);
             ZeroActionParameterBase param =
-                _terminal.Session.GetParameter<MembershipUser>();
+                ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>();
             if (param != null)
             {
                 _header.UserCode = (Guid)((MembershipUser)param.Value).ProviderUserKey;
@@ -80,8 +78,8 @@ namespace ZeroSales.Pages
 
         public override bool CanAccept(object parameter)
         {
-            bool ret = true;
-            if (_header.ExistsDataToSave())
+            bool ret = base.CanAccept(parameter);
+            if (ret && _header.ExistsDataToSave())
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -112,16 +110,22 @@ namespace ZeroSales.Pages
 
         #endregion
 
+        private Product validProd;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name.StartsWith("Prod"));
-            if (Part != null)
+            validProd = _context.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            if (validProd == null)
             {
-                Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
-                if (prod == null)
+                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
+                if (Part != null)
                 {
-                    Part.IsValid = false;
-                    e.Error = string.Format(Properties.Resources.UnexistentProduct+" - {0}",Part.Code);
+                    string strCode = Part.Code.ToString();
+                    validProd = _context.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                    if (validProd == null)
+                    {
+                        Part.IsValid = false;
+                        e.Error = string.Format(Properties.Resources.UnexistentProduct + " - {0}", Part.Code);
+                    }
                 }
             }
         }
@@ -131,13 +135,12 @@ namespace ZeroSales.Pages
             BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
             if (Part != null)
             {
-                Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == Part.Code);
-                if (prod != null)
+                if (validProd != null)
                 {
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
-                    currentProd.Text = prod.Description;
+                    currentProd.Text = validProd.Description;
                     CreateResTimer();
-                    saleGrid.AddItem(_header.AddNewSaleItem(prod, partQty.Code,_lot));
+                    saleGrid.AddItem(_header.AddNewSaleItem(validProd, partQty.Code, _lot));
                     lblItemsCount.Text = _header.SaleItems.Count.ToString();
                     _lot = "";
                     lotBarcode.SetFocus();
@@ -167,7 +170,15 @@ namespace ZeroSales.Pages
             bool ret = false;
             try
             {
-               MessageBox.Show("Este Módulo es solo de Prueba por el momento, los datos no se guardaran", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                var view = new PaymentInstrumentList();
+                ret =
+                    ZeroMessageBox.Show(view, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OK).
+                        GetValueOrDefault();
+                if(ret)
+                {
+                    object o = view.SelectedItem;
+                }
+               //MessageBox.Show("Este Módulo es solo de prueba por el momento, los datos no se guardaran", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                //_context.SaveChanges();
                // currentProd.Text = "";
                // MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -177,7 +188,7 @@ namespace ZeroSales.Pages
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                _terminal.Session.Notifier.Log(TraceLevel.Error, ex.ToString());
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
             }
             return ret;
         }
@@ -185,7 +196,6 @@ namespace ZeroSales.Pages
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             SaveData();
-            GoHomeOrDisable(_terminal);
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

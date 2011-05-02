@@ -15,10 +15,16 @@ namespace ZeroCommonClasses.Context
         public static ConnectionStringSettings ServerConnectionString { get; private set; }
         public static ConnectionStringSettings ClientConnectionString { get; private set; }
         public static ConnectionStringSettings UsersConnectionString { get; private set; }
-
+        public static int TerminalCode { get; private set; }
+        public static string TerminalName { get; set; }
         static ContextInfo()
         {
             ServerConnectionString = ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.ConfigConn"];
+            string aux = ConfigurationManager.AppSettings["TerminalZeroClient.Properties.Settings.TerminalCode"];
+            int auxInt; 
+            int.TryParse(aux, out auxInt);
+            TerminalCode = auxInt;
+            TerminalName = Environment.MachineName;
             IsOnServer = ServerConnectionString != null;
             ClientConnectionString = ConfigurationManager.ConnectionStrings["TerminalZeroClient.Properties.Settings.ConfigConn"];
             UsersConnectionString = ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.UsersConn"];
@@ -126,6 +132,8 @@ namespace ZeroCommonClasses.Context
 
         #endregion
 
+
+        
     }
 }
 

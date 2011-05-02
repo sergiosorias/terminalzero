@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
-using ZeroBusiness;
 using ZeroCommonClasses.Context;
 
 namespace ZeroCommonClasses.GlobalObjects
@@ -86,7 +85,7 @@ namespace ZeroCommonClasses.GlobalObjects
                 }
                 catch (Exception ex)
                 {
-                    if (Session != null) Session.Notifier.SendNotification("Error: "+ex);
+                    if (Terminal.Instance.CurrentClient != null) Terminal.Instance.CurrentClient.Notifier.SendNotification("Error: " + ex);
                     Trace.WriteIf(ContextInfo.LogLevel.TraceError,
                                                      string.Format("{2} on {1} throws-> {0}",ex,ExecuteAction.Method, ExecuteAction.Target.GetType()), "Error");
                 }

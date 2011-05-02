@@ -1,0 +1,2256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TZeroDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="TZeroDataModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="TZeroDataModel.Store.Customer" store:Type="Tables" Schema="data" />
+          <EntitySet Name="DeliveryDocumentHeader" EntityType="TZeroDataModel.Store.DeliveryDocumentHeader" store:Type="Tables" Schema="data" />
+          <EntitySet Name="DeliveryDocumentItem" EntityType="TZeroDataModel.Store.DeliveryDocumentItem" store:Type="Tables" Schema="data" />
+          <EntitySet Name="DeliveryNoteHeader" EntityType="TZeroDataModel.Store.DeliveryNoteHeader" store:Type="Tables" Schema="data" />
+          <EntitySet Name="DeliveryNoteItem" EntityType="TZeroDataModel.Store.DeliveryNoteItem" store:Type="Tables" Schema="data" />
+          <EntitySet Name="PaymentInstrument" EntityType="TZeroDataModel.Store.PaymentInstrument" store:Type="Tables" Schema="data" />
+          <EntitySet Name="Price" EntityType="TZeroDataModel.Store.Price" store:Type="Tables" Schema="data" />
+          <EntitySet Name="Product" EntityType="TZeroDataModel.Store.Product" store:Type="Tables" Schema="data" />
+          <EntitySet Name="ProductGroup" EntityType="TZeroDataModel.Store.ProductGroup" store:Type="Tables" Schema="data" />
+          <EntitySet Name="ReturnReason" EntityType="TZeroDataModel.Store.ReturnReason" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SaleHeader" EntityType="TZeroDataModel.Store.SaleHeader" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SaleItem" EntityType="TZeroDataModel.Store.SaleItem" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SalePaymentHeader" EntityType="TZeroDataModel.Store.SalePaymentHeader" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SalePaymentItem" EntityType="TZeroDataModel.Store.SalePaymentItem" store:Type="Tables" Schema="data" />
+          <EntitySet Name="SaleType" EntityType="TZeroDataModel.Store.SaleType" store:Type="Tables" Schema="data" />
+          <EntitySet Name="StockHeader" EntityType="TZeroDataModel.Store.StockHeader" store:Type="Tables" Schema="data" />
+          <EntitySet Name="StockItem" EntityType="TZeroDataModel.Store.StockItem" store:Type="Tables" Schema="data" />
+          <EntitySet Name="StockType" EntityType="TZeroDataModel.Store.StockType" store:Type="Tables" Schema="data" />
+          <EntitySet Name="Supplier" EntityType="TZeroDataModel.Store.Supplier" store:Type="Tables" Schema="data" />
+          <EntitySet Name="Tax" EntityType="TZeroDataModel.Store.Tax" store:Type="Tables" Schema="data" />
+          <EntitySet Name="TaxPosition" EntityType="TZeroDataModel.Store.TaxPosition" store:Type="Tables" Schema="data" />
+          <EntitySet Name="Weight" EntityType="TZeroDataModel.Store.Weight" store:Type="Tables" Schema="data" />
+          <EntitySet Name="StockCreateSummary" EntityType="TZeroDataModel.Store.StockCreateSummary" store:Type="Views" store:Schema="data" store:Name="StockCreateSummary">
+            <DefiningQuery>SELECT 
+      [StockCreateSummary].[Name] AS [Name], 
+      [StockCreateSummary].[ProductMasterCode] AS [ProductMasterCode], 
+      [StockCreateSummary].[NetWeight] AS [NetWeight], 
+      [StockCreateSummary].[QuantityKG] AS [QuantityKG], 
+      [StockCreateSummary].[ProductCount] AS [ProductCount], 
+      [StockCreateSummary].[TerminalToCode] AS [TerminalToCode]
+      FROM [data].[StockCreateSummary] AS [StockCreateSummary]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StockModifySummary" EntityType="TZeroDataModel.Store.StockModifySummary" store:Type="Views" store:Schema="data" store:Name="StockModifySummary">
+            <DefiningQuery>SELECT 
+      [StockModifySummary].[Name] AS [Name], 
+      [StockModifySummary].[ProductMasterCode] AS [ProductMasterCode], 
+      [StockModifySummary].[NetWeight] AS [NetWeight], 
+      [StockModifySummary].[QuantityKG] AS [QuantityKG], 
+      [StockModifySummary].[ProductCount] AS [ProductCount], 
+      [StockModifySummary].[TerminalToCode] AS [TerminalToCode]
+      FROM [data].[StockModifySummary] AS [StockModifySummary]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StockSummary" EntityType="TZeroDataModel.Store.StockSummary" store:Type="Views" store:Schema="data" store:Name="StockSummary">
+            <DefiningQuery>SELECT 
+      [StockSummary].[Name] AS [Name], 
+      [StockSummary].[ProductMasterCode] AS [ProductMasterCode], 
+      [StockSummary].[NetWeight] AS [NetWeight], 
+      [StockSummary].[QuantityKG] AS [QuantityKG], 
+      [StockSummary].[ProductCount] AS [ProductCount], 
+      [StockSummary].[TerminalToCode] AS [TerminalToCode]
+      FROM [data].[StockSummary] AS [StockSummary]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TerminalTo" EntityType="TZeroDataModel.Store.TerminalTo" store:Type="Views" store:Schema="data" store:Name="TerminalTo">
+            <DefiningQuery>SELECT 
+      [TerminalTo].[Code] AS [Code], 
+      [TerminalTo].[Name] AS [Name], 
+      [TerminalTo].[Description] AS [Description]
+      FROM [data].[TerminalTo] AS [TerminalTo]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_DeliveryDocumentHeader_Supplier" Association="TZeroDataModel.Store.FK_DeliveryDocumentHeader_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader" Association="TZeroDataModel.Store.FK_DeliveryDocumentItem_DeliveryDocumentHeader">
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeader" />
+            <End Role="DeliveryDocumentItem" EntitySet="DeliveryDocumentItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Group1_Product_ProductGroup" Association="TZeroDataModel.Store.FK_Group1_Product_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroup" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Group2_Product_ProductGroup" Association="TZeroDataModel.Store.FK_Group2_Product_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroup" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentInstrumentCode_Supplier_PaymentInstrument" Association="TZeroDataModel.Store.FK_PaymentInstrumentCode_Supplier_PaymentInstrument">
+            <End Role="PaymentInstrument" EntitySet="PaymentInstrument" />
+            <End Role="Supplier" EntitySet="Supplier" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceCost_Product_Price" Association="TZeroDataModel.Store.FK_PriceCost_Product_Price">
+            <End Role="Price" EntitySet="Price" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Price" Association="TZeroDataModel.Store.FK_Product_Price">
+            <End Role="Price" EntitySet="Price" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleHeader_SalePaymentHeader" Association="TZeroDataModel.Store.FK_SaleHeader_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeader" />
+            <End Role="SaleHeader" EntitySet="SaleHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleHeader_SaleType" Association="TZeroDataModel.Store.FK_SaleHeader_SaleType">
+            <End Role="SaleType" EntitySet="SaleType" />
+            <End Role="SaleHeader" EntitySet="SaleHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleItem_Product" Association="TZeroDataModel.Store.FK_SaleItem_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SaleItem" EntitySet="SaleItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleItem_SaleHeader" Association="TZeroDataModel.Store.FK_SaleItem_SaleHeader">
+            <End Role="SaleHeader" EntitySet="SaleHeader" />
+            <End Role="SaleItem" EntitySet="SaleItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalePaymentItem_SalePaymentHeader" Association="TZeroDataModel.Store.FK_SalePaymentItem_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeader" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleWeight_Price_Weight" Association="TZeroDataModel.Store.FK_SaleWeight_Price_Weight">
+            <End Role="Weight" EntitySet="Weight" />
+            <End Role="Price" EntitySet="Price" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_DeliveryDocumentHeader" Association="TZeroDataModel.Store.FK_StockHeader_DeliveryDocumentHeader">
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeader" />
+            <End Role="StockHeader" EntitySet="StockHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_PaymentInstrument" Association="TZeroDataModel.Store.FK_StockHeader_PaymentInstrument">
+            <End Role="PaymentInstrument" EntitySet="PaymentInstrument" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_StockType" Association="TZeroDataModel.Store.FK_StockHeader_StockType">
+            <End Role="StockType" EntitySet="StockType" />
+            <End Role="StockHeader" EntitySet="StockHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockItem_Product" Association="TZeroDataModel.Store.FK_StockItem_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="StockItem" EntitySet="StockItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockItem_StockHeader" Association="TZeroDataModel.Store.FK_StockItem_StockHeader">
+            <End Role="StockHeader" EntitySet="StockHeader" />
+            <End Role="StockItem" EntitySet="StockItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tax1_Product_Tax" Association="TZeroDataModel.Store.FK_Tax1_Product_Tax">
+            <End Role="Tax" EntitySet="Tax" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tax2_Product_Tax" Association="TZeroDataModel.Store.FK_Tax2_Product_Tax">
+            <End Role="Tax" EntitySet="Tax" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxPositionCode_Customer_TaxPosition" Association="TZeroDataModel.Store.FK_TaxPositionCode_Customer_TaxPosition">
+            <End Role="TaxPosition" EntitySet="TaxPosition" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxPositionCode_Supplier_TaxPosition" Association="TZeroDataModel.Store.FK_TaxPositionCode_Supplier_TaxPosition">
+            <End Role="TaxPosition" EntitySet="TaxPosition" />
+            <End Role="Supplier" EntitySet="Supplier" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UnitWeight_Price_Weight" Association="TZeroDataModel.Store.FK_UnitWeight_Price_Weight">
+            <End Role="Weight" EntitySet="Weight" />
+            <End Role="Price" EntitySet="Price" />
+          </AssociationSet>
+          <AssociationSet Name="PK_PaymentInstrumentCode_Customer_PaymentInstrument" Association="TZeroDataModel.Store.PK_PaymentInstrumentCode_Customer_PaymentInstrument">
+            <End Role="PaymentInstrument" EntitySet="PaymentInstrument" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name1" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name2" Type="nvarchar" MaxLength="300" />
+          <Property Name="Country" Type="nvarchar" MaxLength="250" />
+          <Property Name="State" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="250" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="20" />
+          <Property Name="Street" Type="nvarchar" MaxLength="100" />
+          <Property Name="Floor" Type="int" />
+          <Property Name="DepNumber" Type="varchar" MaxLength="10" />
+          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="E-Mail1" Type="varchar" MaxLength="250" />
+          <Property Name="E-Mail2" Type="varchar" MaxLength="250" />
+          <Property Name="WebSite" Type="varchar" MaxLength="250" />
+          <Property Name="Telephone1" Type="varchar" MaxLength="50" />
+          <Property Name="Telephone2" Type="varchar" MaxLength="50" />
+          <Property Name="Telephone3" Type="varchar" MaxLength="50" />
+          <Property Name="TaxPositionCode" Type="int" />
+          <Property Name="PaymentInstrumentCode" Type="int" />
+          <Property Name="LegalCode" Type="varchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="DeliveryDocumentHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserCode" Type="uniqueidentifier" />
+          <Property Name="SupplierCode" Type="int" />
+          <Property Name="Note" Type="text" />
+          <Property Name="Used" Type="bit" />
+        </EntityType>
+        <EntityType Name="DeliveryDocumentItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="DeliveryDocumentHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="DeliveryDocumentHeaderCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="Batch" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ProductCode" Type="int" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ProductByWeight" Type="bit" Nullable="false" />
+          <Property Name="PriceValue" Type="float" Nullable="false" />
+          <Property Name="UnitWeightQuantity" Type="float" />
+          <Property Name="SaleWeightQuantity" Type="float" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DeliveryNoteHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserCode" Type="uniqueidentifier" />
+          <Property Name="SupplierCode" Type="int" />
+          <Property Name="SupplierDeliveryNoteCode" Type="varchar" MaxLength="20" />
+          <Property Name="Note" Type="text" />
+        </EntityType>
+        <EntityType Name="DeliveryNoteItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="DeliveryNoteHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="DeliveryNoteHeaderCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="Batch" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ProductCode" Type="int" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ProductByWeight" Type="bit" Nullable="false" />
+          <Property Name="PriceValue" Type="float" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentInstrument">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="PrintModeDefault" Type="int" />
+        </EntityType>
+        <EntityType Name="Price">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="UnitWeightCode" Type="int" />
+          <Property Name="SaleWeightCode" Type="int" />
+          <Property Name="Value" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="MasterCode" Type="varchar" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="ShortDescription" Type="nvarchar" MaxLength="100" />
+          <Property Name="PriceCode" Type="int" />
+          <Property Name="PriceCostCode" Type="int" />
+          <Property Name="ByWeight" Type="bit" Nullable="false" />
+          <Property Name="Tax1Code" Type="int" />
+          <Property Name="Tax2Code" Type="int" />
+          <Property Name="Group1" Type="int" />
+          <Property Name="Group2" Type="int" />
+          <Property Name="DueDays" Type="int" />
+        </EntityType>
+        <EntityType Name="ProductGroup">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="ReturnReason">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="SaleHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserCode" Type="uniqueidentifier" />
+          <Property Name="SaleTypeCode" Type="int" Nullable="false" />
+          <Property Name="SalePaymentHeaderCode" Type="int" />
+          <Property Name="PayIsComplete" Type="bit" Nullable="false" />
+          <Property Name="PrintMode" Type="int" />
+          <Property Name="CustomerCode" Type="int" />
+          <Property Name="PriceSumValue" Type="float" Nullable="false" />
+          <Property Name="TaxSumValue" Type="float" Nullable="false" />
+          <Property Name="Tax1SumValue" Type="float" Nullable="false" />
+          <Property Name="Summarized" Type="bit" Nullable="false" />
+          <Property Name="Historized" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SaleItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="SaleHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="SaleHeaderCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="Batch" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ProductCode" Type="int" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ProductByWeight" Type="bit" Nullable="false" />
+          <Property Name="PriceValue" Type="float" Nullable="false" />
+          <Property Name="UnitWeightQuantity" Type="float" />
+          <Property Name="SaleWeightQuantity" Type="float" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="TaxValue" Type="float" Nullable="false" />
+          <Property Name="Tax1Value" Type="float" Nullable="false" />
+          <Property Name="NetPriceValue" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalePaymentHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="TotalQuantity" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalePaymentItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="SalePaymentHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="SalePaymentHeaderCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="PaymentInstrumentCode" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SaleType">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="StockHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="UserCode" Type="uniqueidentifier" />
+          <Property Name="StockTypeCode" Type="int" />
+          <Property Name="DeliveryDocumentHeaderTerminalCode" Type="int" />
+          <Property Name="DeliveryDocumentHeaderCode" Type="int" />
+        </EntityType>
+        <EntityType Name="StockItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="StockHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="TerminalCode" Type="int" Nullable="false" />
+          <Property Name="StockHeaderCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+          <Property Name="Batch" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ProductCode" Type="int" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ProductByWeight" Type="bit" Nullable="false" />
+          <Property Name="PriceValue" Type="float" Nullable="false" />
+          <Property Name="UnitWeightQuantity" Type="float" />
+          <Property Name="SaleWeightQuantity" Type="float" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockType">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name1" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name2" Type="nvarchar" MaxLength="300" />
+          <Property Name="Country" Type="nvarchar" MaxLength="250" />
+          <Property Name="State" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="250" />
+          <Property Name="Street" Type="nvarchar" MaxLength="100" />
+          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="E-Mail1" Type="varchar" MaxLength="250" />
+          <Property Name="E-Mail2" Type="varchar" MaxLength="250" />
+          <Property Name="WebSite" Type="varchar" MaxLength="250" />
+          <Property Name="Telephone1" Type="varchar" MaxLength="50" />
+          <Property Name="Telephone2" Type="varchar" MaxLength="50" />
+          <Property Name="Telephone3" Type="varchar" MaxLength="50" />
+          <Property Name="TaxPositionCode" Type="int" />
+          <Property Name="PaymentInstrumentCode" Type="int" />
+          <Property Name="LegalCode" Type="varchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="Tax">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="Value" Type="float" Nullable="false" />
+          <Property Name="ProductDefault" Type="bit" />
+        </EntityType>
+        <EntityType Name="TaxPosition">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Weight">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.StockCreateSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="StockCreateSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="NetWeight" Type="float" />
+          <Property Name="QuantityKG" Type="float" />
+          <Property Name="ProductCount" Type="int" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.StockModifySummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="StockModifySummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="NetWeight" Type="float" />
+          <Property Name="QuantityKG" Type="float" />
+          <Property Name="ProductCount" Type="int" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.StockSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="StockSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductMasterCode" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="NetWeight" Type="float" />
+          <Property Name="QuantityKG" Type="float" />
+          <Property Name="ProductCount" Type="int" />
+          <Property Name="TerminalToCode" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'TZeroMaster.data.TerminalTo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="TerminalTo">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <Association Name="FK_DeliveryDocumentHeader_Supplier">
+          <End Role="Supplier" Type="TZeroDataModel.Store.Supplier" Multiplicity="0..1" />
+          <End Role="DeliveryDocumentHeader" Type="TZeroDataModel.Store.DeliveryDocumentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="DeliveryDocumentHeader">
+              <PropertyRef Name="SupplierCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader">
+          <End Role="DeliveryDocumentHeader" Type="TZeroDataModel.Store.DeliveryDocumentHeader" Multiplicity="1" />
+          <End Role="DeliveryDocumentItem" Type="TZeroDataModel.Store.DeliveryDocumentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryDocumentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="DeliveryDocumentItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="DeliveryDocumentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Group1_Product_ProductGroup">
+          <End Role="ProductGroup" Type="TZeroDataModel.Store.ProductGroup" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Group1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Group2_Product_ProductGroup">
+          <End Role="ProductGroup" Type="TZeroDataModel.Store.ProductGroup" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Group2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentInstrumentCode_Supplier_PaymentInstrument">
+          <End Role="PaymentInstrument" Type="TZeroDataModel.Store.PaymentInstrument" Multiplicity="0..1" />
+          <End Role="Supplier" Type="TZeroDataModel.Store.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentInstrument">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceCost_Product_Price">
+          <End Role="Price" Type="TZeroDataModel.Store.Price" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PriceCostCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Price">
+          <End Role="Price" Type="TZeroDataModel.Store.Price" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PriceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleHeader_SalePaymentHeader">
+          <End Role="SalePaymentHeader" Type="TZeroDataModel.Store.SalePaymentHeader" Multiplicity="0..1" />
+          <End Role="SaleHeader" Type="TZeroDataModel.Store.SaleHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleHeader_SaleType">
+          <End Role="SaleType" Type="TZeroDataModel.Store.SaleType" Multiplicity="1" />
+          <End Role="SaleHeader" Type="TZeroDataModel.Store.SaleHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SaleType">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleHeader">
+              <PropertyRef Name="SaleTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleItem_Product">
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="1" />
+          <End Role="SaleItem" Type="TZeroDataModel.Store.SaleItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleItem">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleItem_SaleHeader">
+          <End Role="SaleHeader" Type="TZeroDataModel.Store.SaleHeader" Multiplicity="1" />
+          <End Role="SaleItem" Type="TZeroDataModel.Store.SaleItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SaleHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SaleHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalePaymentItem_SalePaymentHeader">
+          <End Role="SalePaymentHeader" Type="TZeroDataModel.Store.SalePaymentHeader" Multiplicity="1" />
+          <End Role="SalePaymentItem" Type="TZeroDataModel.Store.SalePaymentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SalePaymentItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleWeight_Price_Weight">
+          <End Role="Weight" Type="TZeroDataModel.Store.Weight" Multiplicity="0..1" />
+          <End Role="Price" Type="TZeroDataModel.Store.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Weight">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="SaleWeightCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_DeliveryDocumentHeader">
+          <End Role="DeliveryDocumentHeader" Type="TZeroDataModel.Store.DeliveryDocumentHeader" Multiplicity="0..1" />
+          <End Role="StockHeader" Type="TZeroDataModel.Store.StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryDocumentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="DeliveryDocumentHeaderTerminalCode" />
+              <PropertyRef Name="DeliveryDocumentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_PaymentInstrument">
+          <End Role="PaymentInstrument" Type="TZeroDataModel.Store.PaymentInstrument" Multiplicity="1" />
+          <End Role="SalePaymentItem" Type="TZeroDataModel.Store.SalePaymentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentInstrument">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SalePaymentItem">
+              <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_StockType">
+          <End Role="StockType" Type="TZeroDataModel.Store.StockType" Multiplicity="0..1" />
+          <End Role="StockHeader" Type="TZeroDataModel.Store.StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockType">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="StockTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockItem_Product">
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="1" />
+          <End Role="StockItem" Type="TZeroDataModel.Store.StockItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockItem">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockItem_StockHeader">
+          <End Role="StockHeader" Type="TZeroDataModel.Store.StockHeader" Multiplicity="1" />
+          <End Role="StockItem" Type="TZeroDataModel.Store.StockItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="StockHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tax1_Product_Tax">
+          <End Role="Tax" Type="TZeroDataModel.Store.Tax" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tax">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Tax1Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tax2_Product_Tax">
+          <End Role="Tax" Type="TZeroDataModel.Store.Tax" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tax">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Tax2Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxPositionCode_Customer_TaxPosition">
+          <End Role="TaxPosition" Type="TZeroDataModel.Store.TaxPosition" Multiplicity="0..1" />
+          <End Role="Customer" Type="TZeroDataModel.Store.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxPosition">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="TaxPositionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxPositionCode_Supplier_TaxPosition">
+          <End Role="TaxPosition" Type="TZeroDataModel.Store.TaxPosition" Multiplicity="0..1" />
+          <End Role="Supplier" Type="TZeroDataModel.Store.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxPosition">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="TaxPositionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UnitWeight_Price_Weight">
+          <End Role="Weight" Type="TZeroDataModel.Store.Weight" Multiplicity="0..1" />
+          <End Role="Price" Type="TZeroDataModel.Store.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Weight">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="UnitWeightCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_PaymentInstrumentCode_Customer_PaymentInstrument">
+          <End Role="PaymentInstrument" Type="TZeroDataModel.Store.PaymentInstrument" Multiplicity="0..1" />
+          <End Role="Customer" Type="TZeroDataModel.Store.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentInstrument">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Clean_Stock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="data">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Get_StockSummaryByTerminal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="data">
+          <Parameter Name="TerminalCode" Type="int" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TZeroDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="TZeroDataModel.Customer" />
+          <EntitySet Name="DeliveryDocumentHeaders" EntityType="TZeroDataModel.DeliveryDocumentHeader" />
+          <EntitySet Name="DeliveryDocumentItems" EntityType="TZeroDataModel.DeliveryDocumentItem" />
+          <EntitySet Name="DeliveryNoteHeaders" EntityType="TZeroDataModel.DeliveryNoteHeader" />
+          <EntitySet Name="DeliveryNoteItems" EntityType="TZeroDataModel.DeliveryNoteItem" />
+          <EntitySet Name="PaymentInstruments" EntityType="TZeroDataModel.PaymentInstrument" />
+          <EntitySet Name="Prices" EntityType="TZeroDataModel.Price" />
+          <EntitySet Name="Products" EntityType="TZeroDataModel.Product" />
+          <EntitySet Name="ProductGroups" EntityType="TZeroDataModel.ProductGroup" />
+          <EntitySet Name="ReturnReasons" EntityType="TZeroDataModel.ReturnReason" />
+          <EntitySet Name="SaleHeaders" EntityType="TZeroDataModel.SaleHeader" />
+          <EntitySet Name="SaleItems" EntityType="TZeroDataModel.SaleItem" />
+          <EntitySet Name="SalePaymentHeaders" EntityType="TZeroDataModel.SalePaymentHeader" />
+          <EntitySet Name="SalePaymentItems" EntityType="TZeroDataModel.SalePaymentItem" />
+          <EntitySet Name="SaleTypes" EntityType="TZeroDataModel.SaleType" />
+          <EntitySet Name="StockHeaders" EntityType="TZeroDataModel.StockHeader" />
+          <EntitySet Name="StockItems" EntityType="TZeroDataModel.StockItem" />
+          <EntitySet Name="StockTypes" EntityType="TZeroDataModel.StockType" />
+          <EntitySet Name="Suppliers" EntityType="TZeroDataModel.Supplier" />
+          <EntitySet Name="Taxes" EntityType="TZeroDataModel.Tax" />
+          <EntitySet Name="TaxPositions" EntityType="TZeroDataModel.TaxPosition" />
+          <EntitySet Name="Weights" EntityType="TZeroDataModel.Weight" />
+          <EntitySet Name="StockCreateSummaries" EntityType="TZeroDataModel.StockCreateSummary" />
+          <EntitySet Name="StockModifySummaries" EntityType="TZeroDataModel.StockModifySummary" />
+          <EntitySet Name="StockSummaries" EntityType="TZeroDataModel.StockSummary" />
+          <EntitySet Name="TerminalToes" EntityType="TZeroDataModel.TerminalTo" />
+          <AssociationSet Name="FK_TaxPositionCode_Customer_TaxPosition" Association="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition">
+            <End Role="TaxPosition" EntitySet="TaxPositions" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="PK_PaymentInstrumentCode_Customer_PaymentInstrument" Association="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument">
+            <End Role="PaymentInstrument" EntitySet="PaymentInstruments" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DeliveryDocumentHeader_Supplier" Association="TZeroDataModel.FK_DeliveryDocumentHeader_Supplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader" Association="TZeroDataModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader">
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
+            <End Role="DeliveryDocumentItem" EntitySet="DeliveryDocumentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_DeliveryDocumentHeader" Association="TZeroDataModel.FK_StockHeader_DeliveryDocumentHeader">
+            <End Role="DeliveryDocumentHeader" EntitySet="DeliveryDocumentHeaders" />
+            <End Role="StockHeader" EntitySet="StockHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentInstrumentCode_Supplier_PaymentInstrument" Association="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument">
+            <End Role="PaymentInstrument" EntitySet="PaymentInstruments" />
+            <End Role="Supplier" EntitySet="Suppliers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_PaymentInstrument" Association="TZeroDataModel.FK_StockHeader_PaymentInstrument">
+            <End Role="PaymentInstrument" EntitySet="PaymentInstruments" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceCost_Product_Price" Association="TZeroDataModel.FK_PriceCost_Product_Price">
+            <End Role="Price" EntitySet="Prices" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Price" Association="TZeroDataModel.FK_Product_Price">
+            <End Role="Price" EntitySet="Prices" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleWeight_Price_Weight" Association="TZeroDataModel.FK_SaleWeight_Price_Weight">
+            <End Role="Weight" EntitySet="Weights" />
+            <End Role="Price" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UnitWeight_Price_Weight" Association="TZeroDataModel.FK_UnitWeight_Price_Weight">
+            <End Role="Weight" EntitySet="Weights" />
+            <End Role="Price" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Group1_Product_ProductGroup" Association="TZeroDataModel.FK_Group1_Product_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroups" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Group2_Product_ProductGroup" Association="TZeroDataModel.FK_Group2_Product_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroups" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleItem_Product" Association="TZeroDataModel.FK_SaleItem_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="SaleItem" EntitySet="SaleItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockItem_Product" Association="TZeroDataModel.FK_StockItem_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="StockItem" EntitySet="StockItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tax1_Product_Tax" Association="TZeroDataModel.FK_Tax1_Product_Tax">
+            <End Role="Tax" EntitySet="Taxes" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tax2_Product_Tax" Association="TZeroDataModel.FK_Tax2_Product_Tax">
+            <End Role="Tax" EntitySet="Taxes" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleHeader_SalePaymentHeader" Association="TZeroDataModel.FK_SaleHeader_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeaders" />
+            <End Role="SaleHeader" EntitySet="SaleHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleHeader_SaleType" Association="TZeroDataModel.FK_SaleHeader_SaleType">
+            <End Role="SaleType" EntitySet="SaleTypes" />
+            <End Role="SaleHeader" EntitySet="SaleHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaleItem_SaleHeader" Association="TZeroDataModel.FK_SaleItem_SaleHeader">
+            <End Role="SaleHeader" EntitySet="SaleHeaders" />
+            <End Role="SaleItem" EntitySet="SaleItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalePaymentItem_SalePaymentHeader" Association="TZeroDataModel.FK_SalePaymentItem_SalePaymentHeader">
+            <End Role="SalePaymentHeader" EntitySet="SalePaymentHeaders" />
+            <End Role="SalePaymentItem" EntitySet="SalePaymentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_StockType" Association="TZeroDataModel.FK_StockHeader_StockType">
+            <End Role="StockType" EntitySet="StockTypes" />
+            <End Role="StockHeader" EntitySet="StockHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockItem_StockHeader" Association="TZeroDataModel.FK_StockItem_StockHeader">
+            <End Role="StockHeader" EntitySet="StockHeaders" />
+            <End Role="StockItem" EntitySet="StockItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxPositionCode_Supplier_TaxPosition" Association="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition">
+            <End Role="TaxPosition" EntitySet="TaxPositions" />
+            <End Role="Supplier" EntitySet="Suppliers" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name1" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Name2" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="Country" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="State" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Street" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Floor" Type="Int32" />
+          <Property Name="DepNumber" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Number" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="E_Mail1" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="E_Mail2" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="WebSite" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Telephone1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Telephone2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Telephone3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TaxPositionCode" Type="Int32" />
+          <Property Name="PaymentInstrumentCode" Type="Int32" />
+          <Property Name="LegalCode" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="TaxPosition" Relationship="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="Customer" ToRole="TaxPosition" />
+          <NavigationProperty Name="PaymentInstrument" Relationship="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="Customer" ToRole="PaymentInstrument" />
+        </EntityType>
+        <EntityType Name="DeliveryDocumentHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="UserCode" Type="Guid" />
+          <Property Name="SupplierCode" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Used" Type="Boolean" />
+          <NavigationProperty Name="Supplier" Relationship="TZeroDataModel.FK_DeliveryDocumentHeader_Supplier" FromRole="DeliveryDocumentHeader" ToRole="Supplier" />
+          <NavigationProperty Name="DeliveryDocumentItems" Relationship="TZeroDataModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="DeliveryDocumentItem" />
+          <NavigationProperty Name="StockHeaders" Relationship="TZeroDataModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="DeliveryDocumentHeader" ToRole="StockHeader" />
+        </EntityType>
+        <EntityType Name="DeliveryDocumentItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="DeliveryDocumentHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryDocumentHeaderCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ProductCode" Type="Int32" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ProductByWeight" Type="Boolean" Nullable="false" />
+          <Property Name="PriceValue" Type="Double" Nullable="false" />
+          <Property Name="UnitWeightQuantity" Type="Double" />
+          <Property Name="SaleWeightQuantity" Type="Double" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroDataModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" FromRole="DeliveryDocumentItem" ToRole="DeliveryDocumentHeader" />
+        </EntityType>
+        <EntityType Name="DeliveryNoteHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="UserCode" Type="Guid" />
+          <Property Name="SupplierCode" Type="Int32" />
+          <Property Name="SupplierDeliveryNoteCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Note" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="DeliveryNoteItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="DeliveryNoteHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryNoteHeaderCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ProductCode" Type="Int32" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ProductByWeight" Type="Boolean" Nullable="false" />
+          <Property Name="PriceValue" Type="Double" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentInstrument">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="PrintModeDefault" Type="Int32" />
+          <NavigationProperty Name="Customers" Relationship="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Customer" />
+          <NavigationProperty Name="Suppliers" Relationship="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Supplier" />
+          <NavigationProperty Name="SalePaymentItems" Relationship="TZeroDataModel.FK_StockHeader_PaymentInstrument" FromRole="PaymentInstrument" ToRole="SalePaymentItem" />
+        </EntityType>
+        <EntityType Name="Price">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="UnitWeightCode" Type="Int32" />
+          <Property Name="SaleWeightCode" Type="Int32" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="TZeroDataModel.FK_PriceCost_Product_Price" FromRole="Price" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="TZeroDataModel.FK_Product_Price" FromRole="Price" ToRole="Product" />
+          <NavigationProperty Name="Weight" Relationship="TZeroDataModel.FK_SaleWeight_Price_Weight" FromRole="Price" ToRole="Weight" />
+          <NavigationProperty Name="Weight1" Relationship="TZeroDataModel.FK_UnitWeight_Price_Weight" FromRole="Price" ToRole="Weight" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="MasterCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="PriceCode" Type="Int32" />
+          <Property Name="PriceCostCode" Type="Int32" />
+          <Property Name="ByWeight" Type="Boolean" Nullable="false" />
+          <Property Name="Tax1Code" Type="Int32" />
+          <Property Name="Tax2Code" Type="Int32" />
+          <Property Name="Group1" Type="Int32" />
+          <Property Name="Group2" Type="Int32" />
+          <Property Name="DueDays" Type="Int32" />
+          <NavigationProperty Name="Price" Relationship="TZeroDataModel.FK_PriceCost_Product_Price" FromRole="Product" ToRole="Price" />
+          <NavigationProperty Name="Price1" Relationship="TZeroDataModel.FK_Product_Price" FromRole="Product" ToRole="Price" />
+          <NavigationProperty Name="ProductGroup" Relationship="TZeroDataModel.FK_Group1_Product_ProductGroup" FromRole="Product" ToRole="ProductGroup" />
+          <NavigationProperty Name="ProductGroup1" Relationship="TZeroDataModel.FK_Group2_Product_ProductGroup" FromRole="Product" ToRole="ProductGroup" />
+          <NavigationProperty Name="SaleItems" Relationship="TZeroDataModel.FK_SaleItem_Product" FromRole="Product" ToRole="SaleItem" />
+          <NavigationProperty Name="StockItems" Relationship="TZeroDataModel.FK_StockItem_Product" FromRole="Product" ToRole="StockItem" />
+          <NavigationProperty Name="Tax" Relationship="TZeroDataModel.FK_Tax1_Product_Tax" FromRole="Product" ToRole="Tax" />
+          <NavigationProperty Name="Tax1" Relationship="TZeroDataModel.FK_Tax2_Product_Tax" FromRole="Product" ToRole="Tax" />
+        </EntityType>
+        <EntityType Name="ProductGroup">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Products" Relationship="TZeroDataModel.FK_Group1_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="TZeroDataModel.FK_Group2_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="ReturnReason">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="SaleHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="UserCode" Type="Guid" />
+          <Property Name="SaleTypeCode" Type="Int32" Nullable="false" />
+          <Property Name="SalePaymentHeaderCode" Type="Int32" />
+          <Property Name="PayIsComplete" Type="Boolean" Nullable="false" />
+          <Property Name="PrintMode" Type="Int32" />
+          <Property Name="CustomerCode" Type="Int32" />
+          <Property Name="PriceSumValue" Type="Double" Nullable="false" />
+          <Property Name="TaxSumValue" Type="Double" Nullable="false" />
+          <Property Name="Tax1SumValue" Type="Double" Nullable="false" />
+          <Property Name="Summarized" Type="Boolean" Nullable="false" />
+          <Property Name="Historized" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="SalePaymentHeader" Relationship="TZeroDataModel.FK_SaleHeader_SalePaymentHeader" FromRole="SaleHeader" ToRole="SalePaymentHeader" />
+          <NavigationProperty Name="SaleType" Relationship="TZeroDataModel.FK_SaleHeader_SaleType" FromRole="SaleHeader" ToRole="SaleType" />
+          <NavigationProperty Name="SaleItems" Relationship="TZeroDataModel.FK_SaleItem_SaleHeader" FromRole="SaleHeader" ToRole="SaleItem" />
+        </EntityType>
+        <EntityType Name="SaleItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="SaleHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="SaleHeaderCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ProductCode" Type="Int32" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ProductByWeight" Type="Boolean" Nullable="false" />
+          <Property Name="PriceValue" Type="Double" Nullable="false" />
+          <Property Name="UnitWeightQuantity" Type="Double" />
+          <Property Name="SaleWeightQuantity" Type="Double" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="TaxValue" Type="Double" Nullable="false" />
+          <Property Name="Tax1Value" Type="Double" Nullable="false" />
+          <Property Name="NetPriceValue" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="TZeroDataModel.FK_SaleItem_Product" FromRole="SaleItem" ToRole="Product" />
+          <NavigationProperty Name="SaleHeader" Relationship="TZeroDataModel.FK_SaleItem_SaleHeader" FromRole="SaleItem" ToRole="SaleHeader" />
+        </EntityType>
+        <EntityType Name="SalePaymentHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="TotalQuantity" Type="Double" Nullable="false" />
+          <NavigationProperty Name="SaleHeaders" Relationship="TZeroDataModel.FK_SaleHeader_SalePaymentHeader" FromRole="SalePaymentHeader" ToRole="SaleHeader" />
+          <NavigationProperty Name="SalePaymentItems" Relationship="TZeroDataModel.FK_SalePaymentItem_SalePaymentHeader" FromRole="SalePaymentHeader" ToRole="SalePaymentItem" />
+        </EntityType>
+        <EntityType Name="SalePaymentItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="SalePaymentHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="SalePaymentHeaderCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="PaymentInstrumentCode" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <NavigationProperty Name="PaymentInstrument" Relationship="TZeroDataModel.FK_StockHeader_PaymentInstrument" FromRole="SalePaymentItem" ToRole="PaymentInstrument" />
+          <NavigationProperty Name="SalePaymentHeader" Relationship="TZeroDataModel.FK_SalePaymentItem_SalePaymentHeader" FromRole="SalePaymentItem" ToRole="SalePaymentHeader" />
+        </EntityType>
+        <EntityType Name="SaleType">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="SaleHeaders" Relationship="TZeroDataModel.FK_SaleHeader_SaleType" FromRole="SaleType" ToRole="SaleHeader" />
+        </EntityType>
+        <EntityType Name="StockHeader">
+          <Key>
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="UserCode" Type="Guid" />
+          <Property Name="StockTypeCode" Type="Int32" />
+          <Property Name="DeliveryDocumentHeaderTerminalCode" Type="Int32" />
+          <Property Name="DeliveryDocumentHeaderCode" Type="Int32" />
+          <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroDataModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="StockHeader" ToRole="DeliveryDocumentHeader" />
+          <NavigationProperty Name="StockType" Relationship="TZeroDataModel.FK_StockHeader_StockType" FromRole="StockHeader" ToRole="StockType" />
+          <NavigationProperty Name="StockItems" Relationship="TZeroDataModel.FK_StockItem_StockHeader" FromRole="StockHeader" ToRole="StockItem" />
+        </EntityType>
+        <EntityType Name="StockItem">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="TerminalCode" />
+            <PropertyRef Name="StockHeaderCode" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="TerminalCode" Type="Int32" Nullable="false" />
+          <Property Name="StockHeaderCode" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+          <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ProductCode" Type="Int32" Nullable="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="ProductByWeight" Type="Boolean" Nullable="false" />
+          <Property Name="PriceValue" Type="Double" Nullable="false" />
+          <Property Name="UnitWeightQuantity" Type="Double" />
+          <Property Name="SaleWeightQuantity" Type="Double" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="TZeroDataModel.FK_StockItem_Product" FromRole="StockItem" ToRole="Product" />
+          <NavigationProperty Name="StockHeader" Relationship="TZeroDataModel.FK_StockItem_StockHeader" FromRole="StockItem" ToRole="StockHeader" />
+        </EntityType>
+        <EntityType Name="StockType">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="StockHeaders" Relationship="TZeroDataModel.FK_StockHeader_StockType" FromRole="StockType" ToRole="StockHeader" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name1" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Name2" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="Country" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="State" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Street" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Number" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="E_Mail1" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="E_Mail2" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="WebSite" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+          <Property Name="Telephone1" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Telephone2" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Telephone3" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="TaxPositionCode" Type="Int32" />
+          <Property Name="PaymentInstrumentCode" Type="Int32" />
+          <Property Name="LegalCode" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="DeliveryDocumentHeaders" Relationship="TZeroDataModel.FK_DeliveryDocumentHeader_Supplier" FromRole="Supplier" ToRole="DeliveryDocumentHeader" />
+          <NavigationProperty Name="PaymentInstrument" Relationship="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" FromRole="Supplier" ToRole="PaymentInstrument" />
+          <NavigationProperty Name="TaxPosition" Relationship="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition" FromRole="Supplier" ToRole="TaxPosition" />
+        </EntityType>
+        <EntityType Name="Tax">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="ProductDefault" Type="Boolean" />
+          <NavigationProperty Name="Products" Relationship="TZeroDataModel.FK_Tax1_Product_Tax" FromRole="Tax" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="TZeroDataModel.FK_Tax2_Product_Tax" FromRole="Tax" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="TaxPosition">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Customers" Relationship="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="TaxPosition" ToRole="Customer" />
+          <NavigationProperty Name="Suppliers" Relationship="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition" FromRole="TaxPosition" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="Weight">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Stamp" Type="DateTime" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Prices" Relationship="TZeroDataModel.FK_SaleWeight_Price_Weight" FromRole="Weight" ToRole="Price" />
+          <NavigationProperty Name="Prices1" Relationship="TZeroDataModel.FK_UnitWeight_Price_Weight" FromRole="Weight" ToRole="Price" />
+        </EntityType>
+        <EntityType Name="StockCreateSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="NetWeight" Type="Double" />
+          <Property Name="QuantityKG" Type="Double" />
+          <Property Name="ProductCount" Type="Int32" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockModifySummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="NetWeight" Type="Double" />
+          <Property Name="QuantityKG" Type="Double" />
+          <Property Name="ProductCount" Type="Int32" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockSummary">
+          <Key>
+            <PropertyRef Name="ProductMasterCode" />
+            <PropertyRef Name="TerminalToCode" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="ProductMasterCode" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="NetWeight" Type="Double" />
+          <Property Name="QuantityKG" Type="Double" />
+          <Property Name="ProductCount" Type="Int32" />
+          <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TerminalTo">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_TaxPositionCode_Customer_TaxPosition">
+          <End Role="TaxPosition" Type="TZeroDataModel.TaxPosition" Multiplicity="0..1" />
+          <End Role="Customer" Type="TZeroDataModel.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxPosition">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="TaxPositionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_PaymentInstrumentCode_Customer_PaymentInstrument">
+          <End Role="PaymentInstrument" Type="TZeroDataModel.PaymentInstrument" Multiplicity="0..1" />
+          <End Role="Customer" Type="TZeroDataModel.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentInstrument">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DeliveryDocumentHeader_Supplier">
+          <End Role="Supplier" Type="TZeroDataModel.Supplier" Multiplicity="0..1" />
+          <End Role="DeliveryDocumentHeader" Type="TZeroDataModel.DeliveryDocumentHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="DeliveryDocumentHeader">
+              <PropertyRef Name="SupplierCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DeliveryDocumentItem_DeliveryDocumentHeader">
+          <End Role="DeliveryDocumentHeader" Type="TZeroDataModel.DeliveryDocumentHeader" Multiplicity="1" />
+          <End Role="DeliveryDocumentItem" Type="TZeroDataModel.DeliveryDocumentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryDocumentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="DeliveryDocumentItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="DeliveryDocumentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_DeliveryDocumentHeader">
+          <End Role="DeliveryDocumentHeader" Type="TZeroDataModel.DeliveryDocumentHeader" Multiplicity="0..1" />
+          <End Role="StockHeader" Type="TZeroDataModel.StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryDocumentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="DeliveryDocumentHeaderTerminalCode" />
+              <PropertyRef Name="DeliveryDocumentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentInstrumentCode_Supplier_PaymentInstrument">
+          <End Role="PaymentInstrument" Type="TZeroDataModel.PaymentInstrument" Multiplicity="0..1" />
+          <End Role="Supplier" Type="TZeroDataModel.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentInstrument">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_PaymentInstrument">
+          <End Role="PaymentInstrument" Type="TZeroDataModel.PaymentInstrument" Multiplicity="1" />
+          <End Role="SalePaymentItem" Type="TZeroDataModel.SalePaymentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentInstrument">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SalePaymentItem">
+              <PropertyRef Name="PaymentInstrumentCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceCost_Product_Price">
+          <End Role="Price" Type="TZeroDataModel.Price" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PriceCostCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Price">
+          <End Role="Price" Type="TZeroDataModel.Price" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Price">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="PriceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleWeight_Price_Weight">
+          <End Role="Weight" Type="TZeroDataModel.Weight" Multiplicity="0..1" />
+          <End Role="Price" Type="TZeroDataModel.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Weight">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="SaleWeightCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UnitWeight_Price_Weight">
+          <End Role="Weight" Type="TZeroDataModel.Weight" Multiplicity="0..1" />
+          <End Role="Price" Type="TZeroDataModel.Price" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Weight">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Price">
+              <PropertyRef Name="UnitWeightCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Group1_Product_ProductGroup">
+          <End Role="ProductGroup" Type="TZeroDataModel.ProductGroup" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Group1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Group2_Product_ProductGroup">
+          <End Role="ProductGroup" Type="TZeroDataModel.ProductGroup" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Group2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleItem_Product">
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="1" />
+          <End Role="SaleItem" Type="TZeroDataModel.SaleItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleItem">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockItem_Product">
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="1" />
+          <End Role="StockItem" Type="TZeroDataModel.StockItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockItem">
+              <PropertyRef Name="ProductCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tax1_Product_Tax">
+          <End Role="Tax" Type="TZeroDataModel.Tax" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tax">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Tax1Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tax2_Product_Tax">
+          <End Role="Tax" Type="TZeroDataModel.Tax" Multiplicity="0..1" />
+          <End Role="Product" Type="TZeroDataModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tax">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Tax2Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleHeader_SalePaymentHeader">
+          <End Role="SalePaymentHeader" Type="TZeroDataModel.SalePaymentHeader" Multiplicity="0..1" />
+          <End Role="SaleHeader" Type="TZeroDataModel.SaleHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleHeader_SaleType">
+          <End Role="SaleType" Type="TZeroDataModel.SaleType" Multiplicity="1" />
+          <End Role="SaleHeader" Type="TZeroDataModel.SaleHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SaleType">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleHeader">
+              <PropertyRef Name="SaleTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaleItem_SaleHeader">
+          <End Role="SaleHeader" Type="TZeroDataModel.SaleHeader" Multiplicity="1" />
+          <End Role="SaleItem" Type="TZeroDataModel.SaleItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SaleHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SaleItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SaleHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalePaymentItem_SalePaymentHeader">
+          <End Role="SalePaymentHeader" Type="TZeroDataModel.SalePaymentHeader" Multiplicity="1" />
+          <End Role="SalePaymentItem" Type="TZeroDataModel.SalePaymentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalePaymentHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="SalePaymentItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="SalePaymentHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockHeader_StockType">
+          <End Role="StockType" Type="TZeroDataModel.StockType" Multiplicity="0..1" />
+          <End Role="StockHeader" Type="TZeroDataModel.StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockType">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="StockTypeCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockItem_StockHeader">
+          <End Role="StockHeader" Type="TZeroDataModel.StockHeader" Multiplicity="1" />
+          <End Role="StockItem" Type="TZeroDataModel.StockItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockHeader">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockItem">
+              <PropertyRef Name="TerminalCode" />
+              <PropertyRef Name="StockHeaderCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxPositionCode_Supplier_TaxPosition">
+          <End Role="TaxPosition" Type="TZeroDataModel.TaxPosition" Multiplicity="0..1" />
+          <End Role="Supplier" Type="TZeroDataModel.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxPosition">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="TaxPositionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TZeroDataModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Customers"><EntityTypeMapping TypeName="TZeroDataModel.Customer"><MappingFragment StoreEntitySet="Customer">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name1" ColumnName="Name1" />
+            <ScalarProperty Name="Name2" ColumnName="Name2" />
+            <ScalarProperty Name="Country" ColumnName="Country" />
+            <ScalarProperty Name="State" ColumnName="State" />
+            <ScalarProperty Name="City" ColumnName="City" />
+            <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+            <ScalarProperty Name="Street" ColumnName="Street" />
+            <ScalarProperty Name="Floor" ColumnName="Floor" />
+            <ScalarProperty Name="DepNumber" ColumnName="DepNumber" />
+            <ScalarProperty Name="Number" ColumnName="Number" />
+            <ScalarProperty Name="E_Mail1" ColumnName="E-Mail1" />
+            <ScalarProperty Name="E_Mail2" ColumnName="E-Mail2" />
+            <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+            <ScalarProperty Name="Telephone1" ColumnName="Telephone1" />
+            <ScalarProperty Name="Telephone2" ColumnName="Telephone2" />
+            <ScalarProperty Name="Telephone3" ColumnName="Telephone3" />
+            <ScalarProperty Name="TaxPositionCode" ColumnName="TaxPositionCode" />
+            <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
+            <ScalarProperty Name="LegalCode" ColumnName="LegalCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="DeliveryDocumentHeaders"><EntityTypeMapping TypeName="TZeroDataModel.DeliveryDocumentHeader"><MappingFragment StoreEntitySet="DeliveryDocumentHeader">
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+            <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />
+            <ScalarProperty Name="Note" ColumnName="Note" />
+            <ScalarProperty Name="Used" ColumnName="Used" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="DeliveryDocumentItems"><EntityTypeMapping TypeName="TZeroDataModel.DeliveryDocumentItem"><MappingFragment StoreEntitySet="DeliveryDocumentItem">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="DeliveryDocumentHeaderCode" ColumnName="DeliveryDocumentHeaderCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="Batch" ColumnName="Batch" />
+            <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="ProductByWeight" ColumnName="ProductByWeight" />
+            <ScalarProperty Name="PriceValue" ColumnName="PriceValue" />
+            <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
+            <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="DeliveryNoteHeaders"><EntityTypeMapping TypeName="TZeroDataModel.DeliveryNoteHeader"><MappingFragment StoreEntitySet="DeliveryNoteHeader">
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+            <ScalarProperty Name="SupplierCode" ColumnName="SupplierCode" />
+            <ScalarProperty Name="SupplierDeliveryNoteCode" ColumnName="SupplierDeliveryNoteCode" />
+            <ScalarProperty Name="Note" ColumnName="Note" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="DeliveryNoteItems"><EntityTypeMapping TypeName="TZeroDataModel.DeliveryNoteItem"><MappingFragment StoreEntitySet="DeliveryNoteItem">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="DeliveryNoteHeaderCode" ColumnName="DeliveryNoteHeaderCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="Batch" ColumnName="Batch" />
+            <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="ProductByWeight" ColumnName="ProductByWeight" />
+            <ScalarProperty Name="PriceValue" ColumnName="PriceValue" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="PaymentInstruments"><EntityTypeMapping TypeName="TZeroDataModel.PaymentInstrument"><MappingFragment StoreEntitySet="PaymentInstrument">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="PrintModeDefault" ColumnName="PrintModeDefault" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Prices"><EntityTypeMapping TypeName="TZeroDataModel.Price"><MappingFragment StoreEntitySet="Price">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="UnitWeightCode" ColumnName="UnitWeightCode" />
+            <ScalarProperty Name="SaleWeightCode" ColumnName="SaleWeightCode" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Products"><EntityTypeMapping TypeName="TZeroDataModel.Product"><MappingFragment StoreEntitySet="Product">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="MasterCode" ColumnName="MasterCode" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+            <ScalarProperty Name="PriceCode" ColumnName="PriceCode" />
+            <ScalarProperty Name="PriceCostCode" ColumnName="PriceCostCode" />
+            <ScalarProperty Name="ByWeight" ColumnName="ByWeight" />
+            <ScalarProperty Name="Tax1Code" ColumnName="Tax1Code" />
+            <ScalarProperty Name="Tax2Code" ColumnName="Tax2Code" />
+            <ScalarProperty Name="Group1" ColumnName="Group1" />
+            <ScalarProperty Name="Group2" ColumnName="Group2" />
+            <ScalarProperty Name="DueDays" ColumnName="DueDays" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductGroups"><EntityTypeMapping TypeName="TZeroDataModel.ProductGroup"><MappingFragment StoreEntitySet="ProductGroup">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ReturnReasons"><EntityTypeMapping TypeName="TZeroDataModel.ReturnReason"><MappingFragment StoreEntitySet="ReturnReason">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SaleHeaders"><EntityTypeMapping TypeName="TZeroDataModel.SaleHeader"><MappingFragment StoreEntitySet="SaleHeader">
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+            <ScalarProperty Name="SaleTypeCode" ColumnName="SaleTypeCode" />
+            <ScalarProperty Name="SalePaymentHeaderCode" ColumnName="SalePaymentHeaderCode" />
+            <ScalarProperty Name="PayIsComplete" ColumnName="PayIsComplete" />
+            <ScalarProperty Name="PrintMode" ColumnName="PrintMode" />
+            <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+            <ScalarProperty Name="PriceSumValue" ColumnName="PriceSumValue" />
+            <ScalarProperty Name="TaxSumValue" ColumnName="TaxSumValue" />
+            <ScalarProperty Name="Tax1SumValue" ColumnName="Tax1SumValue" />
+            <ScalarProperty Name="Summarized" ColumnName="Summarized" />
+            <ScalarProperty Name="Historized" ColumnName="Historized" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SaleItems"><EntityTypeMapping TypeName="TZeroDataModel.SaleItem"><MappingFragment StoreEntitySet="SaleItem">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="SaleHeaderCode" ColumnName="SaleHeaderCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="Batch" ColumnName="Batch" />
+            <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="ProductByWeight" ColumnName="ProductByWeight" />
+            <ScalarProperty Name="PriceValue" ColumnName="PriceValue" />
+            <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
+            <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+            <ScalarProperty Name="TaxValue" ColumnName="TaxValue" />
+            <ScalarProperty Name="Tax1Value" ColumnName="Tax1Value" />
+            <ScalarProperty Name="NetPriceValue" ColumnName="NetPriceValue" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SalePaymentHeaders"><EntityTypeMapping TypeName="TZeroDataModel.SalePaymentHeader"><MappingFragment StoreEntitySet="SalePaymentHeader">
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SalePaymentItems"><EntityTypeMapping TypeName="TZeroDataModel.SalePaymentItem"><MappingFragment StoreEntitySet="SalePaymentItem">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="SalePaymentHeaderCode" ColumnName="SalePaymentHeaderCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SaleTypes"><EntityTypeMapping TypeName="TZeroDataModel.SaleType"><MappingFragment StoreEntitySet="SaleType">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StockHeaders"><EntityTypeMapping TypeName="TZeroDataModel.StockHeader"><MappingFragment StoreEntitySet="StockHeader">
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="Date" ColumnName="Date" />
+            <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+            <ScalarProperty Name="StockTypeCode" ColumnName="StockTypeCode" />
+            <ScalarProperty Name="DeliveryDocumentHeaderTerminalCode" ColumnName="DeliveryDocumentHeaderTerminalCode" />
+            <ScalarProperty Name="DeliveryDocumentHeaderCode" ColumnName="DeliveryDocumentHeaderCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StockItems"><EntityTypeMapping TypeName="TZeroDataModel.StockItem"><MappingFragment StoreEntitySet="StockItem">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="StockHeaderCode" ColumnName="StockHeaderCode" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+            <ScalarProperty Name="Batch" ColumnName="Batch" />
+            <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="ProductByWeight" ColumnName="ProductByWeight" />
+            <ScalarProperty Name="PriceValue" ColumnName="PriceValue" />
+            <ScalarProperty Name="UnitWeightQuantity" ColumnName="UnitWeightQuantity" />
+            <ScalarProperty Name="SaleWeightQuantity" ColumnName="SaleWeightQuantity" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StockTypes"><EntityTypeMapping TypeName="TZeroDataModel.StockType"><MappingFragment StoreEntitySet="StockType">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Suppliers"><EntityTypeMapping TypeName="TZeroDataModel.Supplier"><MappingFragment StoreEntitySet="Supplier">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name1" ColumnName="Name1" />
+            <ScalarProperty Name="Name2" ColumnName="Name2" />
+            <ScalarProperty Name="Country" ColumnName="Country" />
+            <ScalarProperty Name="State" ColumnName="State" />
+            <ScalarProperty Name="City" ColumnName="City" />
+            <ScalarProperty Name="Street" ColumnName="Street" />
+            <ScalarProperty Name="Number" ColumnName="Number" />
+            <ScalarProperty Name="E_Mail1" ColumnName="E-Mail1" />
+            <ScalarProperty Name="E_Mail2" ColumnName="E-Mail2" />
+            <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+            <ScalarProperty Name="Telephone1" ColumnName="Telephone1" />
+            <ScalarProperty Name="Telephone2" ColumnName="Telephone2" />
+            <ScalarProperty Name="Telephone3" ColumnName="Telephone3" />
+            <ScalarProperty Name="TaxPositionCode" ColumnName="TaxPositionCode" />
+            <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
+            <ScalarProperty Name="LegalCode" ColumnName="LegalCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Taxes"><EntityTypeMapping TypeName="TZeroDataModel.Tax"><MappingFragment StoreEntitySet="Tax">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+            <ScalarProperty Name="ProductDefault" ColumnName="ProductDefault" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="TaxPositions"><EntityTypeMapping TypeName="TZeroDataModel.TaxPosition"><MappingFragment StoreEntitySet="TaxPosition">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Weights"><EntityTypeMapping TypeName="TZeroDataModel.Weight"><MappingFragment StoreEntitySet="Weight">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+            <ScalarProperty Name="Enable" ColumnName="Enable" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StockCreateSummaries"><EntityTypeMapping TypeName="TZeroDataModel.StockCreateSummary"><MappingFragment StoreEntitySet="StockCreateSummary">
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
+            <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
+            <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StockModifySummaries"><EntityTypeMapping TypeName="TZeroDataModel.StockModifySummary"><MappingFragment StoreEntitySet="StockModifySummary">
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
+            <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
+            <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="StockSummaries"><EntityTypeMapping TypeName="TZeroDataModel.StockSummary"><MappingFragment StoreEntitySet="StockSummary">
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="ProductMasterCode" ColumnName="ProductMasterCode" />
+            <ScalarProperty Name="NetWeight" ColumnName="NetWeight" />
+            <ScalarProperty Name="QuantityKG" ColumnName="QuantityKG" />
+            <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+            <ScalarProperty Name="TerminalToCode" ColumnName="TerminalToCode" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="TerminalToes"><EntityTypeMapping TypeName="TZeroDataModel.TerminalTo"><MappingFragment StoreEntitySet="TerminalTo">
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="DataModel" ZoomLevel="90">
+        <EntityTypeShape EntityType="TZeroDataModel.Customer" Width="1.5" PointX="3.75" PointY="26.875" Height="5.8263151041666674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.DeliveryDocumentHeader" Width="1.5" PointX="6" PointY="21" Height="3.7109993489583317" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.DeliveryDocumentItem" Width="1.5" PointX="8.25" PointY="16.75" Height="4.0956022135416674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.DeliveryNoteHeader" Width="1.5" PointX="10.75" PointY="9.75" Height="2.9417936197916674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.DeliveryNoteItem" Width="1.5" PointX="12.75" PointY="0.75" Height="3.3263964843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.PaymentInstrument" Width="1.5" PointX="1.5" PointY="19.875" Height="2.749492187499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.Price" Width="1.5" PointX="3" PointY="4.625" Height="3.3263964843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.Product" Width="1.5" PointX="5.25" PointY="3.5" Height="5.4417122395833326" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.ProductGroup" Width="1.5" PointX="3" PointY="1.375" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.ReturnReason" Width="1.5" PointX="5.75" PointY="0.75" Height="1.9802864583333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.SaleHeader" Width="1.5" PointX="5.25" PointY="13.75" Height="5.0571093750000031" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.SaleItem" Width="1.5" PointX="7.5" PointY="3.875" Height="4.8648079427083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.SalePaymentHeader" Width="1.5" PointX="3" PointY="13.375" Height="2.749492187499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.SalePaymentItem" Width="1.5" PointX="8.25" PointY="12.5" Height="3.1340950520833388" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.SaleType" Width="1.5" PointX="3" PointY="16.875" Height="2.1725878906250031" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.StockHeader" Width="1.5" PointX="8.25" PointY="22.375" Height="3.7109993489583388" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.StockItem" Width="1.5" PointX="10.5" PointY="4.125" Height="4.2879036458333388" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.StockType" Width="1.5" PointX="6" PointY="26.5" Height="2.1725878906250031" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.Supplier" Width="1.5" PointX="3.75" PointY="20.125" Height="5.2494108072916674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.Tax" Width="1.5" PointX="3" PointY="9.5" Height="2.749492187499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.TaxPosition" Width="1.5" PointX="1.5" PointY="23.375" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.Weight" Width="1.5" PointX="0.75" PointY="5" Height="2.5571907552083388" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.StockCreateSummary" Width="1.5" PointX="7.75" PointY="0.75" Height="2.1725878906250102" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.StockModifySummary" Width="1.5" PointX="9.75" PointY="0.75" Height="2.1725878906250102" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.StockSummary" Width="1.5" PointX="12.75" PointY="5.75" Height="2.1725878906250102" IsExpanded="true" />
+        <EntityTypeShape EntityType="TZeroDataModel.TerminalTo" Width="1.5" PointX="5.75" PointY="9.75" Height="1.5956835937500102" IsExpanded="true" />
+        <AssociationConnector Association="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="25.739889322916667" />
+          <ConnectorPoint PointX="2.25" PointY="29.788157552083334" />
+          <ConnectorPoint PointX="3.75" PointY="29.788157552083334" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.9999999999999996" PointY="22.624492187499996" />
+          <ConnectorPoint PointX="3.375" PointY="22.999492187499996" />
+          <ConnectorPoint PointX="3.375" PointY="28.300326776041665" />
+          <ConnectorPoint PointX="3.75" PointY="28.300326776041665" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_DeliveryDocumentHeader_Supplier" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.25" PointY="22.855499674479166" />
+          <ConnectorPoint PointX="6" PointY="22.855499674479166" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.15625" PointY="21" />
+          <ConnectorPoint PointX="7.15625" PointY="19.857605794270835" />
+          <ConnectorPoint PointX="8.25" PointY="19.857605794270835" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_StockHeader_DeliveryDocumentHeader" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.5" PointY="23.542999674479166" />
+          <ConnectorPoint PointX="8.25" PointY="23.542999674479166" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" ManuallyRouted="false">
+          <ConnectorPoint PointX="3" PointY="21.343493593749997" />
+          <ConnectorPoint PointX="3.75" PointY="21.343493593749997" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_StockHeader_PaymentInstrument" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.21875" PointY="19.875" />
+          <ConnectorPoint PointX="2.21875" PointY="12.90625" />
+          <ConnectorPoint PointX="7.760416666666667" PointY="12.90625" />
+          <ConnectorPoint PointX="7.927083333333333" PointY="12.90625" />
+          <ConnectorPoint PointX="8.25" PointY="12.90625" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_PriceCost_Product_Price" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="6.2881982421875" />
+          <ConnectorPoint PointX="5.25" PointY="6.2881982421875" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_Product_Price" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="5.39409912109375" />
+          <ConnectorPoint PointX="5.25" PointY="5.39409912109375" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_SaleWeight_Price_Weight" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.2785953776041694" />
+          <ConnectorPoint PointX="3" PointY="6.2785953776041694" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_UnitWeight_Price_Weight" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="5.5767976888020847" />
+          <ConnectorPoint PointX="3" PointY="5.5767976888020847" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_Group1_Product_ProductGroup" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="3.1463927291666658" />
+          <ConnectorPoint PointX="5.2447891666666671" PointY="3.1463927291666653" />
+          <ConnectorPoint PointX="5.4114558333333331" PointY="3.1463927291666658" />
+          <ConnectorPoint PointX="5.46875" PointY="3.1463927291666658" />
+          <ConnectorPoint PointX="5.46875" PointY="3.5" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_Group2_Product_ProductGroup" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="2.9383370937499977" />
+          <ConnectorPoint PointX="5.3281225" PointY="2.9383370937499977" />
+          <ConnectorPoint PointX="5.3281225" PointY="3.5" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_SaleItem_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="6.3074039713541659" />
+          <ConnectorPoint PointX="7.5" PointY="6.3074039713541659" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_StockItem_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="8.8720100911458317" />
+          <ConnectorPoint PointX="7.760416666666667" PointY="8.8720100911458317" />
+          <ConnectorPoint PointX="7.927083333333333" PointY="8.8720100911458317" />
+          <ConnectorPoint PointX="10.510416666666666" PointY="8.8720100911458317" />
+          <ConnectorPoint PointX="10.677083333333334" PointY="8.8720100911458317" />
+          <ConnectorPoint PointX="11.25" PointY="8.8720100911458317" />
+          <ConnectorPoint PointX="11.25" PointY="8.4129036458333388" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_Tax1_Product_Tax" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="11.828837890625003" />
+          <ConnectorPoint PointX="5.46875" PointY="11.828837890625003" />
+          <ConnectorPoint PointX="5.46875" PointY="8.9417122395833317" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_Tax2_Product_Tax" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="11.587258242187513" />
+          <ConnectorPoint PointX="5.3281225" PointY="11.587258242187513" />
+          <ConnectorPoint PointX="5.3281225" PointY="8.9417122395833317" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_SaleHeader_SalePaymentHeader" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="14.937246093749998" />
+          <ConnectorPoint PointX="5.25" PointY="14.937246093749998" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_SaleHeader_SaleType" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="17.8410546875" />
+          <ConnectorPoint PointX="5.25" PointY="17.8410546875" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_SaleItem_SaleHeader" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="16.192047526041669" />
+          <ConnectorPoint PointX="7.84375" PointY="16.192047526041669" />
+          <ConnectorPoint PointX="7.84375" PointY="8.7398079427083317" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_SalePaymentItem_SalePaymentHeader" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="13.53125" />
+          <ConnectorPoint PointX="7.760416666666667" PointY="13.53125" />
+          <ConnectorPoint PointX="7.927083333333333" PointY="13.53125" />
+          <ConnectorPoint PointX="8.25" PointY="13.53125" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_StockHeader_StockType" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.5" PointY="27.5862939453125" />
+          <ConnectorPoint PointX="9" PointY="27.5862939453125" />
+          <ConnectorPoint PointX="9" PointY="26.085999348958339" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_StockItem_StockHeader" ManuallyRouted="false">
+          <ConnectorPoint PointX="9.75" PointY="24.230499674479169" />
+          <ConnectorPoint PointX="10.59375" PointY="24.230499674479169" />
+          <ConnectorPoint PointX="10.59375" PointY="8.4129036458333388" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition" ManuallyRouted="false">
+          <ConnectorPoint PointX="3" PointY="24.374705403645834" />
+          <ConnectorPoint PointX="3.2916666666666665" PointY="24.374705403645834" />
+          <ConnectorPoint PointX="3.4583333333333335" PointY="24.374705403645834" />
+          <ConnectorPoint PointX="3.75" PointY="24.374705403645834" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

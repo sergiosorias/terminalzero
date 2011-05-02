@@ -87,7 +87,7 @@
     </Compile>
     <Compile Include="Classes\Delegates.cs" />
     <Compile Include="Classes\EventArgs.cs" />
-    <Compile Include="Classes\Rules.cs" />
+    <Compile Include="Classes\ValidationRules.cs" />
     <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="ListNavigationControl.cs" />

@@ -94,7 +94,7 @@ namespace ZeroGUI
         {
             if (Composition.Length == e.Value.ToString().Length)
             {
-                BarCodeValidationEventArgs args = new BarCodeValidationEventArgs(BarCodePart.BuildComposition(Composition, e.Value.ToString()));
+                BarCodeValidationEventArgs args = new BarCodeValidationEventArgs(e.Value.ToString(), BarCodePart.BuildComposition(Composition, e.Value.ToString()));
                 OnBarcodeValidating(args);
                 e.IsValid = args.Parts.TrueForAll(p => p.IsValid);
                 e.ErrorContent = args.Error;

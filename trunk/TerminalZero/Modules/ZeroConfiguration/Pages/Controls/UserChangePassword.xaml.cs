@@ -29,8 +29,8 @@ namespace ZeroConfiguration.Pages.Controls
 
         public override bool CanAccept(object parameter)
         {
-            bool ret = true;
-            if (_user.GetPassword() != oldPass.Password)
+            bool ret = base.CanAccept(parameter);
+            if (!ret || _user.GetPassword() != oldPass.Password)
             {
                 ret = false;
                 MessageBox.Show(ZeroConfiguration.Properties.Resources.MsgVerifyInsertedInfo, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 
 namespace TerminalZeroClient.Pages
@@ -14,7 +15,7 @@ namespace TerminalZeroClient.Pages
             InitializeComponent();
             if (!System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             {
-                foreach (ZeroCommonClasses.GlobalObjects.ZeroAction item in App.Instance.Manager.GetShorcutActions())
+                foreach (ZeroAction item in Terminal.Instance.Manager.GetShorcutActions())
                 {
                     Button b = new Button();
                     b.Content = item.Alias;

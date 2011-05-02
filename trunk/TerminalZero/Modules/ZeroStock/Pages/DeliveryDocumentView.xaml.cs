@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroStock.Entities;
 using ZeroStock.Pages.Controls;
 
 namespace ZeroStock.Pages
@@ -14,14 +14,11 @@ namespace ZeroStock.Pages
     /// </summary>
     public partial class DeliveryDocumentView : NavigationBasePage
     {
-        private readonly ITerminal Terminal;
         public DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; private set; }
 
-        public DeliveryDocumentView(ITerminal terminal)
+        public DeliveryDocumentView()
         {
-            ControlMode = ControlMode.New;
             InitializeComponent();
-            Terminal = terminal;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -37,9 +34,8 @@ namespace ZeroStock.Pages
 
         public override bool CanAccept(object parameter)
         {
-            base.CanAccept(parameter);
-            bool ret = true;
-            if (ControlMode == ControlMode.Selection)
+            bool ret = base.CanAccept(parameter);
+            if (ret && ControlMode == ControlMode.Selection)
             {
                 SelectedDeliveryDocumentHeader = DeliveryGrid.SelectedItem as DeliveryDocumentHeader;
                 ret = (SelectedDeliveryDocumentHeader != null);
@@ -60,7 +56,7 @@ namespace ZeroStock.Pages
 
         private void btnNewProduct_Click(object sender, RoutedEventArgs e)
         {
-            var det = new DocumentDeliveryDetail(Terminal);
+            var det = new DocumentDeliveryDetail();
             bool? res = ZeroMessageBox.Show(det, Properties.Resources.NewDeliveryNote);
             if (res.HasValue && res.Value)
             {

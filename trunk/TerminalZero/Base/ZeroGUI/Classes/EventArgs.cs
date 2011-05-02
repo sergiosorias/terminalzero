@@ -21,14 +21,14 @@ namespace ZeroGUI.Classes
         }
     }
 
-    public class BarCodeValidationEventArgs : EventArgs
+    public class BarCodeValidationEventArgs : BarCodeEventArgs
     {
-        public List<BarCodePart> Parts { get; private set; }
         public string Error { get; set; }
         
-        public BarCodeValidationEventArgs(List<BarCodePart> parts)
+        public BarCodeValidationEventArgs(string code, List<BarCodePart> parts)
+            :base(code,parts)
         {
-            Parts = parts;
+            
         }
     }
 

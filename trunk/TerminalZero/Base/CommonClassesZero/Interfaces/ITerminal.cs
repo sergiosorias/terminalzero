@@ -6,6 +6,7 @@ namespace ZeroCommonClasses.Interfaces
         int TerminalCode { get; }
         string TerminalName { get; }
         ZeroSession Session { get; }
-        ITerminalManager Manager { get; }
+        ITerminalManager Manager { get; set; }
+        IZeroClient CurrentClient { get; set; }
     }
 }

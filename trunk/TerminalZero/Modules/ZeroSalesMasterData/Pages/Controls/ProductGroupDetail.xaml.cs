@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -13,8 +13,8 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class ProductGroupDetail : NavigationBasePage
     {
-        private MasterDataEntities DataProvider;
-        public ProductGroupDetail(MasterDataEntities entities)
+        private DataModelManager DataProvider;
+        public ProductGroupDetail(DataModelManager entities)
         {
             InitializeComponent();
             DataProvider = entities;
@@ -23,7 +23,7 @@ namespace ZeroMasterData.Pages.Controls
                      true);
         }
 
-        public ProductGroupDetail(MasterDataEntities entities,  ProductGroup Data)
+        public ProductGroupDetail(DataModelManager entities,  ProductGroup Data)
             : this(entities)
         {
             ControlMode = ControlMode.Update;

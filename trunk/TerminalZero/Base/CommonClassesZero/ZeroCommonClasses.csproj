@@ -37,8 +37,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -47,27 +47,31 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\ContextInfo.cs" />
     <Compile Include="Context\EntitiesContext.cs" />
-    <Compile Include="Entities\CommonEntities.cs" />
-    <Compile Include="Entities\DBCommonTables.Designer.cs">
+    <Compile Include="Entities\CommonEntitiesManager.cs" />
+    <Compile Include="Entities\CommonModel.Designer.cs">
+      <DependentUpon>CommonModel.edmx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DBCommonTables.edmx</DependentUpon>
     </Compile>
     <Compile Include="Entities\EntityStatus.cs" />
+    <Compile Include="Entities\PackStatusEnum.cs" />
+    <Compile Include="GlobalObjects\ActionParameters.cs" />
     <Compile Include="GlobalObjects\ActionRequest.cs" />
+    <Compile Include="GlobalObjects\ActionType.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
+    <Compile Include="GlobalObjects\ZeroMenu.cs" />
     <Compile Include="Helpers\ComparisonExtentions.cs" />
     <Compile Include="Interfaces\IExportableEntity.cs" />
     <Compile Include="Interfaces\ISelectable.cs" />
     <Compile Include="Interfaces\ITerminalManager.cs" />
+    <Compile Include="Interfaces\IValidable.cs" />
+    <Compile Include="Interfaces\IZeroClient.cs" />
     <Compile Include="Pack\ExportEntitiesPackInfo.cs" />
     <Compile Include="Pack\PackInfoBase.cs" />
     <Compile Include="Interfaces\IZeroPage.cs" />
@@ -78,6 +82,7 @@
     <Compile Include="Interfaces\ILogBuilder.cs" />
     <Compile Include="Interfaces\IProgressNotifier.cs" />
     <Compile Include="Pack\PackTableInfo.cs" />
+    <Compile Include="Terminal.cs" />
     <Compile Include="ZeroModule.cs" />
     <Compile Include="Interfaces\Services\ISyncService.cs" />
     <Compile Include="Interfaces\Services\IFileService.cs" />
@@ -95,9 +100,9 @@
     <Compile Include="ZeroSession.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Entities\DBCommonTables.edmx">
+    <EntityDeploy Include="Entities\CommonModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DBCommonTables.Designer.cs</LastGenOutput>
+      <LastGenOutput>CommonModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Properties\DataSources\ZeroCommonClasses.Entities.Entities.datasource" />
     <None Include="Properties\Settings.settings">
@@ -112,10 +117,6 @@
     <ProjectReference Include="..\..\Extras\SharpZipLib\SharpZipLib.csproj">
       <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
       <Name>SharpZipLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZeroBusiness\ZeroBusiness.csproj">
-      <Project>{124F4A1B-7968-4424-B296-10F758D9B53B}</Project>
-      <Name>ZeroBusiness</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

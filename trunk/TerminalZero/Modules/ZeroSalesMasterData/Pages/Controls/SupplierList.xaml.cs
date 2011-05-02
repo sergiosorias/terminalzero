@@ -1,10 +1,8 @@
-﻿using System.Data.Objects.DataClasses;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Entities.Data;
 using ZeroGUI;
-
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -13,18 +11,21 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class SupplierList : ListNavigationControl
     {
-        public Entities.MasterDataEntities DataProvider { get; private set; }
+        public DataModelManager DataProvider { get; private set; }
 
         public SupplierList()
         {
             InitializeComponent();
-            DataProvider = new Entities.MasterDataEntities();
-            InitializeList(suppliersDataGrid, DataProvider.Suppliers);
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                DataProvider = new DataModelManager();
+                InitializeList(suppliersDataGrid, DataProvider.Suppliers);
+            }
         }
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {
-            Controls.SupplierDetail detail = new Controls.SupplierDetail(DataProvider, (int)((Button)sender).DataContext);
+            var detail = new SupplierDetail(DataProvider, (int)((Button)sender).DataContext);
             bool? ret = ZeroMessageBox.Show(detail, "Editar proveedor");
             if (ret.HasValue && ret.Value)
             {

@@ -19,9 +19,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <baseControls:SearchBox Search="SearchBox_Search"/>
-            <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
-                <Button x:Name="btnNewSupplier" Content="Nuevo" HorizontalAlignment="Right" Style="{DynamicResource buttonTextStyle}" Click="btnNewSupplier_Click"/>
-            </WrapPanel>
+            <baseControls:ZeroToolBar x:Name="toolbar" Grid.Column="2" HorizontalAlignment="Right" SaveBtnVisible="False" CancelBtnVisible="False" PrintBtnVisible="False" New="toolbar_New" VerticalAlignment="Center"/>
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>

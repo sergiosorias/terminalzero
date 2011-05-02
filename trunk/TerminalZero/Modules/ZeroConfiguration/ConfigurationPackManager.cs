@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
-using ZeroConfiguration.Entities;
 
 namespace ZeroConfiguration
 {
@@ -13,55 +11,53 @@ namespace ZeroConfiguration
         public ConfigurationPackManager(ITerminal terminal)
             : base(terminal)
         {
-            Exporting += new EventHandler<PackEventArgs>(ConfigurationPackManager_Exporting);
+            
         }
 
-        private void ConfigurationPackManager_Exporting(object sender, PackEventArgs e)
+        protected override void ExportProcess(PackProcessingEventArgs args)
         {
-            foreach (PackTableInfo item in ((ExportEntitiesPackInfo)e.PackInfo).Tables)
-            {
-                item.SerializeRows(e.WorkingDirectory);
-            }
+            base.ExportProcess(args);
+            ((ExportEntitiesPackInfo) args.PackInfo).ExportTables();
         }
-        
 
-        private void ImportConfigurations(object sender, PackEventArgs e)
+        protected override void ImportProcess(PackProcessingEventArgs args)
         {
-            ExportEntitiesPackInfo packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-
-            using (ConfigurationEntities ent = new ConfigurationEntities())
+            base.ImportProcess(args);
+            var packInfo = (ExportEntitiesPackInfo)args.PackInfo;
+            using (var ent = new ConfigurationModelManager())
             {
-                foreach (var item in packInfo.Tables)
+                if (packInfo.ContainsTable<Terminal>())
                 {
-                    if (typeof(Terminal).ToString() == item.RowTypeName)
-                    {
-                        ImportTerminal(packInfo.Path, ent, item);
-                    }
-                    else if (typeof(TerminalProperty).ToString() == item.RowTypeName)
-                    {
-                        ImportTerminalProperties(packInfo.Path, ent, item);
-                    }
-                    else if (typeof(Module).ToString() == item.RowTypeName)
-                    {
-                        ImportModules(packInfo.Path, ent, item);
-                    }
+                    ImportTerminal(ent, packInfo.GetTable<Terminal>());
                 }
+
+                if (packInfo.ContainsTable<TerminalProperty>())
+                {
+                    ImportTerminalProperties(ent, packInfo.GetTable<TerminalProperty>());
+                }
+
+                if (packInfo.ContainsTable<Module>())
+                {
+                    ImportModules(ent, packInfo.GetTable<Module>());
+                }
+
             }
         }
 
-        private void ImportModules(string p, ConfigurationEntities ent, PackTableInfo item)
+
+        private void ImportModules(ConfigurationModelManager ent, IEnumerable<Module> items)
         {
             
         }
 
-        private void ImportTerminalProperties(string p, ConfigurationEntities ent, PackTableInfo item)
+        private void ImportTerminalProperties(ConfigurationModelManager ent, IEnumerable<TerminalProperty> items)
         {
             
         }
 
-        private void ImportTerminal(string p, ConfigurationEntities ent, PackTableInfo inf)
+        private void ImportTerminal(ConfigurationModelManager ent, IEnumerable<Terminal> items)
         {
-            foreach (var item in inf.DeserializeRows<Terminal>(p))
+            foreach (var item in items)
             {
                 if (ent.Terminals.FirstOrDefault(t => t.Code == item.Code) == null)
                 {

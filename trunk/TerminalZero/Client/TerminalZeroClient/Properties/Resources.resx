@@ -139,4 +139,7 @@
 	<data name="Home">
 		<value xml:space="preserve">Inicio</value>
 	</data>
+	<data name="ImportantInformation">
+		<value xml:space="preserve">Informacion importante</value>
+	</data>
 </root>

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Data.Objects.DataClasses;
-using System.Windows;
-using System.Windows.Controls;
-using System.ComponentModel;
-using ZeroCommonClasses.Interfaces;
+﻿using System.Data.Objects.DataClasses;
+using ZeroBusiness.Entities.Data;
+using ZeroGUI;
 
 namespace ZeroStock.Pages.Controls
 {
     /// <summary>
     /// Interaction logic for StockGrid.xaml
     /// </summary>
-    public partial class StockList : ZeroGUI.ListNavigationControl
+    public partial class StockList : ListNavigationControl
     {
         public StockList()
         {
@@ -21,7 +18,7 @@ namespace ZeroStock.Pages.Controls
         public override void AddItem(EntityObject item)
         {
             base.AddItem(item);
-            var stockItem = item as Entities.StockItem;
+            var stockItem = item as StockItem;
             if (stockItem!=null && !stockItem.ProductReference.IsLoaded)
             {
                 stockItem.ProductReference.Load();

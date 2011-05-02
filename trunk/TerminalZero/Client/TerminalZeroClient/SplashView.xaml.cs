@@ -1,10 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using TerminalZeroClient.Properties;
+using ZeroCommonClasses;
+using ZeroCommonClasses.Context;
 using ZeroCommonClasses.Interfaces;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace TerminalZeroClient
 {
@@ -17,33 +23,32 @@ namespace TerminalZeroClient
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            appName.Content = Properties.Settings.Default.ApplicationName;
-            App.Instance.Session.Notifier = this;
-            BackgroundWorker work = new BackgroundWorker();
+            appName.Content = Settings.Default.ApplicationName;
+            Terminal.Instance.CurrentClient.Notifier = this;
+            var work = new BackgroundWorker();
             work.DoWork += work_DoWork;
             work.RunWorkerCompleted += work_RunWorkerCompleted;
             work.RunWorkerAsync();
-            
         }
         
         void work_DoWork(object sender, DoWorkEventArgs e)
         {
-            App.Instance.CurrentClient.InitializeAppAsync();
+            Terminal.Instance.CurrentClient.Initialize();
         }
 
         void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Action action;
-            if (App.Instance.CurrentClient.IsAllOK && !ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceVerbose)
+            if (Terminal.Instance.CurrentClient.Initialized && !ContextInfo.LogLevel.TraceVerbose)
             {
                 action = delegate() { btnState_Click(null, null); };
             }
             else
             {
-                action = delegate() { btnState.Visibility = System.Windows.Visibility.Visible; };
+                action = delegate() { btnState.Visibility = Visibility.Visible; };
             }
 
-            this.Dispatcher.Invoke(action, null);
+            Dispatcher.Invoke(action, null);
         }
 
         #region IProgressNotifier Members
@@ -51,19 +56,19 @@ namespace TerminalZeroClient
         public void SetProcess(string newProgress)
         {
             fullLog.AppendLine(newProgress);
-            this.Dispatcher.Invoke(new MethodInvoker(delegate() { statusMsg.Content = newProgress; }), null);
+            Dispatcher.Invoke(new MethodInvoker(delegate { statusMsg.Content = newProgress; }), null);
         }
 
         public void SetProgress(int newProgress)
         {
-            this.Dispatcher.Invoke(new MethodInvoker(delegate() { statusBar.Value = newProgress; }), null);
+            Dispatcher.Invoke(new MethodInvoker(delegate { statusBar.Value = newProgress; }), null);
         }
 
         public void SetUserMessage(bool isMandatory, string message)
         {
             fullLog.AppendLine(message);
-            this.Dispatcher.Invoke(new MethodInvoker(delegate()
-            {
+            Dispatcher.Invoke(new MethodInvoker(delegate
+                                                    {
                 tbxLog.Text += "\n" + message;
                 tbxLog.ScrollToEnd();
             }), null);
@@ -72,10 +77,10 @@ namespace TerminalZeroClient
         public void SendNotification(string message)
         {
             fullLog.AppendLine(message);
-            this.Dispatcher.Invoke(new MethodInvoker(delegate() { System.Windows.Forms.MessageBox.Show(message, "Informacion importante", MessageBoxButtons.OK, MessageBoxIcon.Information); }), null);
+            Dispatcher.Invoke(new MethodInvoker(delegate { MessageBox.Show(message, Properties.Resources.ImportantInformation, MessageBoxButtons.OK, MessageBoxIcon.Information); }), null);
         }
 
-        public void Log(System.Diagnostics.TraceLevel level, string message)
+        public void Log(TraceLevel level, string message)
         {
 
         }
@@ -84,20 +89,20 @@ namespace TerminalZeroClient
 
         private void btnState_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow win = new MainWindow();
+            var win = new MainWindow();
             win.Show();
-            this.Close();
+            Close();
         }
 
-        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Alt)
             {
                 switch (e.SystemKey)
                 {
                     case Key.L:
-                        this.Width = 400;
-                        this.Height = 500;
+                        Width = 400;
+                        Height = 500;
                         tbxLog.Text = fullLog.ToString();
                         fullLog.Length = 0;
                         break;
@@ -113,7 +118,7 @@ namespace TerminalZeroClient
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            DragMove();
         }
 
         

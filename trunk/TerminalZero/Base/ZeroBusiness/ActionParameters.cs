@@ -1,7 +1,9 @@
-﻿namespace ZeroBusiness
+﻿using ZeroCommonClasses.GlobalObjects;
+
+namespace ZeroBusiness
 {
-    public class ActionParameters
+    public partial class ActionParameters
     {
-        public const string Modules = "ExistingModules";
+        
     }
 }

@@ -16,17 +16,15 @@ namespace ZeroConfiguration.Pages
     public partial class Users : UserControl
     {
         private MembershipUserCollection _userCol;
-        private readonly ITerminal _terminal;
-        public Users(ITerminal terminal)
+        public Users()
         {
             InitializeComponent();
-            _terminal = terminal;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             ZeroAction action;
-            if (_terminal.Manager.ExistsAction(ZeroBusiness.Actions.OpenUserPasswordChangeMessage, out action))
+            if (ZeroCommonClasses.Terminal.Instance.Manager.ExistsAction(ZeroBusiness.Actions.OpenUserPasswordChangeMessage, out action))
             {
                 btnChangePassword.Command = action;
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace ZeroCommonClasses.Pack
 {
@@ -21,8 +22,11 @@ namespace ZeroCommonClasses.Pack
         [DataMember]
         public List<int> TerminalToCodes { get; set; }
 
-        [IgnoreDataMember]
-        public string Path { get; set; }
+        [XmlIgnore]
+        public string RootDirectory { get; set; }
+
+        [XmlIgnore]
+        public string WorkingDirectory { get; set; }
 
         [DataMember]
         public DateTime Stamp { get; set; }

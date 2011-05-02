@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
@@ -12,29 +13,32 @@ namespace ZeroUpdateManager
 {
     public class UpdateManagerPackManager : PackManager
     {
+        private StringBuilder outMessage = new StringBuilder();
+        
         public UpdateManagerPackManager(ITerminal terminal)
             : base(terminal)
         {
-            Importing += UpdateManagerPackManager_Importing;
+            
         }
 
-        private void UpdateManagerPackManager_Importing(object sender, PackEventArgs e)
+        protected override void ImportProcess(PackProcessingEventArgs args)
         {
-            e.Pack.IsUpgrade = true;
-            
-            string[] filesToProcess = Directory.GetFiles(e.WorkingDirectory, "*" + Resources.ScripFileExtention);
+            base.ImportProcess(args);
+            args.Pack.IsUpgrade = true;
+
+            string[] filesToProcess = Directory.GetFiles(args.PackInfo.WorkingDirectory, "*" + Resources.ScripFileExtention);
             if (filesToProcess.Length > 0)
             {
-                e.Pack.Result = "SQL";
-                ProcessScripts(filesToProcess,e.Pack.Code,e.PackInfo.TerminalCode);
+                args.Pack.Result = "SQL\n" + outMessage;
+                ProcessScripts(filesToProcess, args.Pack.Code, args.PackInfo.TerminalCode);
             }
 
-            if (e.PackInfo != null && !ContextInfo.IsOnServer)
+            if (args.PackInfo != null && !ContextInfo.IsOnServer)
             {
-                string dir = Path.Combine(e.WorkingDirectory, "App");
-                if(Directory.Exists(dir))
+                string dir = Path.Combine(args.PackInfo.WorkingDirectory, "App");
+                if (Directory.Exists(dir))
                 {
-                    ProcessUpgrade(dir,e.Pack.Code);
+                    ProcessUpgrade(dir, args.Pack.Code);
                 }
             }
         }
@@ -57,11 +61,23 @@ namespace ZeroUpdateManager
             SqlConnection conn = null;
             if (filesToProcess.Length > 0)
             {
+                int errorCount = 0;
                 string lastScript = "";
                 try
                 {
                     conn = new SqlConnection(ContextInfo.GetConnectionForCurrentEnvironment().ConnectionString);
                     conn.Open();
+                    conn.FireInfoMessageEventOnUserErrors = true;
+                    conn.InfoMessage += (sender, e) =>
+                    {
+                        for (int i = 0; i < e.Errors.Count; i++)
+                        {
+                            SqlError error = e.Errors[i];
+                            outMessage.AppendLine(error.Message);
+                            if (error.Number != 0)
+                                errorCount++;
+                        }        
+                    };
                     tran = conn.BeginTransaction();
                     IDbCommand command = conn.CreateCommand();
                     command.Transaction = tran;
@@ -73,7 +89,11 @@ namespace ZeroUpdateManager
                             lastScript = item;
                             command.CommandText = item;
                             command.ExecuteNonQuery();
+                            if (errorCount!=0)
+                                throw new Exception(outMessage.ToString());
+                            
                         }
+                        
                     }
 
                     tran.Commit();
@@ -97,5 +117,7 @@ namespace ZeroUpdateManager
                 }
             }
         }
+
+        
     }
 }

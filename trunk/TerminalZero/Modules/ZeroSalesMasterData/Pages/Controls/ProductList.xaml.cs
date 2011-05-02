@@ -3,9 +3,9 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Entities;
 
 namespace ZeroMasterData.Pages.Controls
 {
@@ -14,7 +14,7 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class ProductList : ListNavigationControl
     {
-        public MasterDataEntities DataProvider { get; set; }
+        public DataModelManager DataProvider { get; set; }
 
         public ProductList()
         {
@@ -22,7 +22,7 @@ namespace ZeroMasterData.Pages.Controls
             
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                DataProvider = new MasterDataEntities();
+                DataProvider = new DataModelManager();
                 InitializeList(productsListView2, DataProvider.Products);
             }
         }

@@ -16,10 +16,10 @@ namespace ZeroBarcode
 {
     public class ZeroBarcodeModule : ZeroModule
     {
-        public ZeroBarcodeModule(ITerminal terminal)
-            :base(terminal,6,Resources.BarcodeModuleDescription)
+        public ZeroBarcodeModule()
+            :base(6,Resources.BarcodeModuleDescription)
         {
-            OwnerTerminal.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenBarcodeGeneratorView, OpenCodebarView));
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenBarcodeGeneratorView, OpenCodebarView));
         }
 
         public override string[] GetFilesToSend()

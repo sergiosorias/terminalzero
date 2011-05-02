@@ -20,9 +20,8 @@ namespace ZeroCommonClasses
     {
         public const string KInFolderName = "In";
 
-        protected ZeroModule(ITerminal iCurrentTerminal,int code, string description)
+        protected ZeroModule(int code, string description)
         {
-            OwnerTerminal = iCurrentTerminal;
             ModuleCode = code;
             Description = description;
         }
@@ -84,8 +83,6 @@ namespace ZeroCommonClasses
             }
         }
 
-        protected ITerminal OwnerTerminal { get; private set; }
-
         /// <summary>
         /// Returns file list to be send to the Server
         /// </summary>
@@ -99,8 +96,8 @@ namespace ZeroCommonClasses
 
         public virtual void NewPackReceived(string path)
         {
-            if (OwnerTerminal.Session != null && OwnerTerminal.Session.Notifier != null)
-                OwnerTerminal.Session.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
+            if (ZeroCommonClasses.Terminal.Instance.Session != null && ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier != null)
+                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
         }
                 
     }

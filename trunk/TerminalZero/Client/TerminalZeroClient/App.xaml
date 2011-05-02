@@ -35,7 +35,6 @@
             <GradientStop Color="{StaticResource color1}" Offset=".65"/>
             <GradientStop Color="{StaticResource color2}"/>
         </LinearGradientBrush>
-        
         <Style x:Key="titleLabelStyle" TargetType="Label">
             <Setter Property="Background" Value="{StaticResource titleBackground}"/>
             <Setter Property="FontSize" Value="14"/>
@@ -46,9 +45,67 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         <Style  x:Key="{x:Type TextBox}" TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <!--<Grid.Triggers>
+                                <EventTrigger SourceName="popUpMsg" RoutedEvent="Opened">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="arrow"  Storyboard.TargetProperty="Fill" From="#FFB1B1B1" To="Navy" Duration="0:0:0.5" AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Grid.Triggers>-->
+                            <Border BorderBrush="OrangeRed" BorderThickness="1.5" CornerRadius="1.2">
+                                <AdornedElementPlaceholder Name="MyAdorner">
+                                </AdornedElementPlaceholder>
+                            </Border>
+                            <Popup x:Name="popUpMsg" StaysOpen="False" PopupAnimation="Slide" IsOpen="{Binding ElementName=MyAdorner, Path=AdornedElement.(Validation.HasError), Mode=OneWay}" AllowsTransparency="True">
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Border Margin="10,-1,0,0" BorderThickness="2" Grid.Row="1" CornerRadius="2" BorderBrush="Gray" Padding="2">
+                                        <Border.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#FFB1B1B1" Offset="0" />
+                                                <GradientStop Color="White" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Foreground="OrangeRed" FontSize="14" VerticalAlignment="Center" 
+                                        Text="{Binding ElementName=MyAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                                    </Border>
+                                    <Path Fill="#FFB1B1B1" x:Name="arrow" Stretch="Fill" Stroke="Gray" StrokeThickness="2" HorizontalAlignment="Left" Margin="40,0,0,0" Width="20" Height="10" Data="M190,84 C203.27403,59.418466 189.83333,83.833001 217.75,33.249609 219.15884,30.696864 246.16667,48.831883 305.83333,84.833012"/>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsFocused" Value="True">
                     <Setter Property="Background" Value="#FCF2E9BA"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Trigger>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="Focusable" Value="True"/>
+                    <Setter Property="Background" Value="#FFF0A6A6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="{x:Type PasswordBox}" TargetType="PasswordBox">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Background" Value="#FCF2E9BA"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -121,7 +178,7 @@
                                 <!-- Content for the menu text etc -->
                                 <ContentPresenter Grid.Column="1"
                                           Margin="{TemplateBinding Padding}"
-                                          x:Name="HeaderHost"
+                                          x:Name="HeaderHost" VerticalAlignment="Center"
                                           RecognizesAccessKey="True"
                                           ContentSource="Header"/>
 
@@ -201,6 +258,7 @@
                                 <Setter Property="Background" Value="LightGray" TargetName="Border"/>
                                 <Setter Property="Foreground" Value="Black"/>
                             </Trigger>
+                          
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Foreground" Value="LightGray"/>
                             </Trigger>
