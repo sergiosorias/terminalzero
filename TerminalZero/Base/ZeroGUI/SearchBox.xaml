@@ -18,21 +18,24 @@
                 </Grid>
             </Button>
         </StackPanel>
-        <Popup Name="quantityPopup"  HorizontalAlignment="Right" HorizontalOffset="10">
-            <Popup.Child>
-                <Border Padding="3" CornerRadius="4" BorderThickness="0">
+        <Popup Name="quantityPopup"  HorizontalAlignment="Right" VerticalOffset="-3" HorizontalOffset="10">
+            <Grid Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Border Margin="10,-2,0,0" BorderThickness="2" Grid.Row="1" CornerRadius="2" BorderBrush="Gray" Padding="2">
                     <Border.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF4A95BE" Offset="0" />
+                            <GradientStop Color="#FFB1B1B1" Offset="0" />
                             <GradientStop Color="White" Offset="1" />
-                            <GradientStop Color="#FFA3A3A3" Offset="0.778" />
-                            <GradientStop Color="#FFB8B8BA" Offset="0.253" />
                         </LinearGradientBrush>
                     </Border.Background>
-                    <TextBlock x:Name="quantity" VerticalAlignment="Center" Foreground="White"/>
+                    <TextBlock Foreground="OrangeRed" FontSize="14" VerticalAlignment="Center" x:Name="quantity"/>
                 </Border>
-
-            </Popup.Child>
+                <Path Fill="#FFB1B1B1" x:Name="arrow" Stretch="Fill" Stroke="Gray" StrokeThickness="2" HorizontalAlignment="Left" Margin="40,0,0,0" Width="20" Height="10" Data="M190,84 C203.27403,59.418466 189.83333,83.833001 217.75,33.249609 219.15884,30.696864 246.16667,48.831883 305.83333,84.833012"/>
+            </Grid>
         </Popup>
+        
     </Grid>
 </UserControl>

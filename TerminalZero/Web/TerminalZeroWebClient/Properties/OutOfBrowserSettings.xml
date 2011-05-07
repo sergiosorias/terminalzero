@@ -1,7 +1,7 @@
-<OutOfBrowserSettings ShortName="TerminalZeroWebClient Application" EnableGPUAcceleration="True" ShowInstallMenuItem="True">
+<OutOfBrowserSettings ShortName="TerminalZeroWebClient Application" ShowInstallMenuItem="True">
   <OutOfBrowserSettings.Blurb>Terminal Web Client Application on your desktop; at home, at work or on the go.</OutOfBrowserSettings.Blurb>
   <OutOfBrowserSettings.WindowSettings>
-    <WindowSettings Title="TerminalZeroWebClient Application" />
+    <WindowSettings Title="Terminal Zero - Server" />
   </OutOfBrowserSettings.WindowSettings>
   <OutOfBrowserSettings.SecuritySettings>
     <SecuritySettings ElevatedPermissions="Required" />

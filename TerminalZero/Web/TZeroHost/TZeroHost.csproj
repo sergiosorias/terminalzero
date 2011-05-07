@@ -64,25 +64,29 @@
     </Reference>
     <Reference Include="ZeroCommonClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Base\CommonClassesZero\bin\Debug\ZeroCommonClasses.dll</HintPath>
+      <HintPath>..\..\..\Deploy_Debug\ZeroCommonClasses.dll</HintPath>
     </Reference>
     <Reference Include="ZeroConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroConfiguration.dll</HintPath>
     </Reference>
-    <Reference Include="ZeroGUI">
-      <HintPath>..\..\..\Deploy_Debug\ZeroGUI.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroLogHandle">
+    <Reference Include="ZeroLogHandle, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroLogHandle.dll</HintPath>
     </Reference>
-    <Reference Include="ZeroMasterData">
+    <Reference Include="ZeroMasterData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroMasterData.dll</HintPath>
     </Reference>
-    <Reference Include="ZeroStock">
+    <Reference Include="ZeroSales">
+      <HintPath>..\..\..\Deploy_Debug\Modules\ZeroSales.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroStock, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroStock.dll</HintPath>
     </Reference>
-    <Reference Include="ZeroUpdateManager">
+    <Reference Include="ZeroUpdateManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Deploy_Debug\Modules\ZeroUpdateManager.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -138,10 +142,6 @@
     <Content Include="Images\logoLogIn.png" />
     <Content Include="Images\MenuBack.png" />
     <Content Include="Images\OpacityColor.png" />
-    <Content Include="Images\pant1.jpg" />
-    <Content Include="Images\pant2.jpg" />
-    <Content Include="Images\pant3.jpg" />
-    <Content Include="Images\pant4_iconos-activos.jpg" />
     <Content Include="Images\popUp2_background.jpg" />
     <Content Include="Images\popUp2_enter_search.jpg" />
     <Content Include="Images\popUp_background.jpg" />
@@ -162,7 +162,6 @@
     <Content Include="Pages\DownloadFile.aspx" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
-    <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />
     <Content Include="Scripts\JScripts.js" />
     <Content Include="Services\DatabaseDataService.svc" />

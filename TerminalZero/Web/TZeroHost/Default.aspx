@@ -63,16 +63,18 @@
             background-repeat: no-repeat;
             background-image: url('./images/btnNormal.png');
         }
-                
+        
         ul.topnav
         {
             list-style: none;
             padding: 0 20px;
             margin: 0;
             float: left;
-            width: 920px;
+            width: 400;
             background: #222;
-            font-size: 1.2em;
+            font-size: 15px;
+            text-align:center;
+            vertical-align:middle;
             background: url(topnav_bg.gif) repeat-x;
         }
         ul.topnav li
@@ -90,21 +92,18 @@
             text-decoration: none;
             float: left;
         }
-        ul.topnav li a:hover
-        {
-            background: url(topnav_hover.gif) no-repeat center top;
-        }
+        
         ul.topnav li span
         {
             /*--Drop down trigger styles--*/
-            width: 17px;
-            height: 55px;
+            width: 40px;
+            height: 35px;
             float: left;
-            background: url(subnav_btn.gif) no-repeat center top;
+            background: url(Images/semaforo_blanco.png) no-repeat center center;
         }
         ul.topnav li span.subhover
         {
-            background-position: center bottom;
+            background: url(Images/semaforo_verde.png) no-repeat center center;
             cursor: pointer;
         }
         /*--Hover effect for trigger--*/
@@ -119,7 +118,7 @@
             padding: 0;
             display: none;
             float: left;
-            width: 170px;
+            width: 200px;
             border: 1px solid #111;
         }
         ul.topnav li ul.subnav li
@@ -129,43 +128,39 @@
             border-top: 1px solid #252525; /*--Create bevel effect--*/
             border-bottom: 1px solid #444; /*--Create bevel effect--*/
             clear: both;
-            width: 170px;
+            width: 200px;
         }
         html ul.topnav li ul.subnav li a
         {
+            font-size:10px;
             float: left;
-            width: 145px;
-            background: #333 url(dropdown_linkbg.gif) no-repeat 10px center;
-            padding-left: 20px;
+            width: 180px;
+            background: #333 url(Images/icon_template_inac.png) no-repeat 10px center;
+            padding-left: 30px;
         }
         html ul.topnav li ul.subnav li a:hover
         {
             /*--Hover effect for subnav links--*/
-            background: #222 url(dropdown_linkbg.gif) no-repeat 10px center;
+            background: #222 url(Images/icon_template_active.png) no-repeat 10px center;
         }
     </style>
-    <script type="text/javascript" src="Scripts/jquery-1.4.1.min.js" />
-    <script type="text/javascript" src="Scripts/jquery-1.4.1-vsdoc.js" />
-    <script type="text/javascript" src="Scripts/jquery-1.4.1.js" />
-    <script type="text/javascript">
-        
-
-    </script>
+    <script type="text/javascript" language="javascript" src="Scripts/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="Scripts/jquery-1.4.1-vsdoc.js"></script>
+    <script type="text/javascript" language="javascript" src="Scripts/jquery-1.4.1.js"></script>
 </head>
 <body>
     <form id="form1" runat="server" style="height: 100%; width: 100%">
     <input type="hidden" runat="server" value="" id="filesToShow" />
     <div id="menuHeader" class="headerButtonParent" style="width: 140; background-image: url('');">
-         <ul class="topnav">
+        <ul class="topnav">
             <li><a href="#">Links</a>
-                 <ul class="subnav">
+                <ul class="subnav">
                     <li><a id="HyperLink1" href="#">Web Control</a></li>
                     <li><a id="HyperLink2" href="#">TS - Server</a></li>
                 </ul>
             </li>
             <li><a href="#">Download</a>
                 <ul class="subnav" id="filesToDownload">
-                    
                 </ul>
             </li>
         </ul>
@@ -173,7 +168,6 @@
     <div id="minimizedHeader" style="display: none" class="headerButtonParent">
         <a class="headerButton">Show Header</a>
     </div>
-    
     <script>
         $(document).ready(function () {
             $("ul.subnav").parent().append("<span/></span>"); //Only shows drop down trigger when js is enabled (Adds empty span tag after ul.subnav*)
@@ -186,11 +180,12 @@
             
             $("ul.topnav li span").click(function () { //When trigger is clicked...
                 //Following events are applied to the subnav itself (moving subnav up and down)
+
                 $(this).parent().find("ul.subnav").slideDown('fast').show(); //Drop down the subnav on click
 
                 $(this).parent().hover(function () {
                 }, function () {
-                    $(this).parent().find("ul.subnav").slideUp('slow'); //When the mouse hovers out of the subnav, move it back up
+                    $(this).parent().find("ul.subnav").slideUp('normal'); //When the mouse hovers out of the subnav, move it back up
                 });
 
                 //Following events are applied to the trigger (Hover events for the trigger)
@@ -209,8 +204,9 @@
             $("#HyperLink1").click(function () {
                 setFrameSource('./TerminalZero.aspx');
             });
+            
             $("#HyperLink2").click(function () {
-                setFrameSource('http://tzhost.dyndns-server.com/tsweb');
+                setFrameSource("./tsweb");
             });
         });
 

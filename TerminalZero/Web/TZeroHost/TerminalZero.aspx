@@ -62,7 +62,7 @@
         <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
 		  <param name="source" value="ClientBin/TerminalZeroWebClient.xap"/>
 		  <param name="onError" value="onSilverlightError" />
-		  <param name="background" value="white" />
+		  <param name="background" value="#575C60" />
 		  <param name="minRuntimeVersion" value="3.0.40818.0" />
 		  <param name="autoUpgrade" value="true" />
           <param name="windowless" value="true" />
