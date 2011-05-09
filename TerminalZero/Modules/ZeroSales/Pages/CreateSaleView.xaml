@@ -1,22 +1,20 @@
 ﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-    x:Class="ZeroSales.Pages.CreateSaleView"
+    x:Class="ZeroSales.Pages.CreateSaleView" 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             mc:Ignorable="d" Loaded="UserControl_Loaded" Header="Nueva Venta"
              xmlns:controls="clr-namespace:ZeroSales.Pages.Controls"
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" IsTabStop="False"
              d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Style="{DynamicResource titleLabelStyle}" x:Name="lblsaleType" Content="Title"/>
-        <Grid HorizontalAlignment="Stretch" Grid.Row="1">
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -37,11 +35,10 @@
                 <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
                                             BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN" TabIndex="1"/>              
             </StackPanel>
-            <baseControls:ZeroToolBar Grid.Column="1" HorizontalAlignment="Right" NewBtnVisible="False" VerticalAlignment="Center" Save="btnSave_Click" Cancel="btnCancel_Click"/>
         </Grid>
 
-        <controls:SaleList Grid.Row="2" x:Name="saleGrid" ItemRemoving="saleGrid_Removing" ItemRemoved="saleGrid_ItemRemoved"/>
-        <Grid Grid.Row="3">
+        <controls:SaleLazyLoadingList Grid.Row="1" x:Name="saleGrid" ItemRemoving="saleGrid_Removing" ItemRemoved="saleGrid_ItemRemoved"/>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>

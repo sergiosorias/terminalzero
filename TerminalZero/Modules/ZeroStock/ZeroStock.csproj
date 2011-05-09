@@ -47,14 +47,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\Controls\DeliveryDocumentList.xaml.cs">
-      <DependentUpon>DeliveryDocumentList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\DeliveryDocumentLazyLoadingList.xaml.cs">
+      <DependentUpon>DeliveryDocumentLazyLoadingList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Controls\DeliveryDocumentDetail.xaml.cs">
       <DependentUpon>DeliveryDocumentDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\StockList.xaml.cs">
-      <DependentUpon>StockList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\StockLazyLoadingList.xaml.cs">
+      <DependentUpon>StockLazyLoadingList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DeliveryNoteView.xaml.cs">
       <DependentUpon>DeliveryNoteView.xaml</DependentUpon>
@@ -95,7 +95,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\Controls\DeliveryDocumentList.xaml">
+    <Page Include="Pages\Controls\DeliveryDocumentLazyLoadingList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -103,7 +103,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\StockList.xaml">
+    <Page Include="Pages\Controls\StockLazyLoadingList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -2,18 +2,109 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ZeroGUI">
-    
+
+    <Style TargetType="{x:Type local:LazyLoadingListControl}">
+        <Setter Property="EnableRowVirtualization" Value="True"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="ClipboardCopyMode" Value="IncludeHeader"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="#FF2D6076"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="AlternatingRowBackground" Value="#D2DFEB"/>
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FCF2E9BA"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsReadOnly" Value="True">
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="{x:Type DataGridColumnHeader}" TargetType="DataGridColumnHeader">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
 
     <Style TargetType="{x:Type local:NavigationBasePage}">
+        <Setter Property="Background" Value="{DynamicResource mainBackground}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource titleBackground}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:NavigationBasePage}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Border.Loaded" SourceName="controlBorder">
+                            <BeginStoryboard>
+                                <Storyboard Duration="00:00:01">
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="controlBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                        <SplineDoubleKeyFrame KeyTime="00:00:00.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="controlBorder" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)">
+                                        <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="0">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseOut"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                    <Border Name="controlBorder" Background="{TemplateBinding Background}" Opacity="0"
+                            BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="5" Padding="3"
                             BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.RenderTransform>
+                            <TranslateTransform X="500" Y="0"/>
+                        </Border.RenderTransform>
+                        <Grid Background="Transparent">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Style="{DynamicResource titleLabelStyle}">
+                                <Label.Content>
+                                    <ContentPresenter ContentSource="Header" ContentTemplate="{TemplateBinding HeaderTemplate}"/>
+                                </Label.Content>
+                            </Label>
+                            <ContentControl VerticalAlignment="Center" HorizontalAlignment="Right" Content="{Binding RelativeSource={RelativeSource AncestorType=local:NavigationBasePage},Path=CommandBar}"/>
+                            <!--<Path Grid.Row="1" Stretch="Fill" Stroke="Gray" MaxWidth="600" Margin="100,100,20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Data="M112,47.75 C112,64.732756 97.785041,78.5 80.25,78.5 C62.714959,78.5 48.5,64.732756 48.5,47.75 C48.5,30.767244 62.714959,17 80.25,17 C97.785041,17 112,30.767244 112,47.75 z M78.5,28.5 C78.5,39.269553 69.881481,48 59.25,48 C48.618519,48 40,39.269553 40,28.5 C40,17.730447 48.618519,9 59.25,9 C69.881481,9 78.5,17.730447 78.5,28.5 z M58.5,15.25 C58.5,23.3962 51.448485,30 42.75,30 C34.051515,30 27,23.3962 27,15.25 C27,7.1037999 34.051515,0.5 42.75,0.5 C51.448485,0.5 58.5,7.1037999 58.5,15.25 z M39,11 C39,16.79899 33.963203,21.5 27.75,21.5 C21.536797,21.5 16.5,16.79899 16.5,11 C16.5,5.2010101 21.536797,0.5 27.75,0.5 C33.963203,0.5 39,5.2010101 39,11 z M22,15.25 C22,18.70178 18.082492,21.5 13.25,21.5 C8.4175084,21.5 4.5,18.70178 4.5,15.25 C4.5,11.79822 8.4175084,9 13.25,9 C18.082492,9 22,11.79822 22,15.25 z M15.5,23.5 C15.5,27.089851 12.142136,30 8,30 C3.8578644,30 0.5,27.089851 0.5,23.5 C0.5,19.910149 3.8578644,17 8,17 C12.142136,17 15.5,19.910149 15.5,23.5 z">
+                                <Path.Fill>
+                                    <LinearGradientBrush EndPoint="2.967,0.154" StartPoint="-2.233,-0.962">
+                                        <GradientStop Color="#00D8C7C7"/>
+                                        <GradientStop Color="White" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Path.Fill>
+                            </Path>-->
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Grid.Row="1"/>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    
+    
 </ResourceDictionary>

@@ -7,8 +7,19 @@ using ZeroGUI.Classes;
 
 namespace ZeroGUI
 {
-    public class NavigationBasePage : UserControl, IValidable
+    public class NavigationBasePage : HeaderedContentControl, IValidable
     {
+        static NavigationBasePage()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(NavigationBasePage),
+                new FrameworkPropertyMetadata(typeof(NavigationBasePage)));
+        }
+
+        public NavigationBasePage()
+        {
+            CommandBar = new ZeroToolBar();
+        }
+
         private bool _focusOnError = false;
         public bool FocusOnError
         {
@@ -25,6 +36,16 @@ namespace ZeroGUI
         // Using a DependencyProperty as the backing store for ControlMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ModeProperty =
             DependencyProperty.Register("ControlMode", typeof(ControlMode), typeof(NavigationBasePage), null);
+
+        public ZeroToolBar CommandBar
+        {
+            get { return (ZeroToolBar)GetValue(ToolBarProperty); }
+            set { SetValue(ToolBarProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CommandBar.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ToolBarProperty =
+            DependencyProperty.Register("CommandBar", typeof(ZeroGUI.ZeroToolBar), typeof(NavigationBasePage), null);
 
         protected override void OnInitialized(EventArgs e)
         {

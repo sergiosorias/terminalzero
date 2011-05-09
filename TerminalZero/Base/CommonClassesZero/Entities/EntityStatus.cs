@@ -1,6 +1,6 @@
 ﻿namespace ZeroCommonClasses.Entities
 {
-    public enum EntityStatus
+    public enum EntityStatus : int
     {
         New = 0,
         Exported = 1,

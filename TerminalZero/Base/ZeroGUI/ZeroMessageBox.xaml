@@ -4,25 +4,100 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Loaded="CurrentLoaded"
              mc:Ignorable="d" Title="Información" WindowStartupLocation="CenterOwner"
-             WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="80" MinWidth="100"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+             WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="80" MinWidth="100" AllowsTransparency="True"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+    <Window.Background>
+        <SolidColorBrush Color="Transparent" />
+        
+    </Window.Background>
+    <Window.Resources>
+        <Border x:Name="backWindow" x:Key="backWindow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border.Background>
+                <SolidColorBrush Color="Black" Opacity="0.4"/>
+            </Border.Background>
+        </Border>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="4"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="border" Grid.Column="1" Margin="0,1,0,0" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1.5,0,1.5,1.5" CornerRadius="0,0,5,5">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="Black" Offset="0"/>
+                                        <GradientStop Color="LightGray" Offset="0.3"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <Path Fill="White" Stretch="Fill" Stroke="{TemplateBinding BorderBrush}" HorizontalAlignment="Left" Margin="0.25,2.083,0,0" VerticalAlignment="Top" Width="1" Height="1" Grid.Column="2" Data="M128.75,2.0833333"/>
+                            <Path Fill="White" Stretch="Fill" Stroke="{TemplateBinding BorderBrush}" Margin="-1,-0.5,-0.417,0" VerticalAlignment="Top" Height="3.25" Grid.Column="2" Data="M127.83293,1.75 L132.2504,-0.5"/>
+                            <Path Fill="White" Stretch="Fill" Stroke="{TemplateBinding BorderBrush}" Margin="-0.583,-0.417,-0.917,0" VerticalAlignment="Top" Height="3.334" Grid.Column="0" Data="M127.24957,-2.0840062 L131.75001,0.24983325"/>
+                            <Path Fill="White" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Height="1.5" Grid.ColumnSpan="3" Data="M0,0 L132.5,-0.5" StrokeThickness="1.5"/>
+                            <ContentPresenter Margin="3" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Grid.ColumnSpan="3" RecognizesAccessKey="True">
+                                
+                            </ContentPresenter>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black" Offset="0"/>
+                                            <GradientStop Color="#FFF6B5B5" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True"/>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black" Offset="0"/>
+                                            <GradientStop Color="#FF91D6E0" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF706E6E" Offset="0"/>
+                                            <GradientStop Color="White" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Control"/>
         <KeyBinding x:Name="ShortCutCancel" Key="Escape"/>
     </Window.InputBindings>
-    <Grid Background="{DynamicResource mainBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue=Terminal Zero}"/>
-        <ContentPresenter Grid.Row="1" Margin="4" x:Name="contentpress" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue='Terminal Zero'}"/>
+        <ContentPresenter Grid.Row="1" Margin="4,0,4,0" x:Name="contentpress" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
     
         </ContentPresenter>
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2">
-            <Button x:Name="btnAccept" Content="Aceptar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FF727C49" Foreground="#FF727C49" />
-            <Button x:Name="btnCancel" Content="Cancelar" Style="{DynamicResource buttonTextStyle}" BorderBrush="#FFB46161" Foreground="#FFB46161"/>
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2,0,10,2">
+            <Button x:Name="btnAccept" Content="Aceptar" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FF727C49" Foreground="Black" FontSize="15" FontWeight="Bold" />
+            <Button x:Name="btnCancel" Content="Cancelar" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FFB46161" Foreground="Black" FontSize="15" FontWeight="Bold"/>
         </WrapPanel>
     </Grid>
 </Window>

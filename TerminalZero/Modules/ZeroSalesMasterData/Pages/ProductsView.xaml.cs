@@ -16,12 +16,14 @@ namespace ZeroMasterData.Pages
         public ProductsView()
         {
             InitializeComponent();
+            CommandBar.New += NewBtnClick;
+            CommandBar.Print += PrintBtnClicked;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void NewBtnClick(object sender, RoutedEventArgs e)
         {
-            var detail = new ProductDetail(productList.DataProvider);
-
+            var detail = new ProductDetail();
+            detail.Header = Properties.Resources.NewProduct;
             bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.NewProduct);
             if (ret.HasValue && ret.Value && detail.ControlMode == ControlMode.New)
             {
@@ -32,7 +34,7 @@ namespace ZeroMasterData.Pages
         protected override void OnControlModeChanged(ControlMode newMode)
         {
  	         base.OnControlModeChanged(newMode);
-             toolbar.NewBtnVisible = !(ControlMode == ControlMode.ReadOnly);
+             CommandBar.NewBtnVisible = !(ControlMode == ControlMode.ReadOnly);
              productList.ControlMode = ControlMode;
         }
 
@@ -41,7 +43,7 @@ namespace ZeroMasterData.Pages
             e.Matches = productList.ApplyFilter(e.Criteria);
         }
 
-        private void toolbar_Print(object sender, RoutedEventArgs e)
+        private void PrintBtnClicked(object sender, RoutedEventArgs e)
         {
             PrintDialog pd = new PrintDialog();
             pd.PrintVisual(productList, "Lista de productos");

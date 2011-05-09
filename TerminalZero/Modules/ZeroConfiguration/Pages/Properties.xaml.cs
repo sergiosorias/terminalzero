@@ -23,6 +23,7 @@ namespace ZeroConfiguration.Pages
             ControlMode = ControlMode.ReadOnly;
             _dataProvider = null;
             InitializeComponent();
+            CommandBar.Save += this.ZeroToolBar_Save;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)

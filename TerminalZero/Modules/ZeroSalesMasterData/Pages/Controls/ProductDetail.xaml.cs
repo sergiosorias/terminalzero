@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.MasterData;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -17,19 +18,16 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class ProductDetail : NavigationBasePage
     {
-        DataModelManager DataProvider;
         public Product CurrentProduct { get; private set; }
 
-        public ProductDetail(DataModelManager dataProvider)
+        public ProductDetail()
         {
             InitializeComponent();
-            DataProvider = dataProvider;
         }
 
-        public ProductDetail(DataModelManager dataProvider, int productCode)
-            : this(dataProvider)
+        public ProductDetail(int productCode) : this()
         {
-            CurrentProduct = DataProvider.Products.First(p => p.Code == productCode);
+            CurrentProduct = Context.Instance.Manager.Products.First(p => p.Code == productCode);
             ControlMode = ControlMode.Update;
         }
 
@@ -47,7 +45,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadTaxes()
         {
-            taxesComboBox.ItemsSource = DataProvider.Taxes;
+            taxesComboBox.ItemsSource = Context.Instance.Manager.Taxes;
             switch (ControlMode)
             {
                 case ControlMode.New:
@@ -69,7 +67,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadPriceWeights()
         {
-            foreach (var item in DataProvider.Weights)
+            foreach (var item in Context.Instance.Manager.Weights)
             {
                 weightBox.Items.Add(item);
             }
@@ -90,7 +88,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadProductGroup()
         {
-            foreach (var item in DataProvider.ProductGroups)
+            foreach (var item in Context.Instance.Manager.ProductGroups)
             {
                 groupBox.Items.Add(item);
                 if (ControlMode == ControlMode.Update && CurrentProduct.Group1 == item.Code)
@@ -108,20 +106,20 @@ namespace ZeroMasterData.Pages.Controls
             {
                 case ControlMode.New:
                     CurrentProduct = Product.CreateProduct(
-                        DataProvider.Products.Count()
+                        Context.Instance.Manager.Products.Count()
                         , true, true);
                     
                     P = Price.CreatePrice(
-                        DataProvider.Prices.Count(),
+                        Context.Instance.Manager.Prices.Count(),
                         true, 0);
                     break;
                 case ControlMode.Update:
                     if (CurrentProduct.PriceCode.HasValue)
-                        P = DataProvider.Prices.First(p => p.Code == CurrentProduct.PriceCode);
+                        P = Context.Instance.Manager.Prices.First(p => p.Code == CurrentProduct.PriceCode);
                     else
                     {
                         P = Price.CreatePrice(
-                        DataProvider.Prices.Count(),
+                        Context.Instance.Manager.Prices.Count(),
                         true, 0);
                     }
                     masterCodeTextBox.IsReadOnly = true;
@@ -145,12 +143,12 @@ namespace ZeroMasterData.Pages.Controls
 
         private void groupBtn_Click(object sender, RoutedEventArgs e)
         {
-            var pgd = new ProductGroupDetail(DataProvider);
+            var pgd = new ProductGroupDetail();
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewGroup);
             if (res.HasValue && res.Value)
             {
-                DataProvider.ProductGroups.AddObject(pgd.ProductGroupNew);
-                DataProvider.SaveChanges();
+                Context.Instance.Manager.ProductGroups.AddObject(pgd.ProductGroupNew);
+                Context.Instance.Manager.SaveChanges();
                 groupBox.Items.Add(pgd.ProductGroupNew);
                 groupBox.SelectedItem = pgd.ProductGroupNew;
             }
@@ -158,12 +156,12 @@ namespace ZeroMasterData.Pages.Controls
 
         private void weightBtn_Click(object sender, RoutedEventArgs e)
         {
-            var pgd = new WeightDetail(DataProvider);
+            var pgd = new WeightDetail();
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                DataProvider.Weights.AddObject(pgd.WeigthNew);
-                DataProvider.SaveChanges();
+                Context.Instance.Manager.Weights.AddObject(pgd.WeigthNew);
+                Context.Instance.Manager.SaveChanges();
                 weightBox.Items.Add(pgd.WeigthNew);
                 weightBox.SelectedItem = pgd.WeigthNew;
             }
@@ -176,7 +174,7 @@ namespace ZeroMasterData.Pages.Controls
             if (ret)
             {
                 if (ControlMode == ControlMode.New &&
-                    DataProvider.Products.FirstOrDefault(pr => pr.MasterCode.Equals(CurrentProduct.MasterCode)) != null)
+                    Context.Instance.Manager.Products.FirstOrDefault(pr => pr.MasterCode.Equals(CurrentProduct.MasterCode)) != null)
                 {
                     msg = "Codigo de product existente!\n Por favor ingrese otro código.";
                     masterCodeTextBox.SelectAll();
@@ -235,10 +233,12 @@ namespace ZeroMasterData.Pages.Controls
                         switch (ControlMode)
                         {
                             case ControlMode.New:
-                                DataProvider.Products.AddObject(CurrentProduct);
+                                Context.Instance.Manager.Products.AddObject(CurrentProduct);
+                                Header = "Producto Nuevo";
                                 break;
                             case ControlMode.Update:
-                                DataProvider.Products.ApplyCurrentValues(CurrentProduct);
+                                Context.Instance.Manager.Products.ApplyCurrentValues(CurrentProduct);
+                                Header = "Editar Producto";
                                 break;
                             case ControlMode.Delete:
                                 break;
@@ -248,7 +248,7 @@ namespace ZeroMasterData.Pages.Controls
                                 break;
                         }
 
-                        DataProvider.SaveChanges();
+                        Context.Instance.Manager.SaveChanges();
                     }
                     catch (Exception wx)
                     {
@@ -266,23 +266,25 @@ namespace ZeroMasterData.Pages.Controls
         {
             EntityObject obj = CurrentProduct;
             if (obj.EntityState == EntityState.Modified)
-                DataProvider.Refresh(RefreshMode.StoreWins, CurrentProduct);
+
+                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, CurrentProduct);
             return true;
         }
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {
             var t = (int)((Button)sender).DataContext;
-            ProductGroup pgroup = DataProvider.ProductGroups.First(pg => pg.Code == t);
-            var pgd = new ProductGroupDetail(DataProvider, pgroup);
+            ProductGroup pgroup =
+            Context.Instance.Manager.ProductGroups.First(pg => pg.Code == t);
+            var pgd = new ProductGroupDetail(pgroup);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
-                DataProvider.SaveChanges();
+                Context.Instance.Manager.SaveChanges();
             }
             else
             {
-                DataProvider.Refresh(RefreshMode.StoreWins, pgroup);
+                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, pgroup);
             }
 
         }
@@ -290,17 +292,17 @@ namespace ZeroMasterData.Pages.Controls
         private void weightBoxItemButton_Click(object sender, RoutedEventArgs e)
         {
             var t = (int)((Button)sender).DataContext;
-            var algo = DataProvider.Weights.First(w => w.Code == t);
-            var pgd = new WeightDetail(DataProvider,
-                algo);
+            var algo =
+            Context.Instance.Manager.Weights.First(w => w.Code == t);
+            var pgd = new WeightDetail(algo);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                DataProvider.SaveChanges();
+                Context.Instance.Manager.SaveChanges();
             }
             else
             {
-                DataProvider.Refresh(RefreshMode.StoreWins, algo);
+                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, algo);
             }
 
         }

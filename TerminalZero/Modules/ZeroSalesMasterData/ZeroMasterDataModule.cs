@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.MasterData;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -25,13 +26,13 @@ namespace ZeroMasterData
 
         private void BuildPosibleActions()
         {
-            var openProducList = new ZeroAction( ActionType.MenuItem, Actions.OpenProductsView, OpenProductView);
-            Terminal.Instance.Session.AddAction(openProducList);
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenProductMessage,OpenProductMessage));
+            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenProductsView, OpenProductView));
+            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenProductMessage, OpenProductMessage));
             Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
             Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCustomersView,OpenCustomerView));
             Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
-            Terminal.Instance.Session.AddAction(new ZeroAction(ActionType.MenuItem, "Test@Import master data", TestImportDataPack));
+            
+            //Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
         public override string[] GetFilesToSend()
@@ -73,6 +74,7 @@ namespace ZeroMasterData
             var P = new ProductsView();
             if (!Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero)) 
                 P.ControlMode = ControlMode.ReadOnly;
+            Context.BeginOperation();
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
@@ -87,13 +89,14 @@ namespace ZeroMasterData
                              Topmost = true,
                              MaxWidth = 600
                          };
-            
+            Context.BeginOperation();
             mb.Show();
         }
 
         private void OpenSupplierView()
         {
             var P = new SupplierView();
+            Context.BeginOperation();
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
@@ -104,7 +107,7 @@ namespace ZeroMasterData
             {
                 P.ControlMode = ControlMode.Update;
             }
-
+            Context.BeginOperation();
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
@@ -126,7 +129,8 @@ namespace ZeroMasterData
 
         private void ExportPackEntryPoint(object o)
         {
-            using (var ent = new DataModelManager())
+            var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
+            using (var ent = Context.CreateTemporaryManager(masterDataPackManager))
             {
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(10);
@@ -143,13 +147,13 @@ namespace ZeroMasterData
                 info.AddTable(ent.Products);
                 info.AddTable(ent.Customers);
 
-                using (var pack = new MasterDataPackManager(Terminal.Instance))
+                using (masterDataPackManager)
                 {
-                    pack.Exported += pack_Exported;
+                    masterDataPackManager.Exported += pack_Exported;
                     try
                     {
                         Terminal.Instance.CurrentClient.Notifier.SetProcess("Creando paquete");
-                        pack.Export(info);
+                        masterDataPackManager.Export(info);
                     }
                     catch (Exception ex)
                     {

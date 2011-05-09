@@ -10,6 +10,16 @@ namespace ZeroGUI.Converters
 {
     public class ModeToReadOnlyConverter : IValueConverter
     {
+        private static ModeToReadOnlyConverter _instance;
+
+        public static ModeToReadOnlyConverter Instance
+        {
+            get
+            {
+                return _instance?? (_instance = new ModeToReadOnlyConverter());
+            }    
+        }
+
         #region Implementation of IValueConverter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

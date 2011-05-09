@@ -3049,6 +3049,30 @@ namespace ZeroBusiness.Entities.Data
         private Nullable<global::System.Int32> _PrintModeDefault;
         partial void OnPrintModeDefaultChanging(Nullable<global::System.Int32> value);
         partial void OnPrintModeDefaultChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ChangeEnable
+        {
+            get
+            {
+                return _ChangeEnable;
+            }
+            set
+            {
+                OnChangeEnableChanging(value);
+                ReportPropertyChanging("ChangeEnable");
+                _ChangeEnable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ChangeEnable");
+                OnChangeEnableChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ChangeEnable;
+        partial void OnChangeEnableChanging(Nullable<global::System.Boolean> value);
+        partial void OnChangeEnableChanged();
 
         #endregion
     

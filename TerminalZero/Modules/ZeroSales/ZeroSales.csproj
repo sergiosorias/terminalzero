@@ -48,17 +48,23 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\Controls\PaymentInstrumentGrid.xaml.cs">
-      <DependentUpon>PaymentInstrumentGrid.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\PaymentInstrumentLazyLoadingList.xaml.cs">
+      <DependentUpon>PaymentInstrumentLazyLoadingList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\SaleList.xaml.cs">
-      <DependentUpon>SaleList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\SaleLazyLoadingList.xaml.cs">
+      <DependentUpon>SaleLazyLoadingList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Controls\SalePaymentItemLazyLoadingList.xaml.cs">
+      <DependentUpon>SalePaymentItemLazyLoadingList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\CreateSaleView.xaml.cs">
       <DependentUpon>CreateSaleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PaymentInstrumentList.xaml.cs">
-      <DependentUpon>PaymentInstrumentList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\PaymentInstrumenSelection.xaml.cs">
+      <DependentUpon>PaymentInstrumenSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SalePaymentView.xaml.cs">
+      <DependentUpon>SalePaymentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -94,11 +100,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\Controls\PaymentInstrumentGrid.xaml">
+    <Page Include="Pages\Controls\PaymentInstrumentLazyLoadingList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\SaleList.xaml">
+    <Page Include="Pages\Controls\SaleLazyLoadingList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Controls\SalePaymentItemLazyLoadingList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -106,12 +116,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PaymentInstrumentList.xaml">
+    <Page Include="Pages\Controls\PaymentInstrumenSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SalePaymentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\DataSources\ZeroBusiness.Entities.Data.SalePaymentHeader.datasource" />
+    <None Include="Properties\DataSources\ZeroBusiness.Entities.Data.SalePaymentItem.datasource" />
     <None Include="Properties\DataSources\ZeroSales.Entities.Entities.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

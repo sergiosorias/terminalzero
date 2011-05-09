@@ -4,27 +4,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+             xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" Header="Lista de Clientes"
              mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroMasterData.Pages.Controls">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition MinHeight="100"/>
         </Grid.RowDefinitions>
-        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" Content="Lista de clientes"/>
-        <Grid HorizontalAlignment="Stretch" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <baseControls:SearchBox Search="SearchBox_Search"/>
-            <baseControls:ZeroToolBar x:Name="toolbar" Grid.Column="2" HorizontalAlignment="Right" SaveBtnVisible="False" CancelBtnVisible="False" PrintBtnVisible="False" New="toolbar_New" VerticalAlignment="Center"/>
-        </Grid>
-        <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
-            <ContentPresenter.Content>
-                <myControls:CustomerList x:Name="customerGrid"/>
-            </ContentPresenter.Content>
-        </ContentPresenter>
+        <baseControls:SearchBox Search="SearchBox_Search"/>
+        
+        <myControls:CustomerLazyLoadingList  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
     </Grid>
 </base:NavigationBasePage>

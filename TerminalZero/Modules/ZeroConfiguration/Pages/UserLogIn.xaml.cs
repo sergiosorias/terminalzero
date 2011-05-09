@@ -7,7 +7,7 @@ namespace ZeroConfiguration.Pages
     /// <summary>
     /// Interaction logic for UserLogIn.xaml
     /// </summary>
-    public partial class UserLogIn : UserControl
+    public partial class UserLogIn : ZeroGUI.NavigationBasePage
     {
         public string UserName { get; set; }
         public string UserPass { get; set; }

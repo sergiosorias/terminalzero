@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.MasterData;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -13,18 +14,15 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class ProductGroupDetail : NavigationBasePage
     {
-        private DataModelManager DataProvider;
-        public ProductGroupDetail(DataModelManager entities)
+        public ProductGroupDetail()
         {
             InitializeComponent();
-            DataProvider = entities;
             ProductGroupNew = ProductGroup.CreateProductGroup(
-                    DataProvider.ProductGroups.Count(),
+                    Context.Instance.Manager.ProductGroups.Count(),
                      true);
         }
 
-        public ProductGroupDetail(DataModelManager entities,  ProductGroup Data)
-            : this(entities)
+        public ProductGroupDetail(ProductGroup Data) :this()
         {
             ControlMode = ControlMode.Update;
             ProductGroupNew = Data;

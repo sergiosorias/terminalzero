@@ -9,7 +9,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public class DataModelManager : Entities
     {
-        public DataModelManager()
+        internal DataModelManager()
             : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("Data.DataModel"))
         {
 

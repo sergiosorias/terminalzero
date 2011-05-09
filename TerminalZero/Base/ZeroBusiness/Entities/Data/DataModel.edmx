@@ -275,6 +275,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
           <Property Name="PrintModeDefault" Type="int" />
+          <Property Name="ChangeEnable" Type="bit" />
         </EntityType>
         <EntityType Name="Price">
           <Key>
@@ -1136,6 +1137,7 @@
           <NavigationProperty Name="Customers" Relationship="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Customer" />
           <NavigationProperty Name="Suppliers" Relationship="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Supplier" />
           <NavigationProperty Name="SalePaymentItems" Relationship="TZeroDataModel.FK_StockHeader_PaymentInstrument" FromRole="PaymentInstrument" ToRole="SalePaymentItem" />
+          <Property Type="Boolean" Name="ChangeEnable" />
         </EntityType>
         <EntityType Name="Price">
           <Key>
@@ -1856,7 +1858,8 @@
             <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="PaymentInstruments"><EntityTypeMapping TypeName="TZeroDataModel.PaymentInstrument"><MappingFragment StoreEntitySet="PaymentInstrument">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="ChangeEnable" ColumnName="ChangeEnable" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />

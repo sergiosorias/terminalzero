@@ -33,24 +33,11 @@
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
         <Menu x:Name="mainMenu">
-            <!--<MenuItem Header="Inicio" Icon="" Click="MenuItem_Click">
-                <MenuItem Command="ApplicationCommands.Save"/>
-                <Separator/>
-                <MenuItem Header="_Edit">
-                    <MenuItem.BitmapEffect>
-                        <DropShadowBitmapEffect/>
-                    </MenuItem.BitmapEffect>
-                    <MenuItem Command="ApplicationCommands.Copy"/>
-                    <MenuItem Command="ApplicationCommands.Cut"/>
-                    <MenuItem Command="ApplicationCommands.Paste"/>
-                </MenuItem>
-            </MenuItem>-->
+          
         </Menu>
-        <Border Grid.Row="1"  Margin="3" BorderBrush="{StaticResource titleBackground}" Background="{DynamicResource mainBackground}" BorderThickness="2" Padding="2,0,2,0" CornerRadius="3">
-            <ContentControl  x:Name="PrimaryWindow" IsTabStop="False">
-                <my:Home IsTabStop="False"/>
-            </ContentControl>
-        </Border>
+        <ContentControl  Grid.Row="1"  Margin="3" x:Name="PrimaryWindow" IsTabStop="False">
+            <my:Home IsTabStop="False"/>
+        </ContentControl>
         <StatusBar Grid.Row="2" Background="Gainsboro" x:Name="mainBar">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>

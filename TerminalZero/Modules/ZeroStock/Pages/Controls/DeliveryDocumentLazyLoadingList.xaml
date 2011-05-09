@@ -1,0 +1,15 @@
+﻿<base:LazyLoadingListControl xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+    x:Class="ZeroStock.Pages.Controls.DeliveryDocumentLazyLoadingList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DataGrid.Columns>
+        <DataGridTextColumn x:Name="terminalNameColumn" Binding="{Binding Path=TerminalToCode}" Header="Terminal" Width="200" />
+        <DataGridTextColumn x:Name="dateColumn" Binding="{Binding Path=Date}" Header="Fecha" Width="140" />
+        <DataGridTextColumn x:Name="supplierName1Column" Binding="{Binding Path=Supplier.Name1}" Header="Proveedor" Width="200" />
+        <DataGridTextColumn x:Name="noteColumn" Binding="{Binding Path=Note}" Header="Nota" Width="*" MaxWidth="250" />
+    </DataGrid.Columns>
+</base:LazyLoadingListControl>

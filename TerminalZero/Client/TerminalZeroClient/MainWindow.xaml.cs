@@ -66,11 +66,8 @@ namespace TerminalZeroClient
             if (!Terminal.Instance.Manager.ExistsAction(Actions.AppHome, out actionInit))
             {
                 actionInit = new ZeroAction( ActionType.BackgroudAction, Actions.AppHome, OpenHome);
-                //actionMenu = new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Home, () => item.Focus());
-                //MenuShorcut.Command = actionMenu;
                 Terminal.Instance.Session.AddAction(actionInit);
                 Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppBack, OpenHome));
-                //Terminal.Instance.Session.AddAction(new ZeroAction(null, ActionType.BackgroudAction, ApplicationActions.Back, GoBack));
                 Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppExit, ForceClose));
             }
             ShortCutHome.Command = actionInit;

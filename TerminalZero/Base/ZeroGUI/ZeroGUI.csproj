@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\WPF_ControlStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SearchBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,9 +92,11 @@
     <Compile Include="Classes\Delegates.cs" />
     <Compile Include="Classes\EventArgs.cs" />
     <Compile Include="Classes\ValidationRules.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\InvertVisibilityConverter.cs" />
     <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
     <Compile Include="Delegates.cs" />
-    <Compile Include="ListNavigationControl.cs" />
+    <Compile Include="LazyLoadingListControl.cs" />
     <Compile Include="Masking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

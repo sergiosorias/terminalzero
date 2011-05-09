@@ -8,7 +8,7 @@ using ZeroGUI;
 namespace ZeroMasterData.Pages
 {
     /// <summary>
-    /// Interaction logic for SupplierList.xaml
+    /// Interaction logic for SupplierLazyLoadingList.xaml
     /// </summary>
     public partial class SupplierView : NavigationBasePage
     {
@@ -19,7 +19,7 @@ namespace ZeroMasterData.Pages
 
         private void btnNewSupplier_Click(object sender, RoutedEventArgs e)
         {
-            var detail = new Controls.SupplierDetail(supplierGrid.DataProvider);
+            var detail = new Controls.SupplierDetail();
             bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.NewSupplier);
             if (ret.HasValue && ret.Value)
             {

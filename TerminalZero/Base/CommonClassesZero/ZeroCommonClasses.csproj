@@ -62,12 +62,14 @@
     <Compile Include="Entities\PackStatusEnum.cs" />
     <Compile Include="GlobalObjects\ActionParameters.cs" />
     <Compile Include="GlobalObjects\ActionRequest.cs" />
+    <Compile Include="GlobalObjects\ActionsSourceBase.cs" />
     <Compile Include="GlobalObjects\ActionType.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ModuleNotificationEventArgs.cs" />
     <Compile Include="GlobalObjects\ZeroMenu.cs" />
     <Compile Include="Helpers\ComparisonExtentions.cs" />
     <Compile Include="Interfaces\IExportableEntity.cs" />
+    <Compile Include="Interfaces\IMenuCommandValidator.cs" />
     <Compile Include="Interfaces\ISelectable.cs" />
     <Compile Include="Interfaces\ITerminalManager.cs" />
     <Compile Include="Interfaces\IValidable.cs" />

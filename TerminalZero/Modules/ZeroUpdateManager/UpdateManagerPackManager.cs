@@ -29,8 +29,8 @@ namespace ZeroUpdateManager
             string[] filesToProcess = Directory.GetFiles(args.PackInfo.WorkingDirectory, "*" + Resources.ScripFileExtention);
             if (filesToProcess.Length > 0)
             {
-                args.Pack.Result = "SQL\n" + outMessage;
                 ProcessScripts(filesToProcess, args.Pack.Code, args.PackInfo.TerminalCode);
+                args.Pack.Result = "SQL\n" + outMessage;
             }
 
             if (args.PackInfo != null && !ContextInfo.IsOnServer)
@@ -74,8 +74,11 @@ namespace ZeroUpdateManager
                         {
                             SqlError error = e.Errors[i];
                             outMessage.AppendLine(error.Message);
-                            if (error.Number != 0)
+                            if(error.Class > 10) 
+                            {            
+                                // treat this as a genuine error        
                                 errorCount++;
+                            } 
                         }        
                     };
                     tran = conn.BeginTransaction();
