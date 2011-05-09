@@ -14,8 +14,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Style="{StaticResource titleLabelStyle}" x:Name="lblStockType" Content="Title"/>
-        
         <Grid HorizontalAlignment="Stretch" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -41,9 +39,9 @@
             
         </Grid>
 
-        <myControls:StockList Grid.Row="2" x:Name="stockGrid">
+        <myControls:StockLazyLoadingList Grid.Row="2" x:Name="stockGrid">
 
-        </myControls:StockList>
+        </myControls:StockLazyLoadingList>
     </Grid>
 
 </base:NavigationBasePage>

@@ -1,5 +1,5 @@
 ﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-    x:Class="ZeroMasterData.Pages.SupplierView"
+    x:Class="ZeroMasterData.Pages.SupplierView" Header="Lista de proveedores"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,10 +9,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Name="lblCaption" Grid.ColumnSpan="2" Style="{DynamicResource titleLabelStyle}" Content="Lista de proveedores"/>
         <Grid HorizontalAlignment="Stretch" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -21,10 +19,6 @@
             <baseControls:SearchBox Search="SearchBox_Search"/>
             <baseControls:ZeroToolBar New="btnNewSupplier_Click" SaveBtnVisible="False" CancelBtnVisible="False" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
-        <ContentPresenter MinHeight="10" Grid.Row="2" HorizontalAlignment="Stretch">
-            <ContentPresenter.Content>
-                <myControls:SupplierList x:Name="supplierGrid"/>
-            </ContentPresenter.Content>
-        </ContentPresenter>
+        <myControls:SupplierLazyLoadingList Grid.Row="2" x:Name="supplierGrid"/>
     </Grid>
 </base:NavigationBasePage>

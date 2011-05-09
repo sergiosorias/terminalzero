@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Stock;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -80,7 +81,8 @@ namespace ZeroStock
         {
             try
             {
-                using (var ent = new DataModelManager())
+                var manager = new ZeroStockPackMaganer(Terminal.Instance);
+                using (var ent = Context.CreateTemporaryManager(manager))
                 {
                     var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
                     info.TerminalToCodes.AddRange(
@@ -94,7 +96,7 @@ namespace ZeroStock
 
                     if (info.SomeEntityHasRows)
                     {
-                        using (var manager = new ZeroStockPackMaganer(Terminal.Instance))
+                        using (manager)
                         {
                             if (manager.Export(info))
                             {
@@ -107,6 +109,10 @@ namespace ZeroStock
             catch (Exception ex)
             {
                 Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
+            }
+            finally
+            {
+                
             }
         }
 

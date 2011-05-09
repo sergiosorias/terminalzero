@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.MasterData;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -17,29 +18,24 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class CustomerDetail : NavigationBasePage
     {
-        private Customer _CustomerNew;
-        public Customer CurrentCustomer 
+        public Customer CurrentCustomer
         {
-            get
-            {
-                return _CustomerNew;
-            }
-            
+            get;
+            private set;
+
         }
 
-        DataModelManager DataProvider;
-        public CustomerDetail(DataModelManager dataProvider)
+        public CustomerDetail()
         {
             ControlMode = ControlMode.New;
             InitializeComponent();
-            DataProvider = dataProvider;
             DataContext = this;
         }
 
-        public CustomerDetail(DataModelManager dataProvider, int customerCode)
-            : this(dataProvider)
+        public CustomerDetail(int customerCode)
+            : this()
         {
-            _CustomerNew = DataProvider.Customers.First(s => s.Code == customerCode);
+            CurrentCustomer = Context.Instance.Manager.Customers.First(s => s.Code == customerCode);
             ControlMode = ControlMode.Update;
         }
 
@@ -47,36 +43,32 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                taxPositionCodeComboBox.ItemsSource = DataProvider.TaxPositions;
-                paymentInstrumentCodeComboBox.ItemsSource = DataProvider.PaymentInstruments;
+                taxPositionCodeComboBox.ItemsSource = Context.Instance.Manager.TaxPositions;
+                paymentInstrumentCodeComboBox.ItemsSource = Context.Instance.Manager.PaymentInstruments;
                 switch (ControlMode)
                 {
                     case ControlMode.New:
-                        _CustomerNew = Customer.CreateCustomer(
-                            DataProvider.GetNextCustomerCode() ,0
+                        CurrentCustomer = Customer.CreateCustomer(
+                            Context.Instance.Manager.GetNextCustomerCode(), 0
                             , true);
                         paymentInstrumentCodeComboBox.SelectedIndex = 0;
+                        Header = "Cliente Nuevo";
                         break;
                     case ControlMode.Update:
-                        if (!_CustomerNew.TaxPositionReference.IsLoaded)
-                            _CustomerNew.TaxPositionReference.Load();
-                        taxPositionCodeComboBox.SelectedItem = _CustomerNew.TaxPosition;
-                        paymentInstrumentCodeComboBox.SelectedItem = _CustomerNew.PaymentInstrument;
-                        break;
-                    case ControlMode.Delete:
-                        break;
-                    case ControlMode.ReadOnly:
-                        break;
-                    default:
+                        if (!CurrentCustomer.TaxPositionReference.IsLoaded)
+                            CurrentCustomer.TaxPositionReference.Load();
+                        taxPositionCodeComboBox.SelectedItem = CurrentCustomer.TaxPosition;
+                        paymentInstrumentCodeComboBox.SelectedItem = CurrentCustomer.PaymentInstrument;
+                        Header = "Editar Cliente";
                         break;
                 }
-                
-                grid1.DataContext = _CustomerNew;
+
+                grid1.DataContext = CurrentCustomer;
             }
         }
-        
+
         #region IZeroPage Members
-        
+
         public override bool CanAccept(object parameter)
         {
             bool ret = base.CanAccept(parameter);
@@ -86,10 +78,10 @@ namespace ZeroMasterData.Pages.Controls
                 switch (ControlMode)
                 {
                     case ControlMode.New:
-                        DataProvider.AddToCustomers(CurrentCustomer);
+                        Context.Instance.Manager.AddToCustomers(CurrentCustomer);
                         break;
                     case ControlMode.Update:
-                        DataProvider.Customers.ApplyCurrentValues(CurrentCustomer);
+                        Context.Instance.Manager.Customers.ApplyCurrentValues(CurrentCustomer);
                         break;
                     case ControlMode.Delete:
                         break;
@@ -99,7 +91,7 @@ namespace ZeroMasterData.Pages.Controls
                         break;
                 }
 
-                DataProvider.SaveChanges();
+                Context.Instance.Manager.SaveChanges();
             }
 
             return ret;
@@ -108,8 +100,8 @@ namespace ZeroMasterData.Pages.Controls
         public override bool CanCancel(object parameter)
         {
             EntityObject obj = CurrentCustomer;
-            if(obj!=null && obj.EntityState == EntityState.Modified)
-                DataProvider.Refresh(RefreshMode.StoreWins, CurrentCustomer);
+            if (obj != null && obj.EntityState == EntityState.Modified)
+                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, CurrentCustomer);
 
             return true;
         }

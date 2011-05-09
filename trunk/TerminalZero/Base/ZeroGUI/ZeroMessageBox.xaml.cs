@@ -31,7 +31,6 @@ namespace ZeroGUI
                 
             }
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            lblCaption.DataContext = this;
             _acceptAction = new ZeroAction( ActionType.BackgroudAction, "cancel", Accept);
             _cancelAction = new ZeroAction( ActionType.BackgroudAction, "accept", Cancel);
             btnAccept.Command = ShortCutAccept.Command = _acceptAction;
@@ -65,6 +64,13 @@ namespace ZeroGUI
                 {
                     _acceptAction.RuleToSatisfy = ((NavigationBasePage)value).CanAccept;
                     _cancelAction.RuleToSatisfy = ((NavigationBasePage)value).CanCancel;
+                    lblCaption.Visibility = Visibility.Collapsed;
+                    if (ResizeMode == System.Windows.ResizeMode.NoResize)
+                    {
+                        Background = Brushes.Transparent;
+                        AllowsTransparency = true;
+                    }
+                    ((NavigationBasePage) value).MouseLeftButtonDown += CurrentMouseLeftButtonDown;
                 }
             }
         }
@@ -117,7 +123,7 @@ namespace ZeroGUI
         {
             if (Content is NavigationBasePage)
             {
-                
+                this.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }
             else
             {
@@ -182,35 +188,29 @@ namespace ZeroGUI
             var MB = new ZeroMessageBox(true);
             MB.Content = content;
             MB.ResizeMode = resizeMode;
-            if(resizeMode == ResizeMode.NoResize)
-            {
-                MB.BorderThickness = new Thickness(1);
-                MB.BorderBrush = Brushes.Black;
-            }
-            if (content is UIElement)
-            {
-                ((UIElement)content).Focus();
-            }
-
             switch (mboxButtons)
             {
                 case MessageBoxButton.OK:
                     MB.btnCancel.Visibility = Visibility.Collapsed;
                     break;
-                case MessageBoxButton.OKCancel:
-                   break;
-                case MessageBoxButton.YesNoCancel:
-                    break;
                 case MessageBoxButton.YesNo:
                      MB.btnCancel.Content = "No";
                      MB.btnAccept.Content = "Si";
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException("mboxButtons");
             }
             MB.Title = caption;
             MB.SizeToContent = sizeToContent;
-            return MB.ShowDialog();
+            object obj = Application.Current.Windows[0].Content;
+            
+            if(obj is Panel)
+                ((Panel)obj).Children.Add((UIElement)MB.Resources["backWindow"]);
+            
+            bool? res = MB.ShowDialog();
+            
+            if (obj is Panel)
+                ((Panel)obj).Children.Remove((UIElement)MB.Resources["backWindow"]);
+
+            return res;
         }
 
         #endregion Statics

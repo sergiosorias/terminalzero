@@ -54,14 +54,14 @@
     <Compile Include="Pages\Controls\CustomerDetail.xaml.cs">
       <DependentUpon>CustomerDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\CustomerList.xaml.cs">
-      <DependentUpon>CustomerList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\CustomerLazyLoadingList.xaml.cs">
+      <DependentUpon>CustomerLazyLoadingList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Controls\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\ProductList.xaml.cs">
-      <DependentUpon>ProductList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\ProductLazyLoadingList.xaml.cs">
+      <DependentUpon>ProductLazyLoadingList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Controls\ProductGroupDetail.xaml.cs">
       <DependentUpon>ProductGroupDetail.xaml</DependentUpon>
@@ -69,8 +69,8 @@
     <Compile Include="Pages\Controls\SupplierDetail.xaml.cs">
       <DependentUpon>SupplierDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Controls\SupplierList.xaml.cs">
-      <DependentUpon>SupplierList.xaml</DependentUpon>
+    <Compile Include="Pages\Controls\SupplierLazyLoadingList.xaml.cs">
+      <DependentUpon>SupplierLazyLoadingList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Controls\WeightDetail.xaml.cs">
       <DependentUpon>WeightDetail.xaml</DependentUpon>
@@ -124,7 +124,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Controls\CustomerList.xaml">
+    <Page Include="Pages\Controls\CustomerLazyLoadingList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -132,7 +132,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\ProductList.xaml">
+    <Page Include="Pages\Controls\ProductLazyLoadingList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -144,7 +144,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Controls\SupplierList.xaml">
+    <Page Include="Pages\Controls\SupplierLazyLoadingList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

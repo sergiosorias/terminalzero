@@ -1,16 +1,16 @@
 ﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-                   x:Class="ZeroStock.Pages.CurrentStockView"
+                   x:Class="ZeroStock.Pages.CurrentStockView" Header="Stock actual"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
              d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
-    <UserControl.Resources>
+    <base:NavigationBasePage.Resources>
         <CollectionViewSource Source="{Binding}" x:Key="cvs1"/>
         <CollectionViewSource Source="{Binding}" x:Key="cvs2"/>
-        <CollectionViewSource Source="{Binding}" x:Key="cvs3"/>
-    </UserControl.Resources>
+        <CollectionViewSource Source="{Binding}" x:Key="cvs3"/>    
+    </base:NavigationBasePage.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="100"/>

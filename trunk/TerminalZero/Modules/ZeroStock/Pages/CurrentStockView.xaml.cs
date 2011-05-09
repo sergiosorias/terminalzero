@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Sale;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -21,18 +22,16 @@ namespace ZeroStock.Pages
             InitializeComponent();
         }
 
-        DataModelManager MyEntities;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
 
             // Do not load your data at design time.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                MyEntities = new DataModelManager();
                 if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
                 {
                     terminalFilterContent.Visibility = Visibility.Visible;
-                    var expter = MyEntities.GetExportTerminal(ZeroCommonClasses.Terminal.Instance.TerminalCode).ToList();
+                    var expter = Context.Instance.Manager.GetExportTerminal(ZeroCommonClasses.Terminal.Instance.TerminalCode).ToList();
                     cbTerminals.ItemsSource = expter;
                     cbTerminals.SelectedItem = expter.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
                     cbTerminals.SelectionChanged += cbTerminals_SelectionChanged;
@@ -46,11 +45,11 @@ namespace ZeroStock.Pages
             int tCode = ZeroCommonClasses.Terminal.Instance.TerminalCode;
             if (cbTerminals.SelectedValue != null) tCode = ((int)cbTerminals.SelectedValue);
             var cvs1 = Resources["cvs1"] as CollectionViewSource;
-            cvs1.Source = MyEntities.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
+            cvs1.Source = Context.Instance.Manager.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
             var cvs2 = Resources["cvs2"] as CollectionViewSource;
-            cvs2.Source = MyEntities.StockCreateSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
+            cvs2.Source = Context.Instance.Manager.StockCreateSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
             var cvs3 = Resources["cvs3"] as CollectionViewSource;
-            cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
+            cvs3.Source = Context.Instance.Manager.StockModifySummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
         }
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -61,11 +60,11 @@ namespace ZeroStock.Pages
         private void FilterPerTerminal(int tCode)
         {
             var cvs1 = Resources["cvs1"] as CollectionViewSource;
-            cvs1.Source = MyEntities.StockSummaries.Where(s => s.TerminalToCode == tCode);
+            cvs1.Source = Context.Instance.Manager.StockSummaries.Where(s => s.TerminalToCode == tCode);
             var cvs2 = Resources["cvs2"] as CollectionViewSource;
-            cvs2.Source = MyEntities.StockCreateSummaries.Where(s => s.TerminalToCode == tCode);
+            cvs2.Source = Context.Instance.Manager.StockCreateSummaries.Where(s => s.TerminalToCode == tCode);
             var cvs3 = Resources["cvs3"] as CollectionViewSource;
-            cvs3.Source = MyEntities.StockModifySummaries.Where(s => s.TerminalToCode == tCode);
+            cvs3.Source = Context.Instance.Manager.StockModifySummaries.Where(s => s.TerminalToCode == tCode);
             UpdateLayout();
         }
 

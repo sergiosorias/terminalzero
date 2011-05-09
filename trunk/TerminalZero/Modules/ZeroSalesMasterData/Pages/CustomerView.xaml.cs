@@ -8,7 +8,7 @@ using ZeroMasterData.Pages.Controls;
 namespace ZeroMasterData.Pages
 {
     /// <summary>
-    /// Interaction logic for SupplierList.xaml
+    /// Interaction logic for SupplierLazyLoadingList.xaml
     /// </summary>
     public partial class CustomerView : NavigationBasePage
     {
@@ -16,6 +16,7 @@ namespace ZeroMasterData.Pages
         {
             ControlMode = ControlMode.ReadOnly;
             InitializeComponent();
+            CommandBar.New += toolbar_New;
         }
 
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
@@ -25,7 +26,7 @@ namespace ZeroMasterData.Pages
 
         private void toolbar_New(object sender, RoutedEventArgs e)
         {
-            var detail = new CustomerDetail(customerGrid.DataProvider);
+            var detail = new CustomerDetail();
             bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.CustomerNew, ResizeMode.NoResize, MessageBoxButton.OKCancel);
             if (ret.HasValue && ret.Value)
             {

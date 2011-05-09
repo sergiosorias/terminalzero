@@ -169,7 +169,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TZero_ConfigModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true" a:TypeAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration">
           <EntitySet Name="Connections" EntityType="TZero_ConfigModel.Connection" />
           <EntitySet Name="ConnectionStatus" EntityType="TZero_ConfigModel.ConnectionStatu" />
           <EntitySet Name="Modules" EntityType="TZero_ConfigModel.Module" />

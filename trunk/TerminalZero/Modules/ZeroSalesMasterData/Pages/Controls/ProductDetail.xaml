@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" HorizontalContentAlignment="Stretch" 
              xmlns:r="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI"
-             VerticalContentAlignment="Stretch" Background="{DynamicResource PageBackgroundBrushKey}">
+             VerticalContentAlignment="Stretch" Header="Producto">
     <Grid Name="grid1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,7 +33,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                     <TextBox  Height="23" Width="150" HorizontalAlignment="Stretch" Margin="1,3,1,2" Name="masterCodeTextBox" VerticalAlignment="Center" GotFocus="masterCodeTextBox_GotFocus">
                         <TextBox.Text>
-                            <Binding Path="MasterCode" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
+                            <Binding Path="MasterCode" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <DataErrorValidationRule/>
                                     <ExceptionValidationRule/>

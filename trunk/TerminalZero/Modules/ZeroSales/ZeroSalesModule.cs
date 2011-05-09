@@ -1,7 +1,10 @@
-﻿using ZeroBusiness;
+﻿using System.Windows;
+using ZeroBusiness;
+using ZeroBusiness.Manager.Sale;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
 using ZeroSales.Pages;
 using ZeroSales.Properties;
 
@@ -39,10 +42,12 @@ namespace ZeroSales
 
         private void openSaleView()
         {
+            var view = new CreateSaleView(0);
             var args = new ModuleNotificationEventArgs
                            {
-                               ControlToShow = new CreateSaleView(0)
+                               ControlToShow = view
                            };
+            Context.BeginOperation();
             OnModuleNotifing(args);
         }
 

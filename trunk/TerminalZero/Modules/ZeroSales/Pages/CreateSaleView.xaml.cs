@@ -1,19 +1,20 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Web.Security;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Sale;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Barcode;
-using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ZeroGUI.Classes;
+using ZeroSales.Pages.Controls;
 
 namespace ZeroSales.Pages
 {
@@ -25,12 +26,12 @@ namespace ZeroSales.Pages
         public CreateSaleView(int saleType)
         {
             InitializeComponent();
-            InitializeComponent();
             _saleType = saleType;
+            CommandBar.Save += this.btnSave_Click;
+            CommandBar.Cancel += this.btnCancel_Click;
         }
 
         private SaleHeader _header;
-        private DataModelManager _context;
         private string _lot = "";
         readonly int _saleType = -1;
         
@@ -38,17 +39,13 @@ namespace ZeroSales.Pages
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                if (_context != null)
-                    _context.Dispose();
-
-                _context = new DataModelManager();
-                LoadHeader(_saleType, _context.SaleHeaders.Count() > 0 ? _context.GetNextSaleHeaderCode(ZeroCommonClasses.Terminal.Instance.TerminalCode) : 1, ZeroCommonClasses.Terminal.Instance.TerminalCode);
-                lblsaleType.Content = _header.SaleType != null &&
+                LoadHeader(_saleType, Context.Instance.Manager.SaleHeaders.Count() > 0 ? Context.Instance.Manager.GetNextSaleHeaderCode(Terminal.Instance.TerminalCode) : 1, Terminal.Instance.TerminalCode);
+                Header = _header.SaleType != null &&
                                        !string.IsNullOrWhiteSpace(_header.SaleType.Description)
                                            ? _header.SaleType.Description
                                            : "Venta";
 
-                _header.TerminalToCode = ZeroCommonClasses.Terminal.Instance.TerminalCode;
+                _header.TerminalToCode = Terminal.Instance.TerminalCode;
                 DataContext = _header;
             }
         }
@@ -56,7 +53,7 @@ namespace ZeroSales.Pages
         private void LoadHeader(int saleType, int code, int terminalTo)
         {
             _header = SaleHeader.CreateSaleHeader(
-                ZeroCommonClasses.Terminal.Instance.TerminalCode,
+                Terminal.Instance.TerminalCode,
                 code,
                 true,
                 (int)EntityStatus.New,
@@ -64,17 +61,15 @@ namespace ZeroSales.Pages
                 DateTime.Now.Date, 
                 _saleType,false,0,0,0,false,false);
             ZeroActionParameterBase param =
-                ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>();
+                Terminal.Instance.Session.GetParameter<MembershipUser>();
             if (param != null)
             {
                 _header.UserCode = (Guid)((MembershipUser)param.Value).ProviderUserKey;
             }
-            _header.SaleType = _context.SaleTypes.FirstOrDefault(st => st.Code == saleType);
-            _context.AddToSaleHeaders(_header);
+            _header.SaleType = Context.Instance.Manager.SaleTypes.FirstOrDefault(st => st.Code == saleType);
+            Context.Instance.Manager.AddToSaleHeaders(_header);
 
         }
-
-        #region IZeroPage Members
 
         public override bool CanAccept(object parameter)
         {
@@ -96,7 +91,6 @@ namespace ZeroSales.Pages
                     case MessageBoxResult.OK:
                     case MessageBoxResult.Yes:
                         ret = SaveData();
-
                         break;
                 }
             }
@@ -108,19 +102,17 @@ namespace ZeroSales.Pages
             return CanAccept(parameter);
         }
 
-        #endregion
-
         private Product validProd;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            validProd = _context.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            validProd = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (validProd == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
                 if (Part != null)
                 {
                     string strCode = Part.Code.ToString();
-                    validProd = _context.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                    validProd = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
                     if (validProd == null)
                     {
                         Part.IsValid = false;
@@ -149,11 +141,11 @@ namespace ZeroSales.Pages
             }
         }
 
-        private System.Threading.Timer cleanResTimer = null;
+        private Timer cleanResTimer;
 
         private void CreateResTimer()
         {
-            cleanResTimer = new System.Threading.Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+            cleanResTimer = new Timer(cleanResTimer_Elapsed, null, 5000, 5000);
         }
 
         void cleanResTimer_Elapsed(object o)
@@ -168,34 +160,35 @@ namespace ZeroSales.Pages
         private bool SaveData()
         {
             bool ret = false;
+            
             try
             {
-                var view = new PaymentInstrumentList();
-                ret =
-                    ZeroMessageBox.Show(view, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OK).
-                        GetValueOrDefault();
-                if(ret)
+                
+                var paymentCurrentSale = new SalePaymentHeader();
+                _header.SalePaymentHeader = paymentCurrentSale;
+                SalePaymentView salePaymentview = new SalePaymentView(_header);
+                salePaymentview.DataContext = paymentCurrentSale;
+                ret = ZeroMessageBox.Show(salePaymentview, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
+
+                if (ret)
                 {
-                    object o = view.SelectedItem;
+                    //DataModelManager.SaveChanges();
                 }
-               //MessageBox.Show("Este Módulo es solo de prueba por el momento, los datos no se guardaran", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
-               //_context.SaveChanges();
-               // currentProd.Text = "";
-               // MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
-               // ret = true;
+                // ret = true;
             }
             catch (Exception ex)
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
+                Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
             }
             return ret;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            SaveData();
+            if(_header.SaleItems!= null && _header.SaleItems.Count>0)
+                SaveData();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

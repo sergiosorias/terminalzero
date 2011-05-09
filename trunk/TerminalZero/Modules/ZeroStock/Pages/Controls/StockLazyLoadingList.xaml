@@ -1,0 +1,13 @@
+﻿<base:LazyLoadingListControl xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+    x:Class="ZeroStock.Pages.Controls.StockLazyLoadingList" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataGrid.Columns>
+        <DataGridTextColumn x:Name="productNameColumn" MinWidth="210" IsReadOnly="True" Binding="{Binding Path=Product.Name}" Header="Nombre" Width="SizeToHeader" />
+        <DataGridTextColumn x:Name="productMasterCodeColumn" IsReadOnly="True" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
+        <DataGridTextColumn x:Name="priceValueColumn" IsReadOnly="True" Binding="{Binding Path=PriceValue}" Header="Precio Unitario" Width="SizeToHeader" />
+        <DataGridTextColumn x:Name="quantityColumn" IsReadOnly="True" Binding="{Binding Path=Quantity}" Header="Cantidad" Width="SizeToHeader" />
+    </DataGrid.Columns>
+
+</base:LazyLoadingListControl>

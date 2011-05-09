@@ -31,11 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Input.Manipulations" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,14 +65,20 @@
     <Compile Include="Entities\Data\DataModelManager.cs" />
     <Compile Include="Entities\Data\DeliveryDocumentHeader.cs" />
     <Compile Include="Entities\Data\DeliveryDocumentItem.cs" />
+    <Compile Include="Entities\Data\PaymentInstrument.cs" />
     <Compile Include="Entities\Data\Price.cs" />
     <Compile Include="Entities\Data\Product.cs" />
     <Compile Include="Entities\Data\ProductGroup.cs" />
     <Compile Include="Entities\Data\SaleHeader.cs" />
+    <Compile Include="Entities\Data\SalePaymentHeader.cs" />
+    <Compile Include="Entities\Data\SalePaymentItem.cs" />
     <Compile Include="Entities\Data\StockHeader.cs" />
     <Compile Include="Entities\Data\StockItem.cs" />
     <Compile Include="Entities\Data\Supplier.cs" />
     <Compile Include="Entities\Data\Weight.cs" />
+    <Compile Include="Manager\MasterData\Context.cs" />
+    <Compile Include="Manager\Sale\Context.cs" />
+    <Compile Include="Manager\Stock\Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules.cs" />
   </ItemGroup>
@@ -94,6 +102,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
+    <None Include="Properties\DataSources\ZeroBusiness.Entities.Configuration.Entities.datasource" />
+    <None Include="Properties\DataSources\ZeroBusiness.Entities.Data.Entities.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\Data\Sales\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

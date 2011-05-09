@@ -13,12 +13,13 @@ namespace ZeroConfiguration.Pages
     /// <summary>
     /// Interaction logic for Users.xaml
     /// </summary>
-    public partial class Users : UserControl
+    public partial class Users : ZeroGUI.NavigationBasePage
     {
         private MembershipUserCollection _userCol;
         public Users()
         {
             InitializeComponent();
+            CommandBar.New += btnNew_Click;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -26,13 +27,8 @@ namespace ZeroConfiguration.Pages
             ZeroAction action;
             if (ZeroCommonClasses.Terminal.Instance.Manager.ExistsAction(ZeroBusiness.Actions.OpenUserPasswordChangeMessage, out action))
             {
-                btnChangePassword.Command = action;
+                CommandBar.AppendButton("Cambiar Contraseña", action);
             }
-            else
-            {
-                btnChangePassword.IsEnabled = false;
-            }
-
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 LoadUsers();

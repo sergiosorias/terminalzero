@@ -5,6 +5,7 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Reflection;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.MasterData;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
@@ -35,7 +36,7 @@ namespace ZeroMasterData
         private static void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = new DataModelManager())
+            using (var ent = Context.Instance.Manager)
             {
                 ent.MetadataWorkspace.LoadFromAssembly(typeof(DataModelManager).Module.Assembly);
                 

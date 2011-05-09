@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Stock;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -17,7 +18,6 @@ namespace ZeroStock.Pages.Controls
     /// </summary>
     public partial class DocumentDeliveryDetail : NavigationBasePage
     {
-        private DataModelManager DataProvider;
         public DeliveryDocumentHeader CurrentDocumentDelivery { get; private set; }
 
         public DocumentDeliveryDetail()
@@ -30,12 +30,10 @@ namespace ZeroStock.Pages.Controls
             // Do not load your data at design time.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                DataProvider = new DataModelManager();
-
-                CurrentDocumentDelivery = DataProvider.CreateDeliveryDocumentHeader(ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                CurrentDocumentDelivery = Context.Instance.Manager.CreateDeliveryDocumentHeader(Terminal.Instance.TerminalCode);
                 grid1.DataContext = CurrentDocumentDelivery;
-                supplierBox.ItemsSource = DataProvider.Suppliers;
-                cbTerminals.ItemsSource = DataProvider.GetExportTerminal(ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                supplierBox.ItemsSource = Context.Instance.Manager.Suppliers;
+                cbTerminals.ItemsSource = Context.Instance.Manager.GetExportTerminal(Terminal.Instance.TerminalCode);
             }
         }
 
@@ -68,7 +66,7 @@ namespace ZeroStock.Pages.Controls
                 {
                     try
                     {
-                        DataProvider.SaveChanges();
+                        Context.Instance.Manager.SaveChanges();
                         return ret;
                     }
                     catch (Exception ex)
@@ -84,8 +82,7 @@ namespace ZeroStock.Pages.Controls
 
         private void supplierBox_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (DataProvider != null)
-                DataProvider.Dispose();
+            
         }
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)

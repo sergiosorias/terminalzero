@@ -1,5 +1,5 @@
 ﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-                   x:Class="ZeroStock.Pages.DeliveryNoteView"
+                   x:Class="ZeroStock.Pages.DeliveryNoteView" Header=""
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Remitos:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
+                <Label Content="Filtro:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="80" VerticalAlignment="Center"/>
                 <DatePicker Text="Fecha" x:Name="dateFilter" VerticalAlignment="Center"/>
                 <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
             </StackPanel>
@@ -30,7 +30,7 @@
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>
-                <controls:DeliveryDocumentList x:Name="DeliveryGrid" />
+                <controls:DeliveryDocumentLazyLoadingList x:Name="DeliveryGrid" />
             </ContentPresenter.Content>
         </ContentPresenter>
     </Grid>

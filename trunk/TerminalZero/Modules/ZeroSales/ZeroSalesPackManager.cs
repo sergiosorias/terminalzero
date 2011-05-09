@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Sale;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 
@@ -27,10 +28,10 @@ namespace ZeroSales
             ImportEntities(args);
         }
         
-        private static void ImportEntities(PackProcessingEventArgs e)
+        private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = new DataModelManager())
+            using (var ent = Context.CreateTemporaryManager(this))
             {
                 if (packInfo.ContainsTable<SaleHeader>())
                 {

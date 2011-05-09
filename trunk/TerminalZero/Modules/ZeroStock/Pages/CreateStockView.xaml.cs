@@ -7,6 +7,7 @@ using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Stock;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Barcode;
@@ -23,7 +24,6 @@ namespace ZeroStock.Pages
     public partial class CreateStockView : NavigationBasePage
     {
         private StockHeader _header;
-        private DataModelManager _context;
         private string _lot = "";
         readonly int _stockType = -1;
         public CreateStockView(int stockType)
@@ -37,8 +37,6 @@ namespace ZeroStock.Pages
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
 
-                _context = new DataModelManager();
-
                 Guid g = new Guid();
                 ZeroActionParameterBase param =
                 ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>();
@@ -47,21 +45,21 @@ namespace ZeroStock.Pages
                     g = (Guid)((MembershipUser)param.Value).ProviderUserKey;
                 }
 
-                _header = _context.CreateStockHeader(ZeroCommonClasses.Terminal.Instance.TerminalCode, _stockType, _context.GetNextStockHeaderCode(), ZeroCommonClasses.Terminal.Instance.TerminalCode, g);
+                _header = Context.Instance.Manager.CreateStockHeader(Terminal.Instance.TerminalCode, _stockType, Context.Instance.Manager.GetNextStockHeaderCode(), ZeroCommonClasses.Terminal.Instance.TerminalCode, g);
 
-                lblStockType.Content = _header.StockType != null &&
+                Header = _header.StockType != null &&
                                        !string.IsNullOrWhiteSpace(_header.StockType.Description)
                                            ? _header.StockType.Description
                                            : "Stock";
 
-                if (_context.IsDeliveryDocumentMandatory(_stockType))
+                if (Context.Instance.Manager.IsDeliveryDocumentMandatory(_stockType))
                 {
                     var view = new DeliveryDocumentView();
                     view.ControlMode = ControlMode.Selection;
                     bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
                     {
-                        _header.DeliveryDocumentHeader =(DeliveryDocumentHeader)_context.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
+                        _header.DeliveryDocumentHeader = (DeliveryDocumentHeader)Context.Instance.Manager.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
                         _header.TerminalToCode = _header.DeliveryDocumentHeader.TerminalToCode;
                     }
                     else
@@ -105,13 +103,13 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            Product prod = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (prod == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
                 if (Part != null)
                 {
-                    prod = _context.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
+                    prod = Context.Instance.Manager.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
                     if (prod == null)
                     {
                         Part.IsValid = false;
@@ -123,13 +121,13 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeReceived(object sender, BarCodeEventArgs e)
         {
-            Product prod = _context.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            Product prod = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (prod == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
                 if (Part != null)
                 {
-                    prod = _context.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
+                    prod = Context.Instance.Manager.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
                 }
             }
 
@@ -169,7 +167,7 @@ namespace ZeroStock.Pages
                 {
                     _header.DeliveryDocumentHeader.Used = true;
                 }
-                _context.SaveChanges();
+                Context.Instance.Manager.SaveChanges();
                 MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 ret = true;
             }

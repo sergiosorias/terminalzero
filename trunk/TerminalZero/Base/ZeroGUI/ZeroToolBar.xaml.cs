@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Shapes;
 
 namespace ZeroGUI
 {
@@ -11,7 +13,6 @@ namespace ZeroGUI
         public ZeroToolBar()
         {
             InitializeComponent();
-            PrintBtnVisible = false;
         }
 
         public bool NewBtnVisible
@@ -20,17 +21,13 @@ namespace ZeroGUI
             set { SetValue(NewBtnVisibleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for SaveActive.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NewBtnVisibleProperty =
-            DependencyProperty.Register("NewBtnVisible", typeof(bool), typeof(ZeroToolBar), new UIPropertyMetadata(true, OnNewBtnVisibleChanged));
+            DependencyProperty.Register("NewBtnVisible", typeof(bool), typeof(ZeroToolBar), null);
 
-        private static void OnNewBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public ICommand NewBtnCommand
         {
-            var tb = d as ZeroToolBar;
-            if (tb != null)
-            {
-                tb.btnSaveLine.Visibility = tb.btnNew.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-            }
+            get { return btnNew.Command; }
+            set { btnNew.Command = value; }
         }
 
         public bool SaveBtnVisible
@@ -39,17 +36,13 @@ namespace ZeroGUI
             set {SetValue(SaveActiveProperty, value);}
         }
 
-        // Using a DependencyProperty as the backing store for SaveActive.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SaveActiveProperty =
-            DependencyProperty.Register("SaveBtnVisible", typeof(bool), typeof(ZeroToolBar), new UIPropertyMetadata(true,OnSaveBtnVisibleChanged));
+            DependencyProperty.Register("SaveBtnVisible", typeof(bool), typeof(ZeroToolBar),null);
 
-        private static void OnSaveBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public ICommand SaveBtnCommand
         {
-            var tb = d as ZeroToolBar;
-            if(tb!=null)
-            {
-                tb.btnSave.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-            }
+            get { return btnSave.Command; }
+            set { btnSave.Command = value; }
         }
 
         public bool CancelBtnVisible
@@ -59,17 +52,13 @@ namespace ZeroGUI
             }
         }
 
-        // Using a DependencyProperty as the backing store for CancelBtnVisible.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CancelActiveProperty =
-            DependencyProperty.Register("CancelBtnVisible", typeof(bool), typeof(ZeroToolBar), new UIPropertyMetadata(true,OnCancelBtnVisibleChanged));
+            DependencyProperty.Register("CancelBtnVisible", typeof(bool), typeof(ZeroToolBar),null);
 
-        private static void OnCancelBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public ICommand CancelBtnCommand
         {
-            var tb = d as ZeroToolBar;
-            if (tb != null)
-            {
-                tb.btnCancel.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-            }    
+            get { return btnCancel.Command; }
+            set { btnCancel.Command = value; }
         }
 
         public bool PrintBtnVisible
@@ -81,17 +70,13 @@ namespace ZeroGUI
             }
         }
 
-        // Using a DependencyProperty as the backing store for CancelBtnVisible.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PrintActiveProperty =
-            DependencyProperty.Register("PrintBtnVisible", typeof(bool), typeof(ZeroToolBar), new UIPropertyMetadata(false, OnPrintBtnVisibleChanged));
+            DependencyProperty.Register("PrintBtnVisible", typeof(bool), typeof(ZeroToolBar), null);
 
-        private static void OnPrintBtnVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public ICommand PrintBtnCommand
         {
-            var tb = d as ZeroToolBar;
-            if (tb != null)
-            {
-                tb.btnPrint.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
-            }
+            get { return btnPrint.Command; }
+            set { btnPrint.Command = value; }
         }
 
         public event RoutedEventHandler Save;
@@ -120,6 +105,39 @@ namespace ZeroGUI
 
         public event RoutedEventHandler Print;
 
+        public void AppendButton(string content, RoutedEventHandler handler)
+        {
+            Button newButton = new Button();
+            newButton.Click += handler;
+            newButton.Content = content;
+            newButton.Style = (Style)Resources["toolbarButton"];
+
+            AddSeparator();
+            buttonsBar.Children.Add(newButton);
+
+        }
+
+        public void AppendButton(string content, ICommand command)
+        {
+            Button newButton = new Button();
+            newButton.Content = content;
+            newButton.Style = (Style)Resources["toolbarButton"];
+
+            newButton.Command = command;
+            AddSeparator();
+            buttonsBar.Children.Add(newButton);
+
+        }
+
+        private void AddSeparator()
+        {
+            Rectangle rect = new Rectangle()
+                                 {
+                                     Style = (Style)Resources["separatorRectangle"]
+                                 };
+            buttonsBar.Children.Add(rect);
+        }
+
         private void OnPrint(RoutedEventArgs e)
         {
             RoutedEventHandler handler = Print;
@@ -144,6 +162,15 @@ namespace ZeroGUI
         private void btnPrint_Click(object sender, RoutedEventArgs e)
         {
             OnPrint(e);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            SaveBtnVisible = Save != null || SaveBtnCommand!=null;
+            CancelBtnVisible = Cancel != null || CancelBtnCommand != null;
+            NewBtnVisible = New != null || NewBtnCommand != null;
+            PrintBtnVisible = Print != null || PrintBtnCommand != null;
+                 
         }
 
    }

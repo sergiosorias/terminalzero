@@ -6,4 +6,5 @@
 	[Name] nvarchar(100) NULL,
 	[Description] nvarchar(300) NULL,
 	[PrintModeDefault] int NULL,
+	[ChangeEnable] bit NULL,
 )
