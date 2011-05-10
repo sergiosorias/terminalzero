@@ -29,7 +29,7 @@
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>
-                <controls:DeliveryDocumentLazyLoadingList x:Name="DeliveryGrid" Loaded="DeliveryGrid_Loaded"  />
+                <controls:DeliveryDocumentLazyLoadingList x:Name="DeliveryGrid" ItemsLoaded="DeliveryGrid_ItemsLoaded" />
             </ContentPresenter.Content>
         </ContentPresenter>
     </Grid>

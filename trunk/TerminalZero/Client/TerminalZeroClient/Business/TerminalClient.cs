@@ -17,8 +17,8 @@ namespace TerminalZeroClient.Business
         public TerminalClient()
         {
             ModuleList = new List<ZeroModule>();
-            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ContextInfo.CreateSyncConnection(), false));
-            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false,ContextInfo.CreateFileTranferConnection(),false));
+            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ConfigurationContext.CreateSyncConnection(), false));
+            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false,ConfigurationContext.CreateFileTranferConnection(),false));
         }
 
         public bool Initialized { get; private set; }
@@ -102,7 +102,7 @@ namespace TerminalZeroClient.Business
             try
             {
                 Notifier.SetProgress(5);
-                string[] Modules = Directory.GetFiles(ContextInfo.Directories.ModulesFolder, "*.dll");
+                string[] Modules = Directory.GetFiles(ConfigurationContext.Directories.ModulesFolder, "*.dll");
                 Notifier.SetProgress(10);
                 canContinue = Modules.Length != 0;
                 if (!canContinue)
@@ -225,7 +225,7 @@ namespace TerminalZeroClient.Business
                 var mod = obj as ZeroModule;
                 mod.TerminalStatus = ModuleStatus.Unknown;
                 mod.UserStatus = ModuleStatus.Unknown;
-                mod.WorkingDirectory = path + ContextInfo.Directories.WorkingDirSubfix;
+                mod.WorkingDirectory = path + ConfigurationContext.Directories.WorkingDirSubfix;
                 ModuleList.Add(mod);
                 Notifier.SetUserMessage(false, "Módulo ensamblado --> ''" + mod.Description + "''");
 

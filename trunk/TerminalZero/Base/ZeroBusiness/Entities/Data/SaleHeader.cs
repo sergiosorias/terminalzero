@@ -1,17 +1,49 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Input;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Manager.Data;
+
 
 namespace ZeroBusiness.Entities.Data
 {
     public partial class SaleHeader : IExportableEntity
     {
-        public bool ExistsDataToSave()
+        internal SaleHeader()
         {
-            return EntityState != System.Data.EntityState.Unchanged && SaleItems != null && SaleItems.Count > 0 && SaleItems.All(si => si.EntityState != System.Data.EntityState.Unchanged);
+            
+        }
+
+        public SaleHeader(SaleType type)
+        {
+            Code = GetNextSaleHeaderCode(ZeroCommonClasses.Terminal.Instance.TerminalCode);
+            TerminalToCode = TerminalCode = ZeroCommonClasses.Terminal.Instance.TerminalCode;
+            Enable = true;
+            SaleType = type;
+            Date = DateTime.Now;
+            UserCode = User.GetCurrentUserCode();
+        }
+
+        private static int GetNextSaleHeaderCode(int terminal)
+        {
+            var list = BusinessContext.Instance.Manager.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Select(sh=>sh.Code);
+            if(list.Count()>0)
+            {
+                return list.Max() + 1;
+            }
+            return 1;
+        }
+
+        public bool HasChanges
+        {
+            get
+            {
+                return EntityState != System.Data.EntityState.Unchanged && SaleItems != null && SaleItems.Count > 0 &&
+                       SaleItems.All(si => si.EntityState != System.Data.EntityState.Unchanged);
+            }
         }
 
         private void CalculateValues()
@@ -67,7 +99,7 @@ namespace ZeroBusiness.Entities.Data
 
         public void RemoveSaleItem(Product prod, double qty, string lot)
         {
-            
+            //TODO:
         }
 
         public void RemoveSaleItem(SaleItem item)
@@ -90,8 +122,14 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
-        
-        
+
+        public object ViewTitle
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(SaleType.Description)? SaleType.Description : "Venta";
+            }
+        }
     }
 
     

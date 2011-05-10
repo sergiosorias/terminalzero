@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.MasterData;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -27,7 +27,7 @@ namespace ZeroMasterData.Pages.Controls
 
         public ProductDetail(int productCode) : this()
         {
-            CurrentProduct = Context.Instance.Manager.Products.First(p => p.Code == productCode);
+            CurrentProduct = BusinessContext.Instance.Manager.Products.First(p => p.Code == productCode);
             ControlMode = ControlMode.Update;
         }
 
@@ -45,7 +45,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadTaxes()
         {
-            taxesComboBox.ItemsSource = Context.Instance.Manager.Taxes;
+            taxesComboBox.ItemsSource = BusinessContext.Instance.Manager.Taxes;
             switch (ControlMode)
             {
                 case ControlMode.New:
@@ -67,7 +67,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadPriceWeights()
         {
-            foreach (var item in Context.Instance.Manager.Weights)
+            foreach (var item in BusinessContext.Instance.Manager.Weights)
             {
                 weightBox.Items.Add(item);
             }
@@ -88,7 +88,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadProductGroup()
         {
-            foreach (var item in Context.Instance.Manager.ProductGroups)
+            foreach (var item in BusinessContext.Instance.Manager.ProductGroups)
             {
                 groupBox.Items.Add(item);
                 if (ControlMode == ControlMode.Update && CurrentProduct.Group1 == item.Code)
@@ -106,20 +106,20 @@ namespace ZeroMasterData.Pages.Controls
             {
                 case ControlMode.New:
                     CurrentProduct = Product.CreateProduct(
-                        Context.Instance.Manager.Products.Count()
+                        BusinessContext.Instance.Manager.Products.Count()
                         , true, true);
                     
                     P = Price.CreatePrice(
-                        Context.Instance.Manager.Prices.Count(),
+                        BusinessContext.Instance.Manager.Prices.Count(),
                         true, 0);
                     break;
                 case ControlMode.Update:
                     if (CurrentProduct.PriceCode.HasValue)
-                        P = Context.Instance.Manager.Prices.First(p => p.Code == CurrentProduct.PriceCode);
+                        P = BusinessContext.Instance.Manager.Prices.First(p => p.Code == CurrentProduct.PriceCode);
                     else
                     {
                         P = Price.CreatePrice(
-                        Context.Instance.Manager.Prices.Count(),
+                        BusinessContext.Instance.Manager.Prices.Count(),
                         true, 0);
                     }
                     masterCodeTextBox.IsReadOnly = true;
@@ -147,8 +147,8 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewGroup);
             if (res.HasValue && res.Value)
             {
-                Context.Instance.Manager.ProductGroups.AddObject(pgd.ProductGroupNew);
-                Context.Instance.Manager.SaveChanges();
+                BusinessContext.Instance.Manager.ProductGroups.AddObject(pgd.ProductGroupNew);
+                BusinessContext.Instance.Manager.SaveChanges();
                 groupBox.Items.Add(pgd.ProductGroupNew);
                 groupBox.SelectedItem = pgd.ProductGroupNew;
             }
@@ -160,8 +160,8 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                Context.Instance.Manager.Weights.AddObject(pgd.WeigthNew);
-                Context.Instance.Manager.SaveChanges();
+                BusinessContext.Instance.Manager.Weights.AddObject(pgd.WeigthNew);
+                BusinessContext.Instance.Manager.SaveChanges();
                 weightBox.Items.Add(pgd.WeigthNew);
                 weightBox.SelectedItem = pgd.WeigthNew;
             }
@@ -174,7 +174,7 @@ namespace ZeroMasterData.Pages.Controls
             if (ret)
             {
                 if (ControlMode == ControlMode.New &&
-                    Context.Instance.Manager.Products.FirstOrDefault(pr => pr.MasterCode.Equals(CurrentProduct.MasterCode)) != null)
+                    BusinessContext.Instance.Manager.Products.FirstOrDefault(pr => pr.MasterCode.Equals(CurrentProduct.MasterCode)) != null)
                 {
                     msg = "Codigo de product existente!\n Por favor ingrese otro código.";
                     masterCodeTextBox.SelectAll();
@@ -233,11 +233,11 @@ namespace ZeroMasterData.Pages.Controls
                         switch (ControlMode)
                         {
                             case ControlMode.New:
-                                Context.Instance.Manager.Products.AddObject(CurrentProduct);
+                                BusinessContext.Instance.Manager.Products.AddObject(CurrentProduct);
                                 Header = "Producto Nuevo";
                                 break;
                             case ControlMode.Update:
-                                Context.Instance.Manager.Products.ApplyCurrentValues(CurrentProduct);
+                                BusinessContext.Instance.Manager.Products.ApplyCurrentValues(CurrentProduct);
                                 Header = "Editar Producto";
                                 break;
                             case ControlMode.Delete:
@@ -248,7 +248,7 @@ namespace ZeroMasterData.Pages.Controls
                                 break;
                         }
 
-                        Context.Instance.Manager.SaveChanges();
+                        BusinessContext.Instance.Manager.SaveChanges();
                     }
                     catch (Exception wx)
                     {
@@ -267,7 +267,7 @@ namespace ZeroMasterData.Pages.Controls
             EntityObject obj = CurrentProduct;
             if (obj.EntityState == EntityState.Modified)
 
-                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, CurrentProduct);
+                BusinessContext.Instance.Manager.Refresh(RefreshMode.StoreWins, CurrentProduct);
             return true;
         }
 
@@ -275,16 +275,16 @@ namespace ZeroMasterData.Pages.Controls
         {
             var t = (int)((Button)sender).DataContext;
             ProductGroup pgroup =
-            Context.Instance.Manager.ProductGroups.First(pg => pg.Code == t);
+            BusinessContext.Instance.Manager.ProductGroups.First(pg => pg.Code == t);
             var pgd = new ProductGroupDetail(pgroup);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
-                Context.Instance.Manager.SaveChanges();
+                BusinessContext.Instance.Manager.SaveChanges();
             }
             else
             {
-                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, pgroup);
+                BusinessContext.Instance.Manager.Refresh(RefreshMode.StoreWins, pgroup);
             }
 
         }
@@ -293,16 +293,16 @@ namespace ZeroMasterData.Pages.Controls
         {
             var t = (int)((Button)sender).DataContext;
             var algo =
-            Context.Instance.Manager.Weights.First(w => w.Code == t);
+            BusinessContext.Instance.Manager.Weights.First(w => w.Code == t);
             var pgd = new WeightDetail(algo);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                Context.Instance.Manager.SaveChanges();
+                BusinessContext.Instance.Manager.SaveChanges();
             }
             else
             {
-                Context.Instance.Manager.Refresh(RefreshMode.StoreWins, algo);
+                BusinessContext.Instance.Manager.Refresh(RefreshMode.StoreWins, algo);
             }
 
         }

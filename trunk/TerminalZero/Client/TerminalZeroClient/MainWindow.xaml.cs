@@ -326,7 +326,7 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            Trace.WriteLineIf(ContextInfo.LogLevel.Level >= level, GetStamp() + message);
+            Trace.WriteLineIf(ConfigurationContext.LogLevel.Level >= level, GetStamp() + message);
         }
 
         #endregion

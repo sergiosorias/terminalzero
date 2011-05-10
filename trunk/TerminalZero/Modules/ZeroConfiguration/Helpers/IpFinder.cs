@@ -19,7 +19,7 @@ namespace ZeroConfiguration.Helpers
         //    }
         //    catch (WebException we)
         //    {
-        //        System.Diagnostics.Trace.WriteIf(ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceError,
+        //        System.Diagnostics.Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceError,
         //                                             string.Format("GetExternalIp on {0} throws-> {0}", we), "Error");
         //        return null;
         //    }

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.MasterData;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -18,7 +18,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             InitializeComponent();
             ProductGroupNew = ProductGroup.CreateProductGroup(
-                    Context.Instance.Manager.ProductGroups.Count(),
+                    BusinessContext.Instance.Manager.ProductGroups.Count(),
                      true);
         }
 

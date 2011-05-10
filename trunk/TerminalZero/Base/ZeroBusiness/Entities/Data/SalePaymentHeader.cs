@@ -4,35 +4,50 @@ using System.Linq;
 using System.Text;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
+using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Manager.Data;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class SalePaymentHeader
+    public partial class SalePaymentHeader : IExportableEntity
     {
+        public SalePaymentHeader()
+        {
+            Code = GetNextSalePaymentHeaderCode();
+            NotReady = true;
+            TerminalToCode = TerminalCode = Terminal.Instance.TerminalCode;
+            TotalQuantity = 0;
+            UpdateStatus(EntityStatus.New);
+        }
+
+        private static int GetNextSalePaymentHeaderCode()
+        {
+            return BusinessContext.Instance.Manager.SalePaymentHeaders.Count();
+        }
+
+        #region Generated Properties
+        
         public double Change
         {
             get
             {
                 var res = TotalQuantity- (SaleHeaders.Count>0? SaleHeaders.Select(sh=>sh.PriceSumValue).Sum():0);
-                return res > 0 ? res : 0;
+                return Math.Round(res > 0 ? res : 0,2);
             }
         }
 
         public double RestToPay
         {
-            get { return SaleHeaders.Count>0? SaleHeaders.Select(sh=>sh.PriceSumValue).Sum() - TotalQuantity:0; }
+            get
+            {
+                return
+                    Math.Round(
+                        SaleHeaders.Count > 0 ? SaleHeaders.Select(sh => sh.PriceSumValue).Sum() - TotalQuantity : 0, 2);
+            }
         }
 
         public bool NotReady { get; set; }
-
-        public SalePaymentHeader()
-        {
-            NotReady = true;
-            Enable = true;
-            Status = (int)EntityStatus.New;
-            TerminalToCode = TerminalCode = Terminal.Instance.TerminalCode;
-            TotalQuantity = 0;
-        }
+        #endregion
 
         public void AddPaymentInstrument(SalePaymentItem payment)
         {
@@ -55,5 +70,20 @@ namespace ZeroBusiness.Entities.Data
             OnPropertyChanged("RestToPay");
             OnPropertyChanged("NotReady");
         }
+
+        #region IExportableEntity Members
+
+        public int TerminalDestination
+        {
+            get { return TerminalToCode; }
+        }
+
+        public void UpdateStatus(EntityStatus status)
+        {
+            Status = (short)status;
+            Stamp = DateTime.Now;
+        }
+
+        #endregion
     }
 }

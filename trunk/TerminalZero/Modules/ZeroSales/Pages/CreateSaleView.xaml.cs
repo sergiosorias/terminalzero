@@ -7,7 +7,7 @@ using System.Web.Security;
 using System.Windows;
 using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Sale;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -39,42 +39,16 @@ namespace ZeroSales.Pages
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                LoadHeader(_saleType, Context.Instance.Manager.SaleHeaders.Count() > 0 ? Context.Instance.Manager.GetNextSaleHeaderCode(Terminal.Instance.TerminalCode) : 1, Terminal.Instance.TerminalCode);
-                Header = _header.SaleType != null &&
-                                       !string.IsNullOrWhiteSpace(_header.SaleType.Description)
-                                           ? _header.SaleType.Description
-                                           : "Venta";
-
-                _header.TerminalToCode = Terminal.Instance.TerminalCode;
+                _header = new SaleHeader(BusinessContext.Instance.Manager.SaleTypes.First(st => st.Code == _saleType));
+                BusinessContext.Instance.Manager.AddToSaleHeaders(_header);
                 DataContext = _header;
             }
-        }
-
-        private void LoadHeader(int saleType, int code, int terminalTo)
-        {
-            _header = SaleHeader.CreateSaleHeader(
-                Terminal.Instance.TerminalCode,
-                code,
-                true,
-                (int)EntityStatus.New,
-                terminalTo,
-                DateTime.Now.Date, 
-                _saleType,false,0,0,0,false,false);
-            ZeroActionParameterBase param =
-                Terminal.Instance.Session.GetParameter<MembershipUser>();
-            if (param != null)
-            {
-                _header.UserCode = (Guid)((MembershipUser)param.Value).ProviderUserKey;
-            }
-            _header.SaleType = Context.Instance.Manager.SaleTypes.FirstOrDefault(st => st.Code == saleType);
-            Context.Instance.Manager.AddToSaleHeaders(_header);
-
         }
 
         public override bool CanAccept(object parameter)
         {
             bool ret = base.CanAccept(parameter);
-            if (ret && _header.ExistsDataToSave())
+            if (ret && _header.HasChanges)
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -105,14 +79,14 @@ namespace ZeroSales.Pages
         private Product validProd;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            validProd = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            validProd = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (validProd == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
                 if (Part != null)
                 {
                     string strCode = Part.Code.ToString();
-                    validProd = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                    validProd = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
                     if (validProd == null)
                     {
                         Part.IsValid = false;
@@ -172,7 +146,8 @@ namespace ZeroSales.Pages
 
                 if (ret)
                 {
-                    //DataModelManager.SaveChanges();
+                    BusinessContext.Instance.Manager.SaveChanges();
+                    GoHomeOrDisable();
                 }
                 // ret = true;
             }
@@ -181,6 +156,7 @@ namespace ZeroSales.Pages
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
                 Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
+                GoHomeOrDisable();
             }
             return ret;
         }

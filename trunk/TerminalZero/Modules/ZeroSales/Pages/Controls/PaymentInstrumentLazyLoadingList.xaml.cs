@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ZeroBusiness.Manager.Sale;
+using ZeroBusiness.Manager.Data;
+
 
 namespace ZeroSales.Pages.Controls
 {
@@ -24,7 +25,7 @@ namespace ZeroSales.Pages.Controls
         public PaymentInstrumentLazyLoadingList()
         {
             InitializeComponent();
-            Loaded += (sender, e) => StartListLoad(Context.Instance.Manager.PaymentInstruments);
+            Loaded += (sender, e) => StartListLoad(BusinessContext.Instance.Manager.PaymentInstruments);
         }
     }
 }

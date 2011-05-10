@@ -86,7 +86,7 @@ namespace ZeroCommonClasses.GlobalObjects
                 catch (Exception ex)
                 {
                     if (Terminal.Instance.CurrentClient != null) Terminal.Instance.CurrentClient.Notifier.SendNotification("Error: " + ex);
-                    Trace.WriteIf(ContextInfo.LogLevel.TraceError,
+                    Trace.WriteIf(ConfigurationContext.LogLevel.TraceError,
                                                      string.Format("{2} on {1} throws-> {0}",ex,ExecuteAction.Method, ExecuteAction.Target.GetType()), "Error");
                 }
             }

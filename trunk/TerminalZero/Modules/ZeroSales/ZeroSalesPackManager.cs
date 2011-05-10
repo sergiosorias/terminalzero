@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Sale;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 
@@ -31,12 +31,17 @@ namespace ZeroSales
         private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = Context.CreateTemporaryManager(this))
+            using (var ent = BusinessContext.CreateTemporaryManager(this))
             {
                 if (packInfo.ContainsTable<SaleHeader>())
                 {
                     ImportSaleHeader(ent, packInfo.GetTable<SaleHeader>());
                     if (packInfo.ContainsTable<SaleItem>()) ImportSaleItem(ent, packInfo.GetTable<SaleItem>());
+                }
+                if (packInfo.ContainsTable<SalePaymentHeader>())
+                {
+                    ImportSalePaymentHeader(ent, packInfo.GetTable<SalePaymentHeader>());
+                    if (packInfo.ContainsTable<SalePaymentItem>()) ImportSalePaymentItem(ent, packInfo.GetTable<SalePaymentItem>());
                 }
                 ent.SaveChanges();
             }
@@ -58,6 +63,25 @@ namespace ZeroSales
             {
                 item.Stamp = DateTime.Now;
                 ent.SaleHeaders.AddObject(item);
+            }
+        }
+
+        private static void ImportSalePaymentItem(DataModelManager ent, IEnumerable<SalePaymentItem> items)
+        {
+            foreach (var item in items)
+            {
+                item.Stamp = DateTime.Now;
+                ent.SalePaymentItems.AddObject(item);
+
+            }
+        }
+
+        private static void ImportSalePaymentHeader(DataModelManager ent, IEnumerable<SalePaymentHeader> items)
+        {
+            foreach (var item in items)
+            {
+                item.Stamp = DateTime.Now;
+                ent.SalePaymentHeaders.AddObject(item);
             }
         }
     }

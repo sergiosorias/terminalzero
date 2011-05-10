@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.MasterData;
+using ZeroBusiness.Manager.Data;
 using ZeroGUI;
 
 namespace ZeroMasterData.Pages.Controls
@@ -28,7 +28,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (WeigthNew == null)
             {
-                WeigthNew = Weight.CreateWeight(Context.Instance.Manager.Weights.Count()
+                WeigthNew = Weight.CreateWeight(BusinessContext.Instance.Manager.Weights.Count()
                     , true, 0);
             }
             grid1.DataContext = WeigthNew;

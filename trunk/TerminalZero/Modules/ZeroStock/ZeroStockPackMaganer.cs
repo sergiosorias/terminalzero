@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Stock;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 
@@ -38,7 +38,7 @@ namespace ZeroStock
         private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = Context.CreateTemporaryManager(this))
+            using (var ent = BusinessContext.CreateTemporaryManager(this))
             {
                 if (packInfo.ContainsTable<StockHeader>())
                 {

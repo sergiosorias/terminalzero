@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Stock;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -30,10 +30,10 @@ namespace ZeroStock.Pages.Controls
             // Do not load your data at design time.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                CurrentDocumentDelivery = Context.Instance.Manager.CreateDeliveryDocumentHeader(Terminal.Instance.TerminalCode);
+                CurrentDocumentDelivery = new DeliveryDocumentHeader();
                 grid1.DataContext = CurrentDocumentDelivery;
-                supplierBox.ItemsSource = Context.Instance.Manager.Suppliers;
-                cbTerminals.ItemsSource = Context.Instance.Manager.GetExportTerminal(Terminal.Instance.TerminalCode);
+                supplierBox.ItemsSource = BusinessContext.Instance.Manager.Suppliers;
+                cbTerminals.ItemsSource = BusinessContext.Instance.Manager.GetExportTerminal(Terminal.Instance.TerminalCode);
             }
         }
 
@@ -66,7 +66,8 @@ namespace ZeroStock.Pages.Controls
                 {
                     try
                     {
-                        Context.Instance.Manager.SaveChanges();
+                        BusinessContext.Instance.Manager.AddToDeliveryDocumentHeaders(CurrentDocumentDelivery);
+                        BusinessContext.Instance.Manager.SaveChanges();
                         return ret;
                     }
                     catch (Exception ex)

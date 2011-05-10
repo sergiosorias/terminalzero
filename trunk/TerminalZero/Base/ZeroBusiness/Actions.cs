@@ -2,6 +2,7 @@
 {
     public class Actions
     {
+        public const string NULL                           = "NULL";
         public const string AppBack                         = "Application@Back";
         public const string AppHome                         = "Application@Home";
         public const string AppExit                         = "Application@Exit";

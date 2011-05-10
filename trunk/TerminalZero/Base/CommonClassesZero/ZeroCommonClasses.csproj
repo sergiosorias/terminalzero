@@ -50,8 +50,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\ContextInfo.cs" />
-    <Compile Include="Context\EntitiesContext.cs" />
+    <Compile Include="Context\ConfigurationContext.cs" />
     <Compile Include="Entities\CommonEntitiesManager.cs" />
     <Compile Include="Entities\CommonModel.Designer.cs">
       <DependentUpon>CommonModel.edmx</DependentUpon>

@@ -8,7 +8,7 @@ using ZeroCommonClasses.Interfaces.Services;
 
 namespace ZeroCommonClasses.Context
 {
-    public static class ContextInfo
+    public static class ConfigurationContext
     {
         public static TraceSwitch LogLevel { get; private set; }
         public static bool IsOnServer { get; private set; }
@@ -17,7 +17,7 @@ namespace ZeroCommonClasses.Context
         public static ConnectionStringSettings UsersConnectionString { get; private set; }
         public static int TerminalCode { get; private set; }
         public static string TerminalName { get; set; }
-        static ContextInfo()
+        static ConfigurationContext()
         {
             ServerConnectionString = ConfigurationManager.ConnectionStrings["TZeroHost.Properties.Settings.ConfigConn"];
             string aux = ConfigurationManager.AppSettings["TerminalZeroClient.Properties.Settings.TerminalCode"];

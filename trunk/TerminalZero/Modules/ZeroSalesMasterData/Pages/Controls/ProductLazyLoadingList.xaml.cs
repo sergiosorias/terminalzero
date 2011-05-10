@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.MasterData;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 
@@ -43,7 +43,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                StartListLoad(Context.Instance.Manager.Products);
+                StartListLoad(BusinessContext.Instance.Manager.Products);
             }
         }
         
