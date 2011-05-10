@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Stock;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
@@ -82,7 +82,7 @@ namespace ZeroStock
             try
             {
                 var manager = new ZeroStockPackMaganer(Terminal.Instance);
-                using (var ent = Context.CreateTemporaryManager(manager))
+                using (var ent = BusinessContext.CreateTemporaryManager(manager))
                 {
                     var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
                     info.TerminalToCodes.AddRange(
@@ -120,24 +120,28 @@ namespace ZeroStock
 
         private void openStockView()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new CurrentStockView();
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openNewStockView()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(0);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void openModifyStockView()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(1);
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }
 
         private void OpenDeliveryNoteView()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new DeliveryDocumentView();
             OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
         }

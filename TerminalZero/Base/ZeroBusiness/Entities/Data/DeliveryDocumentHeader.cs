@@ -1,11 +1,27 @@
 ﻿using System;
+using System.Linq;
+using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Manager.Data;
 
 namespace ZeroBusiness.Entities.Data
 {
     public partial class DeliveryDocumentHeader : IExportableEntity, ISelectable
     {
+        public DeliveryDocumentHeader()
+        {
+            Code = GetNextDocumentHeaderCode();
+            Date = DateTime.Now.Date;
+            TerminalCode = Terminal.Instance.TerminalCode;
+            UpdateStatus(EntityStatus.New);
+        }
+
+        private static int GetNextDocumentHeaderCode()
+        {
+            return BusinessContext.Instance.Manager.DeliveryDocumentHeaders.Count() + 1;
+        }
+
         public int TerminalDestination
         {
             get { return TerminalToCode; }

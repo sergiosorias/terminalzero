@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.MasterData;
+using ZeroBusiness.Manager.Data;
 using ZeroGUI;
 
 namespace ZeroMasterData.Pages.Controls
@@ -15,7 +15,7 @@ namespace ZeroMasterData.Pages.Controls
         public SupplierLazyLoadingList()
         {
             InitializeComponent();
-            Loaded += (sender, e) => StartListLoad(Context.Instance.Manager.Suppliers);
+            Loaded += (sender, e) => StartListLoad(BusinessContext.Instance.Manager.Suppliers);
         }
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)

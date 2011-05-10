@@ -6,7 +6,7 @@ namespace ZeroBusiness.Entities.Configuration
     public class ConfigurationModelManager : Entities
     {
         public ConfigurationModelManager()
-            : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("Configuration.ConfigurationModel"))
+            : base(ZeroCommonClasses.Context.ConfigurationContext.GetConnectionForCurrentEnvironment("Configuration.ConfigurationModel"))
         {
             
         }

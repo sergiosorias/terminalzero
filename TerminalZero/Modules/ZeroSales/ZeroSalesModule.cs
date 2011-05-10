@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using ZeroBusiness;
-using ZeroBusiness.Manager.Sale;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -47,7 +47,7 @@ namespace ZeroSales
                            {
                                ControlToShow = view
                            };
-            Context.BeginOperation();
+            BusinessContext.Instance.BeginOperation();
             OnModuleNotifing(args);
         }
 

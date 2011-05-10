@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Objects;
 using System.Linq;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Entities;
@@ -10,10 +11,9 @@ namespace ZeroBusiness.Entities.Data
     public class DataModelManager : Entities
     {
         internal DataModelManager()
-            : base(ZeroCommonClasses.Context.ContextInfo.GetConnectionForCurrentEnvironment("Data.DataModel"))
+            : base(ZeroCommonClasses.Context.ConfigurationContext.GetConnectionForCurrentEnvironment("Data.DataModel"))
         {
-
-                
+            
         }
 
         private ConfigurationModelManager _confModel;
@@ -29,16 +29,6 @@ namespace ZeroBusiness.Entities.Data
             return ret;
         }
 
-        public int GetNextSaleHeaderCode(int terminal)
-        {
-            return SaleHeaders.Where(hh => hh.TerminalCode == terminal).Max(h => h.Code) + 1;
-        }
-
-        public int GetNextStockHeaderCode()
-        {
-            return StockHeaders.Count() > 0 ? StockHeaders.Max(sh => sh.Code) + 1 : 1;
-        }
-
         public IEnumerable<Terminal> GetExportTerminal(int terminal)
         {
             if (_confModel == null)
@@ -47,40 +37,18 @@ namespace ZeroBusiness.Entities.Data
             return _confModel.Terminals;
         }
 
-        public bool IsDeliveryDocumentMandatory(int stockType)
+        public override int SaveChanges(System.Data.Objects.SaveOptions options)
         {
-            return stockType == 0;
+            foreach (ObjectStateEntry entry in this.ObjectStateManager.GetObjectStateEntries(System.Data.EntityState.Added))
+            {
+                if(entry.Entity is IExportableEntity)
+                {
+                    ((IExportableEntity)entry.Entity).UpdateStatus(EntityStatus.New);
+                }
+            }
+            return base.SaveChanges(options);
         }
 
-        public StockHeader CreateStockHeader(int terminalCode, int stockType, int code, int terminalTo, Guid user)
-        {
-            StockHeader _header = null;
-            _header = StockHeader.CreateStockHeader(
-            terminalCode,
-            code,
-            true,
-            0, terminalTo, DateTime.Now.Date);
-            _header.UserCode = user;
-            _header.StockType = StockTypes.FirstOrDefault(st => st.Code == stockType);
-
-            AddToStockHeaders(_header);
-            return _header;
-        }
-
-        public DeliveryDocumentHeader CreateDeliveryDocumentHeader(int terminalCode)
-        {
-            DeliveryDocumentHeader ret = DeliveryDocumentHeader.CreateDeliveryDocumentHeader(
-                    terminalCode,
-                    DeliveryDocumentHeaders.Count() + 1,
-                    true,
-                    (short)EntityStatus.New,
-                    terminalCode,
-                    DateTime.Now);
-
-            DeliveryDocumentHeaders.AddObject(ret);
-
-            return ret;
-        }
         
     }
 }

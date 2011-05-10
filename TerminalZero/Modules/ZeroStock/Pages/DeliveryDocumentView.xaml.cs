@@ -69,12 +69,13 @@ namespace ZeroStock.Pages
             DeliveryGrid.ApplyFilter(string.Empty, dateFilter.SelectedDate);
         }
 
-        private void DeliveryGrid_Loaded(object sender, RoutedEventArgs e)
+        private void DeliveryGrid_ItemsLoaded(object sender, EventArgs e)
         {
             if (ControlMode == ControlMode.Selection)
             {
                 DeliveryGrid.ApplyFilter(string.Empty, DateTime.Now.Date);
             }
         }
+        
     }
 }

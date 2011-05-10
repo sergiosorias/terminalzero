@@ -33,7 +33,7 @@ namespace ZeroUpdateManager
                 args.Pack.Result = "SQL\n" + outMessage;
             }
 
-            if (args.PackInfo != null && !ContextInfo.IsOnServer)
+            if (args.PackInfo != null && !ConfigurationContext.IsOnServer)
             {
                 string dir = Path.Combine(args.PackInfo.WorkingDirectory, "App");
                 if (Directory.Exists(dir))
@@ -47,7 +47,7 @@ namespace ZeroUpdateManager
         {
             try
             {
-                Directory.Move(dir, Path.Combine(ContextInfo.Directories.UpgradeFolder,packCode.ToString()));
+                Directory.Move(dir, Path.Combine(ConfigurationContext.Directories.UpgradeFolder,packCode.ToString()));
             }
             catch (Exception ex)
             {
@@ -65,7 +65,7 @@ namespace ZeroUpdateManager
                 string lastScript = "";
                 try
                 {
-                    conn = new SqlConnection(ContextInfo.GetConnectionForCurrentEnvironment().ConnectionString);
+                    conn = new SqlConnection(ConfigurationContext.GetConnectionForCurrentEnvironment().ConnectionString);
                     conn.Open();
                     conn.FireInfoMessageEventOnUserErrors = true;
                     conn.InfoMessage += (sender, e) =>

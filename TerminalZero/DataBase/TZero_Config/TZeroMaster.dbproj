@@ -555,9 +555,6 @@
     <Build Include="Schema Objects\Schemas\data\Tables\Keys\SalePaymentItem.FK_SalePaymentItem_SalePaymentHeader.fkey.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\data\Tables\Triggers\SalePaymentItem.TR_SalePaymentItem_UpdateIsPayComplete.trigger.sql">
-      <SubType>Code</SubType>
-    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Scripts\Post-Deployment\InitData\status\Type.sql">

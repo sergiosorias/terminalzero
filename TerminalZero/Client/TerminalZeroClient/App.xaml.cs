@@ -18,7 +18,7 @@ namespace TerminalZeroClient
     {
         public App()
         {
-            var set = new AppDomainSetup { PrivateBinPath = ContextInfo.Directories.ModulesFolder };
+            var set = new AppDomainSetup { PrivateBinPath = ConfigurationContext.Directories.ModulesFolder };
             AppDomain.CreateDomain("Modules folder", null, set);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             ZeroCommonClasses.Terminal.Instance.CurrentClient = new TerminalClient();

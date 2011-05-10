@@ -11,8 +11,8 @@ namespace ZeroCommonClasses
     {
         private Terminal()
         {
-            TerminalCode = ContextInfo.TerminalCode;
-            TerminalName = ContextInfo.TerminalName;
+            TerminalCode = ConfigurationContext.TerminalCode;
+            TerminalName = ConfigurationContext.TerminalName;
             Session = new ZeroSession();
         }
         #region Singleton

@@ -7,7 +7,7 @@ using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Stock;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Barcode;
@@ -36,30 +36,17 @@ namespace ZeroStock.Pages
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                _header = new StockHeader(BusinessContext.Instance.Manager.StockTypes.First(st=>st.Code == _stockType),Terminal.Instance.TerminalCode);
+                Header = _header.ViewTitle;
 
-                Guid g = new Guid();
-                ZeroActionParameterBase param =
-                ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>();
-                if (param != null)
-                {
-                    g = (Guid)((MembershipUser)param.Value).ProviderUserKey;
-                }
-
-                _header = Context.Instance.Manager.CreateStockHeader(Terminal.Instance.TerminalCode, _stockType, Context.Instance.Manager.GetNextStockHeaderCode(), ZeroCommonClasses.Terminal.Instance.TerminalCode, g);
-
-                Header = _header.StockType != null &&
-                                       !string.IsNullOrWhiteSpace(_header.StockType.Description)
-                                           ? _header.StockType.Description
-                                           : "Stock";
-
-                if (Context.Instance.Manager.IsDeliveryDocumentMandatory(_stockType))
+                if (BusinessContext.Instance.IsDeliveryDocumentMandatory(_stockType))
                 {
                     var view = new DeliveryDocumentView();
                     view.ControlMode = ControlMode.Selection;
                     bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
                     {
-                        _header.DeliveryDocumentHeader = (DeliveryDocumentHeader)Context.Instance.Manager.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
+                        _header.DeliveryDocumentHeader = (DeliveryDocumentHeader)BusinessContext.Instance.Manager.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
                         _header.TerminalToCode = _header.DeliveryDocumentHeader.TerminalToCode;
                     }
                     else
@@ -68,16 +55,14 @@ namespace ZeroStock.Pages
                         GoHomeOrDisable();
                     }
                 }
-
             }
-            
         }
 
         public override bool CanAccept(object parameter)
         {
             bool ret = base.CanAccept(parameter);
             
-            if (ret && _header != null && _header.EntityState != EntityState.Unchanged && _header.StockItems != null && _header.StockItems.Count > 0 &&  _header.StockItems.All(si => si.EntityState != EntityState.Unchanged))
+            if (ret && _header != null && _header.HasChanges)
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -103,13 +88,14 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            Product prod = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            Product prod = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (prod == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
                 if (Part != null)
                 {
-                    prod = Context.Instance.Manager.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
+                    string part = Part.Code.ToString();
+                    prod = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == part);
                     if (prod == null)
                     {
                         Part.IsValid = false;
@@ -121,13 +107,13 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeReceived(object sender, BarCodeEventArgs e)
         {
-            Product prod = Context.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            Product prod = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (prod == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
                 if (Part != null)
                 {
-                    prod = Context.Instance.Manager.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
+                    prod = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
                 }
             }
 
@@ -167,7 +153,7 @@ namespace ZeroStock.Pages
                 {
                     _header.DeliveryDocumentHeader.Used = true;
                 }
-                Context.Instance.Manager.SaveChanges();
+                BusinessContext.Instance.Manager.SaveChanges();
                 MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 ret = true;
             }

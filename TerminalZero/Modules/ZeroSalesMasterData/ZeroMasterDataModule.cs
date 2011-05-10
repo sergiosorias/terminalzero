@@ -5,7 +5,7 @@ using System.Threading;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.MasterData;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
@@ -74,7 +74,7 @@ namespace ZeroMasterData
             var P = new ProductsView();
             if (!Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero)) 
                 P.ControlMode = ControlMode.ReadOnly;
-            Context.BeginOperation();
+            BusinessContext.Instance.BeginOperation();
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
@@ -89,14 +89,14 @@ namespace ZeroMasterData
                              Topmost = true,
                              MaxWidth = 600
                          };
-            Context.BeginOperation();
+            BusinessContext.Instance.BeginOperation();
             mb.Show();
         }
 
         private void OpenSupplierView()
         {
             var P = new SupplierView();
-            Context.BeginOperation();
+            BusinessContext.Instance.BeginOperation();
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
@@ -107,7 +107,7 @@ namespace ZeroMasterData
             {
                 P.ControlMode = ControlMode.Update;
             }
-            Context.BeginOperation();
+            BusinessContext.Instance.BeginOperation();
             OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
         }
 
@@ -130,7 +130,7 @@ namespace ZeroMasterData
         private void ExportPackEntryPoint(object o)
         {
             var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
-            using (var ent = Context.CreateTemporaryManager(masterDataPackManager))
+            using (var ent = BusinessContext.CreateTemporaryManager(masterDataPackManager))
             {
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(10);

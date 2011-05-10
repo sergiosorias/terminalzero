@@ -52,6 +52,7 @@ namespace ZeroGUI
         #region Events
         public event EventHandler<ItemActionEventArgs> ItemRemoving;
         public event EventHandler<ItemActionEventArgs> ItemRemoved;
+        public event EventHandler ItemsLoaded;
         #endregion
 
         protected void StartListLoad(IEnumerable items)
@@ -108,11 +109,13 @@ namespace ZeroGUI
             {
                 Items.Add(item);
             }
+            OnItemsLoaded();
         }
 
-        private void _currentItemList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnItemsLoaded()
         {
-            SelectedItem = SelectedItem as EntityObject;
+            if (ItemsLoaded != null)
+                ItemsLoaded(this, EventArgs.Empty);
         }
 
         #region Protected Methods
@@ -135,29 +138,33 @@ namespace ZeroGUI
         #region Public Methods
         public virtual int ApplyFilter(string criteria, params object[] otherCriteriaObjects)
         {
-           Items.Clear();
+            if (_fullItemList != null)
+            {
+                Items.Clear();
 
-            foreach (var item in _fullItemList.OfType<ISelectable>().Where(p => p.Contains(criteria)))
-            {
-                Items.Add(item);
-            }
-            
-            if(otherCriteriaObjects!=null)
-            {
-                foreach (object other in otherCriteriaObjects)
+                foreach (var item in _fullItemList.OfType<ISelectable>().Where(p => p.Contains(criteria)))
                 {
-                    if (other is DateTime)
+                    Items.Add(item);
+                }
+
+                if (otherCriteriaObjects != null)
+                {
+                    foreach (object other in otherCriteriaObjects)
                     {
-                        var date = (DateTime)other;
-                        foreach (var item in _fullItemList.OfType<ISelectable>().Where(p => p.Contains(date)))
+                        if (other is DateTime)
                         {
-                            Items.Add(item);
+                            var date = (DateTime) other;
+                            foreach (var item in _fullItemList.OfType<ISelectable>().Where(p => p.Contains(date)))
+                            {
+                                Items.Add(item);
+                            }
                         }
                     }
                 }
-            }
 
-            return Items.Count;
+                return Items.Count;
+            }
+            return 0;
         }
 
         public virtual void AddItem(EntityObject item)

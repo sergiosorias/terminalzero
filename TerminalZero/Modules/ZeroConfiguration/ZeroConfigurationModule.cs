@@ -281,7 +281,7 @@ namespace ZeroConfiguration
                 action = ZeroCommonClasses.Terminal.Instance.Session.SystemActions[actionName];
                 return true;
             }
-            Trace.WriteLineIf(ContextInfo.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
+            Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
             return false;
         }
         
