@@ -1,0 +1,5 @@
+#summary Links de los diferentes environments del cliente.
+
+= Server =
+
+[http://tzhost.dyndns-server.com/tzserver/ Terminal Zero Server Web]
