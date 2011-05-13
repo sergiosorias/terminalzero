@@ -11,4 +11,4 @@ Aca hay que guardar todo lo que nos sirva a los desarrolladores para tener en cu
  * Sql 2008 (puede ser express)
  * Visual Studio 2010
  * Silverlight 4 SDK
- * Cliente SVN [http: http://code.google.com/p/terminalzero/downloads/list]
+ * Cliente SVN [http://code.google.com/p/terminalzero/downloads/list Downloads]
