@@ -43,7 +43,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                StartListLoad(BusinessContext.Instance.Manager.Products);
+                StartListLoad(BusinessContext.Instance.ModelManager.Products);
             }
         }
         

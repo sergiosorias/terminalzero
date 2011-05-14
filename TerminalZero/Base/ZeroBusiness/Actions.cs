@@ -26,9 +26,14 @@
         public const string OpenModifyStockView             = "Operaciones@Stock@Baja";
         public const string OpenDeliveryNoteView            = "Operaciones@Remitos de salida";
         public const string OpenNewSaleView                 = "Operaciones@Ventas@Nueva";
+        public const string ExecCreateStockFromLastSale     = "Create@Stock from last sale";
 
-        public const string OpenPaymentSelectionView                 = "Operaciones@Ventas@Nueva@PaymentInstrument";
+        public const string OpenPaymentSelectionView        = "Operaciones@Ventas@Nueva@PaymentInstrument";
+
+        
 
         public const string ExecTestImportMasterData        = "Test@Import Master Data";
+        public const string ExecTestChangeActionExecution   = "Test@Change Execution Action";
+        public const string ExecTestActionExecutionOnTrigger = "Test@ActionExecutedOnTrigger";
     }
 }

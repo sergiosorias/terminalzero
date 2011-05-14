@@ -90,8 +90,9 @@ namespace TerminalZeroClient
         private void btnState_Click(object sender, RoutedEventArgs e)
         {
             var win = new MainWindow();
-            win.Show();
             Close();
+            App.Current.MainWindow = win;
+            win.Show();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

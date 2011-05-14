@@ -28,7 +28,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (WeigthNew == null)
             {
-                WeigthNew = Weight.CreateWeight(BusinessContext.Instance.Manager.Weights.Count()
+                WeigthNew = Weight.CreateWeight(BusinessContext.Instance.ModelManager.Weights.Count()
                     , true, 0);
             }
             grid1.DataContext = WeigthNew;

@@ -12,7 +12,7 @@ namespace ZeroGUI.Converters
         private static InvertVisibilityConverter _Instance;
         public static InvertVisibilityConverter Instance
         {
-            get { return _Instance ?? new InvertVisibilityConverter(); }
+            get { return _Instance ?? (_Instance = new InvertVisibilityConverter()); }
         }
         #region IValueConverter Members
 

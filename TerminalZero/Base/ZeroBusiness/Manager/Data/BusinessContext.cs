@@ -1,4 +1,5 @@
 ﻿using System;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Pack;
 
@@ -6,7 +7,7 @@ namespace ZeroBusiness.Manager.Data
 {
     public class BusinessContext
     {
-        public static Entities.Data.DataModelManager CreateTemporaryManager(PackManager owner)
+        public static Entities.Data.DataModelManager CreateTemporaryModelManager(PackManager owner)
         {
             return new Entities.Data.DataModelManager();
         }
@@ -24,21 +25,25 @@ namespace ZeroBusiness.Manager.Data
 
         public void BeginOperation(string actionName)
         {
-            if (_manager != null)
-                try{_manager.Dispose();}catch{}
+            if (_modelManager != null)
+                try{_modelManager.Dispose();}catch{}
             
-            _manager = new Entities.Data.DataModelManager();
+            _modelManager = new Entities.Data.DataModelManager();
         }
 
-        private Entities.Data.DataModelManager _manager;
-        public Entities.Data.DataModelManager Manager
+        private Entities.Data.DataModelManager _modelManager;
+        public Entities.Data.DataModelManager ModelManager
         {
-            get { return _manager; }
+            get { return _modelManager; }
         }
 
-        public bool IsDeliveryDocumentMandatory(int stockType)
+        public static class Rules
         {
-            return stockType == 0;
+            public static bool IsDeliveryDocumentMandatory(int stockType)
+            {
+                return stockType == 0;
+            }    
         }
+        
     }
 }

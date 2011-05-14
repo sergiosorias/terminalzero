@@ -30,10 +30,10 @@ namespace ZeroStock.Pages.Controls
             // Do not load your data at design time.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                CurrentDocumentDelivery = new DeliveryDocumentHeader();
+                CurrentDocumentDelivery = new DeliveryDocumentHeader(Terminal.Instance.TerminalCode);
                 grid1.DataContext = CurrentDocumentDelivery;
-                supplierBox.ItemsSource = BusinessContext.Instance.Manager.Suppliers;
-                cbTerminals.ItemsSource = BusinessContext.Instance.Manager.GetExportTerminal(Terminal.Instance.TerminalCode);
+                supplierBox.ItemsSource = BusinessContext.Instance.ModelManager.Suppliers;
+                cbTerminals.ItemsSource = BusinessContext.Instance.ModelManager.GetExportTerminal(Terminal.Instance.TerminalCode);
             }
         }
 
@@ -66,8 +66,8 @@ namespace ZeroStock.Pages.Controls
                 {
                     try
                     {
-                        BusinessContext.Instance.Manager.AddToDeliveryDocumentHeaders(CurrentDocumentDelivery);
-                        BusinessContext.Instance.Manager.SaveChanges();
+                        BusinessContext.Instance.ModelManager.AddToDeliveryDocumentHeaders(CurrentDocumentDelivery);
+                        BusinessContext.Instance.ModelManager.SaveChanges();
                         return ret;
                     }
                     catch (Exception ex)

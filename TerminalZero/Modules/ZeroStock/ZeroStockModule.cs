@@ -6,8 +6,7 @@ using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Entities;
-using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Pack;
 using ZeroStock.Pages;
 using ZeroStock.Properties;
@@ -24,10 +23,13 @@ namespace ZeroStock
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCurrentStockView, openStockView));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenNewStockView, openNewStockView, Rules.IsTerminalZero));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenModifyStockView, openModifyStockView, Rules.IsTerminalZero));
+            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCurrentStockView, OpenStockView));
+            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenNewStockView, OpenNewStockView, Rules.IsTerminalZero));
+            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenModifyStockView, OpenModifyStockView, Rules.IsTerminalZero));
             Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero));
+            var createStockFromSale = new ZeroTriggerAction(Actions.ExecCreateStockFromLastSale, CreateStockFromSale);
+            createStockFromSale.AddParam(typeof(SaleHeader),true);
+            Terminal.Instance.Session.AddAction(createStockFromSale);
         }
 
         public override void Init()
@@ -44,7 +46,7 @@ namespace ZeroStock
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new ZeroStockPackMaganer(Terminal.Instance);
+            var PackReceived = new ZeroStockPackManager(Terminal.Instance);
             PackReceived.Imported += (o, e) =>
             {
                 try
@@ -64,7 +66,7 @@ namespace ZeroStock
 
         }
 
-        void PackReceived_Imported(object sender, PackProcessingEventArgs e)
+        private void PackReceived_Imported(object sender, PackProcessingEventArgs e)
         {
             Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Info,
                                           string.Format(
@@ -81,18 +83,18 @@ namespace ZeroStock
         {
             try
             {
-                var manager = new ZeroStockPackMaganer(Terminal.Instance);
-                using (var ent = BusinessContext.CreateTemporaryManager(manager))
+                var manager = new ZeroStockPackManager(Terminal.Instance);
+                using (var ent = BusinessContext.CreateTemporaryModelManager(manager))
                 {
                     var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
                     info.TerminalToCodes.AddRange(
                         ent.GetExportTerminal(Terminal.Instance.TerminalCode).Where(
                             t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
 
-                    info.AddTable(ent.StockHeaders.Where(h => h.Status == (int)EntityStatus.New));
-                    info.AddTable(ent.StockItems.Where(h => h.Status == (int)EntityStatus.New));
-                    info.AddTable(ent.DeliveryDocumentHeaders.Where(h => h.Status == (int)EntityStatus.New));
-                    info.AddTable(ent.DeliveryDocumentItems.Where(h => h.Status == (int) EntityStatus.New));
+                    info.AddExportableEntities(ent.StockHeaders);
+                    info.AddExportableEntities(ent.StockItems);
+                    info.AddExportableEntities(ent.DeliveryDocumentHeaders);
+                    info.AddExportableEntities(ent.DeliveryDocumentItems);
 
                     if (info.SomeEntityHasRows)
                     {
@@ -110,40 +112,53 @@ namespace ZeroStock
             {
                 Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
             }
-            finally
-            {
-                
-            }
         }
 
         #region Handlers
 
-        private void openStockView()
+        private void OpenStockView()
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CurrentStockView();
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void openNewStockView()
+        private void OpenNewStockView()
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(0);
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void openModifyStockView()
+        private void OpenModifyStockView()
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(1);
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void OpenDeliveryNoteView()
         {
             BusinessContext.Instance.BeginOperation();
             var view = new DeliveryDocumentView();
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = view });
+            Terminal.Instance.CurrentClient.ShowView(view);
+        }
+
+        private void CreateStockFromSale()
+        {
+            SaleHeader header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;
+
+            StockHeader stockNew =
+                new StockHeader(BusinessContext.Instance.ModelManager.StockTypes.First(st => st.Code == 1),
+                                Terminal.Instance.TerminalCode);
+
+            foreach (SaleItem item in header.SaleItems)
+            {
+                stockNew.AddNewStockItem(item.Product,item.Quantity,item.Batch);    
+            }
+
+            BusinessContext.Instance.ModelManager.AddToStockHeaders(stockNew);
+
         }
 
         #endregion

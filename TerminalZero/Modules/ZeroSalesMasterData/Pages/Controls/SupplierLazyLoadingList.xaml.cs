@@ -15,7 +15,7 @@ namespace ZeroMasterData.Pages.Controls
         public SupplierLazyLoadingList()
         {
             InitializeComponent();
-            Loaded += (sender, e) => StartListLoad(BusinessContext.Instance.Manager.Suppliers);
+            Loaded += (sender, e) => StartListLoad(BusinessContext.Instance.ModelManager.Suppliers);
         }
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)

@@ -45,7 +45,8 @@
             <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="False"/>
             <Label Grid.Row="1" Style="{DynamicResource titleLabelStyle}" Content="Stock por producto"/>
         </Grid>
-        <DataGrid AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Grid.ColumnSpan="2" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs1}}" Name="stockSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid AutoGenerateColumns="False" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs1}}" 
+                  Name="stockSummariesDataGrid" Style="{DynamicResource dataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
@@ -56,7 +57,7 @@
         </DataGrid>
         <Label Grid.Column="0" Grid.Row="2" Style="{StaticResource titleLabelStyle}" Content="Resumen de altas"/>
         <Label Grid.Column="1" Grid.Row="2" Content="Resumen de bajas" Style="{StaticResource titleLabelStyle}"/>
-        <DataGrid AutoGenerateColumns="False" Grid.Row="3" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs2}}" Name="stockCreateSummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid AutoGenerateColumns="False" Grid.Row="3" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs2}}" Name="stockCreateSummariesDataGrid" Style="{DynamicResource dataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn1" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn1" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
@@ -65,8 +66,8 @@
                 <DataGridTextColumn x:Name="productCountColumn1" Binding="{Binding Path=ProductCount}" Header="Unidades" Width="SizeToHeader" />
             </DataGrid.Columns>
         </DataGrid>
-        <GridSplitter Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Width="3" Background="{StaticResource DarkBlueBrushKey}"/>
-        <DataGrid AutoGenerateColumns="False" EnableRowVirtualization="True" IsReadOnly="True" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs3}}" Name="stockModifySummariesDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <GridSplitter Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Width="3" Background="{DynamicResource DarkBlueBrushKey}"/>
+        <DataGrid Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource cvs3}}" Name="stockModifySummariesDataGrid" Style="{DynamicResource dataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="productMasterCodeColumn2" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="nameColumn2" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />

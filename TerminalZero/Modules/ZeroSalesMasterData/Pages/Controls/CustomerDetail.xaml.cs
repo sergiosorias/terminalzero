@@ -35,7 +35,7 @@ namespace ZeroMasterData.Pages.Controls
         public CustomerDetail(int customerCode)
             : this()
         {
-            CurrentCustomer = BusinessContext.Instance.Manager.Customers.First(s => s.Code == customerCode);
+            CurrentCustomer = BusinessContext.Instance.ModelManager.Customers.First(s => s.Code == customerCode);
             ControlMode = ControlMode.Update;
         }
 
@@ -43,13 +43,13 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                taxPositionCodeComboBox.ItemsSource = BusinessContext.Instance.Manager.TaxPositions;
-                paymentInstrumentCodeComboBox.ItemsSource = BusinessContext.Instance.Manager.PaymentInstruments;
+                taxPositionCodeComboBox.ItemsSource = BusinessContext.Instance.ModelManager.TaxPositions;
+                paymentInstrumentCodeComboBox.ItemsSource = BusinessContext.Instance.ModelManager.PaymentInstruments;
                 switch (ControlMode)
                 {
                     case ControlMode.New:
                         CurrentCustomer = Customer.CreateCustomer(
-                            BusinessContext.Instance.Manager.GetNextCustomerCode(), 0
+                            BusinessContext.Instance.ModelManager.GetNextCustomerCode(), 0
                             , true);
                         paymentInstrumentCodeComboBox.SelectedIndex = 0;
                         Header = "Cliente Nuevo";
@@ -78,10 +78,10 @@ namespace ZeroMasterData.Pages.Controls
                 switch (ControlMode)
                 {
                     case ControlMode.New:
-                        BusinessContext.Instance.Manager.AddToCustomers(CurrentCustomer);
+                        BusinessContext.Instance.ModelManager.AddToCustomers(CurrentCustomer);
                         break;
                     case ControlMode.Update:
-                        BusinessContext.Instance.Manager.Customers.ApplyCurrentValues(CurrentCustomer);
+                        BusinessContext.Instance.ModelManager.Customers.ApplyCurrentValues(CurrentCustomer);
                         break;
                     case ControlMode.Delete:
                         break;
@@ -91,7 +91,7 @@ namespace ZeroMasterData.Pages.Controls
                         break;
                 }
 
-                BusinessContext.Instance.Manager.SaveChanges();
+                BusinessContext.Instance.ModelManager.SaveChanges();
             }
 
             return ret;
@@ -101,7 +101,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             EntityObject obj = CurrentCustomer;
             if (obj != null && obj.EntityState == EntityState.Modified)
-                BusinessContext.Instance.Manager.Refresh(RefreshMode.StoreWins, CurrentCustomer);
+                BusinessContext.Instance.ModelManager.Refresh(RefreshMode.StoreWins, CurrentCustomer);
 
             return true;
         }
