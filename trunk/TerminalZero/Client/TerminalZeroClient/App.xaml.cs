@@ -21,7 +21,7 @@ namespace TerminalZeroClient
             var set = new AppDomainSetup { PrivateBinPath = ConfigurationContext.Directories.ModulesFolder };
             AppDomain.CreateDomain("Modules folder", null, set);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            ZeroCommonClasses.Terminal.Instance.CurrentClient = new TerminalClient();
+            ZeroCommonClasses.Terminal.Instance.CurrentClient = new WpfClient();
         }
 
         void App_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)

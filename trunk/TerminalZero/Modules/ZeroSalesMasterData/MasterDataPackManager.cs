@@ -36,7 +36,7 @@ namespace ZeroMasterData
         private static void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = BusinessContext.Instance.Manager)
+            using (var ent = BusinessContext.Instance.ModelManager)
             {
                 ent.MetadataWorkspace.LoadFromAssembly(typeof(DataModelManager).Module.Assembly);
                 

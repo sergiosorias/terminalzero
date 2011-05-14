@@ -8,14 +8,13 @@ using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Context;
-using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroConfiguration.Pages;
 using ZeroConfiguration.Pages.Controls;
 using ZeroConfiguration.Properties;
 using ZeroGUI;
-using ActionParameters = ZeroCommonClasses.GlobalObjects.ActionParameters;
 
 namespace ZeroConfiguration
 {
@@ -40,13 +39,12 @@ namespace ZeroConfiguration
             //actions.Add(new ZeroAction(ActionType.MenuItem, "Reload", (rule) => { OnConfigurationRequired(); }));
             
             SyncAction = new ZeroAction( ActionType.BackgroudAction, Actions.ExecSync, StartSync);
-            SyncAction.Parameters.Add(new ZeroActionParameterBase(typeof(ISyncService), true));
-            SyncAction.Parameters.Add(new ZeroActionParameterBase(ActionParameters.Modules, true));
+            SyncAction.AddParam(typeof(ISyncService), true);
             ZeroCommonClasses.Terminal.Instance.Session.AddAction(SyncAction);
             ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction(ActionType.MenuItem, Actions.OpenPropertiesView, OpenConfiguration));
             ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenUserListView, OpenUsers, Rules.IsValidUser));
             var changePassAction = new ZeroAction( ActionType.MenuItem, Actions.OpenUserPasswordChangeMessage, OpenChangePassword);
-            changePassAction.Parameters.Add(new ZeroActionParameterBase(typeof (MembershipUser), true));
+            changePassAction.AddParam(typeof (MembershipUser), true);
             ZeroCommonClasses.Terminal.Instance.Session.AddAction(changePassAction);
         }
 
@@ -54,11 +52,6 @@ namespace ZeroConfiguration
         {   
             ZeroCommonClasses.Terminal.Instance.Session.AddRule(Rules.IsValidUser, CanOpenConfiguration);
             ZeroCommonClasses.Terminal.Instance.Session.AddRule(Rules.IsTerminalZero, IsTerminalZero);
-        }
-
-        public override string[] GetFilesToSend()
-        {
-            return new string[] { };
         }
 
         public override void Init()
@@ -79,7 +72,8 @@ namespace ZeroConfiguration
         private void OpenLogInDialog()
         {
 #if DEBUG
-            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false, Membership.GetUser(K_administrator, true), false));
+            ActionParameterBase userpParam = new ActionParameter<MembershipUser>(false, Membership.GetUser(K_administrator, true), false);
+            ZeroCommonClasses.Terminal.Instance.Session[userpParam.Name] = userpParam;
 #else
             var view = new UserLogIn();
             bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
@@ -87,7 +81,8 @@ namespace ZeroConfiguration
             {
                 if (Membership.ValidateUser(view.UserName, view.UserPass))
                 {
-                    ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<MembershipUser>(false,Membership.GetUser(view.UserName,true), false));
+                    ZeroActionParameterBase userpParam = new ZeroActionParameter<MembershipUser>(false,Membership.GetUser(view.UserName,true), false)
+                    ZeroCommonClasses.Terminal.Instance.Session[userpParam.Name] = userpParam;
                 }
                 else
                 {
@@ -119,15 +114,11 @@ namespace ZeroConfiguration
             ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
             _sync.SyncStarting += SyncSyncStarting;
             _sync.SyncFinished += _sync_SyncFinished;
-            
-            var sb = new StringBuilder();
-            if (SyncAction.CanExecute(sb))
-                SyncAction.Execute(null);
-            else
-                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(sb.ToString());
+
+            ExecuteAction(SyncAction);
         }
 
-        void _sync_SyncFinished(object sender, EventArgs e)
+        private void _sync_SyncFinished(object sender, EventArgs e)
         {
             using (var conf = new ConfigurationModelManager())
             {
@@ -139,8 +130,8 @@ namespace ZeroConfiguration
         private void SyncSyncStarting(object sender, Synchronizer.SyncStartingEventArgs e)
         {
             e.Notifier = ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier;
-            e.SyncService = ZeroCommonClasses.Terminal.Instance.Session.GetParameter<ISyncService>().Value;
-            e.FileTransferService = ZeroCommonClasses.Terminal.Instance.Session.GetParameter<IFileTransfer>().Value;
+            e.SyncService = (ISyncService)ZeroCommonClasses.Terminal.Instance.Session[typeof(ISyncService)].Value;
+            e.FileTransferService = (IFileTransfer)ZeroCommonClasses.Terminal.Instance.Session[typeof(IFileTransfer)].Value;
             e.Modules = ZeroCommonClasses.Terminal.Instance.CurrentClient.ModuleList;
         }
 
@@ -151,32 +142,34 @@ namespace ZeroConfiguration
 
         private void OpenUsers()
         {
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = new Users() });
+            ZeroCommonClasses.Terminal.Instance.CurrentClient.ShowView(new Users());
+            
         }
 
         private void OpenChangePassword()
         {
             var pswChange = new UserChangePassword();
-            pswChange.DataContext = ZeroCommonClasses.Terminal.Instance.Session.GetParameter<MembershipUser>().Value;
+            pswChange.DataContext = ZeroCommonClasses.Terminal.Instance.Session[typeof(MembershipUser)].Value;
             ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize);
         }
 
         private void OpenConfiguration()
         {
             // ReSharper disable RedundantNameQualifier
-            var P = new Pages.Properties();
+            var view = new Pages.Properties();
             // ReSharper restore RedundantNameQualifier
-            P.UpdateTimeRemaining(_sync);
-            if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
-                P.ControlMode = ControlMode.Update;
+            view.UpdateTimeRemaining(_sync);
+            if (ZeroCommonClasses.Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
+                view.ControlMode = ControlMode.Update;
 
-            OnModuleNotifing(new ModuleNotificationEventArgs { ControlToShow = P });
+            ZeroCommonClasses.Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private bool CanOpenConfiguration(object param)
         {
             bool ret = true;
             
+
             if (param != null)
                 if (param is StringBuilder)
                 {
@@ -240,10 +233,10 @@ namespace ZeroConfiguration
 
         }
 
-        public bool ValidateRule(string ruleName)
+        public bool IsRuleValid(string ruleName)
         {
             return ZeroCommonClasses.Terminal.Instance.Session.SystemRules.ContainsKey(ruleName) &&
-                   ZeroCommonClasses.Terminal.Instance.Session.SystemRules[ruleName].Invoke(null);
+                   ZeroCommonClasses.Terminal.Instance.Session.SystemRules[ruleName](null);
         }
 
         public bool ExecuteAction(ZeroAction action)

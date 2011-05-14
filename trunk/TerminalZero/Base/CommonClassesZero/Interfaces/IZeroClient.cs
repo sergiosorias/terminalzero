@@ -12,6 +12,7 @@ namespace ZeroCommonClasses.Interfaces
         IProgressNotifier Notifier { get; set; }
         List<ZeroModule> ModuleList { get; }
         ZeroMenu MainMenu { get; }
+        void ShowView(object view);
         void Initialize();
     }
 }

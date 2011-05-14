@@ -11,6 +11,7 @@ using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ContextMenu = System.Windows.Forms.ContextMenu;
@@ -25,7 +26,6 @@ namespace TerminalZeroClient
     /// </summary>
     public partial class MainWindow : Window, IProgressNotifier
     {
-        private object _lastViewShown;
         public MainWindow()
         {
             InitializeComponent();
@@ -38,11 +38,9 @@ namespace TerminalZeroClient
             LoadConfigs();
             Terminal.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
             Terminal.Instance.CurrentClient.Notifier = this;
-            Terminal.Instance.CurrentClient.ModuleList.ForEach(m => m.Notifing += m_Notifing);
             try
             {
                 Terminal.Instance.CurrentClient.ModuleList.ForEach(m => m.Init());
-                OpenHome();
             }
             catch (Exception ex)
             {
@@ -78,60 +76,7 @@ namespace TerminalZeroClient
         
         private void OpenHome()
         {
-            var args = new ModuleNotificationEventArgs();
-            args.ControlToShow = new Home();
-            m_Notifing(null, args);
-        }
-
-        private void GoBack()
-        {
-            try
-            {
-                var args = new ModuleNotificationEventArgs();
-                args.ControlToShow = _lastViewShown;
-                m_Notifing(null, args);
-            }
-            catch
-            {
-                OpenHome();
-            }
-            
-        }
-
-        private void m_Notifing(object sender, ModuleNotificationEventArgs e)
-        {
-            if (e.SomethingToShow)
-            {
-                if (e.ControlToShow is ZeroMessageBox)
-                {
-                    ((ZeroMessageBox) e.ControlToShow).Owner = this;
-                    ((ZeroMessageBox) e.ControlToShow).Top = Top + 1;
-                    ((ZeroMessageBox) e.ControlToShow).ShowDialog();
-                }
-                else if (Content is NavigationBasePage)
-                {
-                    if (((NavigationBasePage)PrimaryWindow.Content).CanAccept(null))
-                    {
-                        ShowObject(e);
-                    }
-                }
-                else
-                {
-                    ShowObject(e);
-                }
-                
-            }
-        }
-
-        private void ShowObject(ModuleNotificationEventArgs e)
-        {
-            _lastViewShown = PrimaryWindow.Content;
-            PrimaryWindow.Content = e.ControlToShow;
-            if (e.ControlToShow is UIElement)
-            {
-                bool focus = ((UIElement)e.ControlToShow).Focus();
-                if (focus) ((UIElement) e.ControlToShow).CaptureMouse();
-            }
+            Terminal.Instance.CurrentClient.ShowView(new Home());
         }
 
         private static void InternalBuildMenu(ZeroMenu menu, ItemCollection items)

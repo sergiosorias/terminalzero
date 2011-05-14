@@ -31,19 +31,19 @@ namespace ZeroSales
         private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = BusinessContext.CreateTemporaryManager(this))
+            using (var modelManager = BusinessContext.CreateTemporaryModelManager(this))
             {
                 if (packInfo.ContainsTable<SaleHeader>())
                 {
-                    ImportSaleHeader(ent, packInfo.GetTable<SaleHeader>());
-                    if (packInfo.ContainsTable<SaleItem>()) ImportSaleItem(ent, packInfo.GetTable<SaleItem>());
+                    ImportSaleHeader(modelManager, packInfo.GetTable<SaleHeader>());
+                    if (packInfo.ContainsTable<SaleItem>()) ImportSaleItem(modelManager, packInfo.GetTable<SaleItem>());
                 }
                 if (packInfo.ContainsTable<SalePaymentHeader>())
                 {
-                    ImportSalePaymentHeader(ent, packInfo.GetTable<SalePaymentHeader>());
-                    if (packInfo.ContainsTable<SalePaymentItem>()) ImportSalePaymentItem(ent, packInfo.GetTable<SalePaymentItem>());
+                    ImportSalePaymentHeader(modelManager, packInfo.GetTable<SalePaymentHeader>());
+                    if (packInfo.ContainsTable<SalePaymentItem>()) ImportSalePaymentItem(modelManager, packInfo.GetTable<SalePaymentItem>());
                 }
-                ent.SaveChanges();
+                modelManager.SaveChanges();
             }
         }
 

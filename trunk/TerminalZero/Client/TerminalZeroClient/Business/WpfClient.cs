@@ -4,21 +4,26 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
+using ZeroGUI;
 
 namespace TerminalZeroClient.Business
 {
-    internal class TerminalClient : IZeroClient
+    internal class WpfClient : IZeroClient
     {
-        public TerminalClient()
+        public WpfClient()
         {
             ModuleList = new List<ZeroModule>();
-            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<ISyncService>(false, ConfigurationContext.CreateSyncConnection(), false));
-            ZeroCommonClasses.Terminal.Instance.Session.AddNavigationParameter(new ZeroActionParameter<IFileTransfer>(false,ConfigurationContext.CreateFileTranferConnection(),false));
+            var param1 = new ActionParameter<ISyncService>(false, ConfigurationContext.CreateSyncConnection(), false);
+            var param2 = new ActionParameter<IFileTransfer>(false,ConfigurationContext.CreateFileTranferConnection(),false);
+            Terminal.Instance.Session[param1.Name] = param1;
+            Terminal.Instance.Session[param2.Name] = param2;
         }
 
         public bool Initialized { get; private set; }
@@ -92,6 +97,27 @@ namespace TerminalZeroClient.Business
                 #endregion build menu bar
 
                 return menu;
+            }
+        }
+
+        public void ShowView(object view)
+        {
+            if (view is ZeroMessageBox)
+            {
+                ((ZeroMessageBox)view).Owner = Application.Current.MainWindow;
+                ((ZeroMessageBox)view).Top = Application.Current.MainWindow.Top + 1;
+                ((ZeroMessageBox)view).ShowDialog();
+            }
+            else if (((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content is NavigationBasePage)
+            {
+                if (((NavigationBasePage)((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content).CanAccept(null))
+                {
+                    ((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content = view;
+                }
+            }
+            else
+            {
+                ((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content = view;
             }
         }
 

@@ -11,18 +11,24 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SalePaymentHeader : IExportableEntity
     {
-        public SalePaymentHeader()
+        internal SalePaymentHeader()
+        {
+            
+        }
+
+        public SalePaymentHeader(int terminalToCode)
         {
             Code = GetNextSalePaymentHeaderCode();
             NotReady = true;
-            TerminalToCode = TerminalCode = Terminal.Instance.TerminalCode;
+            TerminalToCode = terminalToCode;
+            TerminalCode = Terminal.Instance.TerminalCode;
             TotalQuantity = 0;
             UpdateStatus(EntityStatus.New);
         }
 
         private static int GetNextSalePaymentHeaderCode()
         {
-            return BusinessContext.Instance.Manager.SalePaymentHeaders.Count();
+            return BusinessContext.Instance.ModelManager.SalePaymentHeaders.Count();
         }
 
         #region Generated Properties

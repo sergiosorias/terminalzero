@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using ZeroCommonClasses.GlobalObjects;
-using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses
 {
@@ -38,13 +36,6 @@ namespace ZeroCommonClasses
         public ModuleStatus UserStatus { get; set; }
         [DataMember]
         public bool? IsActive { get; set; }
-
-        public event EventHandler<ModuleNotificationEventArgs> Notifing;
-        protected void OnModuleNotifing(ModuleNotificationEventArgs args)
-        {
-            if (Notifing != null)
-                Notifing(this, args);
-        }
 
         private string _workingDirectory = "";
         [DataMember]
@@ -87,8 +78,11 @@ namespace ZeroCommonClasses
         /// Returns file list to be send to the Server
         /// </summary>
         /// <returns></returns>
-        public abstract string[] GetFilesToSend();
-
+        public virtual string[] GetFilesToSend()
+        {
+            return new string[] {};
+        }
+        
         /// <summary>
         /// en este momento es donde se cargan y se hacen las cosas necesarias para el modulo
         /// </summary>
@@ -96,8 +90,8 @@ namespace ZeroCommonClasses
 
         public virtual void NewPackReceived(string path)
         {
-            if (ZeroCommonClasses.Terminal.Instance.Session != null && ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier != null)
-                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
+            if (Terminal.Instance.Session != null && Terminal.Instance.CurrentClient.Notifier != null)
+                Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
         }
                 
     }

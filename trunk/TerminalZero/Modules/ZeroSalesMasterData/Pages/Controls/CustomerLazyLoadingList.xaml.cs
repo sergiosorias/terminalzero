@@ -29,7 +29,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LazyLoadingListControl_Loaded(object sender, RoutedEventArgs e)
         {
-            StartListLoad(BusinessContext.Instance.Manager.Customers);
+            StartListLoad(BusinessContext.Instance.ModelManager.Customers);
         }
     }
 }

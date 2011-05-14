@@ -4,10 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using ZeroBusiness;
-using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
-using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 using ZeroGUI;
@@ -71,11 +70,11 @@ namespace ZeroMasterData
 
         private void OpenProductView()
         {
-            var P = new ProductsView();
-            if (!Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero)) 
-                P.ControlMode = ControlMode.ReadOnly;
+            var view = new ProductsView();
+            if (!Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero)) 
+                view.ControlMode = ControlMode.ReadOnly;
             BusinessContext.Instance.BeginOperation();
-            OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void OpenProductMessage()
@@ -95,20 +94,20 @@ namespace ZeroMasterData
 
         private void OpenSupplierView()
         {
-            var P = new SupplierView();
+            var view = new SupplierView();
             BusinessContext.Instance.BeginOperation();
-            OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void OpenCustomerView()
         {
-            var P = new CustomerView();
-            if (Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
+            var view = new CustomerView();
+            if (Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
             {
-                P.ControlMode = ControlMode.Update;
+                view.ControlMode = ControlMode.Update;
             }
             BusinessContext.Instance.BeginOperation();
-            OnModuleNotifing(new ModuleNotificationEventArgs {ControlToShow = P});
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void ExportMasterDataPack()
@@ -130,22 +129,22 @@ namespace ZeroMasterData
         private void ExportPackEntryPoint(object o)
         {
             var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
-            using (var ent = BusinessContext.CreateTemporaryManager(masterDataPackManager))
+            using (var modelManager = BusinessContext.CreateTemporaryModelManager(masterDataPackManager))
             {
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(10);
                 //TODO:
                 //Fijarse si se puede hacer dinamica la carga del paquete.
                 var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                info.AddTable(ent.Prices);
-                info.AddTable(ent.Weights);
-                info.AddTable(ent.PaymentInstruments);
-                info.AddTable(ent.ProductGroups);
-                info.AddTable(ent.Taxes);
-                info.AddTable(ent.TaxPositions);
-                info.AddTable(ent.Suppliers);
-                info.AddTable(ent.Products);
-                info.AddTable(ent.Customers);
+                info.AddEntities(modelManager.Prices);
+                info.AddEntities(modelManager.Weights);
+                info.AddEntities(modelManager.PaymentInstruments);
+                info.AddEntities(modelManager.ProductGroups);
+                info.AddEntities(modelManager.Taxes);
+                info.AddEntities(modelManager.TaxPositions);
+                info.AddEntities(modelManager.Suppliers);
+                info.AddEntities(modelManager.Products);
+                info.AddEntities(modelManager.Customers);
 
                 using (masterDataPackManager)
                 {

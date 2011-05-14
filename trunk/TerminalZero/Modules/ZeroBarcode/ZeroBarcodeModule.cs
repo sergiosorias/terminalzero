@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Media;
-using ZeroBarcode.Pages.Controls;
+﻿using ZeroBarcode.Pages;
 using ZeroBarcode.Properties;
 using ZeroBusiness;
 using ZeroCommonClasses;
-using ZeroCommonClasses.GlobalObjects;
-using ZeroCommonClasses.Interfaces;
-using ZeroGUI;
+using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroBarcode
 {
@@ -19,7 +11,7 @@ namespace ZeroBarcode
         public ZeroBarcodeModule()
             :base(6,Resources.BarcodeModuleDescription)
         {
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenBarcodeGeneratorView, OpenCodebarView));
+            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenBarcodeGeneratorView, OpenCodebarView));
         }
 
         public override string[] GetFilesToSend()
@@ -35,9 +27,7 @@ namespace ZeroBarcode
         #region Handlers
         private void OpenCodebarView()
         {
-            ModuleNotificationEventArgs args = new ModuleNotificationEventArgs
-                                                   {ControlToShow = new Pages.BarcodePrintView()};
-            OnModuleNotifing(args);
+            Terminal.Instance.CurrentClient.ShowView(new BarcodePrintView());
         }
         #endregion
     }

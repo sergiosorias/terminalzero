@@ -87,7 +87,7 @@ namespace ZeroConfiguration
             Session = session;
             SyncEvery = LoadSyncRecurrence(Context);
             Steps.Add(ExecuteHelloCommand);
-            if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
+            if (ZeroCommonClasses.Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
             {
                 Steps.Add(SendTerminals);
                 Steps.Add(SendModules);
@@ -385,7 +385,7 @@ namespace ZeroConfiguration
             Config.Notifier.SetProcess("Enviando datos");
             Config.Notifier.SetUserMessage(false, "Enviando datos sobre módulos actuales al servidor.");
             string modulesToSend;
-            if (ZeroCommonClasses.Terminal.Instance.Manager.ValidateRule(Rules.IsTerminalZero))
+            if (ZeroCommonClasses.Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
             {
                 modulesToSend = ContextExtentions.GetEntitiesAsXMLObjectList(CurrentContext.Modules);
             }

@@ -29,7 +29,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextSaleHeaderCode(int terminal)
         {
-            var list = BusinessContext.Instance.Manager.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Select(sh=>sh.Code);
+            var list = BusinessContext.Instance.ModelManager.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Select(sh=>sh.Code);
             if(list.Count()>0)
             {
                 return list.Max() + 1;

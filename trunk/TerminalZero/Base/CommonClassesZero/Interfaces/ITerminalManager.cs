@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroCommonClasses.Interfaces
 {
@@ -11,7 +12,7 @@ namespace ZeroCommonClasses.Interfaces
         ModuleStatus GetModuleStatus(ZeroModule module);
         List<ZeroAction> GetShorcutActions();
         List<ZeroAction> BuilSessionActions();
-        bool ValidateRule(string ruleName);
+        bool IsRuleValid(string ruleName);
         bool ExecuteAction(ZeroAction action);
         bool ExistsAction(string actionName, out ZeroAction action);
     }

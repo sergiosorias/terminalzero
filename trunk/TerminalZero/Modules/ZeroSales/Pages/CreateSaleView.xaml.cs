@@ -39,8 +39,8 @@ namespace ZeroSales.Pages
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                _header = new SaleHeader(BusinessContext.Instance.Manager.SaleTypes.First(st => st.Code == _saleType));
-                BusinessContext.Instance.Manager.AddToSaleHeaders(_header);
+                _header = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == _saleType));
+                BusinessContext.Instance.ModelManager.AddToSaleHeaders(_header);
                 DataContext = _header;
             }
         }
@@ -79,14 +79,14 @@ namespace ZeroSales.Pages
         private Product validProd;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            validProd = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (validProd == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
                 if (Part != null)
                 {
                     string strCode = Part.Code.ToString();
-                    validProd = BusinessContext.Instance.Manager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                    validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
                     if (validProd == null)
                     {
                         Part.IsValid = false;
@@ -138,7 +138,7 @@ namespace ZeroSales.Pages
             try
             {
                 
-                var paymentCurrentSale = new SalePaymentHeader();
+                var paymentCurrentSale = new SalePaymentHeader(Terminal.Instance.TerminalCode);
                 _header.SalePaymentHeader = paymentCurrentSale;
                 SalePaymentView salePaymentview = new SalePaymentView(_header);
                 salePaymentview.DataContext = paymentCurrentSale;
@@ -146,7 +146,9 @@ namespace ZeroSales.Pages
 
                 if (ret)
                 {
-                    BusinessContext.Instance.Manager.SaveChanges();
+                    Terminal.Instance.Session[typeof (SaleHeader)] =
+                        new ZeroCommonClasses.GlobalObjects.Actions.ActionParameter<SaleHeader>(true, _header, true);
+                    BusinessContext.Instance.ModelManager.SaveChanges();
                     GoHomeOrDisable();
                 }
                 // ret = true;

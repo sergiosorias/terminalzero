@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using ZeroCommonClasses.Context;
 
-namespace ZeroCommonClasses.GlobalObjects
+namespace ZeroCommonClasses.GlobalObjects.Actions
 {
     public class ZeroAction : ICommand
     {
@@ -15,21 +15,21 @@ namespace ZeroCommonClasses.GlobalObjects
             if (Finished != null)
                 Finished(this, EventArgs.Empty);
         }
-        public ZeroSession Session { get; private set; }
         public ActionType ActionType { get; private set; }
         public string Name { get; private set; }
         public string Alias { get; private set; }
         public string RuleToSatisfyName { get; private set; }
         public Predicate<object> RuleToSatisfy { get; set; }
         public Action ExecuteAction { get; private set; }
-        public List<ZeroActionParameterBase> Parameters { get; private set; }
+        protected List<ActionParameterBase> Parameters { get; set; }
+
         private bool _canExecute;
         public ZeroAction(ActionType actionType, string name, Action executeAction)
         {
             ActionType = actionType;
             Name = name;
             ExecuteAction = executeAction;
-            Parameters = new List<ZeroActionParameterBase>();
+            Parameters = new List<ActionParameterBase>();
         }
 
         public ZeroAction(ActionType actionType, string name, Action executeAction, string ruleToSatisfy)
@@ -46,29 +46,26 @@ namespace ZeroCommonClasses.GlobalObjects
 
         #region ICommand Members
 
-        public bool CanExecute(object parameter)
+        public virtual bool CanExecute(object parameter)
         {
             StringBuilder sb;
             if (parameter is StringBuilder)
                 sb = parameter as StringBuilder;
             else
-                sb = sb = new StringBuilder();
+                sb = new StringBuilder();
 
-            if (RuleToSatisfyName == null && RuleToSatisfy == null)
+            _canExecute = ValidateActionParams(sb);
+
+            if (_canExecute && RuleToSatisfy != null)
             {
-                _canExecute = true;
+                _canExecute = RuleToSatisfy(sb);
             }
-            else if(RuleToSatisfyName != null && RuleToSatisfy == null)
+            else if (_canExecute && RuleToSatisfyName != null)
             {
                 _canExecute = false;
             }
-            else
-            {
-                _canExecute = Session != null
-                                  ? (ValidateActionParams(sb) && RuleToSatisfy.Invoke(sb))
-                                  : RuleToSatisfy.Invoke(sb);
-            }
             
+            ///TODO: log sb result if false
             return _canExecute;
         }
 
@@ -78,28 +75,21 @@ namespace ZeroCommonClasses.GlobalObjects
         {
             if (_canExecute)
             {
-                try
-                {
-                    ExecuteAction();
-                    OnFinished();
-                }
-                catch (Exception ex)
-                {
-                    if (Terminal.Instance.CurrentClient != null) Terminal.Instance.CurrentClient.Notifier.SendNotification("Error: " + ex);
-                    Trace.WriteIf(ConfigurationContext.LogLevel.TraceError,
-                                                     string.Format("{2} on {1} throws-> {0}",ex,ExecuteAction.Method, ExecuteAction.Target.GetType()), "Error");
-                }
+                ExecuteAction();
+                OnFinished();
             }
         }
+
+        #endregion
 
         private bool ValidateActionParams(StringBuilder result)
         {
             bool ret = true;
-            ZeroActionParameterBase obj = null;
+            ActionParameterBase obj = null;
             foreach (var item in Parameters)
             {
-                if (Session.SessionParams.ContainsKey(item.Name))
-                    obj = Session.SessionParams[item.Name];
+                if (Terminal.Instance.Session.SessionParams.ContainsKey(item.Name))
+                    obj = Terminal.Instance.Session.SessionParams[item.Name];
 
                 if ((obj == null || obj.Value == null) && item.IsMandatory)
                 {
@@ -113,8 +103,6 @@ namespace ZeroCommonClasses.GlobalObjects
             return ret;
         }
 
-        #endregion
-
         public void SetAlias(string[] nameParts)
         {
             if (nameParts.Length > 1)
@@ -125,6 +113,16 @@ namespace ZeroCommonClasses.GlobalObjects
             {
                 Alias = nameParts[0].Substring(nameParts[0].LastIndexOf('@') + 1).Trim(); ;
             }
+        }
+
+        public void AddParam(string name, bool isMandatory)
+        {
+            Parameters.Add(new ActionParameterBase(name,isMandatory,false));
+        }
+
+        public void AddParam(Type type, bool isMandatory)
+        {
+            Parameters.Add(new ActionParameterBase(type, isMandatory,false));
         }
     }
 }

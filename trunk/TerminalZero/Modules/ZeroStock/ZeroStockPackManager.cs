@@ -11,9 +11,9 @@ using ZeroCommonClasses.Pack;
 
 namespace ZeroStock
 {
-    public class ZeroStockPackMaganer : PackManager
+    public class ZeroStockPackManager : PackManager
     {
-        public ZeroStockPackMaganer(ITerminal termminal)
+        public ZeroStockPackManager(ITerminal termminal)
             : base(termminal)
         {
             
@@ -38,7 +38,7 @@ namespace ZeroStock
         private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = BusinessContext.CreateTemporaryManager(this))
+            using (var ent = BusinessContext.CreateTemporaryModelManager(this))
             {
                 if (packInfo.ContainsTable<StockHeader>())
                 {

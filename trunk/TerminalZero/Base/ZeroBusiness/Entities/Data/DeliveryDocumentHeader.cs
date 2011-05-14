@@ -9,17 +9,22 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class DeliveryDocumentHeader : IExportableEntity, ISelectable
     {
-        public DeliveryDocumentHeader()
+        internal DeliveryDocumentHeader()
+        {
+            
+        }
+        public DeliveryDocumentHeader(int terminalToCode)
         {
             Code = GetNextDocumentHeaderCode();
             Date = DateTime.Now.Date;
             TerminalCode = Terminal.Instance.TerminalCode;
+            TerminalToCode = terminalToCode;
             UpdateStatus(EntityStatus.New);
         }
 
         private static int GetNextDocumentHeaderCode()
         {
-            return BusinessContext.Instance.Manager.DeliveryDocumentHeaders.Count() + 1;
+            return BusinessContext.Instance.ModelManager.DeliveryDocumentHeaders.Count() + 1;
         }
 
         public int TerminalDestination

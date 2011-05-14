@@ -9,8 +9,8 @@
     <Grid>
 
         <Grid Grid.Row="1">
-            <DataGrid AutoGenerateColumns="True" IsReadOnly="True" EnableRowVirtualization="True" HorizontalAlignment="Stretch" ItemsSource="{Binding}" 
-                      Name="users" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid HorizontalAlignment="Stretch" ItemsSource="{Binding}" 
+                      Name="users" Style="{DynamicResource dataGridStyle}">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="userNameColumn" Binding="{Binding Path=UserName, Mode=OneWay}" Header="Nombre" Width="150" />
                     <DataGridTextColumn x:Name="emailColumn" Binding="{Binding Path=Email}" Header="E-Mail" Width="250" />

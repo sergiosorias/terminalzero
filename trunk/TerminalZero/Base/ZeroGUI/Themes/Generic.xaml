@@ -3,49 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ZeroGUI">
 
-    <Style TargetType="{x:Type local:LazyLoadingListControl}">
-        <Setter Property="EnableRowVirtualization" Value="True"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="IsReadOnly" Value="True"/>
-        <Setter Property="SelectionUnit" Value="FullRow"/>
-        <Setter Property="SelectionMode" Value="Single"/>
-        <Setter Property="AutoGenerateColumns" Value="False"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="RowDetailsVisibilityMode" Value="Collapsed"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="ClipboardCopyMode" Value="IncludeHeader"/>
-        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="#FF2D6076"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="AlternatingRowBackground" Value="#D2DFEB"/>
-        <Setter Property="CellStyle">
-            <Setter.Value>
-                <Style TargetType="DataGridCell">
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#FCF2E9BA"/>
-                            <Setter Property="Foreground" Value="Black"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsReadOnly" Value="True">
-                <Setter Property="Foreground" Value="Black"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="{x:Type DataGridColumnHeader}" TargetType="DataGridColumnHeader">
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-    </Style>
-
     <Style TargetType="{x:Type local:NavigationBasePage}">
         <Setter Property="Background" Value="{DynamicResource mainBackground}"/>
         <Setter Property="BorderThickness" Value="2"/>

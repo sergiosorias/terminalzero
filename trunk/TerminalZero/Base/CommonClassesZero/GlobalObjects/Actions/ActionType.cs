@@ -1,4 +1,4 @@
-﻿namespace ZeroCommonClasses.GlobalObjects
+﻿namespace ZeroCommonClasses.GlobalObjects.Actions
 {
     public enum ActionType
     {

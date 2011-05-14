@@ -75,7 +75,7 @@
     </Compile>
     <Compile Include="ZeroStockModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZeroStockPackMaganer.cs" />
+    <Compile Include="ZeroStockPackManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Base\CommonClassesZero\ZeroCommonClasses.csproj">

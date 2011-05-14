@@ -9,10 +9,10 @@ namespace ZeroGUI.Converters
 {
     public class BoolToVisibilityConverter :IValueConverter
     {
-        private static BoolToVisibilityConverter _Instance;
+        private static BoolToVisibilityConverter _instance;
         public static BoolToVisibilityConverter Instance
         {
-            get { return _Instance ?? new BoolToVisibilityConverter(); }
+            get { return _instance ??  (_instance =  new BoolToVisibilityConverter()); }
         }
         #region IValueConverter Members
 

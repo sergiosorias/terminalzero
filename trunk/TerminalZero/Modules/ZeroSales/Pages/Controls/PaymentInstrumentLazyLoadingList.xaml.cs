@@ -25,7 +25,7 @@ namespace ZeroSales.Pages.Controls
         public PaymentInstrumentLazyLoadingList()
         {
             InitializeComponent();
-            Loaded += (sender, e) => StartListLoad(BusinessContext.Instance.Manager.PaymentInstruments);
+            Loaded += (sender, e) => StartListLoad(BusinessContext.Instance.ModelManager.PaymentInstruments);
         }
     }
 }
