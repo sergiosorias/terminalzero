@@ -51,7 +51,7 @@ namespace TZeroHost.Classes
                 {
                     if (packManager != null)
                     {
-                        Trace.WriteIf(ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceInfo, string.Format("Starting import: ConnID = {0}", data.ConnId), "Information");
+                        Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceInfo, string.Format("Starting import: ConnID = {0}", data.ConnId), "Information");
                         packManager.ConnectionID = data.ConnId;
                         packManager.Imported += a_Imported;
                         packManager.Error += a_Error;
@@ -61,7 +61,7 @@ namespace TZeroHost.Classes
                         }
                         catch (Exception ex)
                         {
-                            Trace.WriteIf(ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceError, string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnId, ex), "EXCEPTION");
+                            Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceError, string.Format("Import EXCEPTION: ConnID = {0}, ERROR = {1}", data.ConnId, ex), "EXCEPTION");
                         }
                         finally
                         {
@@ -85,7 +85,7 @@ namespace TZeroHost.Classes
 
         private void a_Imported(object sender, PackProcessingEventArgs e)
         {
-            Trace.WriteIf(ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceInfo,
+            Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceInfo,
                 string.Format("Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}",
                               e.ConnectionID, e.Pack.Code, e.PackInfo != null ? e.PackInfo.ModuleCode : -1,
                               (PackManager.PackStatus)e.Pack.PackStatusCode), "Information");
@@ -101,7 +101,7 @@ namespace TZeroHost.Classes
                         {
                             foreach (var item in ent.Terminals.Where(t => t.Code != e.PackInfo.TerminalCode))
                             {
-                                Trace.WriteIf(ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", item.Code), "Verbose");
+                                Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", item.Code), "Verbose");
                                 PackPending pp = PackPending.CreatePackPending(e.Pack.Code, item.Code);
                                 pp.Stamp = DateTime.Now;
                                 packEnt.PackPendings.AddObject(pp);
@@ -123,7 +123,7 @@ namespace TZeroHost.Classes
                                 {
                                     if (ent.Terminals.FirstOrDefault(t => t.Code == terminal) != null)
                                     {
-                                        Trace.WriteIf(ZeroCommonClasses.Context.ContextInfo.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", terminal), "Verbose");
+                                        Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceVerbose, string.Format("Saved to Pendings of Terminal {0}", terminal), "Verbose");
                                         PackPending pp = PackPending.CreatePackPending(e.Pack.Code, terminal);
                                         pp.Stamp = DateTime.Now;
                                         packEnt.PackPendings.AddObject(pp);
