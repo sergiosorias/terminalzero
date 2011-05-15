@@ -15,10 +15,10 @@ namespace TZeroHost.Classes
             {
             }
 
-            private static ServerTerminal _Instance;
+            private static ServerTerminal _instance;
             public static ServerTerminal Instance
             {
-                get { return _Instance ?? (_Instance = new ServerTerminal()); }
+                get { return _instance ?? (_instance = new ServerTerminal()); }
             }
 
             
@@ -103,10 +103,15 @@ namespace TZeroHost.Classes
                     manager = new MasterDataPackManager(ServerTerminal.Instance);
                     break;
                 case 4:
-                    manager = new ZeroStock.ZeroStockPackMaganer(ServerTerminal.Instance);
+                    manager = new ZeroStock.ZeroStockPackManager(ServerTerminal.Instance);
                     break;
                 case 5:
                     manager = new ZeroUpdateManager.UpdateManagerPackManager(ServerTerminal.Instance);
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    manager = new ZeroSales.ZeroSalesPackManager(ServerTerminal.Instance);
                     break;
                 default:
                     manager = PackManager.GetDefaultManager();
