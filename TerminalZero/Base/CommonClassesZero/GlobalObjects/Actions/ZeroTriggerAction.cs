@@ -10,23 +10,17 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
     /// </summary>
     public class ZeroTriggerAction : ZeroAction
     {
-        public ZeroTriggerAction(string name, Action action)
-            :base(ActionType.BackgroudAction,name,action)
+        public ZeroTriggerAction(string name, Action action, string ruleToSatisfy)
+            :base(name,action,ruleToSatisfy,false)
         {
-            CanExecuteChanged += ZeroTriggerAction_CanExecuteChanged;    
+            
         }
 
-        /// <summary>
-        /// This method wil execute the action after the CanExecute returns true.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ZeroTriggerAction_CanExecuteChanged(object sender, EventArgs e)
+        public override void RaiseCanExecuteChanged()
         {
+            base.RaiseCanExecuteChanged();
             if(CanExecute(null))
-            {
                 Execute(null);
-            }
         }
 
     }

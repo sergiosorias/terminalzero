@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ZeroGUI="clr-namespace:ZeroGUI;assembly=ZeroGUI" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Focusable="False" IsEnabled="False" MaxHeight="250"
+             xmlns:Data="clr-namespace:ZeroBusiness.Manager.Data;assembly=ZeroBusiness"
+            ItemsSource="{Binding Path=ModelManager.PaymentInstruments,Source={x:Static Data:BusinessContext.Instance}}"
                 >
     <DataGrid.Columns>
         <DataGridTextColumn x:Name="codeColumn" Binding="{Binding Path=Code}" Header="Código" Width="SizeToHeader" />

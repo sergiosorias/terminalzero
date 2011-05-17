@@ -68,9 +68,7 @@ namespace ZeroBusiness.Entities.Configuration
                 configurationModelManager.SaveChanges();
             }
         }
-
         
-
 
     }
 }

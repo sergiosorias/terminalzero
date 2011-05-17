@@ -1,12 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ZeroBusiness;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
-using ZeroCommonClasses.Interfaces;
 
 namespace ZeroGUI
 {
@@ -32,8 +28,8 @@ namespace ZeroGUI
                 
             }
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            _acceptAction = new ZeroAction( ActionType.BackgroudAction, "cancel", Accept);
-            _cancelAction = new ZeroAction( ActionType.BackgroudAction, "accept", Cancel);
+            _acceptAction = new ZeroBackgroundAction("cancel", Accept, null,false,false);
+            _cancelAction = new ZeroBackgroundAction("accept", Cancel, null, false, false);
             btnAccept.Command = ShortCutAccept.Command = _acceptAction;
             btnCancel.Command = ShortCutCancel.Command = _cancelAction;
             
@@ -55,18 +51,18 @@ namespace ZeroGUI
             set
             {
                 contentpress.Content = value;
-                if(Content is UserControl)
+                if(Content is Control)
                 {
-                    ((UserControl) Content).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
-                    ((UserControl)Content).HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                    ((UserControl)Content).VerticalContentAlignment = VerticalAlignment.Stretch;
+                    ((Control)Content).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
+                    ((Control)Content).HorizontalContentAlignment = HorizontalAlignment.Stretch;
+                    ((Control)Content).VerticalContentAlignment = VerticalAlignment.Stretch;
                 }
                 if(Content is NavigationBasePage)
                 {
                     _acceptAction.RuleToSatisfy = ((NavigationBasePage)value).CanAccept;
                     _cancelAction.RuleToSatisfy = ((NavigationBasePage)value).CanCancel;
                     lblCaption.Visibility = Visibility.Collapsed;
-                    if (ResizeMode == System.Windows.ResizeMode.NoResize)
+                    if (ResizeMode == ResizeMode.NoResize)
                     {
                         Background = Brushes.Transparent;
                         AllowsTransparency = true;
@@ -124,7 +120,7 @@ namespace ZeroGUI
         {
             if (Content is NavigationBasePage)
             {
-                this.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }
             else
             {

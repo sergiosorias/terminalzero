@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using ZeroBusiness.Entities.Data;
 using ZeroGUI;
+using ZeroGUI.Classes;
 using ZeroSales.Pages.Controls;
 
 namespace ZeroSales.Pages
@@ -23,7 +12,7 @@ namespace ZeroSales.Pages
     public partial class SalePaymentView : NavigationBasePage
     {
         public double TotalValue { get; set; }
-        private SaleHeader _sale;
+        public SaleHeader Sale { get; set;}
         private SalePaymentHeader SalePaymentHeader
         {
             get { return (SalePaymentHeader) DataContext; }
@@ -32,7 +21,7 @@ namespace ZeroSales.Pages
         public SalePaymentView(SaleHeader sale)
         {
             InitializeComponent();
-            _sale = sale;
+            Sale = sale;
             TotalValue = sale.PriceSumValue;
         }
 
@@ -43,12 +32,12 @@ namespace ZeroSales.Pages
 
         private void addPaymentInstrument_Click(object sender, RoutedEventArgs e)
         {
-            var paymentInstrument = new PaymentInstrumentSelection(_sale);
+            var paymentInstrument = new PaymentInstrumentSelection(Sale);
             paymentInstrument.SelectedQuantity = SalePaymentHeader.RestToPay;
             bool ret = ZeroMessageBox.Show(paymentInstrument, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
             if (ret)
             {
-                SalePaymentItem newItem = new SalePaymentItem(SalePaymentHeader,paymentInstrument.SelectedItem,paymentInstrument.SelectedQuantity);
+                var newItem = new SalePaymentItem(SalePaymentHeader,paymentInstrument.SelectedItem,paymentInstrument.SelectedQuantity);
                 SalePaymentHeader.AddPaymentInstrument(newItem);
                 paymentitemsList.AddItem(newItem);
             }
@@ -66,14 +55,19 @@ namespace ZeroSales.Pages
             return base.CanCancel(parameter);
         }
 
-        private void paymentitemsList_ItemRemoving(object sender, ZeroGUI.Classes.ItemActionEventArgs e)
+        private void paymentitemsList_ItemRemoving(object sender, ItemActionEventArgs e)
         {
 
         }
 
-        private void paymentitemsList_ItemRemoved(object sender, ZeroGUI.Classes.ItemActionEventArgs e)
+        private void paymentitemsList_ItemRemoved(object sender, ItemActionEventArgs e)
         {
             SalePaymentHeader.RemovePaymentInstrument((SalePaymentItem)e.Item);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Sale.PrintMode = Sale.PrintMode.HasValue && Sale.PrintMode.Value == 0 ? 1 : 0;
         }
         
     }

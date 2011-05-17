@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:myControls="clr-namespace:ZeroMasterData.Pages.Controls"
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-             mc:Ignorable="d">
+             mc:Ignorable="d" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeroBusiness.Events;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
@@ -11,6 +12,14 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SalePaymentHeader : IExportableEntity
     {
+        public event EventHandler<ItemsCollectionChangeEventArgs<SalePaymentItem>> ItemsCollectionChanged;
+
+        private void InvokeItemsCollectionChanged(ItemsCollectionChangeEventArgs<SalePaymentItem> e)
+        {
+            EventHandler<ItemsCollectionChangeEventArgs<SalePaymentItem>> handler = ItemsCollectionChanged;
+            if (handler != null) handler(this, e);
+        }
+
         internal SalePaymentHeader()
         {
             
@@ -60,6 +69,7 @@ namespace ZeroBusiness.Entities.Data
             SalePaymentItems.Add(payment);
             TotalQuantity = SalePaymentItems.Select(pi => pi.Quantity).Sum();
             UpdateViewProperties();
+            InvokeItemsCollectionChanged(new ItemsCollectionChangeEventArgs<SalePaymentItem>(payment));
         }
 
         public void RemovePaymentInstrument(SalePaymentItem payment)
@@ -67,6 +77,7 @@ namespace ZeroBusiness.Entities.Data
             SalePaymentItems.Remove(payment);
             TotalQuantity = SalePaymentItems.Select(pi => pi.Quantity).Sum();
             UpdateViewProperties();
+            InvokeItemsCollectionChanged(new ItemsCollectionChangeEventArgs<SalePaymentItem>(payment));
         }
 
         private void UpdateViewProperties()

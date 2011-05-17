@@ -12,9 +12,10 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SaleHeader : IExportableEntity
     {
+        private bool _printModeForced = false;
         internal SaleHeader()
         {
-            
+                
         }
 
         public SaleHeader(SaleType type)
@@ -24,7 +25,7 @@ namespace ZeroBusiness.Entities.Data
             Enable = true;
             SaleType = type;
             Date = DateTime.Now;
-            UserCode = User.GetCurrentUserCode();
+            UserCode = User.GetCurrentUser().Code;
         }
 
         private static int GetNextSaleHeaderCode(int terminal)
@@ -35,6 +36,20 @@ namespace ZeroBusiness.Entities.Data
                 return list.Max() + 1;
             }
             return 1;
+        }
+
+        partial void OnSalePaymentHeaderCodeChanged()
+        {
+            if(SalePaymentHeader!=null)
+            {
+                SalePaymentHeader.ItemsCollectionChanged += 
+                    (o, e) =>
+                        {
+                            if(!_printModeForced)
+                            PrintMode =
+                                SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == 1) ? 1 : 0;
+                        };
+            }
         }
 
         public bool HasChanges
@@ -97,15 +112,16 @@ namespace ZeroBusiness.Entities.Data
             return item;
         }
 
-        public void RemoveSaleItem(Product prod, double qty, string lot)
-        {
-            //TODO:
-        }
-
         public void RemoveSaleItem(SaleItem item)
         {
             SaleItems.Remove(item);
             CalculateValues();
+        }
+
+        public void ForcePrintMode(int mode)
+        {
+            _printModeForced = true;
+            PrintMode = mode;
         }
 
         #region Implementation of IExportableEntity
@@ -130,6 +146,7 @@ namespace ZeroBusiness.Entities.Data
                 return !string.IsNullOrWhiteSpace(SaleType.Description)? SaleType.Description : "Venta";
             }
         }
+        
     }
 
     

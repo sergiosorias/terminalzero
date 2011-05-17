@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Objects;
 using System.Linq;
 using ZeroBusiness.Entities.Configuration;
+using ZeroCommonClasses.Context;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
 
@@ -11,7 +12,7 @@ namespace ZeroBusiness.Entities.Data
     public class DataModelManager : Entities
     {
         internal DataModelManager()
-            : base(ZeroCommonClasses.Context.ConfigurationContext.GetConnectionForCurrentEnvironment("Data.DataModel"))
+            : base(ConfigurationContext.GetConnectionForCurrentEnvironment("Data.DataModel"))
         {
             
         }
@@ -37,9 +38,9 @@ namespace ZeroBusiness.Entities.Data
             return _confModel.Terminals;
         }
 
-        public override int SaveChanges(System.Data.Objects.SaveOptions options)
+        public override int SaveChanges(SaveOptions options)
         {
-            foreach (ObjectStateEntry entry in this.ObjectStateManager.GetObjectStateEntries(System.Data.EntityState.Added))
+            foreach (ObjectStateEntry entry in ObjectStateManager.GetObjectStateEntries(EntityState.Added))
             {
                 if(entry.Entity is IExportableEntity)
                 {

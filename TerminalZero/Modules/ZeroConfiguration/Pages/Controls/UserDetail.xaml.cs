@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Web.Security;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroConfiguration.Pages.Controls
@@ -23,10 +22,10 @@ namespace ZeroConfiguration.Pages.Controls
         {
             if(MessageBox.Show("Esta a punto de cambiar la contraseña por una nueva, ¿esta seguro?","Precaución",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                var usr = ((MembershipUser)DataContext);
+                var usr = ((User)DataContext);
                 usr.ChangePassword(usr.GetPassword(), usr.UserName.ToLower());
                 MessageBox.Show("La nueva contraseña es: " + usr.UserName.ToLower(), ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
-                Trace.WriteLine(string.Format("User {0} Password Changed",usr.ProviderName));
+                Trace.WriteLine(string.Format("User {0} Password Changed",usr.UserName));
             }
         }
 
@@ -44,7 +43,7 @@ namespace ZeroConfiguration.Pages.Controls
                     else
                     {
                         string msg;
-                        ret = TryCreateUser(out msg);
+                        ret = User.TryCreateUser(nameTextBox.Text, nameTextBox.Text.ToLower(), emailTextBox.Text,out msg);
                         if(!ret)
                         {
                             MessageBox.Show(msg, "Error");
@@ -52,8 +51,8 @@ namespace ZeroConfiguration.Pages.Controls
                     }
                     break;
                 default:
-                    var usr = ((MembershipUser)DataContext);
-                    Membership.UpdateUser(usr);
+                    var usr = ((User)DataContext);
+                    User.UpdateUser(usr);
                     ret = true;
                     break;
             }
@@ -81,61 +80,9 @@ namespace ZeroConfiguration.Pages.Controls
             }
         }
 
-        private bool TryCreateUser(out string msg)
-        {
-            msg = "";
-            bool ret = true;
-            try
-            {
-                Membership.CreateUser(nameTextBox.Text, nameTextBox.Text.ToLower(), emailTextBox.Text);
-            }
-            catch (MembershipCreateUserException e)
-            {
-                msg = GetErrorMessage(e.StatusCode);
-                ret = false;
-            }
-            catch (Exception e)
-            {
-                msg = e.Message;
-                ret = false;
-            }
+        
 
-            return ret;
-
-        }
-
-        private static string GetErrorMessage(MembershipCreateStatus status)
-        {
-            switch (status)
-            {
-                case MembershipCreateStatus.DuplicateUserName:
-                    return "Username already exists. Please enter a different user name.";
-
-                case MembershipCreateStatus.DuplicateEmail:
-                    return "A username for that e-mail address already exists. Please enter a different e-mail address.";
-
-                case MembershipCreateStatus.InvalidPassword:
-                    return "The password provided is invalid. Please enter a valid password value.";
-
-                case MembershipCreateStatus.InvalidEmail:
-                    return "The e-mail address provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidAnswer:
-                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidQuestion:
-                    return "The password retrieval question provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.ProviderError:
-                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-
-                case MembershipCreateStatus.UserRejected:
-                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-
-                default:
-                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-            }
-        }
+        
         
        
     }

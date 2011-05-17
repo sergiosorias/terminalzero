@@ -36,7 +36,7 @@ namespace TerminalZeroClient.Business
         {
             get
             {
-                List<ZeroAction> validActions = ZeroCommonClasses.Terminal.Instance.Manager.BuilSessionActions();
+                List<ZeroAction> validActions = Terminal.Instance.Manager.BuilSessionActions();
                 var menu = new ZeroMenu();
                 string aux = "", current = "";
                 int pos = 0;
@@ -46,8 +46,7 @@ namespace TerminalZeroClient.Business
 
                 foreach (
                     var item in
-                        validActions.Where(
-                            a => a.ActionType == ActionType.MenuItem || a.ActionType == ActionType.MainViewButton))
+                        validActions.Where(a => a.IsOnMenu) )
                 {
                     currentlevel = null;
                     aux = item.Name;
@@ -190,8 +189,8 @@ namespace TerminalZeroClient.Business
             bool ret = true;
             try
             {
-                ZeroCommonClasses.Terminal.Instance.Manager.InitializeTerminal();
-                ModuleList.ForEach(c => c.TerminalStatus = ZeroCommonClasses.Terminal.Instance.Manager.GetModuleStatus(c));
+                Terminal.Instance.Manager.InitializeTerminal();
+                ModuleList.ForEach(c => c.TerminalStatus = Terminal.Instance.Manager.GetModuleStatus(c));
                 if (ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
                 {
                     Initialized = false;
@@ -235,7 +234,7 @@ namespace TerminalZeroClient.Business
                 }
             }
             Notifier.SetProgress(30);
-            if (ZeroCommonClasses.Terminal.Instance.Manager == null)
+            if (Terminal.Instance.Manager == null)
             {
                 return false;
             }
