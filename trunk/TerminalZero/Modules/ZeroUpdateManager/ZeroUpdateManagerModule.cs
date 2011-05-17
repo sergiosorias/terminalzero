@@ -16,7 +16,7 @@ namespace ZeroUpdateManager
 
         public void BuildPosibleActions()
         {
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, ZeroBusiness.Actions.ExecUpgradeProcess, ImportScriptFile));
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroBackgroundAction( ZeroBusiness.Actions.ExecUpgradeProcess, ImportScriptFile, null,false,true));
         }
 
         public override string[] GetFilesToSend()

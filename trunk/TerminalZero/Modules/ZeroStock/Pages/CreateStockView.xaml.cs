@@ -86,17 +86,18 @@ namespace ZeroStock.Pages
             return ret;
         }
 
+        private Product validProd;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            Product prod = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
-            if (prod == null)
+            validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            if (validProd == null)
             {
-                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
+                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
                 if (Part != null)
                 {
-                    string part = Part.Code.ToString();
-                    prod = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == part);
-                    if (prod == null)
+                    string strCode = Part.Code.ToString();
+                    validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                    if (validProd == null)
                     {
                         Part.IsValid = false;
                         e.Error = string.Format(Properties.Resources.UnexistentProduct + " - {0}", Part.Code);
@@ -107,37 +108,29 @@ namespace ZeroStock.Pages
 
         private void BarCodeTextBox_BarcodeReceived(object sender, BarCodeEventArgs e)
         {
-            Product prod = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
-            if (prod == null)
-            {
-                BarCodePart Part = e.Parts.FirstOrDefault(p => p.Composition.Equals('P'));
-                if (Part != null)
-                {
-                    prod = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => int.Parse(p.MasterCode) == Part.Code);
-                }
-            }
-
-            if (prod != null)
+            if (validProd != null)
             {
                 if (!_header.DeliveryDocumentHeaderReference.IsLoaded)
                 {
                     _header.DeliveryDocumentHeaderReference.Load();
                 }
-                if (!prod.Price1Reference.IsLoaded)
+                if (!validProd.Price1Reference.IsLoaded)
                 {
-                    prod.Price1Reference.Load();
+                    validProd.Price1Reference.Load();
                 }
-                if (!prod.PriceReference.IsLoaded)
+                if (!validProd.PriceReference.IsLoaded)
                 {
-                    prod.PriceReference.Load();
+                    validProd.PriceReference.Load();
                 }
 
-                BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Composition.Equals('Q'));
+                double qty = 1;
+                if(validProd.ByWeight)
+                    qty = e.Parts.FirstOrDefault(p => p.Composition.Equals('Q')).Code;
 
-                stockGrid.AddItem(_header.AddNewStockItem(prod, partQty.Code, _lot));
+                stockGrid.AddItem(_header.AddNewStockItem(validProd, qty, _lot));
 
                 if (_header.DeliveryDocumentHeader != null)
-                    _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(prod, partQty.Code, _lot);
+                    _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(validProd, qty, _lot);
 
                 _lot = "";
                 lotBarcode.SetFocus();
@@ -185,6 +178,8 @@ namespace ZeroStock.Pages
                 e.Error = Properties.Resources.WrongMonth;
             else if (!(e.Parts[3].IsValid = e.Parts[3].Code > 0 && e.Parts[3].Code <= 31))
                 e.Error = Properties.Resources.WrongDay;
+
+            
         }
 
         private void lotBarcode_BarcodeReceived(object sender, BarCodeEventArgs e)

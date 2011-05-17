@@ -30,18 +30,16 @@ namespace ZeroSales.Pages.Controls
 
         public override void AddItem(EntityObject item)
         {
-            base.AddItem(item);
             var saleitem = item as SaleItem;
             if (saleitem != null && !saleitem.ProductReference.IsLoaded)
-                    saleitem.ProductReference.Load();
+                saleitem.ProductReference.Load();
+            base.AddItem(item);
         }
-        
-        private void saleItemsDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+
+        protected override void OnKeyboardDeleteKeysPressed()
         {
-            if (e.Key == Key.D && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
-            {
-                TryRemoveItem(SelectedItem as EntityObject);
-            }
+            base.OnKeyboardDeleteKeysPressed();
+            TryRemoveItem(SelectedItem as EntityObject);
         }
 
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)

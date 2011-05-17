@@ -61,8 +61,8 @@
     <Compile Include="Entities\PackStatusEnum.cs" />
     <Compile Include="GlobalObjects\Actions\ActionRequest.cs" />
     <Compile Include="GlobalObjects\Actions\ActionsSourceBase.cs" />
-    <Compile Include="GlobalObjects\Actions\ActionType.cs" />
     <Compile Include="GlobalObjects\Actions\ActionParameterBase.cs" />
+    <Compile Include="GlobalObjects\Actions\ZeroBackgroundAction.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroTriggerAction.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
     <Compile Include="GlobalObjects\ZeroMenu.cs" />

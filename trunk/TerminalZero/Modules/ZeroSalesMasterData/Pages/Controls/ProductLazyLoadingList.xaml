@@ -1,7 +1,9 @@
 ﻿<base:LazyLoadingListControl xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
     x:Class="ZeroMasterData.Pages.Controls.ProductLazyLoadingList" 
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Loaded="LazyLoadingListControl_Loaded"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" FrozenColumnCount="1">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" FrozenColumnCount="1"
+            xmlns:Data="clr-namespace:ZeroBusiness.Manager.Data;assembly=ZeroBusiness"
+            ItemsSource="{Binding Path=ModelManager.Products,Source={x:Static Data:BusinessContext.Instance}}">
     <DataGrid.Columns>
         <DataGridTextColumn MinWidth="80" Header="Código/PLU" Binding="{Binding Path=MasterCode, Mode=OneWay}"/>
         <DataGridTextColumn MinWidth="150" Width="1*" Header="Nombre" Binding="{Binding Path=Name, Mode=OneWay}"/>

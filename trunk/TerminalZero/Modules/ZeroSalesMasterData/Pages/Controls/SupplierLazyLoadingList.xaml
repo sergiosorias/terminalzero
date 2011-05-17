@@ -4,7 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d">
+             mc:Ignorable="d" 
+            xmlns:Data="clr-namespace:ZeroBusiness.Manager.Data;assembly=ZeroBusiness"
+            ItemsSource="{Binding Path=ModelManager.Suppliers,Source={x:Static Data:BusinessContext.Instance}}"
+             SelectionUnit="FullRow">
     <DataGrid.Columns>
         <DataGridTextColumn x:Name="name1Column" Binding="{Binding Path=Name1}" Header="Nombre 1" Width="1*" MaxWidth="200"/>
         <DataGridTextColumn x:Name="name2Column" Binding="{Binding Path=Name2}" Header="Nombre 2" Width="1*" MaxWidth="200" />

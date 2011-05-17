@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Web.Security;
 using System.Windows;
 using System.Windows.Controls;
-using ZeroCommonClasses.GlobalObjects;
+using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroConfiguration.Pages.Controls;
@@ -14,9 +14,9 @@ namespace ZeroConfiguration.Pages
     /// <summary>
     /// Interaction logic for Users.xaml
     /// </summary>
-    public partial class Users : ZeroGUI.NavigationBasePage
+    public partial class Users : NavigationBasePage
     {
-        private MembershipUserCollection _userCol;
+        private IEnumerable<User> _userCol;
         public Users()
         {
             InitializeComponent();
@@ -39,9 +39,9 @@ namespace ZeroConfiguration.Pages
         private void LoadUsers()
         {
             users.Items.Clear();
-            _userCol = Membership.GetAllUsers();
+            _userCol = User.GetAllUsers();
 
-            foreach (MembershipUser user in _userCol)
+            foreach (User user in _userCol)
             {
                 users.Items.Add(user);
             }
@@ -52,10 +52,10 @@ namespace ZeroConfiguration.Pages
             try
             {
                 var ud = new UserDetail();
-                MembershipUser usr = null;
-                foreach (MembershipUser user in _userCol)
+                User usr = null;
+                foreach (User user in _userCol)
                 {
-                    if (user.ProviderUserKey.Equals(((Button)sender).DataContext))
+                    if (user.Code.Equals(((Button)sender).DataContext))
                     {
                         usr = user;
                         break;

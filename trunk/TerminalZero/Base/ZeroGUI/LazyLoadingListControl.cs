@@ -6,6 +6,7 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI.Classes;
 
@@ -17,6 +18,8 @@ namespace ZeroGUI
         {
             LazyLoadEnable = true;
             Style = (Style) Application.Current.Resources["dataGridStyle"];
+            Loaded += new RoutedEventHandler(LazyLoadingListControl_Loaded);
+            PreviewKeyDown += LazyLoadingListControl_PreviewKeyDown;
         }
 
         public ControlMode ControlMode
@@ -25,6 +28,11 @@ namespace ZeroGUI
             set { SetValue(ModeProperty, value); OnControlModeChanged(value); }
 
         }
+
+        // Using a DependencyProperty as the backing store for ControlMode.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ModeProperty =
+            DependencyProperty.Register("ControlMode1", typeof(ControlMode), typeof(NavigationBasePage), null);
+        
 
         public bool LazyLoadEnable
         {
@@ -41,11 +49,6 @@ namespace ZeroGUI
 
         }
 
-        // Using a DependencyProperty as the backing store for ControlMode.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("ControlMode1", typeof(ControlMode), typeof(NavigationBasePage), null);
-        
-        
         private IEnumerable _fullItemList;
         private WaitCursorSimple waitCursor = new WaitCursorSimple();
         
@@ -55,35 +58,73 @@ namespace ZeroGUI
         public event EventHandler ItemsLoaded;
         #endregion
 
-        protected void StartListLoad(IEnumerable items)
+        private void LazyLoadingListControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _fullItemList = items ?? new ArrayList();
-            if (_fullItemList!=null && !DesignerProperties.GetIsInDesignMode(this))
+            if (ItemsSource != null)
             {
-                if (LazyLoadEnable)
-                {
-                    Panel panel = Parent as Panel;
-                    if (panel != null)
-                    {
-                        if(panel is Grid)
-                        {
-                            Grid grid = ((Grid) panel);
-                            if(grid.ColumnDefinitions.Count>0)
-                                waitCursor.SetValue(Grid.ColumnSpanProperty, grid.ColumnDefinitions.Count);
-                            if (grid.RowDefinitions.Count > 0)
-                                waitCursor.SetValue(Grid.RowSpanProperty, grid.RowDefinitions.Count);
-                        }
-                        panel.Children.Add(waitCursor);
-                    }
+                IEnumerable items = ItemsSource;
+                ItemsSource = null;
+                StartListLoad(items);
+            }
+        }
 
-                var loader = new BackgroundWorker();
-                    loader.DoWork += loader_DoWork;
-                    loader.RunWorkerCompleted += loader_RunWorkerCompleted;
-                    loader.RunWorkerAsync();
-                }
-                else
+        private void LazyLoadingListControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                if (e.Key == Key.D)
                 {
-                    FillList();
+                    OnKeyboardDeleteKeysPressed();
+                }
+                else if (e.Key == Key.Enter)
+                {
+                    OnKeyboardDeleteKeysPressed();
+                }
+            }
+        }
+        
+        protected virtual void OnKeyboardDeleteKeysPressed()
+        {
+            
+        }
+
+        protected virtual void OnKeyboardSelectItemKeysPressed()
+        {
+
+        }
+
+        private void StartListLoad(IEnumerable items)
+        {
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                _fullItemList = items ?? new ArrayList();
+                if (_fullItemList != null)
+                {
+                    if (LazyLoadEnable)
+                    {
+                        Panel panel = Parent as Panel;
+                        if (panel != null)
+                        {
+                            if (panel is Grid)
+                            {
+                                Grid grid = ((Grid) panel);
+                                if (grid.ColumnDefinitions.Count > 0)
+                                    waitCursor.SetValue(Grid.ColumnSpanProperty, grid.ColumnDefinitions.Count);
+                                if (grid.RowDefinitions.Count > 0)
+                                    waitCursor.SetValue(Grid.RowSpanProperty, grid.RowDefinitions.Count);
+                            }
+                            panel.Children.Add(waitCursor);
+                        }
+
+                        var loader = new BackgroundWorker();
+                        loader.DoWork += loader_DoWork;
+                        loader.RunWorkerCompleted += loader_RunWorkerCompleted;
+                        loader.RunWorkerAsync();
+                    }
+                    else
+                    {
+                        FillList();
+                    }
                 }
             }
         }

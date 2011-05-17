@@ -8,10 +8,9 @@
         <KeyBinding x:Name="ShortCutHome" Key="H" Modifiers="Ctrl"/>
     </Window.InputBindings>
     <Window.Resources>
-        <ContextMenu x:Key="NotifierContextMenu"
+        <ContextMenu x:Key="NotifierContextMenu" x:Name="menuItemContextMenu"
                     Placement="MousePoint">
-            <MenuItem Header="Open"/>
-            <MenuItem Header="Close"/>
+            <MenuItem Header="Mostrar en pantalla de inicio"/>
         </ContextMenu>
         <Style TargetType="MenuItem" x:Key="masterMenuItem">
             <Setter Property="Foreground" Value="{StaticResource BrownLightSelectedRow}"/>

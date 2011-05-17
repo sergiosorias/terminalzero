@@ -88,7 +88,7 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to ¿Desea guardar los datos ingresados?.
         /// </summary>
         internal static string QuestionSaveCurrentData {
             get {

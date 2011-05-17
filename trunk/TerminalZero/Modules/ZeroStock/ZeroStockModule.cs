@@ -23,11 +23,11 @@ namespace ZeroStock
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCurrentStockView, OpenStockView));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenNewStockView, OpenNewStockView, Rules.IsTerminalZero));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenModifyStockView, OpenModifyStockView, Rules.IsTerminalZero));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MainViewButton, Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero));
-            var createStockFromSale = new ZeroTriggerAction(Actions.ExecCreateStockFromLastSale, CreateStockFromSale);
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenCurrentStockView, OpenStockView, null, true));
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenNewStockView, OpenNewStockView, Rules.IsTerminalZero,true));
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenModifyStockView, OpenModifyStockView, Rules.IsTerminalZero,true));
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero,true));
+            var createStockFromSale = new ZeroTriggerAction(Actions.ExecCreateStockFromLastSale, CreateStockFromSale,null);
             createStockFromSale.AddParam(typeof(SaleHeader),true);
             Terminal.Instance.Session.AddAction(createStockFromSale);
         }

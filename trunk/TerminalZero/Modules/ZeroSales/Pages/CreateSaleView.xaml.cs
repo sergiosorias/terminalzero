@@ -3,18 +3,15 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Web.Security;
 using System.Windows;
-using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Entities;
-using ZeroCommonClasses.GlobalObjects;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroGUI;
 using ZeroGUI.Classes;
-using ZeroSales.Pages.Controls;
+using ZeroSales.Printer;
 
 namespace ZeroSales.Pages
 {
@@ -27,8 +24,8 @@ namespace ZeroSales.Pages
         {
             InitializeComponent();
             _saleType = saleType;
-            CommandBar.Save += this.btnSave_Click;
-            CommandBar.Cancel += this.btnCancel_Click;
+            CommandBar.Save += btnSave_Click;
+            CommandBar.Cancel += btnCancel_Click;
         }
 
         private SaleHeader _header;
@@ -104,7 +101,7 @@ namespace ZeroSales.Pages
                 if (validProd != null)
                 {
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
-                    currentProd.Text = validProd.Description;
+                    currentProd.Text = validProd.Description ?? validProd.Name;
                     CreateResTimer();
                     saleGrid.AddItem(_header.AddNewSaleItem(validProd, partQty.Code, _lot));
                     lblItemsCount.Text = _header.SaleItems.Count.ToString();
@@ -140,18 +137,17 @@ namespace ZeroSales.Pages
                 
                 var paymentCurrentSale = new SalePaymentHeader(Terminal.Instance.TerminalCode);
                 _header.SalePaymentHeader = paymentCurrentSale;
-                SalePaymentView salePaymentview = new SalePaymentView(_header);
-                salePaymentview.DataContext = paymentCurrentSale;
+                var salePaymentview = new SalePaymentView(_header) {DataContext = paymentCurrentSale};
                 ret = ZeroMessageBox.Show(salePaymentview, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
-
                 if (ret)
                 {
                     Terminal.Instance.Session[typeof (SaleHeader)] =
-                        new ZeroCommonClasses.GlobalObjects.Actions.ActionParameter<SaleHeader>(true, _header, true);
+                        new ActionParameter<SaleHeader>(true, _header, true);
+                    PrintManager.PrintSale(_header);
                     BusinessContext.Instance.ModelManager.SaveChanges();
+                    MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                     GoHomeOrDisable();
                 }
-                // ret = true;
             }
             catch (Exception ex)
             {

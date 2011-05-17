@@ -127,7 +127,7 @@
     <value>¿Esta seguro de eliminar este ítem?</value>
   </data>
   <data name="QuestionSaveCurrentData" xml:space="preserve">
-    <value />
+    <value xml:space="preserve">¿Desea guardar los datos ingresados?</value>
   </data>
   <data name="UnexistentProduct" xml:space="preserve">
     <value>Producto Inexistente</value>

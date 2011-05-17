@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Web.Security;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
@@ -38,13 +37,13 @@ namespace ZeroConfiguration
         {
             //actions.Add(new ZeroAction(ActionType.MenuItem, "Reload", (rule) => { OnConfigurationRequired(); }));
             
-            SyncAction = new ZeroAction( ActionType.BackgroudAction, Actions.ExecSync, StartSync);
+            SyncAction = new ZeroBackgroundAction( Actions.ExecSync, StartSync,null, false, false);
             SyncAction.AddParam(typeof(ISyncService), true);
             ZeroCommonClasses.Terminal.Instance.Session.AddAction(SyncAction);
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction(ActionType.MenuItem, Actions.OpenPropertiesView, OpenConfiguration));
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenUserListView, OpenUsers, Rules.IsValidUser));
-            var changePassAction = new ZeroAction( ActionType.MenuItem, Actions.OpenUserPasswordChangeMessage, OpenChangePassword);
-            changePassAction.AddParam(typeof (MembershipUser), true);
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration,null,true));
+            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenUserListView, OpenUsers, Rules.IsValidUser,true));
+            var changePassAction = new ZeroAction( Actions.OpenUserPasswordChangeMessage, OpenChangePassword,null,true);
+            changePassAction.AddParam(typeof (User), true);
             ZeroCommonClasses.Terminal.Instance.Session.AddAction(changePassAction);
         }
 
@@ -63,26 +62,26 @@ namespace ZeroConfiguration
 
         private void ValidateAdminUser()
         {
-            if (Membership.GetUser(K_administrator) == null)
+            if (User.GetUser(K_administrator) == null)
             {
-                Membership.CreateUser(K_administrator, K_password);
+                User.CreateUser(K_administrator, K_password);
             }
         }
 
         private void OpenLogInDialog()
         {
 #if DEBUG
-            ActionParameterBase userpParam = new ActionParameter<MembershipUser>(false, Membership.GetUser(K_administrator, true), false);
+            ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(K_administrator, true), false);
             ZeroCommonClasses.Terminal.Instance.Session[userpParam.Name] = userpParam;
 #else
             var view = new UserLogIn();
             bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
             if (dialogResult.GetValueOrDefault())
             {
-                if (Membership.ValidateUser(view.UserName, view.UserPass))
+                if (User.ValidateUser(view.UserName, view.UserPass))
                 {
-                    ZeroActionParameterBase userpParam = new ZeroActionParameter<MembershipUser>(false,Membership.GetUser(view.UserName,true), false)
-                    ZeroCommonClasses.Terminal.Instance.Session[userpParam.Name] = userpParam;
+                    ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(view.UserName, true),false);
+                    ZeroCommonClasses.Terminal.Instance.Session[typeof(User)] = userpParam;
                 }
                 else
                 {
@@ -149,7 +148,7 @@ namespace ZeroConfiguration
         private void OpenChangePassword()
         {
             var pswChange = new UserChangePassword();
-            pswChange.DataContext = ZeroCommonClasses.Terminal.Instance.Session[typeof(MembershipUser)].Value;
+            pswChange.DataContext = ZeroCommonClasses.Terminal.Instance.Session[typeof(User)].Value;
             ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize);
         }
 
@@ -167,16 +166,7 @@ namespace ZeroConfiguration
 
         private bool CanOpenConfiguration(object param)
         {
-            bool ret = true;
-            
-
-            if (param != null)
-                if (param is StringBuilder)
-                {
-                    ((StringBuilder)param).AppendLine(ret ? Resources.ValidUser : Resources.UnauthorizedUser);
-                }
-
-            return ret;
+            return true;
         }
 
         private bool IsTerminalZero(object param)
@@ -184,13 +174,6 @@ namespace ZeroConfiguration
             bool ret = false;
             if (_isTerminalZero)
                 ret = (TerminalStatus == ZeroCommonClasses.ModuleStatus.Valid || TerminalStatus == ZeroCommonClasses.ModuleStatus.NeedsSync);
-
-            if (param != null)
-                if (param is StringBuilder)
-                {
-                    ((StringBuilder)param).AppendLine(ret ? Resources.ValidTerminal : Resources.UnauthorizedTrminal);
-                }
-
 
             return ret;
         }

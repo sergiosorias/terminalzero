@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Windows.Input;
-using ZeroCommonClasses.Context;
 
 namespace ZeroCommonClasses.GlobalObjects.Actions
 {
@@ -15,36 +13,29 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             if (Finished != null)
                 Finished(this, EventArgs.Empty);
         }
-        public ActionType ActionType { get; private set; }
         public string Name { get; private set; }
         public string Alias { get; private set; }
         public string RuleToSatisfyName { get; private set; }
         public Predicate<object> RuleToSatisfy { get; set; }
         public Action ExecuteAction { get; private set; }
         protected List<ActionParameterBase> Parameters { get; set; }
-
+        public bool IsOnMenu { get; protected set; }
+        public bool IsOnMainPage { get; protected set; }
+        
         private bool _canExecute;
-        public ZeroAction(ActionType actionType, string name, Action executeAction)
+        
+        public ZeroAction(string name, Action executeAction, string ruleToSatisfy, bool isOnMenu)
         {
-            ActionType = actionType;
             Name = name;
             ExecuteAction = executeAction;
             Parameters = new List<ActionParameterBase>();
-        }
-
-        public ZeroAction(ActionType actionType, string name, Action executeAction, string ruleToSatisfy)
-            : this(actionType, name, executeAction)
-        {
+            IsOnMenu = isOnMenu;
             RuleToSatisfyName = ruleToSatisfy;
         }
 
-        public void RaiseCanExecuteChanged()
-        {
-            if (CanExecuteChanged!=null)
-                CanExecuteChanged(this, EventArgs.Empty);
-        }
-
         #region ICommand Members
+
+        public event EventHandler CanExecuteChanged;
 
         public virtual bool CanExecute(object parameter)
         {
@@ -58,7 +49,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
             if (_canExecute && RuleToSatisfy != null)
             {
-                _canExecute = RuleToSatisfy(sb);
+                _canExecute = RuleToSatisfy(this);
             }
             else if (_canExecute && RuleToSatisfyName != null)
             {
@@ -69,9 +60,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             return _canExecute;
         }
 
-        public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
+        public virtual void Execute(object parameter)
         {
             if (_canExecute)
             {
@@ -101,6 +90,19 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             }
 
             return ret;
+        }
+
+        public virtual void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+            {
+                bool canExecuteOld = _canExecute;
+                CanExecute(null);
+                if (canExecuteOld != _canExecute)
+                {
+                    CanExecuteChanged(this, EventArgs.Empty);
+                }
+            }
         }
 
         public void SetAlias(string[] nameParts)

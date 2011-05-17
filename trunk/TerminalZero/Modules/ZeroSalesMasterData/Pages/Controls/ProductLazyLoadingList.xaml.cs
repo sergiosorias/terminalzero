@@ -38,14 +38,5 @@ namespace ZeroMasterData.Pages.Controls
                
             }
         }
-
-        private void LazyLoadingListControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!DesignerProperties.GetIsInDesignMode(this))
-            {
-                StartListLoad(BusinessContext.Instance.ModelManager.Products);
-            }
-        }
-        
     }
 }

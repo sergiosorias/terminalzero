@@ -1,27 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Security;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ZeroCommonClasses.Interfaces;
+using ZeroBusiness.Entities.Configuration;
+using ZeroGUI;
 
 namespace ZeroConfiguration.Pages.Controls
 {
     /// <summary>
     /// Interaction logic for UserChangePassword.xaml
     /// </summary>
-    public partial class UserChangePassword : ZeroGUI.NavigationBasePage
+    public partial class UserChangePassword : NavigationBasePage
     {
-        private MembershipUser _user;
+        private User _user;
         public UserChangePassword()
         {
             InitializeComponent();
@@ -46,7 +35,7 @@ namespace ZeroConfiguration.Pages.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _user = DataContext as MembershipUser;
+            _user = DataContext as User;
             if (_user == null)
                 throw new MissingMemberException("UserChangePassword - No existe un usuario asociado al control!");
         }

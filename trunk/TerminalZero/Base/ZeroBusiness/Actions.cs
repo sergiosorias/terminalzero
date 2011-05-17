@@ -17,6 +17,7 @@
 
         public const string OpenProductsView                = "Tablas Maestras@Productos@Lista de Productos";
         public const string OpenProductMessage              = "Tablas Maestras@Productos@Consulta";
+        public const string OpenProductPriceIncrease        = "Tablas Maestras@Productos@Actualizar Precios";
         public const string OpenSupplierView                = "Tablas Maestras@Proveedores";
         public const string OpenCustomersView               = "Tablas Maestras@Clientes";
         public const string ExecExportMasterData            = "Tablas Maestras@Exportar Datos";
@@ -26,6 +27,7 @@
         public const string OpenModifyStockView             = "Operaciones@Stock@Baja";
         public const string OpenDeliveryNoteView            = "Operaciones@Remitos de salida";
         public const string OpenNewSaleView                 = "Operaciones@Ventas@Nueva";
+        public const string OpenCurrentSalesView            = "Operaciones@Ventas@Resumen de ventas";
         public const string ExecCreateStockFromLastSale     = "Create@Stock from last sale";
 
         public const string OpenPaymentSelectionView        = "Operaciones@Ventas@Nueva@PaymentInstrument";

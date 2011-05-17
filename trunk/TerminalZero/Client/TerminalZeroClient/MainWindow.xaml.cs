@@ -63,10 +63,9 @@ namespace TerminalZeroClient
             ZeroAction actionInit = null;
             if (!Terminal.Instance.Manager.ExistsAction(Actions.AppHome, out actionInit))
             {
-                actionInit = new ZeroAction( ActionType.BackgroudAction, Actions.AppHome, OpenHome);
+                actionInit = new ZeroBackgroundAction( Actions.AppHome, OpenHome,null, false,false);
                 Terminal.Instance.Session.AddAction(actionInit);
-                Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppBack, OpenHome));
-                Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.BackgroudAction, Actions.AppExit, ForceClose));
+                Terminal.Instance.Session.AddAction(new ZeroBackgroundAction( Actions.AppExit, ForceClose, null,false,false));
             }
             ShortCutHome.Command = actionInit;
             item.Command = actionInit;
@@ -79,7 +78,7 @@ namespace TerminalZeroClient
             Terminal.Instance.CurrentClient.ShowView(new Home());
         }
 
-        private static void InternalBuildMenu(ZeroMenu menu, ItemCollection items)
+        private void InternalBuildMenu(ZeroMenu menu, ItemCollection items)
         {
             foreach (var item in menu)
             {
@@ -90,6 +89,10 @@ namespace TerminalZeroClient
                 else
                 {
                     menuitem.Command = item.Value.MenuAction;
+                    //Esto hay que hacerlo algun dia!
+                    //menuitem.ContextMenu = new System.Windows.Controls.ContextMenu();
+                    //menuitem.ContextMenu.Items.Add(new System.Windows.Controls.MenuItem {Header = "Anclar al Inicio", IsCheckable=true});
+
                 }
 
                 items.Add(menuitem);

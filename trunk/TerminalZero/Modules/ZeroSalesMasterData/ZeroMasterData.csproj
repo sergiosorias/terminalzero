@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\MasterData.Entities.Entities.datasource" />
+    <None Include="Properties\DataSources\ZeroBusiness.Manager.Data.BusinessContext.datasource" />
     <None Include="Properties\DataSources\ZeroMasterData.Entities.Entities.datasource" />
   </ItemGroup>
   <ItemGroup>

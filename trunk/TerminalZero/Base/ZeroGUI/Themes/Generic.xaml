@@ -32,21 +32,21 @@
                     </ControlTemplate.Triggers>
                     <Border Name="controlBorder" Background="{TemplateBinding Background}" Opacity="0"
                             BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="5" Padding="3"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                            BorderThickness="{TemplateBinding BorderThickness}" Focusable="False">
                         <Border.RenderTransform>
                             <TranslateTransform X="500" Y="0"/>
                         </Border.RenderTransform>
-                        <Grid Background="Transparent">
+                        <Grid Background="Transparent" Focusable="False">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Label Style="{DynamicResource titleLabelStyle}">
+                            <Label Style="{DynamicResource titleLabelStyle}" Focusable="False">
                                 <Label.Content>
                                     <ContentPresenter ContentSource="Header" ContentTemplate="{TemplateBinding HeaderTemplate}"/>
                                 </Label.Content>
                             </Label>
-                            <ContentControl VerticalAlignment="Center" HorizontalAlignment="Right" Content="{Binding RelativeSource={RelativeSource AncestorType=local:NavigationBasePage},Path=CommandBar}"/>
+                            <ContentControl VerticalAlignment="Center" HorizontalAlignment="Right" Content="{Binding RelativeSource={RelativeSource AncestorType=local:NavigationBasePage},Path=CommandBar}" Focusable="False"/>
                             <!--<Path Grid.Row="1" Stretch="Fill" Stroke="Gray" MaxWidth="600" Margin="100,100,20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Data="M112,47.75 C112,64.732756 97.785041,78.5 80.25,78.5 C62.714959,78.5 48.5,64.732756 48.5,47.75 C48.5,30.767244 62.714959,17 80.25,17 C97.785041,17 112,30.767244 112,47.75 z M78.5,28.5 C78.5,39.269553 69.881481,48 59.25,48 C48.618519,48 40,39.269553 40,28.5 C40,17.730447 48.618519,9 59.25,9 C69.881481,9 78.5,17.730447 78.5,28.5 z M58.5,15.25 C58.5,23.3962 51.448485,30 42.75,30 C34.051515,30 27,23.3962 27,15.25 C27,7.1037999 34.051515,0.5 42.75,0.5 C51.448485,0.5 58.5,7.1037999 58.5,15.25 z M39,11 C39,16.79899 33.963203,21.5 27.75,21.5 C21.536797,21.5 16.5,16.79899 16.5,11 C16.5,5.2010101 21.536797,0.5 27.75,0.5 C33.963203,0.5 39,5.2010101 39,11 z M22,15.25 C22,18.70178 18.082492,21.5 13.25,21.5 C8.4175084,21.5 4.5,18.70178 4.5,15.25 C4.5,11.79822 8.4175084,9 13.25,9 C18.082492,9 22,11.79822 22,15.25 z M15.5,23.5 C15.5,27.089851 12.142136,30 8,30 C3.8578644,30 0.5,27.089851 0.5,23.5 C0.5,19.910149 3.8578644,17 8,17 C12.142136,17 15.5,19.910149 15.5,23.5 z">
                                 <Path.Fill>
                                     <LinearGradientBrush EndPoint="2.967,0.154" StartPoint="-2.233,-0.962">
@@ -55,7 +55,7 @@
                                     </LinearGradientBrush>
                                 </Path.Fill>
                             </Path>-->
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Grid.Row="1"/>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Grid.Row="1" Focusable="False"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

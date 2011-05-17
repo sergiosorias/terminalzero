@@ -25,12 +25,12 @@ namespace ZeroMasterData
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenProductsView, OpenProductView));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenProductMessage, OpenProductMessage));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.OpenCustomersView,OpenCustomerView));
-            Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
-            
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenProductsView, OpenProductView,null,true));
+            Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenProductMessage, OpenProductMessage, null, true));
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero,true));
+            Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView, null, true));
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenProductPriceIncrease, ExportMasterDataPack, Rules.IsTerminalZero,true));
+            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero,true));
             //Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
@@ -70,10 +70,10 @@ namespace ZeroMasterData
 
         private void OpenProductView()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new ProductsView();
             if (!Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero)) 
                 view.ControlMode = ControlMode.ReadOnly;
-            BusinessContext.Instance.BeginOperation();
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
@@ -94,47 +94,29 @@ namespace ZeroMasterData
 
         private void OpenSupplierView()
         {
-            var view = new SupplierView();
             BusinessContext.Instance.BeginOperation();
+            var view = new SupplierView();
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void OpenCustomerView()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new CustomerView();
             if (Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
             {
                 view.ControlMode = ControlMode.Update;
             }
-            BusinessContext.Instance.BeginOperation();
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void ExportMasterDataPack()
-        {
-            var th = new Thread(
-                ExportPackEntryPoint);
-
-            th.Start();
-        }
-
-        private void TestImportDataPack()
-        {
-            foreach (string s in GetFilesToSend())
-            {
-                NewPackReceived(s);
-            }
-        }
-
-        private void ExportPackEntryPoint(object o)
         {
             var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
             using (var modelManager = BusinessContext.CreateTemporaryModelManager(masterDataPackManager))
             {
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(10);
-                //TODO:
-                //Fijarse si se puede hacer dinamica la carga del paquete.
                 var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
                 info.AddEntities(modelManager.Prices);
                 info.AddEntities(modelManager.Weights);
@@ -158,12 +140,20 @@ namespace ZeroMasterData
                     {
                         Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
                     }
-                    
+
                 }
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Listo");
                 Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, "Terminado");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(100);
-                
+
+            }
+        }
+
+        private void TestImportDataPack()
+        {
+            foreach (string s in GetFilesToSend())
+            {
+                NewPackReceived(s);
             }
         }
 

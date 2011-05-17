@@ -23,7 +23,7 @@ namespace ZeroBusiness.Entities.Data
             Date = DateTime.Now.Date;
             Code = GetNextStockHeaderCode();
             StockType = type;
-            UserCode = User.GetCurrentUserCode();
+            UserCode = User.GetCurrentUser().Code;
             UpdateStatus(EntityStatus.New);
         }
 
