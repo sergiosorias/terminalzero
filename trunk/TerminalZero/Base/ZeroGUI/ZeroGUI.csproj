@@ -101,6 +101,7 @@
     <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
     <Compile Include="Converters\PrintModeToColorConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
+    <Compile Include="Converters\StringToResourceConverter.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="LazyLoadingListControl.cs" />
     <Compile Include="Masking.cs" />

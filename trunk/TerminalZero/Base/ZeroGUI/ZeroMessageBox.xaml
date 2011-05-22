@@ -8,8 +8,10 @@
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
     <Window.Background>
         <SolidColorBrush Color="Transparent" />
-        
     </Window.Background>
+    <Window.Effect>
+        <DropShadowEffect/>
+    </Window.Effect>
     <Window.Resources>
         <Border x:Name="backWindow" x:Key="backWindow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Background>

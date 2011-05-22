@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroMasterData.Reporting;
 
 namespace ZeroMasterData.Pages
 {
@@ -48,9 +51,9 @@ namespace ZeroMasterData.Pages
 
         private void PrintBtnClicked(object sender, RoutedEventArgs e)
         {
-            var pd = new PrintDialog();
-            if(pd.ShowDialog().GetValueOrDefault())
-                pd.PrintVisual(productList, "Lista de productos");
+            var view = new ProductListReport();
+            view.ProductList = BusinessContext.Instance.ModelManager.Products.OrderBy(product=>product.Name).ToList();
+            ZeroMessageBox.Show(view, MessageBoxButton.OK);
         }
         
     }
