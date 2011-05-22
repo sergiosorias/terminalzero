@@ -30,12 +30,19 @@ namespace ZeroGUI
         public ControlMode ControlMode
         {
             get { return (ControlMode)GetValue(ModeProperty); }
-            set { SetValue(ModeProperty, value); OnControlModeChanged(value); }
+            set
+            {
+                if (ControlMode != value)
+                {
+                    SetValue(ModeProperty, value);
+                    OnControlModeChanged(value);
+                }
+            }
         }
 
         // Using a DependencyProperty as the backing store for ControlMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("ControlMode", typeof(ControlMode), typeof(NavigationBasePage), null);
+            DependencyProperty.Register("ControlMode", typeof(ControlMode), typeof(NavigationBasePage), new PropertyMetadata(ControlMode.NotSet));
 
         public ZeroToolBar CommandBar
         {
@@ -84,9 +91,8 @@ namespace ZeroGUI
 
         protected void GoHomeOrDisable()
         {
-            ZeroAction action;
-            if (!ZeroCommonClasses.Terminal.Instance.Manager.ExistsAction(ZeroBusiness.Actions.AppHome, out action)
-                || !ZeroCommonClasses.Terminal.Instance.Manager.ExecuteAction(action))
+            if (!ZeroCommonClasses.Terminal.Instance.Session.Actions.Exists(ZeroBusiness.Actions.AppHome)
+                || !ZeroCommonClasses.Terminal.Instance.Session.Actions[ZeroBusiness.Actions.AppHome].TryExecute())
             {
                 IsEnabled = false;
             }
@@ -96,7 +102,7 @@ namespace ZeroGUI
 
         public bool Validate()
         {
-            return Validator.IsValid(this);
+            return Validator.IsValid(this, TextBox.TextProperty);
         }
 
         #endregion

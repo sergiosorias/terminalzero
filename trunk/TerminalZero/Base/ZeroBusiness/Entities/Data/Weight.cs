@@ -1,42 +1,48 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Xml.Serialization;
+using ZeroBusiness.Exceptions;
+using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Weight : IDataErrorInfo
+    public partial class Weight
     {
-        #region Implementation of IDataErrorInfo
-
-        public string this[string columnName]
+        internal Weight()
         {
-            get
+            
+            Enable = true;
+        }
+
+        public Weight(double quantity)
+            :this()
+        {
+            Code = GetNextCode();
+            Quantity = quantity;
+        }
+    
+        private static int GetNextCode()
+        {
+            return BusinessContext.Instance.ModelManager.Weights.Count();
+        }
+
+        partial void OnNameChanging(string value)
+        {
+            if (string.IsNullOrEmpty(value))
             {
-                Error = "";
-                if (columnName == "Name")
-                {
-                    if (string.IsNullOrEmpty(Name))
-                    {
-                        Error = "Nombre Obligatorio";
-                        return Error;
-                    }
-                }
+                throw new BusinessValidationException("Nombre Obligatorio");
 
-                if (columnName == "Quantity")
-                {
-                    if (Quantity == 0)
-                    {
-                        Error = "Cantidad obligatoria";
-                        return Error;
-                    }
-                }
-
-                return Error;
             }
         }
 
-        [XmlIgnore]
-        public string Error { get; private set; }
+        partial void OnQuantityChanging(double value)
+        {
+            if (value <= 0)
+            {
+                throw new BusinessValidationException("La cantidad tiene que ser mayor a cero");
+            }
+        }
 
-        #endregion
     }
 }

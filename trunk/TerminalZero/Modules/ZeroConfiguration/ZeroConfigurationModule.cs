@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
@@ -14,10 +12,11 @@ using ZeroConfiguration.Pages;
 using ZeroConfiguration.Pages.Controls;
 using ZeroConfiguration.Properties;
 using ZeroGUI;
+using Terminal = ZeroCommonClasses.Terminal;
 
 namespace ZeroConfiguration
 {
-    public class ZeroConfigurationModule : ZeroCommonClasses.ZeroModule, ITerminalManager
+    public class ZeroConfigurationModule : ZeroModule, ITerminalManager
     {
         private const string K_administrator = "Administrator";
         private const string K_password = "admin";
@@ -30,7 +29,7 @@ namespace ZeroConfiguration
         {
             BuildPosibleActions();
             BuildRulesActions();
-            ZeroCommonClasses.Terminal.Instance.Manager = this;
+            Terminal.Instance.Manager = this;
         }
 
         private void BuildPosibleActions()
@@ -39,18 +38,18 @@ namespace ZeroConfiguration
             
             SyncAction = new ZeroBackgroundAction( Actions.ExecSync, StartSync,null, false, false);
             SyncAction.AddParam(typeof(ISyncService), true);
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(SyncAction);
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration,null,true));
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenUserListView, OpenUsers, Rules.IsValidUser,true));
+            Terminal.Instance.Session.Actions.Add(SyncAction);
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration,null,true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenUserListView, OpenUsers, Rules.IsValidUser, true));
             var changePassAction = new ZeroAction( Actions.OpenUserPasswordChangeMessage, OpenChangePassword,null,true);
             changePassAction.AddParam(typeof (User), true);
-            ZeroCommonClasses.Terminal.Instance.Session.AddAction(changePassAction);
+            Terminal.Instance.Session.Actions.Add(changePassAction);
         }
 
         private void BuildRulesActions()
         {   
-            ZeroCommonClasses.Terminal.Instance.Session.AddRule(Rules.IsValidUser, CanOpenConfiguration);
-            ZeroCommonClasses.Terminal.Instance.Session.AddRule(Rules.IsTerminalZero, IsTerminalZero);
+            Terminal.Instance.Session.Rules.Add(Rules.IsValidUser, CanOpenConfiguration);
+            Terminal.Instance.Session.Rules.Add(Rules.IsTerminalZero, IsTerminalZero);
         }
 
         public override void Init()
@@ -72,7 +71,7 @@ namespace ZeroConfiguration
         {
 #if DEBUG
             ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(K_administrator, true), false);
-            ZeroCommonClasses.Terminal.Instance.Session[userpParam.Name] = userpParam;
+            Terminal.Instance.Session[userpParam.Name] = userpParam;
 #else
             var view = new UserLogIn();
             bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
@@ -107,31 +106,31 @@ namespace ZeroConfiguration
             double milsec;
             using (var conf = new ConfigurationModelManager())
             {
-                milsec = _sync.LoadConfiguration(conf, ZeroCommonClasses.Terminal.Instance.Session);    
+                milsec = _sync.LoadConfiguration(conf, Terminal.Instance.Session);    
             }
 
-            ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
+            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
             _sync.SyncStarting += SyncSyncStarting;
             _sync.SyncFinished += _sync_SyncFinished;
 
-            ExecuteAction(SyncAction);
+            SyncAction.TryExecute();
         }
 
         private void _sync_SyncFinished(object sender, EventArgs e)
         {
             using (var conf = new ConfigurationModelManager())
             {
-                _isTerminalZero = ConfigurationModelManager.IsTerminalZero(conf, ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                _isTerminalZero = ConfigurationModelManager.IsTerminalZero(conf, Terminal.Instance.TerminalCode);
             }
             OnConfigurationRequired();
         }
 
         private void SyncSyncStarting(object sender, Synchronizer.SyncStartingEventArgs e)
         {
-            e.Notifier = ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier;
-            e.SyncService = (ISyncService)ZeroCommonClasses.Terminal.Instance.Session[typeof(ISyncService)].Value;
-            e.FileTransferService = (IFileTransfer)ZeroCommonClasses.Terminal.Instance.Session[typeof(IFileTransfer)].Value;
-            e.Modules = ZeroCommonClasses.Terminal.Instance.CurrentClient.ModuleList;
+            e.Notifier = Terminal.Instance.CurrentClient.Notifier;
+            e.SyncService = (ISyncService)Terminal.Instance.Session[typeof(ISyncService)].Value;
+            e.FileTransferService = (IFileTransfer)Terminal.Instance.Session[typeof(IFileTransfer)].Value;
+            e.Modules = Terminal.Instance.CurrentClient.ModuleList;
         }
 
         private void StartSync()
@@ -141,14 +140,14 @@ namespace ZeroConfiguration
 
         private void OpenUsers()
         {
-            ZeroCommonClasses.Terminal.Instance.CurrentClient.ShowView(new Users());
+            Terminal.Instance.CurrentClient.ShowView(new Users());
             
         }
 
         private void OpenChangePassword()
         {
             var pswChange = new UserChangePassword();
-            pswChange.DataContext = ZeroCommonClasses.Terminal.Instance.Session[typeof(User)].Value;
+            pswChange.DataContext = Terminal.Instance.Session[typeof(User)].Value;
             ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize);
         }
 
@@ -158,10 +157,12 @@ namespace ZeroConfiguration
             var view = new Pages.Properties();
             // ReSharper restore RedundantNameQualifier
             view.UpdateTimeRemaining(_sync);
-            if (ZeroCommonClasses.Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
+            if (Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
                 view.ControlMode = ControlMode.Update;
+            else
+                view.ControlMode = ControlMode.ReadOnly;
 
-            ZeroCommonClasses.Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private bool CanOpenConfiguration(object param)
@@ -173,7 +174,7 @@ namespace ZeroConfiguration
         {
             bool ret = false;
             if (_isTerminalZero)
-                ret = (TerminalStatus == ZeroCommonClasses.ModuleStatus.Valid || TerminalStatus == ZeroCommonClasses.ModuleStatus.NeedsSync);
+                ret = (TerminalStatus == ModuleStatus.Valid || TerminalStatus == ModuleStatus.NeedsSync);
 
             return ret;
         }
@@ -188,101 +189,32 @@ namespace ZeroConfiguration
                 ConfigurationRequired(this, EventArgs.Empty);
         }
 
-        public ZeroCommonClasses.ModuleStatus GetModuleStatus(ZeroCommonClasses.ZeroModule module)
+        public ModuleStatus GetModuleStatus(ZeroModule module)
         {
-            return ConfigurationModelManager.GetTerminalModuleStatus(new ConfigurationModelManager(), ZeroCommonClasses.Terminal.Instance.TerminalCode, module);
+            return ConfigurationModelManager.GetTerminalModuleStatus(new ConfigurationModelManager(), Terminal.Instance.TerminalCode, module);
         }
 
         public void InitializeTerminal()
         {
             using (var conf = new ConfigurationModelManager())
             {
-                Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                ZeroBusiness.Entities.Configuration.Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == Terminal.Instance.TerminalCode);
                 if (T == null)
                 {
-                    Terminal.AddNewTerminal(conf, ZeroCommonClasses.Terminal.Instance.TerminalCode, ZeroCommonClasses.Terminal.Instance.TerminalName);
+                    ZeroBusiness.Entities.Configuration.Terminal.AddNewTerminal(conf, Terminal.Instance.TerminalCode, Terminal.Instance.TerminalName);
                 }
                 else 
                 {
                     _isTerminalZero = T.IsTerminalZero;
-                    if(ZeroCommonClasses.Terminal.Instance.TerminalCode == 0 && !T.IsTerminalZero)
+                    if(Terminal.Instance.TerminalCode == 0 && !T.IsTerminalZero)
                     {
                         T.IsTerminalZero = true;
                         conf.SaveChanges();
                     }
                 }
-                ConfigurationModelManager.CreateTerminalProperties(conf,ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                ConfigurationModelManager.CreateTerminalProperties(conf,Terminal.Instance.TerminalCode);
             }
 
-        }
-
-        public bool IsRuleValid(string ruleName)
-        {
-            return ZeroCommonClasses.Terminal.Instance.Session.SystemRules.ContainsKey(ruleName) &&
-                   ZeroCommonClasses.Terminal.Instance.Session.SystemRules[ruleName](null);
-        }
-
-        public bool ExecuteAction(ZeroAction action)
-        {
-            bool ret = false;
-            try
-            {
-                var result = new StringBuilder();
-                if (action.CanExecute(result))
-                {
-                    action.Execute(null);
-                    ret = true;
-                }
-                else
-                {
-                    ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Action {0} Error: {1}", action.Name, result));
-                    ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(string.Format(Resources.CannotExecuteAction + "\n\nProblemas: {0} ", result));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, string.Format("Action {0} Error: {1}", action.Name, ex));
-                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.UnexpectedError + ".\n " + Resources.ContactSystemAdministrator);
-            }
-
-            return ret;
-        }
-
-        public bool ExistsAction(string actionName, out ZeroAction action)
-        {
-            action = null;
-            if (ZeroCommonClasses.Terminal.Instance.Session.SystemActions.ContainsKey(actionName))
-            {
-                action = ZeroCommonClasses.Terminal.Instance.Session.SystemActions[actionName];
-                return true;
-            }
-            Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceWarning, string.Format("Action {0} is missing!", actionName));
-            return false;
-        }
-        
-        public List<ZeroAction> BuilSessionActions()
-        {
-            var validActions = new List<ZeroAction>();
-            //El sistema posee reglas, estas reglas poseen (o no) una acción asociada para que valide la regla, las lineas siguentes
-            //asocian a las reglas con sus respectias acciones
-
-            //despues de haber cargado las reglas, ahora asocio las acciones finales a las reglas a validar
-            foreach (var item in ZeroCommonClasses.Terminal.Instance.Session.SystemActions)
-            {
-                if (!string.IsNullOrEmpty(item.Value.RuleToSatisfyName))
-                {
-                    if (ZeroCommonClasses.Terminal.Instance.Session.SystemRules.ContainsKey(item.Value.RuleToSatisfyName))
-                    {
-                        item.Value.RuleToSatisfy = ZeroCommonClasses.Terminal.Instance.Session.SystemRules[item.Value.RuleToSatisfyName];
-                    }
-                }
-
-                validActions.Add(item.Value);
-            }
-
-
-            return validActions;
         }
 
         public List<ZeroAction> GetShorcutActions()
@@ -291,19 +223,19 @@ namespace ZeroConfiguration
             var ret = new string[] { };
             using (var conf = new ConfigurationModelManager())
             {
-                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == ZeroCommonClasses.Terminal.Instance.TerminalCode && tp.Code == SystemProperty.HomeShortcut.Code);
+                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == Terminal.Instance.TerminalCode && tp.Code == SystemProperty.HomeShortcut.Code);
                 if (prop != null)
                 {
                     if (prop.LargeValue != null)
                     {
                         ret = prop.LargeValue.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         ZeroAction act = null;
-                        string[] actParts;
                         foreach (var item in ret)
                         {
-                            actParts = item.Split('|');
-                            if (ZeroCommonClasses.Terminal.Instance.Manager.ExistsAction(actParts[0].Trim(), out act))
+                            string[] actParts = item.Split('|');
+                            if (Terminal.Instance.Session.Actions.Exists(actParts[0].Trim()))
                             {
+                                act = Terminal.Instance.Session.Actions[actParts[0].Trim()];
                                 act.SetAlias(actParts);
                                 actions.Add(act);
                             }

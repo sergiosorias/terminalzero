@@ -69,6 +69,25 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             }
         }
 
+        public bool TryExecute()
+        {
+            bool ret = false;
+            try
+            {
+                if (CanExecute(null))
+                {
+                    Execute(null);
+                    ret = true;
+                }
+            }
+            catch
+            {
+
+            }
+
+            return ret;
+        }
+
         #endregion
 
         private bool ValidateActionParams(StringBuilder result)
@@ -77,15 +96,12 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             ActionParameterBase obj = null;
             foreach (var item in Parameters)
             {
-                if (Terminal.Instance.Session.SessionParams.ContainsKey(item.Name))
-                    obj = Terminal.Instance.Session.SessionParams[item.Name];
-
+                obj = Terminal.Instance.Session[item.Name];
                 if ((obj == null || obj.Value == null) && item.IsMandatory)
                 {
                     ret = false;
                     result.AppendLine("UnasignedParameter '" + item.Name + "'");
                 }
-
                 obj = null;
             }
 
@@ -126,5 +142,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         {
             Parameters.Add(new ActionParameterBase(type, isMandatory,false));
         }
+
+        
     }
 }

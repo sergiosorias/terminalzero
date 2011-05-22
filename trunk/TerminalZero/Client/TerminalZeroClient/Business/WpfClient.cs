@@ -36,7 +36,7 @@ namespace TerminalZeroClient.Business
         {
             get
             {
-                List<ZeroAction> validActions = Terminal.Instance.Manager.BuilSessionActions();
+                IEnumerable<ZeroAction> validActions = Terminal.Instance.Session.Actions.GetAll();
                 var menu = new ZeroMenu();
                 string aux = "", current = "";
                 int pos = 0;

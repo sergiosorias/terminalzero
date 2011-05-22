@@ -27,7 +27,7 @@
                     <DataGridTemplateColumn CanUserResize="False" CanUserReorder="False" x:Name="editItemCollum">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button DataContext="{Binding Path=ProviderUserKey}" Name="btnEditUser" Click="btnEditUser_Click" Style="{DynamicResource editRowButton}"/>
+                                <Button DataContext="{Binding Path=Code}" Name="btnEditUser" Click="btnEditUser_Click" Style="{DynamicResource editRowButton}"/>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridCell},Path=IsSelected}" Value="True">
                                         <Setter TargetName="btnEditUser" Property="Visibility" Value="Visible"/>

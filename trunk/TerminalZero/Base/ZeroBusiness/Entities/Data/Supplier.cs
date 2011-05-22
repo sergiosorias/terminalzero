@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Xml.Serialization;
+using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using System.ComponentModel;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Supplier : ISelectable, IDataErrorInfo
+    public partial class Supplier : ISelectable
     {
         public bool Contains(string data)
         {
@@ -19,51 +20,30 @@ namespace ZeroBusiness.Entities.Data
         }
 
 
-
-        #region IDataErrorInfo Members
-
-        [XmlIgnore]
-        public string Error { get; private set; }
-
-        public string this[string columnName]
+        partial void OnName1Changing(string value)
         {
-            get
+            if (string.IsNullOrEmpty(value))
             {
-                Error = "";
-                
-                if (columnName == "Name1")
-                {
-                    if (string.IsNullOrEmpty(Name1))
-                    {
-                        Error = "Nombre obligatorio";
-                        return Error;
-                    }
-                }
+                throw new BusinessValidationException("Nombre Obligatorio");
 
-                if (columnName == "TaxPositionCode")
-                {
-                    if (!TaxPositionCode.HasValue)
-                    {
-                        Error = "Campo obligatorio";
-                        return Error;
-                    }
-                }
-
-                if (columnName == "PaymentInstrumentCode")
-                {
-                    if (!PaymentInstrumentCode.HasValue)
-                    {
-                        Error = "Campo obligatorio";
-                        return Error;
-                    }
-                }
-
-
-
-                return Error;
             }
         }
 
-        #endregion
+        partial void OnTaxPositionCodeChanging(int? value)
+        {
+            if (!value.HasValue)
+            {
+                throw new BusinessValidationException("Campo obligatorio");
+            }
+        }
+
+        partial void OnPaymentInstrumentCodeChanging(int? value)
+        {
+            if (!value.HasValue)
+            {
+                throw new BusinessValidationException("Campo obligatorio");
+            }
+        }
+       
     }
 }

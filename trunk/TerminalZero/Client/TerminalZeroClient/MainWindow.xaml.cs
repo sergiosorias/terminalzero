@@ -61,11 +61,11 @@ namespace TerminalZeroClient
             item.Style = (Style)Resources["masterMenuItem"];
             item.Header = Properties.Resources.Home;
             ZeroAction actionInit = null;
-            if (!Terminal.Instance.Manager.ExistsAction(Actions.AppHome, out actionInit))
+            if (!Terminal.Instance.Session.Actions.Exists(Actions.AppHome))
             {
                 actionInit = new ZeroBackgroundAction( Actions.AppHome, OpenHome,null, false,false);
-                Terminal.Instance.Session.AddAction(actionInit);
-                Terminal.Instance.Session.AddAction(new ZeroBackgroundAction( Actions.AppExit, ForceClose, null,false,false));
+                Terminal.Instance.Session.Actions.Add(actionInit);
+                Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppExit, ForceClose, null, false, false));
             }
             ShortCutHome.Command = actionInit;
             item.Command = actionInit;

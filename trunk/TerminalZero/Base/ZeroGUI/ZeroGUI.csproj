@@ -91,11 +91,16 @@
     </Compile>
     <Compile Include="Classes\Delegates.cs" />
     <Compile Include="Classes\EventArgs.cs" />
-    <Compile Include="Classes\ValidationRules.cs" />
+    <Compile Include="Classes\IsBarCodeRule.cs" />
+    <Compile Include="Classes\IsDoubleRule.cs" />
+    <Compile Include="Classes\MandatoryRule.cs" />
+    <Compile Include="Classes\MandatorySelectionRule.cs" />
+    <Compile Include="Classes\Validator.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\InvertVisibilityConverter.cs" />
     <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
     <Compile Include="Converters\PrintModeToColorConverter.cs" />
+    <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="LazyLoadingListControl.cs" />
     <Compile Include="Masking.cs" />

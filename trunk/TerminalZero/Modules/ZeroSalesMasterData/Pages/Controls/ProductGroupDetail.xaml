@@ -21,7 +21,7 @@
             <TextBox.Text>
                 <Binding Path="Name" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
                     <Binding.ValidationRules>
-                        <DataErrorValidationRule/>
+                        <ExceptionValidationRule/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>

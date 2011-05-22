@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Xml.Serialization;
+using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using System.ComponentModel;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Product : ISelectable, IDataErrorInfo
+    public partial class Product : ISelectable
     {
         #region ISelectable Members
 
@@ -22,16 +23,11 @@ namespace ZeroBusiness.Entities.Data
 
         #endregion
 
-        #region IDataErrorInfo Members
-
-        [XmlIgnore]
-        public string Error { get; private set; }
-
         partial void OnMasterCodeChanged()
         {
             if (string.IsNullOrWhiteSpace(MasterCode))
             {
-                Error = "Código obligatorio";
+                throw new BusinessValidationException("Código obligatorio");
             }
         }
 
@@ -39,7 +35,7 @@ namespace ZeroBusiness.Entities.Data
         {
             if (string.IsNullOrEmpty(Name))
             {
-                Error = "Nombre obligatorio";
+                throw new BusinessValidationException("Nombre obligatorio");
             }
         }
 
@@ -47,35 +43,10 @@ namespace ZeroBusiness.Entities.Data
         {
             if (!Group1.HasValue)
             {
-                Error = "Grupo obligatorio";
+                throw new BusinessValidationException("Grupo obligatorio");
             }
         }
 
-        public string this[string columnName]
-        {
-            get
-            {
-                Error = "";
-                if (columnName == "MasterCode")
-                {
-                    OnMasterCodeChanged();
-                }
-
-                if (columnName == "Name")
-                {
-                    OnNameChanged();
-                }
-
-                if (columnName == "Group1")
-                {
-                    OnGroup1Changed();
-                }
-
-                return Error;
-            }
-        }
-
-        #endregion
        
     }
 }

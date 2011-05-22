@@ -20,8 +20,6 @@ namespace ZeroConfiguration.Pages
         
         public Properties()
         {
-            ControlMode = ControlMode.ReadOnly;
-            _dataProvider = null;
             InitializeComponent();
             CommandBar.Save += this.ZeroToolBar_Save;
         }
@@ -97,8 +95,6 @@ namespace ZeroConfiguration.Pages
         private void UserControlUnloaded(object sender, RoutedEventArgs e)
         {
             _syncProcess.SyncCountdownTick -= SyncSyncCountdownTick;
-            if (_dataProvider != null)
-                _dataProvider.SaveChanges();
         }
 
         private Synchronizer _syncProcess;

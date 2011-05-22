@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Configuration;
@@ -25,11 +26,7 @@ namespace ZeroConfiguration.Pages
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ZeroAction action;
-            if (ZeroCommonClasses.Terminal.Instance.Manager.ExistsAction(ZeroBusiness.Actions.OpenUserPasswordChangeMessage, out action))
-            {
-                CommandBar.AppendButton("Cambiar Contraseña", action);
-            }
+            CommandBar.AppendButton("Cambiar Contraseña", ZeroCommonClasses.Terminal.Instance.Session.Actions[ZeroBusiness.Actions.OpenUserPasswordChangeMessage]);
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 LoadUsers();
@@ -52,19 +49,11 @@ namespace ZeroConfiguration.Pages
             try
             {
                 var ud = new UserDetail();
-                User usr = null;
-                foreach (User user in _userCol)
-                {
-                    if (user.Code.Equals(((Button)sender).DataContext))
-                    {
-                        usr = user;
-                        break;
-                    }
-                }
-
-                ud.DataContext = usr;
+                ud.DataContext = _userCol.FirstOrDefault(user => user.Code.Equals(((Button) sender).DataContext));
+                ud.ControlMode = ControlMode.Update;
                 if (ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.EditUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
                 {
+                    User.UpdateUser((User) ud.DataContext);
                     users.UpdateLayout();
                 }
             }
@@ -78,10 +67,17 @@ namespace ZeroConfiguration.Pages
         private void btnNew_Click(object sender, RoutedEventArgs e)
         {
             var ud = new UserDetail();
+            ud.DataContext = new User();
             ud.ControlMode = ControlMode.New;
             if (ZeroMessageBox.Show(ud, ZeroConfiguration.Properties.Resources.NewUser, SizeToContent.WidthAndHeight).GetValueOrDefault())
             {
-                LoadUsers();
+                string message;
+                if(User.TryCreateUser((User)ud.DataContext,out message))
+                    LoadUsers();
+                else
+                {
+                    MessageBox.Show(message, "Error");    
+                }
             }
         }
     }

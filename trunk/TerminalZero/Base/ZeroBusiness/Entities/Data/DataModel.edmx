@@ -1800,6 +1800,7 @@
             <ScalarProperty Name="TaxPositionCode" ColumnName="TaxPositionCode" />
             <ScalarProperty Name="PaymentInstrumentCode" ColumnName="PaymentInstrumentCode" />
             <ScalarProperty Name="LegalCode" ColumnName="LegalCode" />
+                <Condition ColumnName="Name1" IsNull="false" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="DeliveryDocumentHeaders"><EntityTypeMapping TypeName="TZeroDataModel.DeliveryDocumentHeader"><MappingFragment StoreEntitySet="DeliveryDocumentHeader">
             <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
@@ -2105,7 +2106,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="DataModel" ZoomLevel="90">
+      <Diagram Name="DataModel" ZoomLevel="58">
         <EntityTypeShape EntityType="TZeroDataModel.Customer" Width="1.5" PointX="3.75" PointY="26.875" Height="5.8263151041666674" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroDataModel.DeliveryDocumentHeader" Width="1.5" PointX="6" PointY="21" Height="3.7109993489583317" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroDataModel.DeliveryDocumentItem" Width="1.5" PointX="8.25" PointY="16.75" Height="4.0956022135416674" IsExpanded="true" />

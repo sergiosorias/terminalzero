@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Drawing.Printing;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroBusiness;
+using ZeroBusiness.Entities.Data;
+using ZeroCommonClasses;
+using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Pages
 {
@@ -16,25 +18,26 @@ namespace ZeroMasterData.Pages
         public ProductsView()
         {
             InitializeComponent();
-            CommandBar.New += NewBtnClick;
+            ZeroAction
+            newProduct = Terminal.Instance.Session.Actions[Actions.OpenNewProductsMessage];
+            CommandBar.NewBtnCommand = newProduct;
+            newProduct.Finished += NewBtnClick;
+
             CommandBar.Print += PrintBtnClicked;
         }
 
-        private void NewBtnClick(object sender, RoutedEventArgs e)
+        private void NewBtnClick(object sender, EventArgs e)
         {
-            var detail = new ProductDetail();
-            detail.Header = Properties.Resources.NewProduct;
-            bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.NewProduct);
-            if (ret.HasValue && ret.Value && detail.ControlMode == ControlMode.New)
+            object obj = Terminal.Instance.Session[typeof (Product)];
+            if(obj != null)
             {
-                productList.AddItem(detail.CurrentProduct);
+                productList.AddItem(obj as Product);
             }
         }
 
         protected override void OnControlModeChanged(ControlMode newMode)
         {
  	         base.OnControlModeChanged(newMode);
-             CommandBar.NewBtnVisible = !(ControlMode == ControlMode.ReadOnly);
              productList.ControlMode = ControlMode;
         }
 
@@ -45,8 +48,9 @@ namespace ZeroMasterData.Pages
 
         private void PrintBtnClicked(object sender, RoutedEventArgs e)
         {
-            PrintDialog pd = new PrintDialog();
-            pd.PrintVisual(productList, "Lista de productos");
+            var pd = new PrintDialog();
+            if(pd.ShowDialog().GetValueOrDefault())
+                pd.PrintVisual(productList, "Lista de productos");
         }
         
     }

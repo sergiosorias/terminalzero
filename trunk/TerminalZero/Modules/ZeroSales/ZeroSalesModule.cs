@@ -72,8 +72,8 @@ namespace ZeroSales
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenCurrentSalesView, OpenCurrentSalesView, null, true));
-            Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenNewSaleView, OpenSaleView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCurrentSalesView, OpenCurrentSalesView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewSaleView, OpenSaleView, null, true));
         }
 
         private void OpenSaleView()

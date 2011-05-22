@@ -11,38 +11,26 @@ namespace ZeroMasterData.Pages.Controls
     /// </summary>
     public partial class WeightDetail : NavigationBasePage
     {
-        public Weight WeigthNew { get; private set; }
+        public Weight CurrentWeigth { get; private set; }
 
         public WeightDetail()
         {
             InitializeComponent();
         }
 
-        public WeightDetail(Weight Data)
+        public WeightDetail(Weight data)
             : this()
         {
-            WeigthNew = Data;
+            CurrentWeigth = data;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (WeigthNew == null)
+            if (CurrentWeigth == null)
             {
-                WeigthNew = Weight.CreateWeight(BusinessContext.Instance.ModelManager.Weights.Count()
-                    , true, 0);
+                CurrentWeigth = new Weight(1000);
             }
-            grid1.DataContext = WeigthNew;
-            quantityTextBox.Text = "";
-        }
-
-        public override bool CanAccept(object parameter)
-        {
-            bool ret = base.CanAccept(parameter);
-
-            //if (!ret)
-            //    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return ret;
+            grid1.DataContext = CurrentWeigth;
         }
     }
 }

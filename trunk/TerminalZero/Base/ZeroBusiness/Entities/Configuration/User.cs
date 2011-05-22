@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Security;
+using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroBusiness.Entities.Configuration
@@ -21,7 +22,7 @@ namespace ZeroBusiness.Entities.Configuration
         DateTime LastActivityDate { get; set; }
     }
 
-    public class User : IUser
+    public class User : IUser, INotifyPropertyChanged
     {
         #region Statics
         
@@ -61,6 +62,11 @@ namespace ZeroBusiness.Entities.Configuration
             }
 
             return ret;
+        }
+
+        public static bool TryCreateUser(User newUser, out string error)
+        {
+            return TryCreateUser(newUser.UserName,newUser.GetPassword(),newUser.Email,out error);
         }
 
         public static bool ValidateUser(string userName, string userPass)
@@ -122,9 +128,15 @@ namespace ZeroBusiness.Entities.Configuration
 
         private readonly MembershipUser providerUser;
 
+        public User()
+        {
+            IsNew = true;
+        }
+
         internal User(MembershipUser user)
         {
             providerUser = user;
+            IsNew = false;
         }
         
         #region IUser Members
@@ -134,65 +146,111 @@ namespace ZeroBusiness.Entities.Configuration
             get { return (Guid)providerUser.ProviderUserKey; }
         }
 
+        public bool IsNew { get; private set; }
+
+        private string _userName;
         public string UserName
         {
-            get { return providerUser.UserName; }
+            get
+            {
+                return IsNew ? _userName : providerUser.UserName;
+            }
+            set
+            {
+                _userName = value;
+                if(string.IsNullOrEmpty(_userName))
+                {
+                    throw new BusinessValidationException("Nombre obligatorio");
+                }
+                if (IsNew)
+                    _password = value.ToLowerInvariant();
+                OnPropertyChanged("UserName");
+            }
+            
         }
 
+        private string _email;
         public string Email
         {
-            get { return providerUser.Email; }
-            set { providerUser.Email = value; }
+            get
+            {
+                return IsNew ? _email : providerUser.Email;
+            }
+            set
+            {
+                
+                if (IsNew)
+                    _email = value;
+                else
+                    providerUser.Email = value;
+                OnPropertyChanged("Email");
+            }
         }
 
         public bool ChangePassword(string oldPassword, string newPassword)
         {
-            return providerUser.ChangePassword(oldPassword, newPassword);
+            _password = newPassword;
+            return IsNew ? true : providerUser.ChangePassword(oldPassword, newPassword);
         }
+
+        private string _password = "1234";
+        public string Password { get { return GetPassword(); } }
 
         public string GetPassword()
         {
-            return providerUser.GetPassword();
+            return IsNew ? _password : providerUser.GetPassword();
         }
 
         public string ResetPassword()
         {
-            return providerUser.ResetPassword();
+            _password = UserName.ToLowerInvariant();
+            return IsNew ? _password : providerUser.ResetPassword();
         }
 
         public bool UnlockUser()
         {
-            return providerUser.UnlockUser();
+            return IsNew? true: providerUser.UnlockUser();
         }
 
         public bool IsApproved
         {
-            get { return providerUser.IsApproved; }
+            get { return IsNew ? true : providerUser.IsApproved; }
             set
             {
-                providerUser.IsApproved = value;
+                if(!IsNew)
+                    providerUser.IsApproved = value;
             }
         }
 
         public bool IsLockedOut
         {
-            get { return providerUser.IsLockedOut; }
+            get { return IsNew ? false : providerUser.IsLockedOut; }
         }
 
         public DateTime LastLoginDate
         {
-            get { return providerUser.LastLoginDate; }
-            set { providerUser.LastLoginDate = value; }
+            get { return IsNew ? DateTime.Now : providerUser.LastLoginDate; }
+            set { if(!IsNew) providerUser.LastLoginDate = value; }
         }
 
         public DateTime LastActivityDate
         {
-            get { return providerUser.LastActivityDate; }
-            set {providerUser.LastActivityDate = value;}
+            get { return IsNew ? DateTime.Now : providerUser.LastActivityDate; }
+            set { if (!IsNew) providerUser.LastActivityDate = value; }
         }
 
         #endregion
+
+        #region Implementation of INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
         
-        
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

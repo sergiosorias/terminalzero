@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
@@ -49,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ActionParameters.cs" />
     <Compile Include="Actions.cs" />
+    <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Entities\Configuration\ConfigurationModelManager.cs" />
     <Compile Include="Entities\Configuration\ConfigurationModel.Designer.cs">
       <DependentUpon>ConfigurationModel.edmx</DependentUpon>
