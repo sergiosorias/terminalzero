@@ -61,7 +61,7 @@ namespace TerminalZeroClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aplicación minizada.
+        ///   Looks up a localized string similar to Aplicación minimizada.
         /// </summary>
         internal static string AppMinimized {
             get {
