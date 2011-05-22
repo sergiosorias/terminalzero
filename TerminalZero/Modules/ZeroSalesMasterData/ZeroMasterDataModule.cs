@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using ZeroBusiness;
+using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
@@ -11,6 +12,7 @@ using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 using ZeroGUI;
 using ZeroMasterData.Pages;
+using ZeroMasterData.Pages.Controls;
 using ZeroMasterData.Properties;
 
 namespace ZeroMasterData
@@ -25,12 +27,13 @@ namespace ZeroMasterData
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenProductsView, OpenProductView,null,true));
-            Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenProductMessage, OpenProductMessage, null, true));
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero,true));
-            Terminal.Instance.Session.AddAction(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView, null, true));
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenProductPriceIncrease, ExportMasterDataPack, Rules.IsTerminalZero,true));
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero,true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductsView, OpenProductView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductMessage, OpenProductMessage, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewProductsMessage, OpenNewProductMessage, Rules.IsTerminalZero, false));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductPriceIncrease, ExportMasterDataPack, Rules.IsTerminalZero, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero, true));
             //Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
@@ -72,13 +75,14 @@ namespace ZeroMasterData
         {
             BusinessContext.Instance.BeginOperation();
             var view = new ProductsView();
-            if (!Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero)) 
+            if (!Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero)) 
                 view.ControlMode = ControlMode.ReadOnly;
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void OpenProductMessage()
         {
+            BusinessContext.Instance.BeginOperation();
             var view = new ProductsView { ControlMode = ControlMode.ReadOnly };
             var mb = new ZeroMessageBox
                          {
@@ -88,8 +92,18 @@ namespace ZeroMasterData
                              Topmost = true,
                              MaxWidth = 600
                          };
-            BusinessContext.Instance.BeginOperation();
             mb.Show();
+        }
+
+        private void OpenNewProductMessage()
+        {
+            var detail = new ProductDetail();
+            detail.Header = Resources.NewProduct;
+            bool? ret = ZeroMessageBox.Show(detail, Resources.NewProduct);
+            if (ret.HasValue && ret.Value && detail.ControlMode == ControlMode.New)
+            {
+                Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.CurrentProduct,true);
+            }
         }
 
         private void OpenSupplierView()
@@ -103,7 +117,7 @@ namespace ZeroMasterData
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CustomerView();
-            if (Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
+            if (Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
             {
                 view.ControlMode = ControlMode.Update;
             }

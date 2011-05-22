@@ -1,33 +1,17 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
+using ZeroBusiness.Exceptions;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Price : IDataErrorInfo
+    public partial class Price 
     {
-        #region IDataErrorInfo Members
-
-        [XmlIgnore]
-        public string Error { get; private set; }
-
-        public string this[string columnName]
+        partial void OnValueChanging(double value)
         {
-            get
+            if (value < 0)
             {
-                Error = "";
-                if (columnName == "Value")
-                {
-                    if (Value <0)
-                    {
-                        Error = "Número inválido";
-                        return Error;
-                    }
-                }
-
-                return Error;
+                throw new BusinessValidationException("Número inválido");
             }
         }
-
-        #endregion
     }
 }

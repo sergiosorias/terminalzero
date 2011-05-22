@@ -8,8 +8,8 @@
     ItemsSource="{Binding Path=ModelManager.Customers,Source={x:Static Data:BusinessContext.Instance}}"
     mc:Ignorable="d"> 
     <base:LazyLoadingListControl.Columns>
-        <DataGridTextColumn x:Name="name1Column" Binding="{Binding Path=Name1}" Header="Nombre" Width="1*" MaxWidth="200"/>
-        <DataGridTextColumn x:Name="name2Column" Binding="{Binding Path=Name2}" Header="Apellido" Width="1*" MaxWidth="200" />
+        <DataGridTextColumn x:Name="name1Column" Binding="{Binding Path=Name1, Mode=OneWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" Header="Nombre" Width="1*" MaxWidth="200"/>
+        <DataGridTextColumn x:Name="name2Column" Binding="{Binding Path=Name2, Mode=OneWay, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" Header="Apellido" Width="1*" MaxWidth="200" />
         <DataGridTextColumn x:Name="legalCodeColumn" Binding="{Binding Path=LegalCode}" Header="CUIT/CUIL" Width="1*" MaxWidth="110" />
         <DataGridTextColumn x:Name="streetColumn" Binding="{Binding Path=Street}" Header="Calle" Width="SizeToHeader" />
         <DataGridTextColumn x:Name="numberColumn" Binding="{Binding Path=Number}" Header="Número" Width="SizeToHeader" />

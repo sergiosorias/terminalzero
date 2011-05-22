@@ -16,6 +16,7 @@
         public const string ExecUpgradeProcess              = "Configuración@Actualizar";
 
         public const string OpenProductsView                = "Tablas Maestras@Productos@Lista de Productos";
+        public const string OpenNewProductsMessage          = "Tablas Maestras@Productos@Nuevo";
         public const string OpenProductMessage              = "Tablas Maestras@Productos@Consulta";
         public const string OpenProductPriceIncrease        = "Tablas Maestras@Productos@Actualizar Precios";
         public const string OpenSupplierView                = "Tablas Maestras@Proveedores";

@@ -23,13 +23,13 @@ namespace ZeroStock
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenCurrentStockView, OpenStockView, null, true));
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenNewStockView, OpenNewStockView, Rules.IsTerminalZero,true));
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenModifyStockView, OpenModifyStockView, Rules.IsTerminalZero,true));
-            Terminal.Instance.Session.AddAction(new ZeroAction( Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero,true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCurrentStockView, OpenStockView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewStockView, OpenNewStockView, Rules.IsTerminalZero, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenModifyStockView, OpenModifyStockView, Rules.IsTerminalZero, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero, true));
             var createStockFromSale = new ZeroTriggerAction(Actions.ExecCreateStockFromLastSale, CreateStockFromSale,null);
             createStockFromSale.AddParam(typeof(SaleHeader),true);
-            Terminal.Instance.Session.AddAction(createStockFromSale);
+            Terminal.Instance.Session.Actions.Add(createStockFromSale);
         }
 
         public override void Init()

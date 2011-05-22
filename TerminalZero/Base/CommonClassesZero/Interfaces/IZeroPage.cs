@@ -6,6 +6,7 @@ namespace ZeroCommonClasses.Interfaces
         /// <summary>
         /// Default Mode
         /// </summary>
+        NotSet = -1,
         New = 0,
         Update = 1,
         Delete = 2,

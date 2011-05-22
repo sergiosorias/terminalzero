@@ -28,7 +28,7 @@ namespace ZeroStock.Pages
             // Do not load your data at design time.
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                if (ZeroCommonClasses.Terminal.Instance.Manager.IsRuleValid(Rules.IsTerminalZero))
+                if (ZeroCommonClasses.Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
                 {
                     terminalFilterContent.Visibility = Visibility.Visible;
                     var expter = BusinessContext.Instance.ModelManager.GetExportTerminal(ZeroCommonClasses.Terminal.Instance.TerminalCode).ToList();

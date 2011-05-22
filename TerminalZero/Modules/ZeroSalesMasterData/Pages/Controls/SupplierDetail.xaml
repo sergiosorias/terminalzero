@@ -42,7 +42,6 @@
                         <TextBox.Text>
                             <Binding Path="Name1" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
                                     <ExceptionValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
@@ -72,7 +71,6 @@
                     <TextBox.Text>
                         <Binding Path="TaxPositionCode" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
-                                <DataErrorValidationRule/>
                                 <ExceptionValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
@@ -84,7 +82,6 @@
                     <TextBox.Text>
                         <Binding Path="PaymentInstrumentCode" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
-                                <DataErrorValidationRule/>
                                 <ExceptionValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>

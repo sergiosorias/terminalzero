@@ -43,6 +43,7 @@
         <Setter Property="Foreground" Value="White"/>
     </Style>
     <Style  x:Key="{x:Type TextBox}" TargetType="TextBox">
+        <Setter Property="ToolTipService.ShowDuration" Value="10000"/>
         <Setter Property="Validation.ErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -62,7 +63,7 @@
                             <AdornedElementPlaceholder Name="MyAdorner">
                             </AdornedElementPlaceholder>
                         </Border>
-                        <Popup x:Name="popUpMsg" StaysOpen="False" PopupAnimation="Slide" 
+                        <!--<Popup x:Name="popUpMsg" StaysOpen="False" PopupAnimation="Slide" 
                                    IsOpen="{Binding ElementName=MyAdorner, Path=AdornedElement.(Validation.HasError), Mode=OneWay}" 
                                    AllowsTransparency="True" Placement="Bottom" 
                                    PlacementTarget="{Binding ElementName=errorBorder}"
@@ -84,7 +85,7 @@
                                 </Border>
                                 <Path Fill="#FFB1B1B1" x:Name="arrow" Stretch="Fill" Stroke="Gray" StrokeThickness="2" HorizontalAlignment="Left" Margin="30,0,0,-2" Width="20" Height="10" Data="M190,84 C203.27403,59.418466 189.83333,83.833001 217.75,33.249609 219.15884,30.696864 246.16667,48.831883 305.83333,84.833012"/>
                             </Grid>
-                        </Popup>
+                        </Popup>-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Customer : ISelectable, IDataErrorInfo
+    public partial class Customer : ISelectable
     {
 
         #region ISelectable Members
@@ -23,32 +24,17 @@ namespace ZeroBusiness.Entities.Data
 
         #endregion
 
-        #region IDataErrorInfo Members
-
-        [XmlIgnore]
-        public string Error { get; private set; }
-
-        public string this[string columnName]
+        partial void OnName1Changing(string value)
         {
-            get
-            {
-                Error = "";
-                if (columnName == "Name1")
-                {
-                    if (string.IsNullOrEmpty(Name1))
-                        Error = "Nombre obligatorio";
-                }
-
-                if (columnName == "TaxPositionCode")
-                {
-                    if (!TaxPositionCode.HasValue)
-                        Error = "Campo obligatorio";
-                }
-                
-                return Error;
-            }
+            if (string.IsNullOrEmpty(value))
+                throw new BusinessValidationException("Nombre obligatorio");
         }
 
-        #endregion
+        partial void OnTaxPositionCodeChanging(int? value)
+        {
+            if (!value.HasValue)
+                throw new BusinessValidationException("Campo obligatorio");
+        }
+        
     }
 }

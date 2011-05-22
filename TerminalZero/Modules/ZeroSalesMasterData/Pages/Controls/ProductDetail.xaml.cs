@@ -160,10 +160,10 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.ModelManager.Weights.AddObject(pgd.WeigthNew);
+                BusinessContext.Instance.ModelManager.Weights.AddObject(pgd.CurrentWeigth);
                 BusinessContext.Instance.ModelManager.SaveChanges();
-                weightBox.Items.Add(pgd.WeigthNew);
-                weightBox.SelectedItem = pgd.WeigthNew;
+                weightBox.Items.Add(pgd.CurrentWeigth);
+                weightBox.SelectedItem = pgd.CurrentWeigth;
             }
         }
 

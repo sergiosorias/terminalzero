@@ -1,48 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
-using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses
 {
     public class ZeroSession
     {
+        private Dictionary<string, ActionParameterBase> SessionParams { get; set; }
+
+        public RuleCollection Rules
+        {
+            get;
+            private set;
+        }
+
+        public ActionCollection Actions
+        {
+            get;
+            private set;
+        }
+
         public ZeroSession()
         {
             SessionParams = new Dictionary<string, ActionParameterBase>();
-            SystemActions = new Dictionary<string, ZeroAction>();
-            SystemRules = new Dictionary<string, Predicate<object>>();
+            Actions = new ActionCollection();
+            Rules = new RuleCollection();
         }
 
-        public Dictionary<string, ZeroAction> SystemActions { get; private set; }
-        public Dictionary<string, Predicate<object>> SystemRules { get; private set; }
-        internal Dictionary<string, ActionParameterBase> SessionParams { get; set; }
-
-        public void AddAction(ZeroAction action)
+        public ActionParameterBase this[string name]
         {
-            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, "Acción --> ''" + action.Name + "''");
-            SystemActions.Add(action.Name, action);
+            get { return GetParameter(name); }
+            set { AddParameter(value); }
         }
 
-        public void AddRule(string name,Predicate<object> rule)
+        public ActionParameterBase this[Type type]
         {
-            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, "Regla --> '" + name + "'");
-            SystemRules.Add(name, rule);
+            get { return GetParameter(type); }
+            set { AddParameter(value); }
         }
 
-        private void AddNavigationParameter(ActionParameterBase value)
+        private void AddParameter(ActionParameterBase value)
         {
             if (!SessionParams.ContainsKey(value.Name))
                 SessionParams.Add(value.Name, value);
             else
                 SessionParams[value.Name] = value;
 
-            foreach (KeyValuePair<string, ZeroAction> systemAction in SystemActions)
-            {
-                systemAction.Value.RaiseCanExecuteChanged();
-            }
+            Actions.Refresh();
         }
 
         private ActionParameterBase GetParameter(string name)
@@ -67,20 +72,5 @@ namespace ZeroCommonClasses
 
             return param;
         }
-
-        public ActionParameterBase this[string name]
-        {
-            get { return GetParameter(name); }
-            set { AddNavigationParameter(value); }
-        }
-
-        public ActionParameterBase this[Type type]
-        {
-            get { return GetParameter(type); }
-            set { AddNavigationParameter(value); }
-        }
-        
-
-        
     }
 }

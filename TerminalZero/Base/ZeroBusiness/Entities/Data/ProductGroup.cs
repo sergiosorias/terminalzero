@@ -1,34 +1,17 @@
 ﻿using System.ComponentModel;
 using System.Xml.Serialization;
+using ZeroBusiness.Exceptions;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class ProductGroup : IDataErrorInfo
+    public partial class ProductGroup
     {
-
-        #region IDataErrorInfo Members
-
-        [XmlIgnore]
-        public string Error { get; private set; }
-
-        public string this[string columnName]
+        partial void OnNameChanging(string value)
         {
-            get
+            if (string.IsNullOrEmpty(value))
             {
-                Error = "";
-                if (columnName == "Name")
-                {
-                    if (string.IsNullOrEmpty(Name))
-                    {
-                        Error = "Nombre Obligatorio";
-                        return Error;
-                    }
-                }
-
-                return Error;
+                throw new BusinessValidationException("Nombre Obligatorio");
             }
         }
-
-        #endregion
     }
 }

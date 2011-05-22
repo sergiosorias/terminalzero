@@ -35,7 +35,6 @@
                         <TextBox.Text>
                             <Binding Path="MasterCode" Mode="TwoWay">
                                 <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
                                     <ExceptionValidationRule/>
                                     <r:MandatoryRule ErrorMessage="Ingrese un Código de Producto"/>
                                 </Binding.ValidationRules>
@@ -47,9 +46,8 @@
                 <Label Content="Nombre:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="nameTextBox" VerticalAlignment="Center">
                     <TextBox.Text>
-                        <Binding Path="Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                        <Binding Path="Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True">
                             <Binding.ValidationRules>
-                                <DataErrorValidationRule/>
                                 <ExceptionValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
@@ -87,7 +85,6 @@
                         <TextBox.Text>
                             <Binding Path="Group1" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
                                     <ExceptionValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>

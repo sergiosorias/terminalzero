@@ -11,9 +11,5 @@ namespace ZeroCommonClasses.Interfaces
         void InitializeTerminal();
         ModuleStatus GetModuleStatus(ZeroModule module);
         List<ZeroAction> GetShorcutActions();
-        List<ZeroAction> BuilSessionActions();
-        bool IsRuleValid(string ruleName);
-        bool ExecuteAction(ZeroAction action);
-        bool ExistsAction(string actionName, out ZeroAction action);
     }
 }

@@ -50,6 +50,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalObjects\ActionCollection.cs" />
     <Compile Include="Context\ConfigurationContext.cs" />
     <Compile Include="Entities\CommonEntitiesManager.cs" />
     <Compile Include="Entities\CommonModel.Designer.cs">
@@ -83,6 +84,7 @@
     <Compile Include="Interfaces\ILogBuilder.cs" />
     <Compile Include="Interfaces\IProgressNotifier.cs" />
     <Compile Include="Pack\PackTableInfo.cs" />
+    <Compile Include="GlobalObjects\RuleCollection.cs" />
     <Compile Include="Terminal.cs" />
     <Compile Include="ZeroModule.cs" />
     <Compile Include="Interfaces\Services\ISyncService.cs" />
