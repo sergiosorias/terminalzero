@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Data.Objects.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
@@ -9,7 +11,7 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroMasterData.Reporting;
+using ZeroGUI.Reporting;
 
 namespace ZeroMasterData.Pages
 {
@@ -21,8 +23,7 @@ namespace ZeroMasterData.Pages
         public ProductsView()
         {
             InitializeComponent();
-            ZeroAction
-            newProduct = Terminal.Instance.Session.Actions[Actions.OpenNewProductsMessage];
+            ZeroAction newProduct = Terminal.Instance.Session.Actions[Actions.OpenNewProductsMessage];
             CommandBar.NewBtnCommand = newProduct;
             newProduct.Finished += NewBtnClick;
 
@@ -51,9 +52,21 @@ namespace ZeroMasterData.Pages
 
         private void PrintBtnClicked(object sender, RoutedEventArgs e)
         {
-            var view = new ProductListReport();
-            view.ProductList = BusinessContext.Instance.ModelManager.Products.OrderBy(product=>product.Name).ToList();
-            ZeroMessageBox.Show(view, MessageBoxButton.OK);
+            ReportBuilder.Create("Lista de productos",
+                                  BusinessContext.Instance.ModelManager.Products.OrderBy(product => product.Name)
+                                      .Select(product =>
+                                          new
+                                              {
+                                                  Codigo = product.MasterCode,
+                                                  Nombre = product.Name,
+                                                  Precio = "$ " + SqlFunctions.StringConvert(product.Price1.Value),
+                                                  Activo = product.Enable
+                                              }).ToList(),
+                                  new ReportColumnInfo("Código", new GridLength(150)),
+                                  new ReportColumnInfo("Nombre", new GridLength(100, GridUnitType.Star)),
+                                  new ReportColumnInfo("Precio", new GridLength(100)));
+
+            //ReportBuilder.Create("algo", productList);
         }
         
     }

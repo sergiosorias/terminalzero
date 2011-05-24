@@ -9,7 +9,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class Customer : ISelectable
     {
-
+        
         #region ISelectable Members
 
         public bool Contains(string data)
@@ -35,6 +35,8 @@ namespace ZeroBusiness.Entities.Data
             if (!value.HasValue)
                 throw new BusinessValidationException("Campo obligatorio");
         }
+        
+        
         
     }
 }

@@ -121,34 +121,31 @@
   <data name="search" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="zoom_in" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\zoom_in.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="NewSupplier" xml:space="preserve">
+    <value>Nuevo proveedor</value>
   </data>
-	<data name="NewSupplier">
-		<value xml:space="preserve">Nuevo proveedor</value>
-	</data>
-	<data name="NewProduct">
-		<value xml:space="preserve">Nuevo producto</value>
-	</data>
-	<data name="NewMeasurementUnit">
-		<value xml:space="preserve">Nueva unidad de medida</value>
-	</data>
-	<data name="EditMeasurementUnit">
-		<value xml:space="preserve">Editar unidad de medida</value>
-	</data>
-	<data name="EditGroup">
-		<value xml:space="preserve">Editar grupo</value>
-	</data>
-	<data name="NewGroup">
-		<value xml:space="preserve">Nuevo Grupo</value>
-	</data>
-	<data name="ProductEdit">
-		<value xml:space="preserve">Editar producto</value>
-	</data>
-	<data name="CustomerNew">
-		<value xml:space="preserve">Cliente Nuevo</value>
-	</data>
-	<data name="MasterDataModuleDescription">
-		<value xml:space="preserve">ABM de las estructuras necesarias para realizar operaciones diarias</value>
-	</data>
+  <data name="NewProduct" xml:space="preserve">
+    <value>Nuevo producto</value>
+  </data>
+  <data name="NewMeasurementUnit" xml:space="preserve">
+    <value>Nueva unidad de medida</value>
+  </data>
+  <data name="EditMeasurementUnit" xml:space="preserve">
+    <value>Editar unidad de medida</value>
+  </data>
+  <data name="EditGroup" xml:space="preserve">
+    <value>Editar grupo</value>
+  </data>
+  <data name="NewGroup" xml:space="preserve">
+    <value>Nuevo Grupo</value>
+  </data>
+  <data name="ProductEdit" xml:space="preserve">
+    <value>Editar producto</value>
+  </data>
+  <data name="CustomerNew" xml:space="preserve">
+    <value>Cliente Nuevo</value>
+  </data>
+  <data name="MasterDataModuleDescription" xml:space="preserve">
+    <value>ABM de las estructuras necesarias para realizar operaciones diarias</value>
+  </data>
 </root>

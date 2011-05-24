@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Reporting\GridReport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\WPF_ControlStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +125,11 @@
     <Compile Include="RefreshTimer.xaml.cs">
       <DependentUpon>RefreshTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reporting\ColumnInfo.xaml.cs" />
+    <Compile Include="Reporting\GridReport.xaml.cs">
+      <DependentUpon>GridReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\ReportBuilder.cs" />
     <Compile Include="SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>

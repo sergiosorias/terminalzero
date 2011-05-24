@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Windows;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroGUI.Reporting;
+using System.Linq;
 using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Pages
@@ -17,6 +21,7 @@ namespace ZeroMasterData.Pages
             ControlMode = ControlMode.ReadOnly;
             InitializeComponent();
             CommandBar.New += toolbar_New;
+            CommandBar.Print += CommandBar_Print;
         }
 
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
@@ -40,6 +45,22 @@ namespace ZeroMasterData.Pages
                     Trace.TraceError("Error updating Customer {0}", detail.CurrentCustomer);
                 }
             }
+        }
+
+        private void CommandBar_Print(object sender, RoutedEventArgs e)
+        {
+            var query = from customer in ZeroBusiness.Manager.Data.BusinessContext.Instance.ModelManager.Customers
+                        orderby customer.Name1
+                        select new
+                                   {
+                                       Nombre = customer.Name1,
+                                       CUIT = customer.LegalCode,
+                                       Dirección = customer.Street + "  " + customer.Number,
+                                       Teléfono = customer.Telephone1,
+                                       Celular = customer.Telephone2
+                                   };
+            
+            ReportBuilder.Create("Listado de Clientes", query.ToList());
         }
 
        
