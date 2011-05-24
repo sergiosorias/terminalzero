@@ -23,8 +23,8 @@ namespace ZeroGUI
             {
                 Owner = Application.Current.Windows[Application.Current.Windows.Count - 2];
                 
-                MaxWidth = Application.Current.Windows[0].ActualWidth;
-                MaxHeight = Application.Current.Windows[0].ActualHeight;
+                MaxWidth = Application.Current.Windows[0].ActualWidth - 20;
+                MaxHeight = Application.Current.Windows[0].ActualHeight - 20;
                 
             }
             WindowStartupLocation = WindowStartupLocation.CenterScreen;

@@ -1,0 +1,46 @@
+﻿<ZeroGUI:NavigationBasePage x:Class="ZeroGUI.Reporting.GridReport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" MinHeight="300" Loaded="UserControl_Loaded"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ZeroGUI="clr-namespace:ZeroGUI" xmlns:Reporting="clr-namespace:ZeroGUI.Reporting" mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <ZeroGUI:NavigationBasePage.Resources>
+        <Style x:Key="headerRow" TargetType="TableRow">
+            <Setter Property="Background" Value="Beige"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style x:Key="headerCell" TargetType="TableCell">
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
+        <Style x:Key="itemCell" TargetType="TableCell">
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+        </Style>
+
+    </ZeroGUI:NavigationBasePage.Resources>
+    <Grid>
+        <FlowDocumentReader ViewingMode="Scroll" Padding="5" MinZoom="0.1" BorderBrush="Black" BorderThickness="1">
+            <FlowDocument x:Name="document" Background="White"
+                          PagePadding="10" ColumnWidth="{Binding Path=ActualWidth,RelativeSource={RelativeSource AncestorType=Reporting:GridReport}}" ColumnRuleBrush="Aqua">
+                <Paragraph>
+                    <Label Content="{Binding Path=Header,RelativeSource={RelativeSource AncestorType=Reporting:GridReport}}" FontSize="28" FontFamily="Andalus"/>
+                </Paragraph>
+                <Section>
+                    <Section.Blocks>
+                        <Table Name="table1">
+                            <TableRowGroup>
+
+                            </TableRowGroup>
+                            <TableRowGroup>
+
+                            </TableRowGroup>
+                        </Table>
+                    </Section.Blocks>
+                </Section>
+            </FlowDocument>
+        </FlowDocumentReader>
+    </Grid>
+</ZeroGUI:NavigationBasePage>
