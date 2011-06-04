@@ -70,6 +70,15 @@ namespace ZeroMasterData.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seleccione un cliente.
+        /// </summary>
+        internal static string CustomerSelection {
+            get {
+                return ResourceManager.GetString("CustomerSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Editar grupo.
         /// </summary>
         internal static string EditGroup {
