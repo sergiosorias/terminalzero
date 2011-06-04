@@ -18,6 +18,7 @@
         <Style x:Key="itemCell" TargetType="TableCell">
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
             <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="LineHeight" Value="Auto"/>
         </Style>
 
     </ZeroGUI:NavigationBasePage.Resources>

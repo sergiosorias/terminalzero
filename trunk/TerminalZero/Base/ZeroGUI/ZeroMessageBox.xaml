@@ -2,10 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Loaded="CurrentLoaded"
-             mc:Ignorable="d" Title="Información" WindowStartupLocation="CenterOwner"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ZeroGUI="clr-namespace:ZeroGUI" xmlns:Converters="clr-namespace:ZeroGUI.Converters" Loaded="CurrentLoaded"
+             mc:Ignorable="d" Title="Información" 
              WindowStyle="None" BorderThickness="0" x:Name="current" MinHeight="80" MinWidth="100" AllowsTransparency="True"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <SolidColorBrush Color="Transparent" />
     </Window.Background>
@@ -82,24 +82,40 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Storyboard Duration="00:00:00.4" x:Key="leaveStoryboard">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="allWindow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="allWindow" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.4" Value="-500">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Control"/>
-        <KeyBinding x:Name="ShortCutCancel" Key="Escape"/>
+        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Control" Command="{Binding AcceptAction,RelativeSource={RelativeSource AncestorType=ZeroGUI:ZeroMessageBox}}"/>
+        <KeyBinding x:Name="ShortCutCancel" Key="Escape" Command="{Binding CancelAction,RelativeSource={RelativeSource AncestorType=ZeroGUI:ZeroMessageBox}}"/>
     </Window.InputBindings>
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="allWindow" Background="Transparent">
+        <Grid.RenderTransform>
+            <TranslateTransform X="0"/>
+        </Grid.RenderTransform>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Name="lblCaption" Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue='Terminal Zero'}"/>
-        <ContentPresenter Grid.Row="1" Margin="4,0,4,0" x:Name="contentpress" HorizontalAlignment="Stretch" Focusable="False" VerticalAlignment="Stretch" >
-    
-        </ContentPresenter>
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="2,0,10,2">
-            <Button x:Name="btnAccept" Content="Aceptar" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FF727C49" Foreground="Black" FontSize="15" FontWeight="Bold" />
-            <Button x:Name="btnCancel" Content="Cancelar" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FFB46161" Foreground="Black" FontSize="15" FontWeight="Bold"/>
-        </WrapPanel>
+        <Label x:Name="dummy" Visibility="{Binding Content, ElementName=contentpress,Converter={x:Static Converters:TypeToVisibilityConverter.Instance},ConverterParameter='ZeroGUI.NavigationBasePage'}"/>
+        <Label Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue='Terminal Zero'}" Visibility="{Binding Visibility, ElementName=dummy,Converter={x:Static Converters:InvertVisibilityConverter.Instance}}"/>
+        <ContentControl Grid.Row="1" Margin="4,0,4,0" x:Name="contentpress" HorizontalAlignment="Stretch" Focusable="False" VerticalAlignment="Stretch">
+
+        </ContentControl>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="2,0,10,2">
+            <Button x:Name="btnAccept" Content="Aceptar" Command="{Binding AcceptAction,RelativeSource={RelativeSource AncestorType=ZeroGUI:ZeroMessageBox}}" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FF727C49" Foreground="Black" FontSize="15" FontWeight="Bold" />
+            <Button x:Name="btnCancel" Content="Cancelar" Command="{Binding CancelAction,RelativeSource={RelativeSource AncestorType=ZeroGUI:ZeroMessageBox}}" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FFB46161" Foreground="Black" FontSize="15" FontWeight="Bold"/>
+        </StackPanel>
     </Grid>
 </Window>

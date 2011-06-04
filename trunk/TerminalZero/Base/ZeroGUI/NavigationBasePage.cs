@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using ZeroCommonClasses.Interfaces;
@@ -8,6 +9,11 @@ namespace ZeroGUI
 {
     public class NavigationBasePage : HeaderedContentControl, IValidable
     {
+        protected bool IsInDesignMode
+        {
+            get { return DesignerProperties.GetIsInDesignMode(this); }
+        }
+
         static NavigationBasePage()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NavigationBasePage),
@@ -51,7 +57,7 @@ namespace ZeroGUI
 
         // Using a DependencyProperty as the backing store for CommandBar.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ToolBarProperty =
-            DependencyProperty.Register("CommandBar", typeof(ZeroGUI.ZeroToolBar), typeof(NavigationBasePage), null);
+            DependencyProperty.Register("CommandBar", typeof(ZeroToolBar), typeof(NavigationBasePage), null);
 
         protected override void OnInitialized(EventArgs e)
         {

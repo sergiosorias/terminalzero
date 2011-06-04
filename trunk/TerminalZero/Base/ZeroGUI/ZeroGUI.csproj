@@ -101,11 +101,14 @@
     <Compile Include="Classes\MandatorySelectionRule.cs" />
     <Compile Include="Classes\Validator.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ControlModeToVisibilityConverter.cs" />
     <Compile Include="Converters\InvertVisibilityConverter.cs" />
     <Compile Include="Converters\ModeToReadOnlyConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PrintModeToColorConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\StringToResourceConverter.cs" />
+    <Compile Include="Converters\TypeToVisibilityConverter.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="LazyLoadingListControl.cs" />
     <Compile Include="Masking.cs" />
@@ -125,7 +128,7 @@
     <Compile Include="RefreshTimer.xaml.cs">
       <DependentUpon>RefreshTimer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Reporting\ColumnInfo.xaml.cs" />
+    <Compile Include="Reporting\ReportColumnInfo.xaml.cs" />
     <Compile Include="Reporting\GridReport.xaml.cs">
       <DependentUpon>GridReport.xaml</DependentUpon>
     </Compile>
@@ -134,6 +137,7 @@
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="NavigationBasePage.cs" />
+    <Compile Include="ViewModelGUI.cs" />
     <Compile Include="WaitCursorSimple.xaml.cs">
       <DependentUpon>WaitCursorSimple.xaml</DependentUpon>
     </Compile>

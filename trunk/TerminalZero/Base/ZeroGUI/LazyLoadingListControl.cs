@@ -22,11 +22,15 @@ namespace ZeroGUI
             PreviewKeyDown += LazyLoadingListControl_PreviewKeyDown;
         }
 
+        protected bool IsInDesignMode
+        {
+            get { return DesignerProperties.GetIsInDesignMode(this); }
+        }
+
         public ControlMode ControlMode
         {
             get { return (ControlMode)GetValue(ModeProperty); }
             set { SetValue(ModeProperty, value); OnControlModeChanged(value); }
-
         }
 
         // Using a DependencyProperty as the backing store for ControlMode.  This enables animation, styling, binding, etc...
@@ -95,7 +99,7 @@ namespace ZeroGUI
 
         private void StartListLoad(IEnumerable items)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
                 _fullItemList = items ?? new ArrayList();
                 if (_fullItemList != null)
@@ -210,7 +214,8 @@ namespace ZeroGUI
 
         public virtual void AddItem(EntityObject item)
         {
-            Items.Add(item);
+            if(item!=null)
+                Items.Add(item);
         }
 
         public virtual void TryRemoveItem(EntityObject item)

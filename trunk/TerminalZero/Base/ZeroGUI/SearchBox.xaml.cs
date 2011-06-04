@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,9 +22,7 @@ namespace ZeroGUI
         // Using a DependencyProperty as the backing store for ShowResultCount.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowResultCountProperty =
             DependencyProperty.Register("ShowResultCount", typeof(bool), typeof(SearchBox), null);
-
-
-
+        
         public int MinCriteriaCharCount
         {
             get { return (int)GetValue(MinCriteriaCharCountProperty); }
@@ -34,8 +33,20 @@ namespace ZeroGUI
         public static readonly DependencyProperty MinCriteriaCharCountProperty =
             DependencyProperty.Register("MinCriteriaCharCount", typeof(int), typeof(SearchBox), new PropertyMetadata(0));
 
-        private System.Threading.Timer searchTimer = null;
-        private System.Threading.Timer cleanResTimer = null;
+        
+        public ICommand SearchCommand
+        {
+            get { return (ICommand)GetValue(SearchCommandProperty); }
+            set { SetValue(SearchCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SearchCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SearchCommandProperty =
+            DependencyProperty.Register("SearchCommand", typeof(ICommand), typeof(SearchBox), new UIPropertyMetadata(null));
+        
+
+        private Timer searchTimer;
+        private Timer cleanResTimer;
 
         public SearchBox()
         {
@@ -45,24 +56,32 @@ namespace ZeroGUI
 
         protected void OnSearch()
         {
+            var searchCriteriaEventArgs = new SearchCriteriaEventArgs(txtSearchCriteria.Text);
             if (Search != null)
             {
-                SearchCriteriaEventArgs search = new SearchCriteriaEventArgs(txtSearchCriteria.Text);
-                Search(this, search);
+                Search(this, searchCriteriaEventArgs);
                 
-                if (ShowResultCount)
+            }
+            if(SearchCommand!=null)
+            {
+                if (SearchCommand.CanExecute(null))
                 {
-                    if (search.Matches > 0)
-                    {
-                        quantity.Text = string.Format("{0} encontrados", search.Matches);
-                    }
-                    else
-                    {
-                        quantity.Text = string.Format("No hay resultados");
-                    }
-                    quantityPopup.IsOpen = true;
-                    CreateResTimer();
+                    SearchCommand.Execute(searchCriteriaEventArgs);
                 }
+            }
+
+            if (ShowResultCount)
+            {
+                if (searchCriteriaEventArgs.Matches > 0)
+                {
+                    quantity.Text = string.Format("{0} encontrados", searchCriteriaEventArgs.Matches);
+                }
+                else
+                {
+                    quantity.Text = string.Format("No hay resultados");
+                }
+                quantityPopup.IsOpen = true;
+                CreateResTimer();
             }
         }
 
@@ -92,12 +111,12 @@ namespace ZeroGUI
 
         private void CreateResTimer()
         {
-            cleanResTimer = new System.Threading.Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+            cleanResTimer = new Timer(cleanResTimer_Elapsed, null, 5000, 5000);
         }
 
         private void CreateSearchTimer()
         {
-            searchTimer = new System.Threading.Timer(searchTimer_Elapsed, null, 10, 200);
+            searchTimer = new Timer(searchTimer_Elapsed, null, 10, 200);
         }
 
         void cleanResTimer_Elapsed(object o)

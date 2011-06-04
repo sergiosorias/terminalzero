@@ -10,7 +10,6 @@
         <TextBox.Text>
             <Binding Path="Text"  UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
                 <Binding.ValidationRules>
-                    <r:MandatoryRule ErrorMessage="Ingrese un Código de Barras"/>
                     <r:IsBarCodeRule Validating="IsBarCodeRule_Validating" />
                 </Binding.ValidationRules>
             </Binding>
