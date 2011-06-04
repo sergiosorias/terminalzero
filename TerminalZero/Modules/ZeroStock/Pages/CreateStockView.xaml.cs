@@ -1,20 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Web.Security;
 using System.Windows;
-using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ZeroGUI.Classes;
-
 
 namespace ZeroStock.Pages
 {
@@ -23,31 +17,36 @@ namespace ZeroStock.Pages
     /// </summary>
     public partial class CreateStockView : NavigationBasePage
     {
-        private StockHeader _header;
+        private StockHeader StockHeader
+        {
+            get { return (StockHeader) DataContext; }
+            set { DataContext = value; }
+        }
         private string _lot = "";
         readonly int _stockType = -1;
         public CreateStockView(int stockType)
         {
             InitializeComponent();
             _stockType = stockType;
+            CommandBar.Save += btnSave_Click;
+            CommandBar.Cancel += btnCancel_Click;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
-                _header = new StockHeader(BusinessContext.Instance.ModelManager.StockTypes.First(st=>st.Code == _stockType),Terminal.Instance.TerminalCode);
-                Header = _header.ViewTitle;
+                StockHeader = new StockHeader(BusinessContext.Instance.ModelManager.StockTypes.First(st=>st.Code == _stockType),Terminal.Instance.TerminalCode);
+                
 
                 if (BusinessContext.Rules.IsDeliveryDocumentMandatory(_stockType))
                 {
-                    var view = new DeliveryDocumentView();
-                    view.ControlMode = ControlMode.Selection;
+                    var view = new DeliveryDocumentView {ControlMode = ControlMode.Selection};
                     bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
                     {
-                        _header.DeliveryDocumentHeader = (DeliveryDocumentHeader)BusinessContext.Instance.ModelManager.GetObjectByKey(view.SelectedDeliveryDocumentHeader.EntityKey);
-                        _header.TerminalToCode = _header.DeliveryDocumentHeader.TerminalToCode;
+                        StockHeader.DeliveryDocumentHeader = view.SelectedDeliveryDocumentHeader;
+                        StockHeader.TerminalToCode = StockHeader.DeliveryDocumentHeader.TerminalToCode;
                     }
                     else
                     {
@@ -62,7 +61,7 @@ namespace ZeroStock.Pages
         {
             bool ret = base.CanAccept(parameter);
             
-            if (ret && _header != null && _header.HasChanges)
+            if (ret && StockHeader != null && StockHeader.HasChanges)
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -110,9 +109,9 @@ namespace ZeroStock.Pages
         {
             if (validProd != null)
             {
-                if (!_header.DeliveryDocumentHeaderReference.IsLoaded)
+                if (!StockHeader.DeliveryDocumentHeaderReference.IsLoaded)
                 {
-                    _header.DeliveryDocumentHeaderReference.Load();
+                    StockHeader.DeliveryDocumentHeaderReference.Load();
                 }
                 if (!validProd.Price1Reference.IsLoaded)
                 {
@@ -127,10 +126,10 @@ namespace ZeroStock.Pages
                 if(validProd.ByWeight)
                     qty = e.Parts.FirstOrDefault(p => p.Composition.Equals('Q')).Code;
 
-                stockGrid.AddItem(_header.AddNewStockItem(validProd, qty, _lot));
+                stockGrid.AddItem(StockHeader.AddNewStockItem(validProd, qty, _lot));
 
-                if (_header.DeliveryDocumentHeader != null)
-                    _header.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(validProd, qty, _lot);
+                if (StockHeader.DeliveryDocumentHeader != null)
+                    StockHeader.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(validProd, qty, _lot);
 
                 _lot = "";
                 lotBarcode.SetFocus();
@@ -142,9 +141,9 @@ namespace ZeroStock.Pages
             bool ret = false;
             try
             {
-                if(_header.DeliveryDocumentHeader!=null)
+                if(StockHeader.DeliveryDocumentHeader!=null)
                 {
-                    _header.DeliveryDocumentHeader.Used = true;
+                    StockHeader.DeliveryDocumentHeader.Used = true;
                 }
                 BusinessContext.Instance.ModelManager.SaveChanges();
                 MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -154,7 +153,7 @@ namespace ZeroStock.Pages
             {
                 ret = false;
                 MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
-                ZeroCommonClasses.Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
+                Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
             }
             return ret;
         }

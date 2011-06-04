@@ -26,7 +26,7 @@ namespace ZeroStock.Pages
         {
 
             // Do not load your data at design time.
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
                 if (ZeroCommonClasses.Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
                 {
