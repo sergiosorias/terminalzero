@@ -85,6 +85,9 @@
     <Compile Include="Pages\SupplierView.xaml.cs">
       <DependentUpon>SupplierView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\CustomerDetailViewModel.cs" />
+    <Compile Include="Presentation\CustomerViewModel.cs" />
+    <Compile Include="Presentation\ProductsViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,9 +177,7 @@
   <ItemGroup>
     <Resource Include="Resources\search.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Reporting\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
