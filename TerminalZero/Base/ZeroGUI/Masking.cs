@@ -25,7 +25,8 @@ namespace ZeroGUI
                 new FrameworkPropertyMetadata(OnMaskChanged));
 
         /// <summary> 
-        /// Identifies the <see cref="MaskExpression"/> dependency property. 
+        /// Identifies the <see cref="MaskExpression" />
+        ///   dependency property. 
         /// </summary> 
         public static readonly DependencyProperty MaskExpressionProperty = _maskExpressionPropertyKey.DependencyProperty;
 

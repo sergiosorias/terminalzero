@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroGUI
@@ -11,10 +12,25 @@ namespace ZeroGUI
     /// </summary>
     public partial class ZeroMessageBox : Window
     {
-        bool _isDialog;
+        private readonly bool isDialog;
 
-        private readonly ZeroAction _acceptAction;
-        private readonly ZeroAction _cancelAction;
+        private ZeroActionDelegate acceptAction;
+        public ZeroActionDelegate AcceptAction
+        {
+            get
+            {
+                return acceptAction ?? (acceptAction = new ZeroActionDelegate(Accept));
+            }
+        }
+
+        private ZeroActionDelegate cancelAction;
+        public ZeroActionDelegate CancelAction
+        {
+            get
+            {
+                return cancelAction ?? (cancelAction = new ZeroActionDelegate(Cancel));
+            }
+        }
 
         public ZeroMessageBox()
         {
@@ -22,23 +38,19 @@ namespace ZeroGUI
             if (Application.Current.Windows.Count > 0)
             {
                 Owner = Application.Current.Windows[Application.Current.Windows.Count - 2];
-                
-                MaxWidth = Application.Current.Windows[0].ActualWidth - 20;
-                MaxHeight = Application.Current.Windows[0].ActualHeight - 20;
-                
+
+                if (Application.Current.Windows.Count > 0 && Application.Current.Windows[0] != null)
+                {
+                    MaxWidth = Application.Current.Windows[0].ActualWidth - 20;
+                    MaxHeight = Application.Current.Windows[0].ActualHeight - 20;
+                }
             }
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            _acceptAction = new ZeroBackgroundAction("cancel", Accept, null,false,false);
-            _cancelAction = new ZeroBackgroundAction("accept", Cancel, null, false, false);
-            btnAccept.Command = ShortCutAccept.Command = _acceptAction;
-            btnCancel.Command = ShortCutCancel.Command = _cancelAction;
-            
         }
 
         private ZeroMessageBox(bool isDialog)
-            :this()
+            : this()
         {
-            _isDialog = isDialog;
+            this.isDialog = isDialog;
         }
 
         public new object Content
@@ -50,63 +62,102 @@ namespace ZeroGUI
 
             set
             {
-                contentpress.Content = value;
-                if(Content is Control)
+                
+                
+                if (value is string)
                 {
-                    ((Control)Content).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
-                    ((Control)Content).HorizontalContentAlignment = HorizontalAlignment.Stretch;
-                    ((Control)Content).VerticalContentAlignment = VerticalAlignment.Stretch;
+                    Label label = new Label();
+                    label.FontSize = 18;
+                    label.FontWeight = FontWeights.Bold;
+                    label.Content = value;
+                    Content = label;
+                    contentpress.Background = Brushes.Gray;
                 }
-                if(Content is NavigationBasePage)
+                else
                 {
-                    _acceptAction.RuleToSatisfy = ((NavigationBasePage)value).CanAccept;
-                    _cancelAction.RuleToSatisfy = ((NavigationBasePage)value).CanCancel;
-                    lblCaption.Visibility = Visibility.Collapsed;
-                    if (ResizeMode == ResizeMode.NoResize)
+                    if (value is Control)
                     {
-                        Background = Brushes.Transparent;
-                        AllowsTransparency = true;
+                        ((Control)value).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
+                        ((Control)value).MouseLeftButtonDown += CurrentMouseLeftButtonDown;
                     }
-                    ((NavigationBasePage) value).MouseLeftButtonDown += CurrentMouseLeftButtonDown;
+                    contentpress.Content = value;
                 }
             }
         }
 
-        private void Accept()
+        private bool CanAccept(object parameter)
         {
-            try
-            {
-            if (_isDialog)
-                DialogResult = true;
-            }
-            catch { }
+            if (IsLoaded && Content is NavigationBasePage)
+                return ((NavigationBasePage) Content).CanAccept(parameter);
 
-            Close();
+            return true;
         }
 
-        private void Cancel()
+        private void Accept(object parameter)
         {
-            try
+            if (CanAccept(null))
             {
-                if (_isDialog)
-                    DialogResult = false;
-            }
-            catch{}
-            
+                Storyboard SB = (Storyboard)Resources["leaveStoryboard"];
 
-            Close();
+                SB.Completed += (o, e) =>
+                                    {
+                                        try
+                                        {
+                                            if (isDialog)
+                                                DialogResult = true;
+                                        }
+                                        catch
+                                        {
+                                        }
+
+                                        Close();
+                                    };
+                SB.Begin();
+            }
+        }
+
+        private bool CanCancel(object parameter)
+        {
+            if (IsLoaded && Content is NavigationBasePage)
+                return ((NavigationBasePage)Content).CanCancel(parameter);
+
+            return true;
+        }
+
+        private void Cancel(object parameter)
+        {
+            if (CanCancel(null))
+            {
+                Storyboard SB = (Storyboard)Resources["leaveStoryboard"];
+
+                SB.Completed += (o, e) =>
+                                    {
+                                        try
+                                        {
+                                            if (isDialog)
+                                                DialogResult = false;
+                                        }
+                                        catch
+                                        {
+                                        }
+
+
+                                        Close();
+                                    };
+                SB.Begin();
+            }
         }
 
         private void ZeroMessageBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            
+
             if (e.Key == Key.Enter &&
                 e.KeyboardDevice.Modifiers == ModifierKeys.Control)
             {
                 e.Handled = true;
-                if (_acceptAction.CanExecute(null))
+                if (AcceptAction.CanExecute(null))
                 {
-                    _acceptAction.Execute(null);
+                    AcceptAction.Execute(null);
                 }
             }
         }
@@ -121,6 +172,9 @@ namespace ZeroGUI
             if (Content is NavigationBasePage)
             {
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                KeyboardNavigation.SetControlTabNavigation((NavigationBasePage)Content, KeyboardNavigationMode.Continue);
+                KeyboardNavigation.SetTabNavigation((NavigationBasePage)Content, KeyboardNavigationMode.Continue);    
+
             }
             else
             {
@@ -129,21 +183,6 @@ namespace ZeroGUI
         }
 
         #region Statics
-
-        public static bool? Show(object content)
-        {
-            return Show(content, MessageBoxButton.OK);
-        }
-
-        public static bool? Show(object content, MessageBoxButton mboxButtons)
-        {
-            return Show(content, "", SizeToContent.WidthAndHeight,mboxButtons);
-        }
-
-        public static bool? Show(object content, ResizeMode resizeMode)
-        {
-            return Show(content, resizeMode, MessageBoxButton.OKCancel);
-        }
 
         public static bool? Show(object content, ResizeMode resizeMode, MessageBoxButton mboxButtons)
         {
@@ -158,11 +197,6 @@ namespace ZeroGUI
         public static bool? Show(object content, string caption, MessageBoxButton mboxButtons)
         {
             return Show(content, caption, SizeToContent.WidthAndHeight, mboxButtons);
-        }
-
-        public static bool? Show(object content, string caption, ResizeMode resizeMode)
-        {
-            return Show(content, caption, resizeMode, MessageBoxButton.OKCancel);
         }
 
         public static bool? Show(object content, string caption, ResizeMode resizeMode, MessageBoxButton mboxButtons)
@@ -191,19 +225,19 @@ namespace ZeroGUI
                     MB.btnCancel.Visibility = Visibility.Collapsed;
                     break;
                 case MessageBoxButton.YesNo:
-                     MB.btnCancel.Content = "No";
-                     MB.btnAccept.Content = "Si";
+                    MB.btnCancel.Content = "No";
+                    MB.btnAccept.Content = "Si";
                     break;
             }
             MB.Title = caption;
             MB.SizeToContent = sizeToContent;
             object obj = Application.Current.Windows[0].Content;
-            
-            if(obj is Panel)
+
+            if (obj is Panel)
                 ((Panel)obj).Children.Add((UIElement)MB.Resources["backWindow"]);
-            
+
             bool? res = MB.ShowDialog();
-            
+
             if (obj is Panel)
                 ((Panel)obj).Children.Remove((UIElement)MB.Resources["backWindow"]);
 
@@ -211,6 +245,6 @@ namespace ZeroGUI
         }
 
         #endregion Statics
-        
+
     }
 }

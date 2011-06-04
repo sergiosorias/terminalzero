@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ZeroGUI.Reporting
 {
@@ -24,7 +17,7 @@ namespace ZeroGUI.Reporting
         public List<ReportColumnInfo> Columns { get; private set; }
         public IList DataSource { get; set; }
         public IDocumentPaginatorSource PaginatorSource { get { return document; } }
-        private PropertyInfo[] itemProperties = null;
+        private PropertyInfo[] itemProperties;
 
         internal GridReport()
         {
@@ -45,7 +38,7 @@ namespace ZeroGUI.Reporting
 
         private void LoadHeader()
         {
-            TableRow tr = new TableRow();
+            var tr = new TableRow();
             tr.Style = (Style)Resources["headerRow"];
             if (Columns.Count > 0)
             {
@@ -78,7 +71,7 @@ namespace ZeroGUI.Reporting
             
             foreach (var item in DataSource)
             {
-                TableRow tr = new TableRow();
+                var tr = new TableRow();
                 if (i++ % 2 == 0)
                     tr.Background = (SolidColorBrush) Application.Current.Resources["BlueBrushKey"];
                 if (itemProperties == null)

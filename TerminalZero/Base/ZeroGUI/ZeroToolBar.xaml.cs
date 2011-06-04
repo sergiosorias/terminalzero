@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
+using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroGUI
 {
@@ -10,104 +12,135 @@ namespace ZeroGUI
     /// </summary>
     public partial class ZeroToolBar : UserControl
     {
+        public static readonly DependencyProperty NewCommandProperty = DependencyProperty.RegisterAttached("NewCommand", typeof(ICommand), typeof(ZeroToolBar), new FrameworkPropertyMetadata(OnNewCommandChanged));
+
+        public static ICommand GetNewCommand(NavigationBasePage control)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException("control");
+            }
+
+            return control.GetValue(NewCommandProperty) as ICommand;
+        }
+
+        public static void SetNewCommand(NavigationBasePage control, ICommand command)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException("control");
+            }
+
+            control.SetValue(NewCommandProperty, command);
+        }
+
+        private static void OnNewCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NavigationBasePage)d;
+            control.CommandBar.btnNew.Command = (ICommand)e.NewValue;
+            
+        }
+
+        public static readonly DependencyProperty PrintCommandProperty = DependencyProperty.RegisterAttached("PrintCommand", typeof(ICommand), typeof(ZeroToolBar), new FrameworkPropertyMetadata(OnPrintCommandChanged));
+
+        public static ICommand GetPrintCommand(NavigationBasePage control)
+        {
+            return control.GetValue(PrintCommandProperty) as ICommand;
+        }
+
+        public static void SetPrintCommand(NavigationBasePage control, ICommand command)
+        {
+            control.SetValue(PrintCommandProperty, command);
+        }
+
+        private static void OnPrintCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NavigationBasePage)d;
+            control.CommandBar.btnPrint.Command = (ICommand)e.NewValue;
+        }
+
+        public static readonly DependencyProperty SaveCommandProperty = DependencyProperty.RegisterAttached("SaveCommand", typeof(ICommand), typeof(ZeroToolBar), new FrameworkPropertyMetadata(OnSaveCommandChanged));
+
+        public static ICommand GetSaveCommand(NavigationBasePage control)
+        {
+            return control.GetValue(SaveCommandProperty) as ICommand;
+        }
+
+        public static void SetSaveCommand(NavigationBasePage control, ICommand command)
+        {
+            control.SetValue(SaveCommandProperty, command);
+        }
+
+        private static void OnSaveCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NavigationBasePage)d;
+            control.CommandBar.btnSave.Command = (ICommand)e.NewValue;
+        }
+
+        public static readonly DependencyProperty CancelCommandProperty = DependencyProperty.RegisterAttached("CancelCommand", typeof(ICommand), typeof(ZeroToolBar), new FrameworkPropertyMetadata(OnCancelCommandChanged));
+
+        public static ICommand GetCancelCommand(NavigationBasePage control)
+        {
+            return control.GetValue(CancelCommandProperty) as ICommand;
+        }
+
+        public static void SetCancelCommand(NavigationBasePage control, ICommand command)
+        {
+            control.SetValue(CancelCommandProperty, command);
+        }
+
+        private static void OnCancelCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NavigationBasePage)d;
+            control.CommandBar.btnCancel.Command = (ICommand)e.NewValue;
+        }
+
+        //public static readonly RoutedEvent NewClickedEvent = EventManager.RegisterRoutedEvent("NewClick", RoutingStrategy.Direct,typeof(RoutedEventHandler), typeof(ZeroToolBar));
+        
         public ZeroToolBar()
         {
             InitializeComponent();
         }
 
-        public bool NewBtnVisible
+        public event RoutedEventHandler Save
         {
-            get { return (bool)GetValue(NewBtnVisibleProperty); }
-            set { SetValue(NewBtnVisibleProperty, value); }
-        }
-
-        public static readonly DependencyProperty NewBtnVisibleProperty =
-            DependencyProperty.Register("NewBtnVisible", typeof(bool), typeof(ZeroToolBar), null);
-
-        public ICommand NewBtnCommand
-        {
-            get { return btnNew.Command; }
-            set { btnNew.Command = value; }
-        }
-
-        public bool SaveBtnVisible
-        {
-            get { return (bool)GetValue(SaveActiveProperty); }
-            set {SetValue(SaveActiveProperty, value);}
-        }
-
-        public static readonly DependencyProperty SaveActiveProperty =
-            DependencyProperty.Register("SaveBtnVisible", typeof(bool), typeof(ZeroToolBar),null);
-
-        public ICommand SaveBtnCommand
-        {
-            get { return btnSave.Command; }
-            set { btnSave.Command = value; }
-        }
-
-        public bool CancelBtnVisible
-        {
-            get { return (bool)GetValue(CancelActiveProperty); }
-            set {SetValue(CancelActiveProperty, value);
+            add { btnSave.Click += value;
+            btnSave.Command = new ZeroActionDelegate(Empty);
             }
+            remove { btnSave.Click -= value; }
         }
 
-        public static readonly DependencyProperty CancelActiveProperty =
-            DependencyProperty.Register("CancelBtnVisible", typeof(bool), typeof(ZeroToolBar),null);
-
-        public ICommand CancelBtnCommand
+        public event RoutedEventHandler Cancel
         {
-            get { return btnCancel.Command; }
-            set { btnCancel.Command = value; }
-        }
-
-        public bool PrintBtnVisible
-        {
-            get { return (bool)GetValue(PrintActiveProperty); }
-            set
-            {
-                SetValue(PrintActiveProperty, value);
+            add { btnCancel.Click += value;
+                btnCancel.Command = new ZeroActionDelegate(Empty);
             }
+            remove { btnCancel.Click -= value; }
         }
-
-        public static readonly DependencyProperty PrintActiveProperty =
-            DependencyProperty.Register("PrintBtnVisible", typeof(bool), typeof(ZeroToolBar), null);
-
-        public ICommand PrintBtnCommand
+        
+        public event RoutedEventHandler New
         {
-            get { return btnPrint.Command; }
-            set { btnPrint.Command = value; }
+            add { btnNew.Click += value;
+                btnNew.Command = new ZeroActionDelegate(Empty);
+            }
+            remove { btnNew.Click -= value; }
         }
 
-        public event RoutedEventHandler Save;
-
-        private void OnSave(RoutedEventArgs e)
+        public event RoutedEventHandler Print
         {
-            RoutedEventHandler handler = Save;
-            if (handler != null) handler(this, e);
+            add { btnPrint.Click += value;
+                btnPrint.Command = new ZeroActionDelegate(Empty);
+            }
+            remove { btnPrint.Click -= value; }
         }
 
-        public event RoutedEventHandler Cancel;
-
-        private void OnCancel(RoutedEventArgs e)
+        private static void Empty(object parameter)
         {
-            RoutedEventHandler handler = Cancel;
-            if (handler != null) handler(this, e);
         }
-
-        public event RoutedEventHandler New;
-
-        private void OnNew(RoutedEventArgs e)
-        {
-            RoutedEventHandler handler = New;
-            if (handler != null) handler(this, e);
-        }
-
-        public event RoutedEventHandler Print;
 
         public void AppendButton(string content, RoutedEventHandler handler)
         {
-            Button newButton = new Button();
+            var newButton = new Button();
             newButton.Click += handler;
             newButton.Content = content;
             newButton.Style = (Style)Resources["toolbarButton"];
@@ -119,11 +152,13 @@ namespace ZeroGUI
 
         public void AppendButton(string content, ICommand command)
         {
-            Button newButton = new Button();
-            newButton.Content = content;
-            newButton.Style = (Style)Resources["toolbarButton"];
+            var newButton = new Button
+            {
+                Content = content,
+                Style = (Style) Resources["toolbarButton"],
+                Command = command
+            };
 
-            newButton.Command = command;
             AddSeparator();
             buttonsBar.Children.Add(newButton);
 
@@ -131,47 +166,13 @@ namespace ZeroGUI
 
         private void AddSeparator()
         {
-            Rectangle rect = new Rectangle()
+            var rect = new Rectangle
                                  {
                                      Style = (Style)Resources["separatorRectangle"]
                                  };
             buttonsBar.Children.Add(rect);
         }
 
-        private void OnPrint(RoutedEventArgs e)
-        {
-            RoutedEventHandler handler = Print;
-            if (handler != null) handler(this, e);
-        }
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            OnSave(e);
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            OnCancel(e);
-        }
-
-        private void btnNew_Click(object sender, RoutedEventArgs e)
-        {
-            OnNew(e);
-        }
-
-        private void btnPrint_Click(object sender, RoutedEventArgs e)
-        {
-            OnPrint(e);
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            SaveBtnVisible = Save != null || SaveBtnCommand!=null;
-            CancelBtnVisible = Cancel != null || CancelBtnCommand != null;
-            NewBtnVisible = New != null || NewBtnCommand != null;
-            PrintBtnVisible = Print != null || PrintBtnCommand != null;
-                 
-        }
-
+        
    }
 }
