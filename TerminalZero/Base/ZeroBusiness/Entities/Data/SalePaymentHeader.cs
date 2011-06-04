@@ -28,7 +28,7 @@ namespace ZeroBusiness.Entities.Data
         public SalePaymentHeader(int terminalToCode)
         {
             Code = GetNextSalePaymentHeaderCode();
-            NotReady = true;
+            Ready = false;
             TerminalToCode = terminalToCode;
             TerminalCode = Terminal.Instance.TerminalCode;
             TotalQuantity = 0;
@@ -61,7 +61,7 @@ namespace ZeroBusiness.Entities.Data
             }
         }
 
-        public bool NotReady { get; set; }
+        public bool Ready { get; set; }
         #endregion
 
         public void AddPaymentInstrument(SalePaymentItem payment)
@@ -82,10 +82,10 @@ namespace ZeroBusiness.Entities.Data
 
         private void UpdateViewProperties()
         {
-            NotReady = RestToPay > 0;
+            Ready = !(RestToPay > 0);
             OnPropertyChanged("Change");
             OnPropertyChanged("RestToPay");
-            OnPropertyChanged("NotReady");
+            OnPropertyChanged("Ready");
         }
 
         #region IExportableEntity Members

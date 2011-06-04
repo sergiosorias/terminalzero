@@ -21,6 +21,7 @@
         public const string OpenProductPriceIncrease        = "Tablas Maestras@Productos@Actualizar Precios";
         public const string OpenSupplierView                = "Tablas Maestras@Proveedores";
         public const string OpenCustomersView               = "Tablas Maestras@Clientes";
+        public const string OpenCustomersSelectionView      = OpenCustomersView + "@Selección";
         public const string ExecExportMasterData            = "Tablas Maestras@Exportar Datos";
 
         public const string OpenCurrentStockView            = "Operaciones@Stock@Actual";
@@ -38,5 +39,6 @@
         public const string ExecTestImportMasterData        = "Test@Import Master Data";
         public const string ExecTestChangeActionExecution   = "Test@Change Execution Action";
         public const string ExecTestActionExecutionOnTrigger = "Test@ActionExecutedOnTrigger";
+        
     }
 }
