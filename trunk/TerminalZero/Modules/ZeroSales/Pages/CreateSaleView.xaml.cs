@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -24,28 +23,30 @@ namespace ZeroSales.Pages
         {
             InitializeComponent();
             _saleType = saleType;
+            CommandBar.TabIndex = 3;
             CommandBar.Save += btnSave_Click;
             CommandBar.Cancel += btnCancel_Click;
         }
 
-        private SaleHeader _header;
+        private SaleHeader SaleHeader
+        {
+            get { return DataContext as SaleHeader; }
+        }
         private string _lot = "";
         readonly int _saleType = -1;
         
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
-                _header = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == _saleType));
-                BusinessContext.Instance.ModelManager.AddToSaleHeaders(_header);
-                DataContext = _header;
+                DataContext = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == _saleType));
             }
         }
 
         public override bool CanAccept(object parameter)
         {
             bool ret = base.CanAccept(parameter);
-            if (ret && _header.HasChanges)
+            if (ret && SaleHeader.HasChanges)
             {
                 MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -103,8 +104,7 @@ namespace ZeroSales.Pages
                     BarCodePart partQty = e.Parts.FirstOrDefault(p => p.Name == "Cantidad");
                     currentProd.Text = validProd.Description ?? validProd.Name;
                     CreateResTimer();
-                    saleGrid.AddItem(_header.AddNewSaleItem(validProd, partQty.Code, _lot));
-                    lblItemsCount.Text = _header.SaleItems.Count.ToString();
+                    saleGrid.AddItem(SaleHeader.AddNewSaleItem(validProd, partQty.Code, _lot));
                     _lot = "";
                     lotBarcode.SetFocus();
                     
@@ -136,17 +136,18 @@ namespace ZeroSales.Pages
             {
                 
                 var paymentCurrentSale = new SalePaymentHeader(Terminal.Instance.TerminalCode);
-                _header.SalePaymentHeader = paymentCurrentSale;
-                var salePaymentview = new SalePaymentView(_header) {DataContext = paymentCurrentSale};
+                SaleHeader.SalePaymentHeader = paymentCurrentSale;
+                var salePaymentview = new SalePaymentView(SaleHeader) {DataContext = paymentCurrentSale};
                 ret = ZeroMessageBox.Show(salePaymentview, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
                 if (ret)
                 {
                     Terminal.Instance.Session[typeof (SaleHeader)] =
-                        new ActionParameter<SaleHeader>(true, _header, true);
-                    PrintManager.PrintSale(_header);
+                        new ActionParameter<SaleHeader>(true, SaleHeader, true);
+                    PrintManager.PrintSale(SaleHeader);
+                    BusinessContext.Instance.ModelManager.AddToSaleHeaders(SaleHeader);
                     BusinessContext.Instance.ModelManager.SaveChanges();
                     MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
-                    GoHomeOrDisable();
+                    
                 }
             }
             catch (Exception ex)
@@ -161,7 +162,7 @@ namespace ZeroSales.Pages
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if(_header.SaleItems!= null && _header.SaleItems.Count>0)
+            if(SaleHeader.SaleItems!= null && SaleHeader.SaleItems.Count>0)
                 SaveData();
         }
 
@@ -198,8 +199,7 @@ namespace ZeroSales.Pages
         {
             if (e.Item != null)
             {
-                _header.RemoveSaleItem(e.Item as SaleItem);
-                lblItemsCount.Text = _header.SaleItems.Count.ToString();
+                SaleHeader.RemoveSaleItem(e.Item as SaleItem);
             }
         }
     }
