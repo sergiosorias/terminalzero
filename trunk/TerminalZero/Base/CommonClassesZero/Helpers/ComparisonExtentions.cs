@@ -11,5 +11,13 @@ namespace ZeroCommonClasses.Helpers
         {
             return values.Any(value => value!=null && value.ToString().IndexOf(criteria, StringComparison.CurrentCultureIgnoreCase) >= 0);
         }
+
+        public static bool ContainsType(Type typeOrigin, Type target)
+        {
+            if (typeOrigin == null || target == null)
+                return false;
+
+            return typeOrigin == target || ContainsType(typeOrigin.BaseType, target);
+        }
     }
 }

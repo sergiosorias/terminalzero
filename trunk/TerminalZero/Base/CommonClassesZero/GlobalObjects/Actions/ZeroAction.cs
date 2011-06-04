@@ -24,7 +24,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         
         private bool _canExecute;
         
-        public ZeroAction(string name, Action executeAction, string ruleToSatisfy, bool isOnMenu)
+        public ZeroAction(string name, Action executeAction, string ruleToSatisfy = null, bool isOnMenu = true)
         {
             Name = name;
             ExecuteAction = executeAction;
@@ -56,7 +56,10 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
                 _canExecute = false;
             }
             
-            ///TODO: log sb result if false
+            if(!_canExecute)
+            {
+                System.Diagnostics.Trace.TraceWarning("Action {0} cannot execute - message {1}",ExecuteAction.Method,sb);
+            }
             return _canExecute;
         }
 
@@ -93,18 +96,14 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         private bool ValidateActionParams(StringBuilder result)
         {
             bool ret = true;
-            ActionParameterBase obj = null;
             foreach (var item in Parameters)
             {
-                obj = Terminal.Instance.Session[item.Name];
-                if ((obj == null || obj.Value == null) && item.IsMandatory)
+                if (!Terminal.Instance.Session.SessionParams.ContainsKey(item.Name) && item.IsMandatory)
                 {
                     ret = false;
-                    result.AppendLine("UnasignedParameter '" + item.Name + "'");
+                    result.AppendLine("Unasigned Parameter '" + item.Name + "'");
                 }
-                obj = null;
             }
-
             return ret;
         }
 

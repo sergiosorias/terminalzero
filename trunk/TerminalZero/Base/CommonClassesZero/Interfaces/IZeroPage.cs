@@ -1,6 +1,9 @@
 ﻿
+using System;
+
 namespace ZeroCommonClasses.Interfaces
-{
+{   
+    [Flags]
     public enum ControlMode
     {
         /// <summary>

@@ -10,7 +10,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
     /// </summary>
     public class ZeroTriggerAction : ZeroAction
     {
-        public ZeroTriggerAction(string name, Action action, string ruleToSatisfy)
+        public ZeroTriggerAction(string name, Action action, string ruleToSatisfy = null)
             :base(name,action,ruleToSatisfy,false)
         {
             

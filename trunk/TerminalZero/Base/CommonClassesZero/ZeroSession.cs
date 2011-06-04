@@ -7,7 +7,7 @@ namespace ZeroCommonClasses
 {
     public class ZeroSession
     {
-        private Dictionary<string, ActionParameterBase> SessionParams { get; set; }
+        internal Dictionary<string, ActionParameterBase> SessionParams { get; set; }
 
         public RuleCollection Rules
         {
