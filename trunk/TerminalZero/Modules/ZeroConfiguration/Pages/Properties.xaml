@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Header="Propiedades del sistema"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    ZeroGUI:ZeroToolBar.SaveCommand="{Binding SavePropertiesCommand,Mode=OneWay}"
     xmlns:ZeroGUI="clr-namespace:ZeroGUI;assembly=ZeroGUI" mc:Ignorable="d" Unloaded="UserControlUnloaded" d:DesignHeight="300" d:DesignWidth="300">
 	<Grid Loaded="Grid_Loaded">
 		<Grid.RowDefinitions>
@@ -15,7 +16,7 @@
 				<ColumnDefinition Width="140" />
 			</Grid.ColumnDefinitions>
 			<Label Content="Terminal" HorizontalAlignment="Right" Foreground="White" />
-			<ComboBox Grid.Column="1" Name="cbTerminals" SelectedValuePath="Code" Height="22" VerticalAlignment="Center" SelectionChanged="cbTerminals_SelectionChanged">
+            <ComboBox Grid.Column="1" Name="cbTerminals" ItemsSource="{Binding Terminals}" SelectedItem="{Binding SelectedTerminal}" IsEnabled="{Binding AreControlsEnable}" Height="22" VerticalAlignment="Center">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
@@ -29,13 +30,13 @@
 			</ComboBox>
 		</Grid>
         <TabControl Grid.Row="1" Margin="0,7,0,0">
-			<TabItem Header="Propiedades">
-				<Grid>
+            <TabItem Header="Propiedades">
+                <Grid IsEnabled="{Binding AreControlsEnable}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
 						<RowDefinition Height="*" />
 					</Grid.RowDefinitions>
-					<Grid>
+                    <Grid DataContext="{Binding SelectedTerminal}">
 						<Grid.RowDefinitions>
 							<RowDefinition />
 							<RowDefinition />
@@ -55,12 +56,12 @@
 						<TextBox Grid.Column="3" Grid.Row="0" Height="23" HorizontalAlignment="Left" Margin="3" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" Width="200" />
 						<CheckBox x:Name="cbTerminalIsActive" Grid.Column="4" IsChecked="{Binding Path=Active, Mode=TwoWay}" Content="Activa" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         <Label Grid.Column="5" x:Name="lblLastSynclabel" Visibility="Hidden" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Ultima sync:"/>
-                        <Label Grid.Column="6" x:Name="lblLastSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label Grid.Column="6" x:Name="lblLastSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="{Binding LastSync}" />
 						<CheckBox x:Name="cbsendMasterData" Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding Path=ExistsMasterData, Mode=TwoWay}" Content="Forzar envio de datos maestros" HorizontalAlignment="Center" VerticalAlignment="Center" />
 						<Label Grid.Column="5" Grid.Row="1" x:Name="lblNectSynclabel" HorizontalAlignment="Right" VerticalAlignment="Center">Siguiente:</Label>
 						<Label Grid.Column="6" Grid.Row="1" x:Name="lblNextSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
 					</Grid>
-					<DataGrid Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding}" Name="terminalPropertiesDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected">
+                    <DataGrid DataContext="{Binding SelectedTerminal}" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding TerminalProperties}" Name="terminalPropertiesDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected">
 						<DataGrid.Columns>
 							<DataGridTextColumn x:Name="descriptionColumn" Binding="{Binding Path=Description}" Header="Descripción" IsReadOnly="True" />
 							<DataGridTextColumn x:Name="valueColumn" Binding="{Binding Path=Value}" Header="Valor" Width="SizeToHeader" />
@@ -74,8 +75,8 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="Módulos">
-				<Grid>
-					<ListView ItemsSource="{Binding}" Name="modulesListView" SelectionMode="Single">
+                <Grid DataContext="{Binding SelectedTerminal}">
+					<ListView ItemsSource="{Binding Modules}" Name="modulesListView" SelectionMode="Single">
 						<ListView.ItemContainerStyle>
 							<Style>
 								<Setter Property="Control.HorizontalContentAlignment" Value="Stretch" />

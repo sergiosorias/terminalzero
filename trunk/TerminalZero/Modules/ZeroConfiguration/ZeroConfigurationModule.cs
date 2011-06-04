@@ -148,7 +148,7 @@ namespace ZeroConfiguration
         {
             var pswChange = new UserChangePassword();
             pswChange.DataContext = Terminal.Instance.Session[typeof(User)].Value;
-            ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize);
+            ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize,MessageBoxButton.OKCancel);
         }
 
         private void OpenConfiguration()
