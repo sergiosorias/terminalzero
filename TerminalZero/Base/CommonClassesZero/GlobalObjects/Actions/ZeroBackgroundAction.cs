@@ -9,7 +9,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
     public class ZeroBackgroundAction : ZeroAction
     {
         private bool Async { get; set; }
-        public ZeroBackgroundAction(string name, Action action, string ruleToSatisfy, bool isOnMenu, bool async)
+        public ZeroBackgroundAction(string name, Action action, string ruleToSatisfy = null, bool isOnMenu = true, bool async = false)
             : base(name, action,ruleToSatisfy, isOnMenu)
         {
             Async = async;

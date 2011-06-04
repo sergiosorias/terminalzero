@@ -60,9 +60,8 @@
     </Compile>
     <Compile Include="Entities\EntityStatus.cs" />
     <Compile Include="Entities\PackStatusEnum.cs" />
-    <Compile Include="GlobalObjects\Actions\ActionRequest.cs" />
-    <Compile Include="GlobalObjects\Actions\ActionsSourceBase.cs" />
     <Compile Include="GlobalObjects\Actions\ActionParameterBase.cs" />
+    <Compile Include="GlobalObjects\Actions\ZeroActionDelegate.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroBackgroundAction.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroTriggerAction.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
@@ -85,6 +84,7 @@
     <Compile Include="Interfaces\IProgressNotifier.cs" />
     <Compile Include="Pack\PackTableInfo.cs" />
     <Compile Include="GlobalObjects\RuleCollection.cs" />
+    <Compile Include="MVVMSupport\ViewModelBase.cs" />
     <Compile Include="Terminal.cs" />
     <Compile Include="ZeroModule.cs" />
     <Compile Include="Interfaces\Services\ISyncService.cs" />
@@ -121,17 +121,6 @@
       <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
       <Name>SharpZipLib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="FiscalPrinterLib">
-      <Guid>{9C5C9460-5789-11DA-8CFB-0000E856BC17}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
