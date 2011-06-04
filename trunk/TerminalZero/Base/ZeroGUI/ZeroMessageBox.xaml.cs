@@ -59,7 +59,6 @@ namespace ZeroGUI
             {
                 return contentpress.Content;
             }
-
             set
             {
                 

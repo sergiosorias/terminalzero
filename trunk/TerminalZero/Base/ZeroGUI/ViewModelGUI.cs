@@ -6,7 +6,18 @@ namespace ZeroGUI
 {
     public abstract class ViewModelGui : ViewModelBase
     {
-        public NavigationBasePage View { get; private set; }
+        private NavigationBasePage view;
+
+        public NavigationBasePage View
+        {
+            get { return view; }
+            protected set 
+            { 
+                view = value;
+                if(view!=null)
+                    View.DataContext = this;
+            }
+        }
 
         private ICommand printAction;
         public virtual ICommand PrintCommand 
@@ -17,7 +28,6 @@ namespace ZeroGUI
         protected ViewModelGui(NavigationBasePage view)
         {
             View = view;
-            View.DataContext = this;
         }
 
         protected virtual void PrintCommandExecution(object parameter)

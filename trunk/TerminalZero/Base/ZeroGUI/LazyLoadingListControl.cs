@@ -35,9 +35,8 @@ namespace ZeroGUI
 
         // Using a DependencyProperty as the backing store for ControlMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("ControlMode1", typeof(ControlMode), typeof(NavigationBasePage), null);
+            DependencyProperty.Register("ControlMode", typeof(ControlMode), typeof(LazyLoadingListControl), null);
         
-
         public bool LazyLoadEnable
         {
             get { return (bool)GetValue(LazyLoadEnableProperty); }
