@@ -5,14 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" Header="Lista de Clientes"
+            base:ZeroToolBar.NewCommand="{Binding CreateCommand, Mode=OneWay}"
+            base:ZeroToolBar.PrintCommand="{Binding PrintCommand, Mode=OneWay}"
              mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroMasterData.Pages.Controls">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition MinHeight="100"/>
         </Grid.RowDefinitions>
-        <baseControls:SearchBox Search="SearchBox_Search"/>
-        
-        <myControls:CustomerLazyLoadingList  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
+        <baseControls:SearchBox SearchCommand="{Binding SearchCommand}"/>
+        <myControls:CustomerLazyLoadingList SelectedItem="{Binding SelectedCustomer}" ItemsSource="{Binding CustomerList}"  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
     </Grid>
 </base:NavigationBasePage>

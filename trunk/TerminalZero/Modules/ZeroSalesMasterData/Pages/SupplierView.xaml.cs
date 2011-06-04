@@ -15,6 +15,7 @@ namespace ZeroMasterData.Pages
         public SupplierView()
         {
             InitializeComponent();
+            CommandBar.New += btnNewSupplier_Click;
         }
 
         private void btnNewSupplier_Click(object sender, RoutedEventArgs e)

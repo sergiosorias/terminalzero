@@ -39,7 +39,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
                 taxPositionCodeComboBox.ItemsSource = BusinessContext.Instance.ModelManager.TaxPositions;
                 paymentInstrumentCodeComboBox.ItemsSource = BusinessContext.Instance.ModelManager.PaymentInstruments;
