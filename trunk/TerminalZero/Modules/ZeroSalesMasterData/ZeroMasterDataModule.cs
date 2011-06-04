@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
@@ -13,6 +12,7 @@ using ZeroCommonClasses.Pack;
 using ZeroGUI;
 using ZeroMasterData.Pages;
 using ZeroMasterData.Pages.Controls;
+using ZeroMasterData.Presentation;
 using ZeroMasterData.Properties;
 
 namespace ZeroMasterData
@@ -27,13 +27,14 @@ namespace ZeroMasterData
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductsView, OpenProductView, null, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductMessage, OpenProductMessage, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductsView, OpenProductView));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductMessage, OpenProductMessage));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewProductsMessage, OpenNewProductMessage, Rules.IsTerminalZero, false));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView, null, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductPriceIncrease, ExportMasterDataPack, Rules.IsTerminalZero, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductPriceIncrease, ExportMasterDataPack, Rules.IsTerminalZero));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
             //Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
@@ -74,10 +75,10 @@ namespace ZeroMasterData
         private void OpenProductView()
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new ProductsView();
-            if (!Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero)) 
-                view.ControlMode = ControlMode.ReadOnly;
-            Terminal.Instance.CurrentClient.ShowView(view);
+            var view = new ProductsViewModel();
+            if (!Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
+                view.View.ControlMode = ControlMode.ReadOnly;
+            Terminal.Instance.CurrentClient.ShowView(view.View);
         }
 
         private void OpenProductMessage()
@@ -116,12 +117,28 @@ namespace ZeroMasterData
         private void OpenCustomerView()
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new CustomerView();
+            var view = new CustomerViewModel();
             if (Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
             {
-                view.ControlMode = ControlMode.Update;
+                view.View.ControlMode = ControlMode.Update;
             }
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.CurrentClient.ShowView(view.View);
+        }
+
+        private void OpenCustomerSelectionView()
+        {
+            BusinessContext.Instance.BeginOperation();
+            var view = new CustomerViewModel();
+            view.View.ControlMode = ControlMode.Selection;
+            if (Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
+            {
+                view.View.ControlMode |= ControlMode.Update;
+            }
+            bool? ret = ZeroMessageBox.Show(view.View, Resources.CustomerSelection);
+            if (ret.HasValue && ret.Value)
+            {
+                Terminal.Instance.Session[typeof(Customer)] = new ActionParameter<Customer>(false, view.SelectedCustomer, true);
+            }
         }
 
         private void ExportMasterDataPack()
@@ -144,7 +161,14 @@ namespace ZeroMasterData
 
                 using (masterDataPackManager)
                 {
-                    masterDataPackManager.Exported += pack_Exported;
+                    masterDataPackManager.Exported += (sender, e) =>
+                            {
+                                Terminal.Instance.CurrentClient.Notifier.SetProgress(60);
+                                Terminal.Instance.CurrentClient.Notifier.SetProcess("Datos Exportados");
+                                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false,"Datos Exportados al directorio: " + WorkingDirectory);
+                                Terminal.Instance.CurrentClient.Notifier.SetProgress(80);
+
+                            };
                     try
                     {
                         Terminal.Instance.CurrentClient.Notifier.SetProcess("Creando paquete");
@@ -169,14 +193,6 @@ namespace ZeroMasterData
             {
                 NewPackReceived(s);
             }
-        }
-
-        private void pack_Exported(object sender, PackProcessingEventArgs e)
-        {
-            Terminal.Instance.CurrentClient.Notifier.SetProgress(60);
-            Terminal.Instance.CurrentClient.Notifier.SetProcess("Datos Exportados");
-            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, "Datos Exportados al directorio: " + WorkingDirectory);
-            Terminal.Instance.CurrentClient.Notifier.SetProgress(80);
         }
 
         #endregion
