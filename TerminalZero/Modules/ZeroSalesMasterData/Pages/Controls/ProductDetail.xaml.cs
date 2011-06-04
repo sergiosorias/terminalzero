@@ -33,7 +33,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
                 LoadProduct();
                 LoadTaxes();

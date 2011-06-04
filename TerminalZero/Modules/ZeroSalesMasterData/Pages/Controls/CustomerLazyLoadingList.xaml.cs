@@ -1,8 +1,5 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Data;
 using ZeroGUI;
 
 namespace ZeroMasterData.Pages.Controls
@@ -17,13 +14,18 @@ namespace ZeroMasterData.Pages.Controls
             InitializeComponent();
         }
 
-        private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
+        protected override void OnControlModeChanged(ZeroCommonClasses.Interfaces.ControlMode newMode)
         {
-            var detail = new CustomerDetail((int)((Button)sender).DataContext);
-            bool? ret = ZeroMessageBox.Show(detail, string.Format("Editar cliente {0}", (int)((Button)sender).DataContext));
-            if (ret.HasValue && ret.Value)
+            base.OnControlModeChanged(newMode);
+            if (ControlMode.HasFlag(ZeroCommonClasses.Interfaces.ControlMode.Selection))
             {
-                
+                name2Column.Visibility =
+                    streetColumn.Visibility =
+                    numberColumn.Visibility =
+                    cityColumn.Visibility =
+                    e_Mail1Column.Visibility = System.Windows.Visibility.Collapsed;
+
+                MaxHeight = 400;
             }
         }
     }

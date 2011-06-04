@@ -17,7 +17,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <baseControls:SearchBox Search="SearchBox_Search"/>
-            <baseControls:ZeroToolBar New="btnNewSupplier_Click" SaveBtnVisible="False" CancelBtnVisible="False" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
         <myControls:SupplierLazyLoadingList Grid.Row="2" x:Name="supplierGrid"/>
     </Grid>
