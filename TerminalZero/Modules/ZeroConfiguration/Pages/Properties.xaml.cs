@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Interfaces;
+using ZeroConfiguration.Presentantion;
 
 
 namespace ZeroConfiguration.Pages
@@ -16,81 +17,18 @@ namespace ZeroConfiguration.Pages
     [ToolboxItem(false)]
     public partial class Properties : ZeroGUI.NavigationBasePage
     {
-        ConfigurationModelManager _dataProvider;
-        
         public Properties()
         {
             InitializeComponent();
-            CommandBar.Save += this.ZeroToolBar_Save;
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
-                _dataProvider = new ConfigurationModelManager();
-                switch (ControlMode)
-                {
-                    case ControlMode.New:
-                    case ControlMode.Update:
-                    case ControlMode.Delete:
-                        cbTerminals.ItemsSource = _dataProvider.Terminals;
-                        break;
-                    case ControlMode.ReadOnly:
-                        cbTerminals.ItemsSource = _dataProvider.Terminals.Where(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
-                        cbTerminals.IsEnabled = false;
-                        terminalPropertiesDataGrid.IsEnabled = false;
-                        modulesListView.IsEnabled = false;
-                        cbTerminalIsActive.IsEnabled = false;
-                        tbTerminal.IsReadOnly = descriptionTextBox.IsReadOnly = true;
-                        cbsendMasterData.Visibility = Visibility.Hidden;
-                        break;
-                    default:
-                        break;
-                }
-
-                cbTerminals.SelectedItem = _dataProvider.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                DataContext = new PropertiesViewModel(this);
             }
         }
-
-        private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var terminal = (int)cbTerminals.SelectedValue;
-            Terminal T = _dataProvider.Terminals.First(c => c.Code == terminal);
-            tbTerminal.DataContext = T;
-            if (T.LastSync != null)
-            {
-                lblLastSynclabel.Visibility = Visibility.Visible;
-                lblLastSync.Content = T.LastSync.GetValueOrDefault(DateTime.MinValue).ToString("dd/MM hh:mm:ss tt");
-            }
-            else
-                lblLastSynclabel.Visibility = Visibility.Hidden;
-
-            cbTerminalIsActive.DataContext = T;
-            cbsendMasterData.DataContext = T;
-            descriptionTextBox.DataContext = T;
-            terminalPropertiesDataGrid.ItemsSource = T.TerminalProperties;
-            if (!T.Modules.IsLoaded)
-                T.Modules.Load();
-            modulesListView.ItemsSource = _dataProvider.Modules;
-        }
-
-        #region IZeroPage Members
-
-        public override bool CanAccept(object parameter)
-        {
-            bool ret = base.CanAccept(parameter);
-            _dataProvider.SaveChanges();
-            return ret;
-        }
-
-        public override bool CanCancel(object parameter)
-        {
-            _dataProvider.SaveChanges();
-            return true;
-        }
-
-        #endregion
 
         private void UserControlUnloaded(object sender, RoutedEventArgs e)
         {
@@ -120,9 +58,6 @@ namespace ZeroConfiguration.Pages
                     }), null);
         }
 
-        private void ZeroToolBar_Save(object sender, RoutedEventArgs e)
-        {
-            _dataProvider.SaveChanges();
-        }
+        
     }
 }

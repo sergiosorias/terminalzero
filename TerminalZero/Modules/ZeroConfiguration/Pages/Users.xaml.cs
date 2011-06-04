@@ -27,7 +27,7 @@ namespace ZeroConfiguration.Pages
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             CommandBar.AppendButton("Cambiar Contraseña", ZeroCommonClasses.Terminal.Instance.Session.Actions[ZeroBusiness.Actions.OpenUserPasswordChangeMessage]);
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
                 LoadUsers();
             }
