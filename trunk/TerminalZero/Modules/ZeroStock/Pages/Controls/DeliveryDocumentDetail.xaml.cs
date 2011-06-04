@@ -28,7 +28,7 @@ namespace ZeroStock.Pages.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             // Do not load your data at design time.
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!IsInDesignMode)
             {
                 CurrentDocumentDelivery = new DeliveryDocumentHeader(Terminal.Instance.TerminalCode);
                 grid1.DataContext = CurrentDocumentDelivery;
