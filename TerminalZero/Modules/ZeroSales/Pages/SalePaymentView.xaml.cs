@@ -27,13 +27,15 @@ namespace ZeroSales.Pages
 
         private void NavigationBasePage_Loaded(object sender, RoutedEventArgs e)
         {
-            addPaymentInstrument_Click(null, null);
+            
         }
 
         private void addPaymentInstrument_Click(object sender, RoutedEventArgs e)
         {
-            var paymentInstrument = new PaymentInstrumentSelection(Sale);
-            paymentInstrument.SelectedQuantity = SalePaymentHeader.RestToPay;
+            var paymentInstrument = new PaymentInstrumentSelection(Sale)
+                                        {
+                                            SelectedQuantity = SalePaymentHeader.RestToPay
+                                        };
             bool ret = ZeroMessageBox.Show(paymentInstrument, "Forma de pago", ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
             if (ret)
             {
@@ -46,13 +48,7 @@ namespace ZeroSales.Pages
         public override bool CanAccept(object parameter)
         {
             bool ret = base.CanAccept(parameter);
-            return ret && !SalePaymentHeader.NotReady;
-        }
-
-        public override bool CanCancel(object parameter)
-        {
-            DataContext = null;
-            return base.CanCancel(parameter);
+            return ret && SalePaymentHeader.Ready;
         }
 
         private void paymentitemsList_ItemRemoving(object sender, ItemActionEventArgs e)
@@ -64,11 +60,5 @@ namespace ZeroSales.Pages
         {
             SalePaymentHeader.RemovePaymentInstrument((SalePaymentItem)e.Item);
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Sale.PrintMode = Sale.PrintMode.HasValue && Sale.PrintMode.Value == 0 ? 1 : 0;
-        }
-        
     }
 }

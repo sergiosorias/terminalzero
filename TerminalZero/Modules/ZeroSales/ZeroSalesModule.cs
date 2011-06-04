@@ -18,7 +18,7 @@ namespace ZeroSales
             BuildPosibleActions();
         }
 
-        #region Overrrides
+        #region Overrides
 
         public override string[] GetFilesToSend()
         {
@@ -72,8 +72,8 @@ namespace ZeroSales
 
         private void BuildPosibleActions()
         {
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCurrentSalesView, OpenCurrentSalesView, null, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewSaleView, OpenSaleView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCurrentSalesView, OpenCurrentSalesView));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewSaleView, OpenSaleView));
         }
 
         private void OpenSaleView()

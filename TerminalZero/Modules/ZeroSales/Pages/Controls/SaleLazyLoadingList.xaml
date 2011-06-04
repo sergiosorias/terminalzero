@@ -8,11 +8,11 @@
 
     <DataGrid.Columns>
         <!--<DataGridTextColumn x:Name="productMasterCodeColumn" IsReadOnly="True" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />-->
-        <DataGridTextColumn x:Name="productNameColumn" MinWidth="210" IsReadOnly="True" Binding="{Binding Path=Product.Name}" Header="Nombre" Width="*" />
-        <DataGridTextColumn x:Name="quantityColumn" IsReadOnly="True" Binding="{Binding Path=Quantity}" Header="Cantidad" Width="100" />
-        <DataGridTextColumn x:Name="netPriceValueColumn" IsReadOnly="True" Binding="{Binding Path=NetPriceValue}" Header="Precio Neto" Width="100" />
-        <DataGridTextColumn x:Name="taxValueColumn" IsReadOnly="True" Binding="{Binding Path=TaxValue}" Header="IVA" Width="100" />
-        <DataGridTextColumn x:Name="priceValueColumn" IsReadOnly="True" Binding="{Binding Path=PriceValue}" Header="Precio" Width="100" />
+        <DataGridTextColumn x:Name="productNameColumn" KeyboardNavigation.IsTabStop="True"  MinWidth="210" IsReadOnly="True" Binding="{Binding Path=Product.Name}" Header="Nombre" Width="*" />
+        <DataGridTextColumn x:Name="quantityColumn"  IsReadOnly="True" Binding="{Binding Path=Quantity}" Header="Cantidad" Width="100" />
+        <DataGridTextColumn x:Name="netPriceValueColumn"  IsReadOnly="True" Binding="{Binding Path=NetPriceValue}" Header="Precio Neto" Width="100" />
+        <DataGridTextColumn x:Name="taxValueColumn"  IsReadOnly="True" Binding="{Binding Path=TaxValue}" Header="IVA" Width="100" />
+        <DataGridTextColumn x:Name="priceValueColumn"  IsReadOnly="True" Binding="{Binding Path=PriceValue}" Header="Precio" Width="100" />
         <DataGridTemplateColumn x:Name="removeColumn" Width="25">
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
