@@ -148,4 +148,7 @@
   <data name="MasterDataModuleDescription" xml:space="preserve">
     <value>ABM de las estructuras necesarias para realizar operaciones diarias</value>
   </data>
+	<data name="CustomerSelection">
+		<value xml:space="preserve">Seleccione un cliente</value>
+	</data>
 </root>
