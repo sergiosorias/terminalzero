@@ -32,6 +32,8 @@ namespace ZeroGUI
             set { _focusOnError = value; }
         }
 
+        public ViewModelGui ViewModel { get { return (ViewModelGui)DataContext; } set { DataContext = value; } }
+
         public ControlMode ControlMode
         {
             get { return (ControlMode)GetValue(ModeProperty); }
@@ -80,13 +82,23 @@ namespace ZeroGUI
                     }
                 }
             }
-            
+            if (ret && ViewModel != null)
+                return ViewModel.CanAccept(parameter);
+
             return ret;
         }
 
         public virtual bool CanCancel(object parameter)
         {
+            if (ViewModel != null)
+                return ViewModel.CanCancel(parameter);
+
             return true;
+        }
+
+        public virtual bool? ShowInModalWindow()
+        {
+            return ZeroMessageBox.Show(this, Header.ToString(), ResizeMode.NoResize, MessageBoxButton.OKCancel);
         }
 
         protected virtual void OnControlModeChanged(ControlMode newMode)
