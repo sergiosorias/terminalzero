@@ -18,6 +18,12 @@ namespace ZeroGUI.Converters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            if(parameter!=null)
+            {
+                bool param;
+                if(bool.TryParse(parameter.ToString(),out param))
+                    return ((bool)value) == param ? Visibility.Visible : Visibility.Collapsed;
+            }
             return ((bool) value) ? Visibility.Visible : Visibility.Collapsed;
         }
 

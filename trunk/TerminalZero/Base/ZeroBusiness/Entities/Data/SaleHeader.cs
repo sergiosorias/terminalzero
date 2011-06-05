@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Input;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Entities;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces;
 using ZeroBusiness.Manager.Data;
 
@@ -38,20 +36,6 @@ namespace ZeroBusiness.Entities.Data
             return 1;
         }
 
-        partial void OnSalePaymentHeaderCodeChanged()
-        {
-            if(SalePaymentHeader!=null)
-            {
-                SalePaymentHeader.ItemsCollectionChanged += 
-                    (o, e) =>
-                        {
-                            if(!_printModeForced)
-                            PrintMode =
-                                SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == 1) ? 1 : 0;
-                        };
-            }
-        }
-
         public bool HasChanges
         {
             get
@@ -75,7 +59,7 @@ namespace ZeroBusiness.Entities.Data
             }
         }
 
-        public SaleItem AddNewSaleItem(Product prod, double qty, string lot)
+        public SaleItem AddNewSaleItem(Product prod, double qty, string lot = "")
         {
             if (!prod.Price1Reference.IsLoaded)
             {
@@ -138,14 +122,7 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
-
-        public object ViewTitle
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(SaleType.Description)? SaleType.Description : "Venta";
-            }
-        }
+        
         
     }
 

@@ -121,27 +121,36 @@
     <value>Eliminar</value>
   </data>
   <data name="Important" xml:space="preserve">
-    <value />
+    <value>Importante</value>
   </data>
   <data name="ItemDeletingQuestion" xml:space="preserve">
     <value>¿Esta seguro de eliminar este ítem?</value>
   </data>
   <data name="QuestionSaveCurrentData" xml:space="preserve">
-    <value xml:space="preserve">¿Desea guardar los datos ingresados?</value>
+    <value>¿Desea guardar los datos ingresados?</value>
   </data>
   <data name="UnexistentProduct" xml:space="preserve">
     <value>Producto Inexistente</value>
   </data>
   <data name="WrongDay" xml:space="preserve">
-    <value />
+    <value>Dia Erroneo</value>
   </data>
   <data name="WrongMonth" xml:space="preserve">
-    <value />
+    <value>Mes Erroneo</value>
   </data>
   <data name="WrongYear" xml:space="preserve">
-    <value />
+    <value>Año Erroneo</value>
   </data>
-	<data name="SalesModuleDescription">
-		<value xml:space="preserve">Operaciones referentes a ventas</value>
-	</data>
+  <data name="SalesModuleDescription" xml:space="preserve">
+    <value>Operaciones referentes a ventas</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Error al guardar</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Información</value>
+  </data>
+  <data name="SaveOk" xml:space="preserve">
+    <value>Datos Guardados</value>
+  </data>
 </root>

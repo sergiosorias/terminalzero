@@ -67,6 +67,7 @@
       <DependentUpon>SalePaymentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\CreateSaleViewModel.cs" />
+    <Compile Include="Presentation\SalePaymentViewModel.cs" />
     <Compile Include="Printer\PrintManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

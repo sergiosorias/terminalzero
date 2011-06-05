@@ -48,6 +48,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AutoCleanTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="BarCodeTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -90,6 +94,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoCleanTextBlock.xaml.cs">
+      <DependentUpon>AutoCleanTextBlock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BarCodeTextBox.xaml.cs">
       <DependentUpon>BarCodeTextBox.xaml</DependentUpon>
     </Compile>
@@ -109,6 +116,7 @@
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\StringToResourceConverter.cs" />
     <Compile Include="Converters\TypeToVisibilityConverter.cs" />
+    <Compile Include="LazyLoadingListControlUpgrade.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="LazyLoadingListControl.cs" />
     <Compile Include="Masking.cs" />

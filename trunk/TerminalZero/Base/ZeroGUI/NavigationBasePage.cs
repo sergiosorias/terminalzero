@@ -32,7 +32,11 @@ namespace ZeroGUI
             set { _focusOnError = value; }
         }
 
-        public ViewModelGui ViewModel { get { return (ViewModelGui)DataContext; } set { DataContext = value; } }
+        public ViewModelGui ViewModel
+        {
+            get { return DataContext as ViewModelGui; } 
+            set { DataContext = value; }
+        }
 
         public ControlMode ControlMode
         {
@@ -96,9 +100,9 @@ namespace ZeroGUI
             return true;
         }
 
-        public virtual bool? ShowInModalWindow()
+        public virtual bool ShowInModalWindow()
         {
-            return ZeroMessageBox.Show(this, Header.ToString(), ResizeMode.NoResize, MessageBoxButton.OKCancel);
+            return ZeroMessageBox.Show(this, Header.ToString(), ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
         }
 
         protected virtual void OnControlModeChanged(ControlMode newMode)
@@ -106,7 +110,7 @@ namespace ZeroGUI
             
         }
 
-        protected void GoHomeOrDisable()
+        public void GoHomeOrDisable()
         {
             if (!ZeroCommonClasses.Terminal.Instance.Session.Actions.Exists(ZeroBusiness.Actions.AppHome)
                 || !ZeroCommonClasses.Terminal.Instance.Session.Actions[ZeroBusiness.Actions.AppHome].TryExecute())

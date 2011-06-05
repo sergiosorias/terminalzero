@@ -36,7 +36,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
         public event EventHandler CanExecuteChanged;
 
-        public void InvokeCanExecuteChanged()
+        public void RaiseCanExecuteChanged()
         {
             EventHandler handler = CanExecuteChanged;
             if (handler != null) handler(this, EventArgs.Empty);
