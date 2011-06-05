@@ -70,11 +70,20 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Importante.
         /// </summary>
         internal static string Important {
             get {
                 return ResourceManager.GetString("Important", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Información.
+        /// </summary>
+        internal static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
             }
         }
         
@@ -106,6 +115,24 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error al guardar.
+        /// </summary>
+        internal static string SaveError {
+            get {
+                return ResourceManager.GetString("SaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datos Guardados.
+        /// </summary>
+        internal static string SaveOk {
+            get {
+                return ResourceManager.GetString("SaveOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Producto Inexistente.
         /// </summary>
         internal static string UnexistentProduct {
@@ -115,7 +142,7 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Dia Erroneo.
         /// </summary>
         internal static string WrongDay {
             get {
@@ -124,7 +151,7 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Mes Erroneo.
         /// </summary>
         internal static string WrongMonth {
             get {
@@ -133,7 +160,7 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Año Erroneo.
         /// </summary>
         internal static string WrongYear {
             get {

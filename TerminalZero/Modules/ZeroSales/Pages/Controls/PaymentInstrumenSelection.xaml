@@ -30,7 +30,7 @@
                 </TextBox.Text>
             </TextBox>
         </Grid>
-        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList" LazyLoadEnable="False"/>
+        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList"/>
         <TextBlock Grid.Row="2" FontSize="48" VerticalAlignment="Center" Text="{Binding Path=SelectedItem.Name, ElementName=paymentInstrumentsList, FallbackValue=''}" HorizontalAlignment="Center" FontWeight="Heavy" Foreground="#FFC52C19" />
         <Grid Grid.Row="3" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>

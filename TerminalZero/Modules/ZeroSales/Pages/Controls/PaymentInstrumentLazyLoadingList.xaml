@@ -1,10 +1,10 @@
-﻿<ZeroGUI:LazyLoadingListControl x:Class="ZeroSales.Pages.Controls.PaymentInstrumentLazyLoadingList"
+﻿<ZeroGUI:LazyLoadingListControlUpgrade x:Class="ZeroSales.Pages.Controls.PaymentInstrumentLazyLoadingList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ZeroGUI="clr-namespace:ZeroGUI;assembly=ZeroGUI" mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Focusable="False" IsEnabled="False" MaxHeight="250"
-             xmlns:Data="clr-namespace:ZeroBusiness.Manager.Data;assembly=ZeroBusiness"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Focusable="False" IsEnabled="False" MaxHeight="250" 
+             xmlns:Data="clr-namespace:ZeroBusiness.Manager.Data;assembly=ZeroBusiness" xmlns:ZeroGUI="clr-namespace:ZeroGUI;assembly=ZeroGUI" 
             ItemsSource="{Binding Path=ModelManager.PaymentInstruments,Source={x:Static Data:BusinessContext.Instance}}"
                 >
     <DataGrid.Columns>
@@ -12,4 +12,4 @@
         <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Path=Name}" Header="" Width="180" />
     </DataGrid.Columns>
 
-</ZeroGUI:LazyLoadingListControl>
+</ZeroGUI:LazyLoadingListControlUpgrade>

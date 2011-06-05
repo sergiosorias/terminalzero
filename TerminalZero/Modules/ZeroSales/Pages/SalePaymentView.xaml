@@ -4,13 +4,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI" 
-            xmlns:Controls="clr-namespace:ZeroSales.Pages.Controls" xmlns:Pages="clr-namespace:ZeroSales.Pages" 
+            xmlns:Controls="clr-namespace:ZeroSales.Pages.Controls"
             xmlns:Converters="clr-namespace:ZeroGUI.Converters;assembly=ZeroGUI" mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="420" Loaded="NavigationBasePage_Loaded"
+             d:DesignHeight="300" d:DesignWidth="420" 
              >
-    <Grid Width="400">
+    <Grid>
         <Grid.Background>
-            <SolidColorBrush Color="{Binding Path=Sale.PrintMode, Mode=OneWay, FallbackValue=Transparent, RelativeSource={RelativeSource AncestorType=Pages:SalePaymentView}, Converter={x:Static Converters:PrintModeToColorConverter.Instance}}" Opacity=".4"/>
+            <SolidColorBrush Color="{Binding Path=Sale.PrintMode, Mode=OneWay, FallbackValue=Transparent, Converter={x:Static Converters:PrintModeToColorConverter.Instance}}" Opacity=".4"/>
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -27,10 +27,9 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Left">
                 <TextBlock Grid.Column="3" Text="Total a pagar:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBlock FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="$" Margin="5" Foreground="#FFC52C19" />
-                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=TotalValue, FallbackValue=0, RelativeSource={RelativeSource AncestorType=Pages:SalePaymentView }}" Foreground="#FFC52C19" />
+                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=Sale.PriceSumValue, FallbackValue='$0', StringFormat='C'}" Foreground="#FFC52C19" />
             </StackPanel>
-            <Button Grid.Column="1" Width="50" Margin="10,0,0,0" RenderTransformOrigin="0.5,0.5" Name="addPaymentInstrument" Style="{DynamicResource homeButtonStyle}" Visibility="{Binding Path=NotReady, Mode=OneWay,Converter={x:Static Converters:BoolToVisibilityConverter.Instance}}" Click="addPaymentInstrument_Click">
+            <Button Grid.Column="1" Width="50" Margin="10,0,0,0" RenderTransformOrigin="0.5,0.5" Name="addPaymentInstrument" Style="{DynamicResource homeButtonStyle}" Visibility="{Binding Path=Payment.Ready, Mode=OneWay,Converter={x:Static Converters:BoolToVisibilityConverter.Instance},ConverterParameter='false'}" Command="{Binding AddPaymentInstrumentCommand}">
                 <Button.Content>
                     <TextBlock Text="+" FontSize="40" Foreground="Green" FontWeight="ExtraBold"/>
                 </Button.Content>
@@ -39,7 +38,7 @@
                 </Button.RenderTransform>
             </Button>
         </Grid>
-        <Controls:SalePaymentItemLazyLoadingList Grid.Row="1" x:Name="paymentitemsList" ItemRemoving="paymentitemsList_ItemRemoving" ItemRemoved="paymentitemsList_ItemRemoved"/>
+        <Controls:SalePaymentItemLazyLoadingList Grid.Row="1" x:Name="paymentitemsList" ItemsSource="{Binding Path=SalePaymentItemsSource}"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -47,13 +46,11 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Visibility="{Binding Path=Visibility, ElementName=addPaymentInstrument}" VerticalAlignment="Center"  HorizontalAlignment="Left">
                 <TextBlock Grid.Column="3" Text="Restan:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBlock FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="$" Margin="5" Foreground="#FFC52C19" />
-                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=RestToPay, FallbackValue=0}" Foreground="#FFC52C19" />
+                <TextBlock Margin="5,0,0,0" FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=Payment.RestToPay, FallbackValue='$0', StringFormat='C'}" Foreground="#FFC52C19" />
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Visibility="{Binding Path=Visibility, ElementName=addPaymentInstrument,Converter={x:Static Converters:InvertVisibilityConverter.Instance}}" VerticalAlignment="Center"  HorizontalAlignment="Left">
                 <TextBlock Grid.Column="3" Text="Vuelto:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBlock FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="$" Margin="5" Foreground="#FFC52C19" />
-                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=Change, FallbackValue=0}" Foreground="#FFC52C19" />
+                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=Payment.Change, FallbackValue='$0', StringFormat='C'}" Foreground="#FFC52C19" />
             </StackPanel>
         </Grid>
     </Grid>

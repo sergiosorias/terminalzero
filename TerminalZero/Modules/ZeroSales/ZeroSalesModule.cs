@@ -6,6 +6,7 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Pack;
 using ZeroSales.Pages;
+using ZeroSales.Presentation;
 using ZeroSales.Properties;
 
 namespace ZeroSales
@@ -79,15 +80,16 @@ namespace ZeroSales
         private void OpenSaleView()
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new CreateSaleView(0);
-            Terminal.Instance.CurrentClient.ShowView(view);
+            var viewModel = new CreateSaleViewModel(new CreateSaleView(), 0);
+            Terminal.Instance.CurrentClient.ShowView(viewModel.View);
         }
 
         private void OpenCurrentSalesView()
         {
-            BusinessContext.Instance.BeginOperation();
-            var view = new CreateSaleView(0);
-            Terminal.Instance.CurrentClient.ShowView(view);
+            ///TODO:
+            //BusinessContext.Instance.BeginOperation();
+            //var view = new CreateSaleView();
+            //Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         #endregion

@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Loaded="UserControl_Loaded" Header="{Binding ViewTitle, FallbackValue='Nueva venta'}"
+             mc:Ignorable="d" 
+             Header="{Binding ViewTitle, FallbackValue='Nueva venta'}"
+             baseControls:ZeroToolBar.SaveCommand="{Binding SaveCommand}"
+             baseControls:ZeroToolBar.CancelCommand="{Binding CancelCommand}"
              xmlns:controls="clr-namespace:ZeroSales.Pages.Controls" 
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI"
              d:DesignHeight="300" d:DesignWidth="500">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,17 +29,15 @@
 
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <Label Content="Lote:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode" BarcodeValidating="lotBarcode_BarcodeValidating" 
-                                            BarcodeReceived="lotBarcode_BarcodeReceived" Composition="NNNYYYYMMDDNN" TabIndex="0"/>
+                <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode" BarcodeReceivedCommand="{Binding LotBarcodeProductCommand}" Composition="NNNYYYYMMDDNN"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
-                                            BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN" TabIndex="1"/>
+                <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" Composition="NPPPPPPQQQQQN" BarcodeReceivedCommand="{Binding BarcodeProductCommand}"/>
             </StackPanel>
         </Grid>
 
-        <controls:SaleLazyLoadingList Grid.Row="1" x:Name="saleGrid" ItemRemoving="saleGrid_Removing" ItemRemoved="saleGrid_ItemRemoved"/>
+        <controls:SaleLazyLoadingList Grid.Row="1" x:Name="saleGrid" ItemsSource="{Binding Path=SaleProductList}"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -46,13 +46,12 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" MinWidth="200"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="" FontSize="48" FontWeight="Heavy" Name="currentProd" Margin="5,0,0,0"/>
+            <base:AutoCleanTextBlock Grid.Column="0" Text="{Binding Path=Message}" FontSize="48" FontWeight="Heavy" Name="currentProd" Margin="5,0,0,0"/>
             <TextBlock Grid.Column="1" Text="Articulos:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=Items.Count,ElementName=saleGrid}"/>
             <TextBlock Grid.Column="3" Text="Total:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center">
-                <TextBlock FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="$" Margin="5" Foreground="#FFC52C19" />
-                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=PriceSumValue, FallbackValue=0}" Foreground="#FFC52C19" />
+                <TextBlock FontSize="48" VerticalAlignment="Center"  HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=SaleHeader.PriceSumValue, FallbackValue='$0',StringFormat='C'}" Foreground="#FFC52C19" />
             </StackPanel>
 
         </Grid>

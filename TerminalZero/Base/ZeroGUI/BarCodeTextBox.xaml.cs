@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroGUI.Classes;
 using UserControl = System.Windows.Controls.UserControl;
@@ -63,6 +64,16 @@ namespace ZeroGUI
         public static readonly DependencyProperty MaskProperty =
             DependencyProperty.Register("Mask", typeof(string), typeof(BarCodeTextBox), null);
 
+        public ICommand BarcodeReceivedCommand
+        {
+            get { return (ICommand)GetValue(BarcodeReceivedCommandProperty); }
+            set { SetValue(BarcodeReceivedCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BarcodeReceivedCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BarcodeReceivedCommandProperty =
+            DependencyProperty.Register("BarcodeReceivedCommand", typeof(ICommand), typeof(BarCodeTextBox), null);
+
         public BarCodeTextBox()
         {
             InitializeComponent();
@@ -82,11 +93,15 @@ namespace ZeroGUI
             {
                 string barcodeText = Text;
                 Text = "";
-                Dispatcher.BeginInvoke(new MethodInvoker(() => OnBarcodeReceived(new BarCodeEventArgs(barcodeText,
-                                                                                                      BarCodePart.
-                                                                                                          BuildComposition
-                                                                                                          (Composition,
-                                                                                                           barcodeText)))), null);
+                Dispatcher.BeginInvoke(new MethodInvoker(() =>
+                {
+                    var args = new BarCodeEventArgs(barcodeText,BarCodePart.BuildComposition(Composition,barcodeText));
+                    OnBarcodeReceived(args);
+                    if (BarcodeReceivedCommand != null)
+                    {
+                        BarcodeReceivedCommand.Execute(args);
+                    }
+                    }), null);
             }
         }
 
@@ -96,6 +111,10 @@ namespace ZeroGUI
             {
                 BarCodeValidationEventArgs args = new BarCodeValidationEventArgs(e.Value.ToString(), BarCodePart.BuildComposition(Composition, e.Value.ToString()));
                 OnBarcodeValidating(args);
+                if (BarcodeReceivedCommand != null)
+                {
+                    BarcodeReceivedCommand.CanExecute(args);
+                }
                 e.IsValid = args.Parts.TrueForAll(p => p.IsValid);
                 e.ErrorContent = args.Error;
             }
@@ -107,4 +126,5 @@ namespace ZeroGUI
         }
     }
 
+    
 }

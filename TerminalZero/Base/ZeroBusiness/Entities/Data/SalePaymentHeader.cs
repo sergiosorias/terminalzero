@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using ZeroBusiness.Events;
@@ -12,14 +13,6 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SalePaymentHeader : IExportableEntity
     {
-        public event EventHandler<ItemsCollectionChangeEventArgs<SalePaymentItem>> ItemsCollectionChanged;
-
-        private void InvokeItemsCollectionChanged(ItemsCollectionChangeEventArgs<SalePaymentItem> e)
-        {
-            EventHandler<ItemsCollectionChangeEventArgs<SalePaymentItem>> handler = ItemsCollectionChanged;
-            if (handler != null) handler(this, e);
-        }
-
         internal SalePaymentHeader()
         {
             
@@ -28,7 +21,6 @@ namespace ZeroBusiness.Entities.Data
         public SalePaymentHeader(int terminalToCode)
         {
             Code = GetNextSalePaymentHeaderCode();
-            Ready = false;
             TerminalToCode = terminalToCode;
             TerminalCode = Terminal.Instance.TerminalCode;
             TotalQuantity = 0;
@@ -55,13 +47,12 @@ namespace ZeroBusiness.Entities.Data
         {
             get
             {
-                return
-                    Math.Round(
-                        SaleHeaders.Count > 0 ? SaleHeaders.Select(sh => sh.PriceSumValue).Sum() - TotalQuantity : 0, 2);
+                return SaleHeaders.Count > 0 ? SaleHeaders.Select(sh => sh.PriceSumValue).Sum() - TotalQuantity : 0;
             }
         }
 
-        public bool Ready { get; set; }
+        public bool Ready { get { return !(RestToPay > 0); } }
+        
         #endregion
 
         public void AddPaymentInstrument(SalePaymentItem payment)
@@ -69,7 +60,7 @@ namespace ZeroBusiness.Entities.Data
             SalePaymentItems.Add(payment);
             TotalQuantity = SalePaymentItems.Select(pi => pi.Quantity).Sum();
             UpdateViewProperties();
-            InvokeItemsCollectionChanged(new ItemsCollectionChangeEventArgs<SalePaymentItem>(payment));
+            
         }
 
         public void RemovePaymentInstrument(SalePaymentItem payment)
@@ -77,12 +68,10 @@ namespace ZeroBusiness.Entities.Data
             SalePaymentItems.Remove(payment);
             TotalQuantity = SalePaymentItems.Select(pi => pi.Quantity).Sum();
             UpdateViewProperties();
-            InvokeItemsCollectionChanged(new ItemsCollectionChangeEventArgs<SalePaymentItem>(payment));
         }
 
         private void UpdateViewProperties()
         {
-            Ready = !(RestToPay > 0);
             OnPropertyChanged("Change");
             OnPropertyChanged("RestToPay");
             OnPropertyChanged("Ready");

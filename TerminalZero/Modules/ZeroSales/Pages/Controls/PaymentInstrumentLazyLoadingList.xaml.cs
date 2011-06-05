@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZeroBusiness.Manager.Data;
+using ZeroGUI;
 
 
 namespace ZeroSales.Pages.Controls
@@ -20,7 +21,7 @@ namespace ZeroSales.Pages.Controls
     /// <summary>
     /// Interaction logic for PaymentInstrumentLazyLoadingList.xaml
     /// </summary>
-    public partial class PaymentInstrumentLazyLoadingList : ZeroGUI.LazyLoadingListControl
+    public partial class PaymentInstrumentLazyLoadingList : LazyLoadingListControlUpgrade
     {
         public PaymentInstrumentLazyLoadingList()
         {
