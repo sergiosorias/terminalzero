@@ -7,8 +7,10 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
+using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using Application = System.Windows.Application;
 using DataGrid = System.Windows.Controls.DataGrid;
@@ -57,7 +59,6 @@ namespace ZeroGUI
 
         }
 
-        private IEnumerable _fullItemList;
         private WaitCursorSimple waitCursor = new WaitCursorSimple();
         
         #region Events
@@ -103,8 +104,7 @@ namespace ZeroGUI
         {
             if (!IsInDesignMode)
             {
-                _fullItemList = items ?? new ArrayList();
-                if (_fullItemList != null)
+                if (items != null)
                 {
                     if (LazyLoadEnable)
                     {
@@ -125,11 +125,11 @@ namespace ZeroGUI
                         var loader = new BackgroundWorker();
                         loader.DoWork += loader_DoWork;
                         loader.RunWorkerCompleted += loader_RunWorkerCompleted;
-                        loader.RunWorkerAsync();
+                        loader.RunWorkerAsync(items);
                     }
                     else
                     {
-                        FillList();
+                        FillList(items);
                     }
                 }
             }
@@ -147,12 +147,12 @@ namespace ZeroGUI
         private void loader_DoWork(object sender, DoWorkEventArgs e)
         {
             Thread.Sleep(400);
-            Dispatcher.BeginInvoke(new MethodInvoker(FillList), null);
+            Dispatcher.BeginInvoke(new ParameterizedThreadStart(FillList), e.Argument);
         }
 
-        private void FillList()
+        private void FillList(object items)
         {
-            ItemsSource = _fullItemList;
+            ItemsSource = (IEnumerable)items;
             OnItemsLoaded();
         }
 
@@ -167,42 +167,28 @@ namespace ZeroGUI
         #endregion
 
         #region Public Methods
-        public virtual int ApplyFilter(string criteria, params object[] otherCriteriaObjects)
+        public virtual int ApplyFilter(params object[] criteriaObjects)
         {
-            if (_fullItemList != null)
+            if (ItemsSource != null)
             {
-                Items.Clear();
+                ICollectionView items = CollectionViewSource.GetDefaultView(ItemsSource);
 
-                foreach (var item in _fullItemList.OfType<ISelectable>().Where(p => p.Contains(criteria)))
+                if (criteriaObjects != null && criteriaObjects.Length > 0 && criteriaObjects.Any(o=>o!=null) && items.CanFilter)
                 {
-                    Items.Add(item);
-                }
+                    items.Filter = p => 
+                    { 
+                        var obj = p as ISelectable;
+                        return obj != null && ComparisonExtentions.Contains(obj, criteriaObjects);
 
-                if (otherCriteriaObjects != null)
+                    };
+                }
+                else
                 {
-                    foreach (object other in otherCriteriaObjects)
-                    {
-                        if (other is DateTime)
-                        {
-                            var date = (DateTime) other;
-                            foreach (var item in _fullItemList.OfType<ISelectable>().Where(p => p.Contains(date)))
-                            {
-                                Items.Add(item);
-                            }
-                        }
-                    }
+                    items.Filter = null;
                 }
-
                 return Items.Count;
             }
             return 0;
-        }
-
-        public virtual void SelectItemByKey(EntityKey key)
-        {
-            if(key!=null)
-            SelectedItem = Items.OfType<EntityObject>().FirstOrDefault(entObj => entObj.EntityKey.Equals(key));
-            
         }
 
         public virtual void SelectItemByIndex(int index)
@@ -212,7 +198,7 @@ namespace ZeroGUI
 
         public virtual void SelectItemByData(string data)
         {
-            SelectedItem = _fullItemList.OfType<ISelectable>().FirstOrDefault(item => item.Contains(data));
+            SelectedItem = ItemsSource.OfType<ISelectable>().FirstOrDefault(item => item.Contains(data));
         }
 
         public virtual void MoveNext()

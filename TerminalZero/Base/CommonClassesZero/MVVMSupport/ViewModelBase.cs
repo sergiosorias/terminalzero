@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroCommonClasses.MVVMSupport
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         #region Implementation of INotifyPropertyChanged
 
@@ -28,5 +29,13 @@ namespace ZeroCommonClasses.MVVMSupport
             return true;
         }
 
-     }
+        #region Implementation of IDisposable
+
+        public virtual void Dispose()
+        {
+            
+        }
+
+        #endregion
+    }
 }

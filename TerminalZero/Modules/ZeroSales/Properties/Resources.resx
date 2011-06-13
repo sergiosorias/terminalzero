@@ -153,4 +153,10 @@
   <data name="SaveOk" xml:space="preserve">
     <value>Datos Guardados</value>
   </data>
+	<data name="FinalCustomer">
+		<value xml:space="preserve">Consumidor Final</value>
+	</data>
+	<data name="Change">
+		<value xml:space="preserve">Cambiar</value>
+	</data>
 </root>

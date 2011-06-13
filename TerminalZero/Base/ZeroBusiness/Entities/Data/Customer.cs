@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Xml.Serialization;
 using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
@@ -14,7 +12,7 @@ namespace ZeroBusiness.Entities.Data
 
         public bool Contains(string data)
         {
-            return ComparisonExtentions.ContainsIgnoreCase(data, Name1, Name2);
+            return ComparisonExtentions.ContainsIgnoreCase(data.Replace("-", ""), Name1, Name2, _LegalCode != null ? _LegalCode.Replace("-", "") : "");
         }
 
         public bool Contains(DateTime data)

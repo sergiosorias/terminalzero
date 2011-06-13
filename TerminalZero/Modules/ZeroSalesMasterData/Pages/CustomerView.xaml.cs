@@ -16,6 +16,11 @@ namespace ZeroMasterData.Pages
         {
             base.OnControlModeChanged(newMode);
             customerGrid.ControlMode = ControlMode;
+            if(newMode == ZeroCommonClasses.Interfaces.ControlMode.Selection)
+            {
+                selectedItemMaximized.Visibility = System.Windows.Visibility.Visible;
+                Height= MaxHeight = 450;
+            }
         }
     
     }

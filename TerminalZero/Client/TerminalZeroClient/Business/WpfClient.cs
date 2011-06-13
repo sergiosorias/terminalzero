@@ -120,6 +120,23 @@ namespace TerminalZeroClient.Business
             }
         }
 
+        private int disableCount = 0;
+        public void ShowEnable(bool enable)
+        {
+            if (!enable)
+            {
+                disableCount++;
+                ((MainWindow)Application.Current.MainWindow).backWindow.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                disableCount--;
+                if (disableCount == 0)
+                    ((MainWindow) Application.Current.MainWindow).backWindow.Visibility = Visibility.Collapsed;
+            }
+
+        }
+
         public void Initialize()
         {
             bool canContinue;

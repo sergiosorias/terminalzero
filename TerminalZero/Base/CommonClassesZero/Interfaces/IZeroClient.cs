@@ -13,6 +13,7 @@ namespace ZeroCommonClasses.Interfaces
         List<ZeroModule> ModuleList { get; }
         ZeroMenu MainMenu { get; }
         void ShowView(object view);
+        void ShowEnable(bool enable);
         void Initialize();
     }
 }

@@ -70,12 +70,12 @@ namespace TerminalZeroClient
             if (!Terminal.Instance.Session.Actions.Exists(Actions.AppHome))
             {
                 Terminal.Instance.Session.Actions.Add(GoHome);
-                Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppExit, ForceClose, null, false, false));
+                Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppExit, ForceClose, null, false));
             }
             InternalBuildMenu(Terminal.Instance.CurrentClient.MainMenu, mainMenu.Items);
         }
-        
-        private static void OpenHome()
+
+        private static void OpenHome(object parameter)
         {
             Terminal.Instance.CurrentClient.ShowView(new Home());
         }
@@ -180,7 +180,7 @@ namespace TerminalZeroClient
         #endregion
 
         private bool _isForced;
-        private void ForceClose()
+        private void ForceClose(object parameter)
         {
             _isForced = true;
             Close();
@@ -288,7 +288,27 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            Trace.WriteLineIf(ConfigurationContext.LogLevel.Level >= level, GetStamp() + message);
+            if (ConfigurationContext.LogLevel.Level >= level)
+            {
+                switch (level)
+                {
+                    case TraceLevel.Error:
+                        Trace.TraceError(message);
+                        break;
+                    case TraceLevel.Warning:
+                        Trace.TraceWarning(message);
+                        break;
+                    case TraceLevel.Info:
+                        Trace.TraceInformation(message);
+                        break;
+                    case TraceLevel.Verbose:
+                        Trace.WriteLine(message,"Verbose");
+                        break;
+                    case TraceLevel.Off:
+                        break;
+                }
+            }
+
         }
 
         #endregion

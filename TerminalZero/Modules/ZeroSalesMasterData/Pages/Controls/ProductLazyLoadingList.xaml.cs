@@ -13,7 +13,7 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for ProductGrid.xaml
     /// </summary>
-    public partial class ProductLazyLoadingList : LazyLoadingListControl
+    public partial class ProductLazyLoadingList : LazyLoadingListControlUpgrade
     {
         public ProductLazyLoadingList()
         {
@@ -27,16 +27,6 @@ namespace ZeroMasterData.Pages.Controls
             
         }
         
-        private void btnEditProduct_Click(object sender, RoutedEventArgs e)
-        {
-            var t = (int)((Button)sender).DataContext;
-            var detail = new ProductDetail(t);
-
-            bool? ret = ZeroMessageBox.Show(detail, Properties.Resources.ProductEdit);
-            if (ret.HasValue && ret.Value)
-            {
-               
-            }
-        }
+        
     }
 }

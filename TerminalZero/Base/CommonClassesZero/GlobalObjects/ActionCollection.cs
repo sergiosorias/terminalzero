@@ -6,7 +6,7 @@ namespace ZeroCommonClasses
     public class ActionCollection
     {
         public static ZeroAction NullAction = new ZeroAction("", DoNothing, RuleCollection.NullRuleName , false);
-        private static void DoNothing()
+        private static void DoNothing(object parameter)
         {
 
         }

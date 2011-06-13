@@ -28,12 +28,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextSaleHeaderCode(int terminal)
         {
-            var list = BusinessContext.Instance.ModelManager.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Select(sh=>sh.Code);
-            if(list.Count()>0)
-            {
-                return list.Max() + 1;
-            }
-            return 1;
+            return BusinessContext.Instance.ModelManager.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Count()+1;
         }
 
         public bool HasChanges
@@ -106,6 +101,11 @@ namespace ZeroBusiness.Entities.Data
         {
             _printModeForced = true;
             PrintMode = mode;
+        }
+
+        partial void OnCustomerCodeChanged()
+        {
+            PrintMode = 1;
         }
 
         #region Implementation of IExportableEntity

@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ZeroGUI
 {
@@ -20,32 +9,36 @@ namespace ZeroGUI
     /// </summary>
     public partial class AutoCleanTextBlock : TextBox
     {
+        public int ClearTimeOut
+        {
+            get { return (int)GetValue(ClearTimeOutProperty); }
+            set { SetValue(ClearTimeOutProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CleatTimeOut.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ClearTimeOutProperty =
+            DependencyProperty.Register("ClearTimeOut", typeof(int), typeof(AutoCleanTextBlock), new PropertyMetadata(5000));
 
         public AutoCleanTextBlock()
         {
             InitializeComponent();
-        }
-
-        protected override void OnTextChanged(TextChangedEventArgs e)
-        {
-            base.OnTextChanged(e);
-            CreateCleanTimer();
+            cleanResTimer = new Timer(cleanResTimer_Elapsed, null, ClearTimeOut, Timeout.Infinite);
+            TextChanged += (o, e) => { 
+                CreateCleanTimer();
+                Opacity = 1;
+            };
         }
 
         private Timer cleanResTimer;
 
         private void CreateCleanTimer()
         {
-            cleanResTimer = new Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+            cleanResTimer.Change(ClearTimeOut, Timeout.Infinite);
         }
 
-        void cleanResTimer_Elapsed(object o)
+        private void cleanResTimer_Elapsed(object o)
         {
-            cleanResTimer.Dispose();
-            Dispatcher.BeginInvoke(new Update(
-                () => { Text = ""; }
-                ), null);
-
+            Dispatcher.BeginInvoke(new Update(() => Opacity = 0), null);
         }
 
         

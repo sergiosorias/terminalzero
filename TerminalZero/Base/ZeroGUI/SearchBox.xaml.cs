@@ -31,7 +31,7 @@ namespace ZeroGUI
 
         // Using a DependencyProperty as the backing store for MinCriteriaCharCount.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinCriteriaCharCountProperty =
-            DependencyProperty.Register("MinCriteriaCharCount", typeof(int), typeof(SearchBox), new PropertyMetadata(0));
+            DependencyProperty.Register("MinCriteriaCharCount", typeof(int), typeof(SearchBox), new PropertyMetadata(3));
 
         
         public ICommand SearchCommand
@@ -42,7 +42,7 @@ namespace ZeroGUI
 
         // Using a DependencyProperty as the backing store for SearchCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SearchCommandProperty =
-            DependencyProperty.Register("SearchCommand", typeof(ICommand), typeof(SearchBox), new UIPropertyMetadata(null));
+            DependencyProperty.Register("SearchCommand", typeof(ICommand), typeof(SearchBox), null);
         
 
         private Timer searchTimer;
@@ -51,12 +51,14 @@ namespace ZeroGUI
         public SearchBox()
         {
             InitializeComponent();
-            MinCriteriaCharCount = 3;
+            cleanResTimer = new Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+            searchTimer = new Timer(searchTimer_Elapsed, null, Timeout.Infinite, Timeout.Infinite);
+           
         }
 
         protected void OnSearch()
         {
-            var searchCriteriaEventArgs = new SearchCriteriaEventArgs(txtSearchCriteria.Text);
+            var searchCriteriaEventArgs = new SearchCriteriaEventArgs(string.IsNullOrEmpty(txtSearchCriteria.Text) ? null : txtSearchCriteria.Text);
             if (Search != null)
             {
                 Search(this, searchCriteriaEventArgs);
@@ -98,30 +100,23 @@ namespace ZeroGUI
             }
             else if (e.Key != Key.Tab && (txtSearchCriteria.Text.Length >= MinCriteriaCharCount || txtSearchCriteria.Text.Length == 0))
             {
-                if(searchTimer!=null)
-                    searchTimer.Dispose();
+                searchTimer.Change(Timeout.Infinite, Timeout.Infinite);
                 CreateSearchTimer();
             }
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void CreateResTimer()
         {
-            cleanResTimer = new Timer(cleanResTimer_Elapsed, null, 5000, 5000);
+            cleanResTimer.Change(5000,Timeout.Infinite);
         }
 
         private void CreateSearchTimer()
         {
-            searchTimer = new Timer(searchTimer_Elapsed, null, 10, 200);
+            searchTimer.Change(50, Timeout.Infinite);
         }
 
         void cleanResTimer_Elapsed(object o)
         {
-            cleanResTimer.Dispose();
             Dispatcher.BeginInvoke(new Update(
                 () => { quantityPopup.IsOpen = false; quantity.Text = ""; }
                 ), null);
@@ -130,7 +125,6 @@ namespace ZeroGUI
 
         void searchTimer_Elapsed(object o)
         {
-            searchTimer.Dispose();
             btnSearch_Click(null, null);
         }
     }

@@ -133,25 +133,25 @@ namespace ZeroConfiguration
             e.Modules = Terminal.Instance.CurrentClient.ModuleList;
         }
 
-        private void StartSync()
+        private void StartSync(object parameter)
         {
             _sync.Start();
         }
 
-        private void OpenUsers()
+        private void OpenUsers(object parameter)
         {
             Terminal.Instance.CurrentClient.ShowView(new Users());
             
         }
 
-        private void OpenChangePassword()
+        private void OpenChangePassword(object parameter)
         {
             var pswChange = new UserChangePassword();
             pswChange.DataContext = Terminal.Instance.Session[typeof(User)].Value;
             ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize,MessageBoxButton.OKCancel);
         }
 
-        private void OpenConfiguration()
+        private void OpenConfiguration(object parameter)
         {
             // ReSharper disable RedundantNameQualifier
             var view = new Pages.Properties();

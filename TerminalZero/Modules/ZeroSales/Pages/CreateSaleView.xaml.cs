@@ -1,17 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Data;
-using ZeroCommonClasses;
-using ZeroCommonClasses.GlobalObjects.Actions;
-using ZeroCommonClasses.GlobalObjects.Barcode;
+﻿using System.Windows;
+using System.Windows.Input;
 using ZeroGUI;
-using ZeroGUI.Classes;
-using ZeroSales.Presentation;
-using ZeroSales.Printer;
 
 namespace ZeroSales.Pages
 {
@@ -24,6 +13,14 @@ namespace ZeroSales.Pages
         {
             InitializeComponent();
             CommandBar.TabIndex = 3;
+            CommandBar.Save += CommandBar_New;
         }
+
+        void CommandBar_New(object sender, RoutedEventArgs e)
+        {
+            ((UIElement)sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
+        }
+
+        
     }
 }

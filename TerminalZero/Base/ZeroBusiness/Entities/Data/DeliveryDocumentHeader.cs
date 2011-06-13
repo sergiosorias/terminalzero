@@ -70,7 +70,7 @@ namespace ZeroBusiness.Entities.Data
         {
             return Date.Date == data.Date;
         }
-
+        
         #endregion
     }
 }

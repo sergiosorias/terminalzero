@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Interfaces;
@@ -27,25 +28,6 @@ namespace ZeroMasterData.Pages
         {
             e.Matches = productList.ApplyFilter(e.Criteria);
         }
-
-        private void NewBtnClick(object sender, EventArgs e)
-        {
-            var obj = Terminal.Instance.Session[typeof(Product)];
-            if (obj != null)
-            {
-                productList.AddItem(obj.Value as Product);
-            }
-        }
-
-        private void NavigationBasePage_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var viewModel = (ProductsViewModel)DataContext;
-            viewModel.NewProductCommand.Finished += NewBtnClick;
-        }
-
-       
-
-       
         
     }
 }

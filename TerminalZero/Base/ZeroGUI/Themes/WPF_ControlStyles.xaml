@@ -23,6 +23,12 @@
         <GradientStop Color="#FFE4E4E4" Offset="0.882" />
         <GradientStop Color="#FFBAAEAE" Offset="0.995" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="mainBackgroundInverted" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="#FFBAAEAE" Offset="0" />
+        <GradientStop Color="#FFE4E4E4" Offset="0.22" />
+        <GradientStop Color="#FFE2E2E2" Offset="0.882" />
+        <GradientStop Color="#FF868484" Offset="0.995" />
+    </LinearGradientBrush>
 
     <Color x:Key="color1">Black</Color>
     <Color x:Key="color2">#FF2D6076</Color>

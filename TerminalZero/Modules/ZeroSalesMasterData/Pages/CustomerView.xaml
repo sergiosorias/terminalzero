@@ -12,8 +12,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition MinHeight="100"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <baseControls:SearchBox SearchCommand="{Binding SearchCommand}"/>
-        <myControls:CustomerLazyLoadingList SelectedItem="{Binding SelectedCustomer}" ItemsSource="{Binding CustomerList}"  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
+        <myControls:CustomerLazyLoadingList SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding CustomerList}"  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
+        <base:AutoCleanTextBlock x:Name="selectedItemMaximized" Visibility="Collapsed" FontSize="48" FontWeight="Heavy" Grid.Row="2" Text="{Binding Path=SelectedItem.Customer.Name1,ElementName=customerGrid, Mode=OneWay}"/>
     </Grid>
 </base:NavigationBasePage>

@@ -29,7 +29,7 @@ namespace ZeroUpdateManager
             
         }
 
-        private void ImportScriptFile()
+        private void ImportScriptFile(object parameter)
         {
             var filesToProcess = new List<string>();
             filesToProcess.AddRange(System.IO.Directory.GetFiles(WorkingDirectoryIn, "*"+Resources.CompressFileExtention));
