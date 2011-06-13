@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses.Helpers
 {
@@ -18,6 +19,20 @@ namespace ZeroCommonClasses.Helpers
                 return false;
 
             return typeOrigin == target || ContainsType(typeOrigin.BaseType, target);
+        }
+
+        public static bool Contains(ISelectable item, object[] dataCriteria)
+        {
+            return dataCriteria.Any(o =>
+                                     {
+                                         if (o is string)
+                                             return item.Contains((string) o);
+
+                                         if (o is DateTime)
+                                             return item.Contains((DateTime) o);
+
+                                         return true;
+                                     });
         }
     }
 }

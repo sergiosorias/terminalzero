@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 
 namespace ZeroGUI
@@ -233,12 +234,12 @@ namespace ZeroGUI
             object obj = Application.Current.Windows[0].Content;
 
             if (obj is Panel)
-                ((Panel)obj).Children.Add((UIElement)MB.Resources["backWindow"]);
+                Terminal.Instance.CurrentClient.ShowEnable(false);
 
             bool? res = MB.ShowDialog();
 
             if (obj is Panel)
-                ((Panel)obj).Children.Remove((UIElement)MB.Resources["backWindow"]);
+                Terminal.Instance.CurrentClient.ShowEnable(true);
 
             return res;
         }

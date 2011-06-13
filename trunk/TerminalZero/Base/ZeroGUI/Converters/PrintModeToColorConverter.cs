@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
+using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroGUI.Converters
@@ -27,7 +28,7 @@ namespace ZeroGUI.Converters
         {
             int? printMode = value as int?;
             Color result = Colors.Transparent;
-            if (printMode.HasValue && printMode.Value == 1)
+            if (printMode.HasValue && printMode.Value == (int)PrintMode.FinalCustomer)
                 result = Colors.Red;
 
             return result;

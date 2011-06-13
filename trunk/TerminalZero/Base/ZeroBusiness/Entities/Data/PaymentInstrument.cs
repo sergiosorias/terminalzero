@@ -18,7 +18,6 @@ namespace ZeroBusiness.Entities.Data
         {
             throw new NotImplementedException();
         }
-
         
     }
 }

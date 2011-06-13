@@ -1,4 +1,4 @@
-﻿<base:LazyLoadingListControl xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+﻿<base:LazyLoadingListControlUpgrade xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
     x:Class="ZeroMasterData.Pages.Controls.CustomerLazyLoadingList"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" EnableRowVirtualization="True"
     xmlns:Converters="clr-namespace:ZeroGUI.Converters;assembly=ZeroGUI" IsReadOnly="True"
     mc:Ignorable="d">
-    <base:LazyLoadingListControl.Columns>
+    <DataGrid.Columns>
         <DataGridTextColumn x:Name="name1Column" Binding="{Binding Path=Customer.Name1, Mode=OneWay}" Header="Nombre" Width="1*" MaxWidth="200" />
         <DataGridTextColumn x:Name="name2Column" Binding="{Binding Path=Customer.Name2, Mode=OneWay}" Header="Apellido" Width="1*" MaxWidth="200" />
         <DataGridTextColumn x:Name="legalCodeColumn" Binding="{Binding Path=Customer.LegalCode}" Header="CUIT/CUIL" Width="1*" MaxWidth="110" />
@@ -28,5 +28,5 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-    </base:LazyLoadingListControl.Columns>
-</base:LazyLoadingListControl>
+    </DataGrid.Columns>
+</base:LazyLoadingListControlUpgrade>

@@ -12,7 +12,6 @@ using ZeroGUI;
 using ZeroGUI.Reporting;
 using ZeroMasterData.Pages;
 using ZeroMasterData.Pages.Controls;
-using ZeroMasterData.Properties;
 
 namespace ZeroMasterData.Presentation
 {
@@ -34,17 +33,17 @@ namespace ZeroMasterData.Presentation
             }
         }
 
-        private Customer selectedCustomer;
+        private CustomerDetailViewModel selectedItem;
 
-        public Customer SelectedCustomer
+        public CustomerDetailViewModel SelectedItem
         {
-            get { return selectedCustomer; }
+            get { return selectedItem; }
             set
             {
-                if (selectedCustomer != value)
+                if (selectedItem != value)
                 {
-                    selectedCustomer = value;
-                    OnPropertyChanged("SelectedCustomer");
+                    selectedItem = value;
+                    OnPropertyChanged("SelectedItem");
                 }
             }
         }
@@ -122,7 +121,7 @@ namespace ZeroMasterData.Presentation
                 try
                 {
                     BusinessContext.Instance.ModelManager.AddToCustomers(viewmodel.Customer);
-                    ((CustomerView)View).customerGrid.AddItem(viewmodel.Customer);
+                    CustomerList.Add(new CustomerDetailViewModel {Customer = viewmodel.Customer });
                 }
                 catch (Exception wx)
                 {

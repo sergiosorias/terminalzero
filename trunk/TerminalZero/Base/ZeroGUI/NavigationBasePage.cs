@@ -102,7 +102,7 @@ namespace ZeroGUI
 
         public virtual bool ShowInModalWindow()
         {
-            return ZeroMessageBox.Show(this, Header.ToString(), ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
+            return ZeroMessageBox.Show(this, string.Empty, ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
         }
 
         protected virtual void OnControlModeChanged(ControlMode newMode)

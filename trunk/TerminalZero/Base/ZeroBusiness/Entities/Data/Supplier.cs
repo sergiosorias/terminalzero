@@ -4,6 +4,7 @@ using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using System.ComponentModel;
+using System.Linq;
 
 namespace ZeroBusiness.Entities.Data
 {
@@ -18,8 +19,7 @@ namespace ZeroBusiness.Entities.Data
         {
             throw new NotImplementedException();
         }
-
-
+        
         partial void OnName1Changing(string value)
         {
             if (string.IsNullOrEmpty(value))

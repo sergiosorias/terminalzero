@@ -65,7 +65,6 @@ namespace ZeroSales.Presentation
             {
                 messsage = value;
                 OnPropertyChanged("Message");
-                
             }
         }
 
@@ -94,15 +93,19 @@ namespace ZeroSales.Presentation
         {
             try
             {
-                var salePaymentview = new SalePaymentViewModel(SaleHeader);
-                if (salePaymentview.View.ShowInModalWindow())
+                using (var salePaymentview = new SalePaymentViewModel(SaleHeader))
                 {
-                    Terminal.Instance.Session[typeof(SaleHeader)] =
-                        new ActionParameter<SaleHeader>(true, SaleHeader, true);
-                    PrintManager.PrintSale(SaleHeader);
-                    BusinessContext.Instance.ModelManager.AddToSaleHeaders(SaleHeader);
-                    BusinessContext.Instance.ModelManager.SaveChanges();
-                    MessageBox.Show(Resources.SaveOk, Resources.Information, MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (salePaymentview.View.ShowInModalWindow())
+                    {
+                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true,
+                                                                                                         SaleHeader,
+                                                                                                         true);
+                        PrintManager.PrintSale(SaleHeader);
+                        BusinessContext.Instance.ModelManager.AddToSaleHeaders(SaleHeader);
+                        BusinessContext.Instance.ModelManager.SaveChanges();
+                        CancelOperation(null);
+                        Message = Resources.SaveOk;
+                    }
                 }
             }
             catch (Exception ex)

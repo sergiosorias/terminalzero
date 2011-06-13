@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ActionParameters.cs" />
     <Compile Include="Actions.cs" />
+    <Compile Include="Entities\Data\PrintMode.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Entities\Configuration\ConfigurationModelManager.cs" />
     <Compile Include="Entities\Configuration\ConfigurationModel.Designer.cs">
@@ -82,7 +83,6 @@
     <Compile Include="Entities\Data\Supplier.cs" />
     <Compile Include="Entities\Data\Weight.cs" />
     <Compile Include="Entities\Data\SaleItem.cs" />
-    <Compile Include="Events\ItemsCollectionChangeEventArgs.cs" />
     <Compile Include="Manager\Data\BusinessContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules.cs" />
@@ -110,9 +110,7 @@
     <None Include="Properties\DataSources\ZeroBusiness.Entities.Configuration.Entities.datasource" />
     <None Include="Properties\DataSources\ZeroBusiness.Entities.Data.Entities.datasource" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\Data\Sales\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

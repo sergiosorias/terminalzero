@@ -104,6 +104,7 @@
     <Compile Include="Classes\EventArgs.cs" />
     <Compile Include="Classes\IsBarCodeRule.cs" />
     <Compile Include="Classes\IsDoubleRule.cs" />
+    <Compile Include="Classes\IsPercentageRule.cs" />
     <Compile Include="Classes\MandatoryRule.cs" />
     <Compile Include="Classes\MandatorySelectionRule.cs" />
     <Compile Include="Classes\Validator.cs" />
@@ -145,6 +146,7 @@
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="NavigationBasePage.cs" />
+    <Compile Include="UIElementExtentions.cs" />
     <Compile Include="ViewModelGUI.cs" />
     <Compile Include="WaitCursorSimple.xaml.cs">
       <DependentUpon>WaitCursorSimple.xaml</DependentUpon>

@@ -8,6 +8,7 @@
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="{DynamicResource titleBackground}"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="KeyboardNavigation.ControlTabNavigation" Value="Cycle"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="Cycle"/>

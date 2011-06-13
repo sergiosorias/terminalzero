@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
-using System.Linq;
-using System.Reflection;
-using ZeroBusiness.Entities.Data;
+﻿using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
@@ -33,10 +27,10 @@ namespace ZeroMasterData
             ImportEntities(args);
         }
 
-        private static void ImportEntities(PackProcessingEventArgs e)
+        private void ImportEntities(PackProcessingEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
-            using (var ent = BusinessContext.Instance.ModelManager)
+            using (var ent = BusinessContext.CreateTemporaryModelManager(this))
             {
                 ent.MetadataWorkspace.LoadFromAssembly(typeof(DataModelManager).Module.Assembly);
                 

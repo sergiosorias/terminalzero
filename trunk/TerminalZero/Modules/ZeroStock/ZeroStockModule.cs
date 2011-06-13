@@ -116,35 +116,35 @@ namespace ZeroStock
 
         #region Handlers
 
-        private void OpenStockView()
+        private void OpenStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CurrentStockView();
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void OpenNewStockView()
+        private void OpenNewStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(0);
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void OpenModifyStockView()
+        private void OpenModifyStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(1);
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void OpenDeliveryNoteView()
+        private void OpenDeliveryNoteView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new DeliveryDocumentView();
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void CreateStockFromSale()
+        private void CreateStockFromSale(object parameter)
         {
             SaleHeader header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;
 

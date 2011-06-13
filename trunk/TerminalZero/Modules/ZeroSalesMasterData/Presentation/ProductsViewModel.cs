@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data.Objects.SqlClient;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
+using ZeroCommonClasses.Interfaces;
+using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroGUI.Reporting;
 using ZeroMasterData.Pages;
+using System.Windows.Input;
+using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Presentation
 {
@@ -25,9 +27,9 @@ namespace ZeroMasterData.Presentation
             }
         }
 
-        private ObservableCollection<Product> productList;
+        private ObservableCollection<ProductExtended> productList;
 
-        public ObservableCollection<Product> ProductList
+        public ObservableCollection<ProductExtended> ProductList
         {
             get { return productList; }
             set
@@ -40,9 +42,9 @@ namespace ZeroMasterData.Presentation
             }
         }
 
-        private Product selectedProduct;
+        private ProductExtended selectedProduct;
 
-        public Product SelectedProduct
+        public ProductExtended SelectedProduct
         {
             get { return selectedProduct; }
             set
@@ -77,7 +79,65 @@ namespace ZeroMasterData.Presentation
         public ProductsViewModel()
             :base(new ProductsView())
         {
-            ProductList = new ObservableCollection<Product>(BusinessContext.Instance.ModelManager.Products);
+
+            ProductList = new ObservableCollection<ProductExtended>(BusinessContext.Instance.ModelManager.Products.Select(p => new ProductExtended { Product = p }));
+            NewProductCommand.Finished +=
+                (o, e) =>
+                    {
+                        var param = Terminal.Instance.Session[typeof (Product)];
+                        if(param !=null)
+                        ProductList.Add(new ProductExtended
+                                            {Product = (Product) param.Value});
+                    };
+
+        }
+
+
+        public class ProductExtended : ViewModelBase, ISelectable
+        {
+            public Product Product { get; set; }
+            
+            private ICommand updateProductCommand;
+
+            public ICommand UpdateProductCommand
+            {
+                get
+                {
+                    return updateProductCommand??(updateProductCommand = new ZeroActionDelegate(this.UpdateProduct));
+                }
+                set
+                {
+                    if (updateProductCommand != value)
+                    {
+                        updateProductCommand = value;
+                        OnPropertyChanged("UpdateProductCommand");
+                    }
+                }
+            }
+
+            private void UpdateProduct(object parameter)
+            {
+                ProductDetailViewModel viewModel = new ProductDetailViewModel();
+                viewModel.Product = Product;
+                viewModel.View.ControlMode = ZeroCommonClasses.Interfaces.ControlMode.Update;
+                ZeroMessageBox.Show(viewModel.View, Properties.Resources.ProductEdit);
+            }
+            
+            #region ISelectable Members
+
+            public bool Contains(string data)
+            {
+                return Product.Contains(data);
+            }
+
+            public bool Contains(System.DateTime data)
+            {
+                return Product.Contains(data);
+            }
+
+            #endregion
         }
     }
+
+    
 }

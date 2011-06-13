@@ -17,14 +17,14 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         public string Alias { get; private set; }
         public string RuleToSatisfyName { get; private set; }
         public Predicate<object> RuleToSatisfy { get; set; }
-        public Action ExecuteAction { get; private set; }
+        public Action<object> ExecuteAction { get; private set; }
         protected List<ActionParameterBase> Parameters { get; set; }
         public bool IsOnMenu { get; protected set; }
         public bool IsOnMainPage { get; protected set; }
         
         private bool _canExecute;
         
-        public ZeroAction(string name, Action executeAction, string ruleToSatisfy = null, bool isOnMenu = true)
+        public ZeroAction(string name, Action<object> executeAction, string ruleToSatisfy = null, bool isOnMenu = true)
         {
             Name = name;
             ExecuteAction = executeAction;
@@ -67,7 +67,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         {
             if (_canExecute)
             {
-                ExecuteAction();
+                ExecuteAction(parameter);
                 OnFinished();
             }
         }

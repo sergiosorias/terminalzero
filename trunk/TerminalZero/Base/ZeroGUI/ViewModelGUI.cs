@@ -6,6 +6,7 @@ namespace ZeroGUI
 {
     public abstract class ViewModelGui : ViewModelBase
     {
+        #region Properties
         private NavigationBasePage view;
 
         public NavigationBasePage View
@@ -19,21 +20,43 @@ namespace ZeroGUI
             }
         }
 
+        private string viewHeader;
+
+        public string ViewHeader
+        {
+            get { return viewHeader; }
+            protected set
+            {
+                if (viewHeader != value)
+                {
+                    viewHeader = value;
+                    OnPropertyChanged("ViewHeader");
+                }
+            }
+        }
+        #endregion
+
+        #region Commands
         private ICommand printAction;
+
         public virtual ICommand PrintCommand 
         {
             get { return printAction ?? (printAction = new ZeroActionDelegate(PrintCommandExecution)); }
-        }
-
-        protected ViewModelGui(NavigationBasePage view)
-        {
-            View = view;
         }
 
         protected virtual void PrintCommandExecution(object parameter)
         {
 
         }
+        #endregion
+
+        protected ViewModelGui(NavigationBasePage view)
+        {
+            View = view;
+        }
+
+        
+
         
     }
 }

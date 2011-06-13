@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroSales.Pages;
 using ZeroSales.Pages.Controls;
 using ZeroBusiness.Entities.Data;
+using ZeroSales.Properties;
 
 namespace ZeroSales.Presentation
 {
@@ -21,12 +23,9 @@ namespace ZeroSales.Presentation
         {
             this.sale = sale;
             sale.SalePaymentHeader = new SalePaymentHeader(sale.TerminalToCode);
-            SalePaymentItemsSource.CollectionChanged += SalePaymentItemsSource_CollectionChanged;
-        }
-
-        private void SalePaymentItemsSource_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Sale.PrintMode = Sale.CustomerCode!=null || Sale.SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == 1) ? 1 : 0;
+            ViewHeader = Resources.FinalCustomer;
+            CustomerSelectionCommand.Finished += CustomerSelectionCommand_Finished;
+            SalePaymentItemsSource.CollectionChanged += (o, e) => { Sale.PrintMode = Sale.CustomerCode != null || Sale.SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == 1) ? 1 : 0; };
         }
 
         #region Properties
@@ -51,6 +50,21 @@ namespace ZeroSales.Presentation
             get { return sale.SalePaymentHeader; }
         }
 
+        private string customerName = Resources.FinalCustomer;
+
+        public string CustomerName
+        {
+            get { return customerName; }
+            set
+            {
+                if (customerName != value)
+                {
+                    customerName = value;
+                    OnPropertyChanged("CustomerName");
+                }
+            }
+        }
+        
         private ObservableCollection<SalePaymentItemExtended> salePaymentItemsSource;
 
         public ObservableCollection<SalePaymentItemExtended> SalePaymentItemsSource
@@ -96,9 +110,23 @@ namespace ZeroSales.Presentation
             bool ret = paymentInstrument.ShowInModalWindow();
             if (ret)
             {
-                var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, paymentInstrument.SelectedQuantity);
-                Sale.SalePaymentHeader.AddPaymentInstrument(newItem);
-                SalePaymentItemsSource.Add(new SalePaymentItemExtended { PaymentItem = newItem, DeleteCommand = new ZeroActionDelegate(RemovePaymentInstrument) });
+                var payment =
+                    Sale.SalePaymentHeader.SalePaymentItems.FirstOrDefault(
+                        item => item.PaymentInstrumentCode == paymentInstrument.SelectedItem.Code);
+                if (payment == null)
+                {
+                    var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, paymentInstrument.SelectedQuantity);
+                    Sale.SalePaymentHeader.AddPaymentInstrument(newItem);
+                    SalePaymentItemsSource.Add(new SalePaymentItemExtended
+                                                   {
+                                                       PaymentItem = newItem,
+                                                       DeleteCommand = new ZeroActionDelegate(RemovePaymentInstrument)
+                                                   });
+                }
+                else
+                {
+                    payment.Quantity += paymentInstrument.SelectedQuantity;
+                }
             }
             addPaymnentInstrumentCommand.RaiseCanExecuteChanged();
         }
@@ -108,6 +136,37 @@ namespace ZeroSales.Presentation
             Payment.RemovePaymentInstrument(parameter as SalePaymentItem);
             SalePaymentItemsSource.Remove(SalePaymentItemsSource.FirstOrDefault(item=>item.PaymentItem == parameter));
         }
+
+        private ZeroAction customerSelectionCommand;
+
+        public ZeroAction CustomerSelectionCommand
+        {
+            get
+            {
+                return customerSelectionCommand ??
+                       (customerSelectionCommand =
+                        Terminal.Instance.Session.Actions[ZeroBusiness.Actions.OpenCustomersSelectionView]);
+            }
+            set
+            {
+                if (customerSelectionCommand != value)
+                {
+                    customerSelectionCommand = value;
+                    OnPropertyChanged("CustomerSelectionCommand");
+                }
+            }
+        }
+
+        private void CustomerSelectionCommand_Finished(object sender, EventArgs e)
+        {
+            var customer = Terminal.Instance.Session[typeof(Customer)];
+            if (customer != null)
+            {
+                CustomerName = string.Concat(((Customer)customer.Value).Name1 ?? ((Customer)customer.Value).Name2, " - ", ((Customer)customer.Value).LegalCode);
+                sale.CustomerCode = ((Customer)customer.Value).Code;
+                ViewHeader = "Factura 'A'";
+            }
+        }
         
         #endregion
 
@@ -115,6 +174,11 @@ namespace ZeroSales.Presentation
         public override bool CanAccept(object parameter)
         {
             return base.CanAccept(parameter) && Payment.Ready;
+        }
+        public override void Dispose()
+        {
+            CustomerSelectionCommand.Finished -= CustomerSelectionCommand_Finished;
+            base.Dispose();
         }
         #endregion
 

@@ -77,14 +77,14 @@ namespace ZeroSales
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewSaleView, OpenSaleView));
         }
 
-        private void OpenSaleView()
+        private void OpenSaleView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var viewModel = new CreateSaleViewModel(new CreateSaleView(), 0);
             Terminal.Instance.CurrentClient.ShowView(viewModel.View);
         }
 
-        private void OpenCurrentSalesView()
+        private void OpenCurrentSalesView(object parameter)
         {
             ///TODO:
             //BusinessContext.Instance.BeginOperation();

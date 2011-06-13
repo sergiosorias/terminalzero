@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
@@ -32,8 +33,8 @@ namespace ZeroMasterData
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewProductsMessage, OpenNewProductMessage, Rules.IsTerminalZero, false));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductPriceIncrease, ExportMasterDataPack, Rules.IsTerminalZero));
+            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView,null,false));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductPriceIncrease, OpenProductUpdateMessage, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
             //Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecTestImportMasterData, TestImportDataPack));
         }
@@ -72,7 +73,7 @@ namespace ZeroMasterData
 
         #region Actions Handle
 
-        private void OpenProductView()
+        private void OpenProductView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new ProductsViewModel();
@@ -81,7 +82,7 @@ namespace ZeroMasterData
             Terminal.Instance.CurrentClient.ShowView(view.View);
         }
 
-        private void OpenProductMessage()
+        private void OpenProductMessage(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new ProductsView { ControlMode = ControlMode.ReadOnly };
@@ -96,25 +97,33 @@ namespace ZeroMasterData
             mb.Show();
         }
 
-        private void OpenNewProductMessage()
+        private void OpenProductUpdateMessage(object parameter)
         {
-            var detail = new ProductDetail();
-            detail.Header = Resources.NewProduct;
-            bool? ret = ZeroMessageBox.Show(detail, Resources.NewProduct);
-            if (ret.HasValue && ret.Value && detail.ControlMode == ControlMode.New)
+            BusinessContext.Instance.BeginOperation();
+            ProductsUpdateViewModel viewModel = new ProductsUpdateViewModel();
+            if(viewModel.View.ShowInModalWindow())
             {
-                Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.CurrentProduct,true);
+                BusinessContext.Instance.ModelManager.SaveChanges();
             }
         }
 
-        private void OpenSupplierView()
+        private void OpenNewProductMessage(object parameter)
+        {
+            var detail = new ProductDetailViewModel();
+            if (detail.View.ShowInModalWindow() && detail.View.ControlMode == ControlMode.New)
+            {
+                Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.Product,true);
+            }
+        }
+
+        private void OpenSupplierView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new SupplierView();
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
-        private void OpenCustomerView()
+        private void OpenCustomerView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CustomerViewModel();
@@ -125,9 +134,8 @@ namespace ZeroMasterData
             Terminal.Instance.CurrentClient.ShowView(view.View);
         }
 
-        private void OpenCustomerSelectionView()
+        private void OpenCustomerSelectionView(object parameter)
         {
-            BusinessContext.Instance.BeginOperation();
             var view = new CustomerViewModel();
             view.View.ControlMode = ControlMode.Selection;
             if (Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
@@ -137,11 +145,11 @@ namespace ZeroMasterData
             bool? ret = ZeroMessageBox.Show(view.View, Resources.CustomerSelection);
             if (ret.HasValue && ret.Value)
             {
-                Terminal.Instance.Session[typeof(Customer)] = new ActionParameter<Customer>(false, view.SelectedCustomer, true);
+                Terminal.Instance.Session[typeof(Customer)] = new ActionParameter<Customer>(false, view.SelectedItem.Customer, true);
             }
         }
 
-        private void ExportMasterDataPack()
+        private void ExportMasterDataPack(object parameter)
         {
             var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
             using (var modelManager = BusinessContext.CreateTemporaryModelManager(masterDataPackManager))

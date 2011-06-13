@@ -29,48 +29,57 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="24"/>
-        </Grid.RowDefinitions>
-        <Menu x:Name="mainMenu">
-            <MenuItem Style="{DynamicResource masterMenuItem}" FontSize="18" FontWeight="Bold" Header="Inicio" Command="{Binding Path=GoHome,RelativeSource={RelativeSource AncestorType=current:MainWindow}}"/>
-        </Menu>
-        <ContentControl  Grid.Row="1"  Margin="3" x:Name="PrimaryWindow" IsTabStop="False">
-            <my:Home IsTabStop="False"/>
-        </ContentControl>
-        <StatusBar Grid.Row="2" Background="Gainsboro" x:Name="mainBar">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Column="1">
-                <ContentControl Name="statusMsg" Content="Listo" IsTabStop="False"/>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="2">
-                <Button Visibility="Hidden" IsTabStop="False" Style="{DynamicResource homeButtonStyle}" x:Name="btnGetMoreStatusInfo" FontSize="10" Padding="0" Click="btnGetMoreStatusInfo_Click">Info</Button>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="3">
-                <ProgressBar Name="statusBar" Value="0" Width="100" Height="18"/>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="4">
-                <TextBlock x:Name="txbState" Text="{Binding Path=State, Mode=OneWay}" />
-            </StatusBarItem>
-        </StatusBar>
+    <Grid>
 
+
+        <Grid Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+            <Menu x:Name="mainMenu">
+                <MenuItem Style="{DynamicResource masterMenuItem}" FontSize="18" FontWeight="Bold" Header="Inicio" Command="{Binding Path=GoHome,RelativeSource={RelativeSource AncestorType=current:MainWindow}}"/>
+            </Menu>
+            <ContentControl  Grid.Row="1"  Margin="3" x:Name="PrimaryWindow" IsTabStop="False">
+                <my:Home IsTabStop="False"/>
+            </ContentControl>
+            <StatusBar Grid.Row="2" Background="Gainsboro" x:Name="mainBar">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="1">
+                    <ContentControl Name="statusMsg" Content="Listo" IsTabStop="False"/>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2">
+                    <Button Visibility="Hidden" IsTabStop="False" Style="{DynamicResource homeButtonStyle}" x:Name="btnGetMoreStatusInfo" FontSize="10" Padding="0" Click="btnGetMoreStatusInfo_Click">Info</Button>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="3">
+                    <ProgressBar Name="statusBar" Value="0" Width="100" Height="18"/>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="4">
+                    <TextBlock x:Name="txbState" Text="{Binding Path=State, Mode=OneWay}" />
+                </StatusBarItem>
+            </StatusBar>
+
+        </Grid>
+        <Border x:Name="backWindow" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border.Background>
+                <SolidColorBrush Color="Black" Opacity="0.4"/>
+            </Border.Background>
+        </Border>
     </Grid>
 </Window>

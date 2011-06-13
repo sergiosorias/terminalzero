@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using ZeroBusiness.Events;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
-using ZeroBusiness.Manager.Data;
 
 namespace ZeroBusiness.Entities.Data
 {
@@ -29,7 +25,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextSalePaymentHeaderCode()
         {
-            return BusinessContext.Instance.ModelManager.SalePaymentHeaders.Count();
+            return BusinessContext.Instance.ModelManager.SalePaymentHeaders.Count()+1;
         }
 
         #region Generated Properties
@@ -58,16 +54,29 @@ namespace ZeroBusiness.Entities.Data
         public void AddPaymentInstrument(SalePaymentItem payment)
         {
             SalePaymentItems.Add(payment);
+            payment.PropertyChanged += payment_PropertyChanged;
+            RefreshTotalQuantity();
+        }
+
+        private void payment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "Quantity")
+            {
+                RefreshTotalQuantity();
+            }
+        }
+
+        private void RefreshTotalQuantity()
+        {
             TotalQuantity = SalePaymentItems.Select(pi => pi.Quantity).Sum();
             UpdateViewProperties();
-            
         }
 
         public void RemovePaymentInstrument(SalePaymentItem payment)
         {
+            payment.PropertyChanged -= payment_PropertyChanged;
             SalePaymentItems.Remove(payment);
-            TotalQuantity = SalePaymentItems.Select(pi => pi.Quantity).Sum();
-            UpdateViewProperties();
+            RefreshTotalQuantity();
         }
 
         private void UpdateViewProperties()

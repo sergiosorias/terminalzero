@@ -77,6 +77,15 @@ namespace ZeroGUI
         public BarCodeTextBox()
         {
             InitializeComponent();
+            barCode.PreviewKeyDown += barCode_PreviewKeyDown;
+        }
+
+        private void barCode_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && !string.IsNullOrEmpty(Text))
+            {
+                e.Handled = true; 
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

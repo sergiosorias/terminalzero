@@ -7,7 +7,7 @@ namespace ZeroMasterData.Pages.Controls
     /// <summary>
     /// Interaction logic for SupplierGrid.xaml
     /// </summary>
-    public partial class CustomerLazyLoadingList : LazyLoadingListControl
+    public partial class CustomerLazyLoadingList : LazyLoadingListControlUpgrade
     {
         public CustomerLazyLoadingList()
         {

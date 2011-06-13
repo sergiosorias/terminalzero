@@ -61,11 +61,29 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cambiar.
+        /// </summary>
+        internal static string Change {
+            get {
+                return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eliminar.
         /// </summary>
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consumidor Final.
+        /// </summary>
+        internal static string FinalCustomer {
+            get {
+                return ResourceManager.GetString("FinalCustomer", resourceCulture);
             }
         }
         

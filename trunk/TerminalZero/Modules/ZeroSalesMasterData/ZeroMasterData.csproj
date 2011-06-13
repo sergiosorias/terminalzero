@@ -82,11 +82,16 @@
     <Compile Include="Pages\ProductsView.xaml.cs">
       <DependentUpon>ProductsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ProductsUpdate.xaml.cs">
+      <DependentUpon>ProductsUpdate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SupplierView.xaml.cs">
       <DependentUpon>SupplierView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentation\CustomerDetailViewModel.cs" />
     <Compile Include="Presentation\CustomerViewModel.cs" />
+    <Compile Include="Presentation\ProductDetailViewModel.cs" />
+    <Compile Include="Presentation\ProductsUpdateViewModel.cs" />
     <Compile Include="Presentation\ProductsViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -159,6 +164,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\ProductsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ProductsUpdate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

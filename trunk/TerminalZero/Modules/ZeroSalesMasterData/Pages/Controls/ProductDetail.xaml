@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" HorizontalContentAlignment="Stretch" 
+             mc:Ignorable="d" HorizontalContentAlignment="Stretch" Header="{Binding Header, Mode=OneWay,FallbackValue='Producto'}" 
              xmlns:r="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI"
-             VerticalContentAlignment="Stretch" Header="Producto">
-    <Grid Name="grid1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+             VerticalContentAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -33,7 +33,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                     <TextBox  Height="23" Width="150" HorizontalAlignment="Stretch" Margin="1,3,1,2" Name="masterCodeTextBox" VerticalAlignment="Center" GotFocus="masterCodeTextBox_GotFocus">
                         <TextBox.Text>
-                            <Binding Path="MasterCode" Mode="TwoWay">
+                            <Binding Path="Product.MasterCode" Mode="TwoWay">
                                 <Binding.ValidationRules>
                                     <ExceptionValidationRule/>
                                     <r:MandatoryRule ErrorMessage="Ingrese un Código de Producto"/>
@@ -41,12 +41,12 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <CheckBox Margin="10,3,1,2" Content="Activo" Name="enableTextBox" IsChecked="{Binding Path=Enable, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"/>
+                    <CheckBox Margin="10,3,1,2" Content="Activo" Name="enableTextBox" IsChecked="{Binding Path=Product.Enable, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <Label Content="Nombre:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="nameTextBox" VerticalAlignment="Center">
                     <TextBox.Text>
-                        <Binding Path="Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True">
+                        <Binding Path="Product.Name" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True">
                             <Binding.ValidationRules>
                                 <ExceptionValidationRule/>
                             </Binding.ValidationRules>
@@ -54,9 +54,9 @@
                     </TextBox.Text>
                 </TextBox>
                 <Label Content="Descripción:" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Grid.Row="3" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
+                <TextBox Grid.Column="1" Grid.Row="3" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="descriptionTextBox" Text="{Binding Path=Product.Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
                 <Label Content="Nombre Ticket:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="shortDescriptionTextBox" Text="{Binding Path=ShortDescription, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
+                <TextBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="1" Name="shortDescriptionTextBox" Text="{Binding Path=Product.ShortDescription, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
                 <Grid Grid.ColumnSpan="3" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="5" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="95" MaxWidth="95" MinWidth="95" />
@@ -64,13 +64,13 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Label Width="95" Content="Durabilidad:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
-                    <TextBox Height="23" Grid.Column="1" HorizontalAlignment="Stretch" Margin="1" Name="dueDaysTextBox" Text="{Binding Path=DueDays, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
+                    <TextBox Height="23" Grid.Column="1" HorizontalAlignment="Stretch" Margin="1" Name="dueDaysTextBox" Text="{Binding Path=Product.DueDays, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"  />
                     <StackPanel Grid.Column="2" Margin="10,0,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <CheckBox Content="Por Peso" Height="16" IsChecked="{Binding Path=ByWeight, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" Margin="1" Name="byWeightCheckBox" VerticalAlignment="Center" />
+                        <CheckBox Content="Por Peso" Height="16" IsChecked="{Binding Path=Product.ByWeight, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" Margin="1" Name="byWeightCheckBox" VerticalAlignment="Center" />
                         <StackPanel  Grid.Row="5" Orientation="Horizontal" Margin="10,0,0,0">
                             <Label Content="IVA:" HorizontalAlignment="Stretch" Margin="1" VerticalAlignment="Center" />
-                            <ComboBox DisplayMemberPath="Name" VerticalAlignment="Center" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="6" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding}" 
-                          Name="taxesComboBox" SelectedValuePath="Code" Width="60" SelectionChanged="taxesComboBox_SelectionChanged">
+                            <ComboBox DisplayMemberPath="Name" VerticalAlignment="Center" SelectedItem="{Binding Path=Product.Tax}" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="6" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding}" 
+                          Name="taxesComboBox" SelectedValuePath="Code" Width="60">
                             </ComboBox>
                         </StackPanel>
                     </StackPanel>
@@ -83,14 +83,14 @@
                     </Grid.ColumnDefinitions>
                     <TextBox Margin="2" Height="23" Focusable="False" IsReadOnly="True" HorizontalAlignment="Stretch" Name="group1TextBox" VerticalAlignment="Center">
                         <TextBox.Text>
-                            <Binding Path="Group1" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                            <Binding Path="Product.Group1" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
                                     <ExceptionValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <ComboBox Margin="2" x:Name="groupBox" TextSearch.TextPath="Name" SelectedValuePath="Code" MaxWidth="250" SelectionChanged="groupBox_SelectionChanged">
+                    <ComboBox Margin="2" x:Name="groupBox" TextSearch.TextPath="Name" SelectedValuePath="Code" MaxWidth="250" SelectedItem="{Binding Product.ProductGroup}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="itemBack" 
@@ -114,8 +114,8 @@
                 </Grid>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="1" Header="Precio" Margin="5" x:Name="gridPrice">
-            <Grid>
+        <GroupBox Grid.Row="1" Header="Precio" Margin="5">
+            <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="95" MaxWidth="95" MinWidth="95" />
                     <ColumnDefinition MinWidth="95"/>
@@ -132,7 +132,7 @@
                 <Label Content="Pesos:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="valueTextBox" VerticalAlignment="Center">
                     <TextBox.Text>
-                        <Binding Path="Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                        <Binding Path="Product.Price1.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
                                 <r:MandatoryRule/>
                                 <r:IsDoubleRule/>
@@ -147,7 +147,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <ComboBox Margin="2" IsEnabled="{Binding ElementName=byWeightCheckBox,Path=IsChecked}" Width="100" SelectedValuePath="Code" x:Name="weightBox" HorizontalAlignment="Stretch" SelectionChanged="weightBox_SelectionChanged">
+                    <ComboBox Margin="2" SelectedItem="{Binding Path=Product.Price1.Weight}" IsEnabled="{Binding ElementName=byWeightCheckBox,Path=IsChecked}" Width="100" SelectedValuePath="Code" x:Name="weightBox" HorizontalAlignment="Stretch">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="itemBack" 
@@ -170,7 +170,7 @@
                     <Button Grid.Column="1" Content="..." Margin="4" IsEnabled="{Binding ElementName=byWeightCheckBox,Path=IsChecked}" Width="40" x:Name="weightBtn" Click="weightBtn_Click"/>
                 </Grid>
                 <Label Content="Notas:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch" Margin="3" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="descriptionTextBox1" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" 
+                <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="2" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="descriptionTextBox1" Text="{Binding Path=Product.Price1.Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" 
                                  VerticalAlignment="Center" Background="White" />
             </Grid>
         </GroupBox>
