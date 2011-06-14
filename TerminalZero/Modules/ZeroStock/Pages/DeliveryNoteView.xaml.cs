@@ -19,6 +19,7 @@ namespace ZeroStock.Pages
         public DeliveryNoteView()
         {
             InitializeComponent();
+            CommandBar.New += btnNewProduct_Click;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -65,7 +66,7 @@ namespace ZeroStock.Pages
             bool? res = ZeroMessageBox.Show(det, "Nuevo remito");
             if (res.HasValue && res.Value)
             {
-                DeliveryGrid.AddItem(det.CurrentDocumentDelivery);
+                //DeliveryGrid.AddItem(det.CurrentDocumentDelivery);
             }
         }
 

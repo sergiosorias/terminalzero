@@ -1,5 +1,5 @@
 ﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-                   x:Class="ZeroStock.Pages.DeliveryNoteView" Header=""
+                   x:Class="ZeroStock.Pages.DeliveryNoteView" Header="Lista de remitos"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -24,9 +24,6 @@
                 <DatePicker Text="Fecha" x:Name="dateFilter" VerticalAlignment="Center"/>
                 <baseControls:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
             </StackPanel>
-            <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
-                <Button x:Name="btnNewProduct" Content="Nuevo" HorizontalAlignment="Right" Style="{DynamicResource buttonTextStyle}" Click="btnNewProduct_Click"/>
-            </WrapPanel>
         </Grid>
         <ContentPresenter MinHeight="10" Grid.Row="1" HorizontalAlignment="Stretch">
             <ContentPresenter.Content>

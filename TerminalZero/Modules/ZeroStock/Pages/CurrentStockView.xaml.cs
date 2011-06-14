@@ -42,14 +42,16 @@ namespace ZeroStock.Pages
 
         private void SearchBox_Search(object sender, SearchCriteriaEventArgs e)
         {
+            string newCriteria = e.Criteria ?? "";
+            
             int tCode = ZeroCommonClasses.Terminal.Instance.TerminalCode;
             if (cbTerminals.SelectedValue != null) tCode = ((int)cbTerminals.SelectedValue);
             var cvs1 = Resources["cvs1"] as CollectionViewSource;
-            cvs1.Source = BusinessContext.Instance.ModelManager.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
+            cvs1.Source = BusinessContext.Instance.ModelManager.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(newCriteria));
             var cvs2 = Resources["cvs2"] as CollectionViewSource;
-            cvs2.Source = BusinessContext.Instance.ModelManager.StockCreateSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
+            cvs2.Source = BusinessContext.Instance.ModelManager.StockCreateSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(newCriteria));
             var cvs3 = Resources["cvs3"] as CollectionViewSource;
-            cvs3.Source = BusinessContext.Instance.ModelManager.StockModifySummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(e.Criteria));
+            cvs3.Source = BusinessContext.Instance.ModelManager.StockModifySummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(newCriteria));
         }
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -20,9 +20,9 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Filtro:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="80" VerticalAlignment="Center"/>
                 <DatePicker Text="Fecha" x:Name="dateFilter" VerticalAlignment="Center"/>
-                <base:SearchBox Search="SearchBox_Search" ShowResultCount="True"/>
+                <base:SearchBox Search="SearchBox_Search" ShowResultCount="True" Name="DeliveryGridCommander"/>
             </StackPanel>
         </Grid>
-        <controls:DeliveryDocumentLazyLoadingList Grid.Row="1" x:Name="DeliveryGrid" ItemsLoaded="DeliveryGrid_ItemsLoaded" />
+        <controls:DeliveryDocumentLazyLoadingList Grid.Row="1" base:UIElementExtentions.ListCommanderName="DeliveryGridCommander" SelectedItem="{Binding SelectedDeliveryDocumentHeader}" x:Name="DeliveryGrid" ItemsSource="{Binding DeliveryDocumentCollection}" />
     </Grid>
 </base:NavigationBasePage>
