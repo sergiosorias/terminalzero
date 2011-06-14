@@ -9,6 +9,7 @@ using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ZeroGUI.Classes;
+using ZeroStock.Presentation;
 
 namespace ZeroStock.Pages
 {
@@ -23,8 +24,8 @@ namespace ZeroStock.Pages
             set { DataContext = value; }
         }
         private string _lot = "";
-        readonly int _stockType = -1;
-        public CreateStockView(int stockType)
+        readonly StockType.Types _stockType = StockType.Types.NotSet;
+        public CreateStockView(StockType.Types stockType)
         {
             InitializeComponent();
             _stockType = stockType;
@@ -36,16 +37,17 @@ namespace ZeroStock.Pages
         {
             if (!IsInDesignMode)
             {
-                StockHeader = new StockHeader(BusinessContext.Instance.ModelManager.StockTypes.First(st=>st.Code == _stockType),Terminal.Instance.TerminalCode);
+                StockHeader = new StockHeader(_stockType,Terminal.Instance.TerminalCode);
                 
-
                 if (BusinessContext.Rules.IsDeliveryDocumentMandatory(_stockType))
                 {
-                    var view = new DeliveryDocumentView {ControlMode = ControlMode.Selection};
-                    bool? res = ZeroMessageBox.Show(view, Properties.Resources.DeliveryNoteSelection);
+                    DeliveryDocumentViewModel viewModel =
+                        new DeliveryDocumentViewModel(new DeliveryDocumentView {ControlMode = ControlMode.Selection});
+
+                    bool? res = ZeroMessageBox.Show(viewModel.View, Properties.Resources.DeliveryNoteSelection);
                     if (res.HasValue && res.Value)
                     {
-                        StockHeader.DeliveryDocumentHeader = view.SelectedDeliveryDocumentHeader;
+                        StockHeader.DeliveryDocumentHeader = viewModel.SelectedDeliveryDocumentHeader;
                         StockHeader.TerminalToCode = StockHeader.DeliveryDocumentHeader.TerminalToCode;
                     }
                     else

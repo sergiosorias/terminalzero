@@ -126,14 +126,14 @@ namespace ZeroStock
         private void OpenNewStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new CreateStockView(0);
+            var view = new CreateStockView(StockType.Types.New);
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
         private void OpenModifyStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new CreateStockView(1);
+            var view = new CreateStockView(StockType.Types.Modify);
             Terminal.Instance.CurrentClient.ShowView(view);
         }
 
@@ -148,16 +148,14 @@ namespace ZeroStock
         {
             SaleHeader header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;
 
-            StockHeader stockNew =
-                new StockHeader(BusinessContext.Instance.ModelManager.StockTypes.First(st => st.Code == 1),
-                                Terminal.Instance.TerminalCode);
+            StockHeader stockNew = new StockHeader(StockType.Types.Modify,Terminal.Instance.TerminalCode);
 
             foreach (SaleItem item in header.SaleItems)
             {
                 stockNew.AddNewStockItem(item.Product,item.Quantity,item.Batch);    
             }
 
-            BusinessContext.Instance.ModelManager.AddToStockHeaders(stockNew);
+            //BusinessContext.Instance.ModelManager.AddToStockHeaders(stockNew);
 
         }
 
