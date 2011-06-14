@@ -28,7 +28,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextSaleHeaderCode(int terminal)
         {
-            return BusinessContext.Instance.ModelManager.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Count()+1;
+            return BusinessContext.Instance.ModelManager.SaleHeaders.Count(hh => hh.TerminalCode == terminal)+1;
         }
 
         public bool HasChanges

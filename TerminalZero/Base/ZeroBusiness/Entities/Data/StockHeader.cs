@@ -16,13 +16,13 @@ namespace ZeroBusiness.Entities.Data
             
         }
 
-        public StockHeader(StockType type, int terminalDestination)
+        public StockHeader(StockType.Types type, int terminalDestination)
         {
             TerminalCode= Terminal.Instance.TerminalCode;
             TerminalToCode = terminalDestination;
             Date = DateTime.Now.Date;
             Code = GetNextStockHeaderCode();
-            StockType = type;
+            StockTypeCode = (int)type;
             UserCode = User.GetCurrentUser().Code;
             UpdateStatus(EntityStatus.New);
         }

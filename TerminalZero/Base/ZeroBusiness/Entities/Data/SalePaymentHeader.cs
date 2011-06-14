@@ -25,7 +25,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextSalePaymentHeaderCode()
         {
-            return BusinessContext.Instance.ModelManager.SalePaymentHeaders.Count()+1;
+            return BusinessContext.Instance.ModelManager.SalePaymentHeaders.Count(p=>p.TerminalCode == Terminal.Instance.TerminalCode)+1;
         }
 
         #region Generated Properties
