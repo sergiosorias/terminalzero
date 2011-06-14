@@ -57,6 +57,7 @@ namespace ZeroGUI
         {
             var control = (NavigationBasePage)d;
             control.CommandBar.btnPrint.Command = (ICommand)e.NewValue;
+            //control.CommandBar.ShortCutPrint.Command = (ICommand) e.NewValue;
         }
 
         public static readonly DependencyProperty SaveCommandProperty = DependencyProperty.RegisterAttached("SaveCommand", typeof(ICommand), typeof(ZeroToolBar), new FrameworkPropertyMetadata(OnSaveCommandChanged));
@@ -75,6 +76,7 @@ namespace ZeroGUI
         {
             var control = (NavigationBasePage)d;
             control.CommandBar.btnSave.Command = (ICommand)e.NewValue;
+            control.CommandBar.ShortCutAccept.Command = (ICommand) e.NewValue;
         }
 
         public static readonly DependencyProperty CancelCommandProperty = DependencyProperty.RegisterAttached("CancelCommand", typeof(ICommand), typeof(ZeroToolBar), new FrameworkPropertyMetadata(OnCancelCommandChanged));
@@ -93,6 +95,7 @@ namespace ZeroGUI
         {
             var control = (NavigationBasePage)d;
             control.CommandBar.btnCancel.Command = (ICommand)e.NewValue;
+            control.CommandBar.ShortCutCancel.Command = (ICommand) e.NewValue;
         }
 
         //public static readonly RoutedEvent NewClickedEvent = EventManager.RegisterRoutedEvent("NewClick", RoutingStrategy.Direct,typeof(RoutedEventHandler), typeof(ZeroToolBar));

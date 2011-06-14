@@ -4,19 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d">
-    <Grid>
+    <UserControl.Resources>
+        
+    </UserControl.Resources>
+    <Grid >
         <StackPanel Orientation="Horizontal">
-            <TextBox Height="23" Width="200" Margin="2,2,5,2" Name="txtSearchCriteria" KeyUp="txtSearchCriteria_KeyUp"/>
-            <Button Margin="2" x:Name="btnSearch" Click="btnSearch_Click">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Buscar" VerticalAlignment="Center"/>
-                    <Image Grid.Column="1" Source="/ZeroGUI;component/Resources/search.png" Height="20"/>
-                </Grid>
-            </Button>
+            <Grid Background="Transparent">
+                <TextBox Height="23" Width="200" Margin="2,2,5,2" Name="txtSearchCriteria" KeyUp="txtSearchCriteria_KeyUp" Tag="Buscar..."/>
+            </Grid>
+            <Image Cursor="Hand" Grid.Column="1" Margin="2" MouseLeftButtonDown="btnSearch_Click" Source="/ZeroGUI;component/Resources/search.png" Height="20">
+                <Image.Effect>
+                    <DropShadowEffect Color="LightBlue"/>
+                </Image.Effect>
+            </Image>
         </StackPanel>
         <Popup Name="quantityPopup"  HorizontalAlignment="Right" VerticalOffset="-3" HorizontalOffset="10">
             <Grid Background="Transparent">
