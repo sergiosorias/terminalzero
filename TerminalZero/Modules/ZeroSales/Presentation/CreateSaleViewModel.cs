@@ -11,7 +11,6 @@ using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroGUI.Classes;
-using ZeroSales.Pages;
 using ZeroSales.Printer;
 using ZeroSales.Properties;
 
@@ -97,11 +96,8 @@ namespace ZeroSales.Presentation
                 {
                     if (salePaymentview.View.ShowInModalWindow())
                     {
-                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true,
-                                                                                                         SaleHeader,
-                                                                                                         true);
+                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
                         PrintManager.PrintSale(SaleHeader);
-                        BusinessContext.Instance.ModelManager.AddToSaleHeaders(SaleHeader);
                         BusinessContext.Instance.ModelManager.SaveChanges();
                         CancelOperation(null);
                         Message = Resources.SaveOk;
@@ -143,7 +139,8 @@ namespace ZeroSales.Presentation
 
         private void CancelOperation(object parameter)
         {
-            SaleHeader = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == saleType));
+            BusinessContext.Instance.BeginOperation();
+            CreateSale();
             productList.Clear();
             saveCommand.RaiseCanExecuteChanged();
         }
@@ -234,10 +231,14 @@ namespace ZeroSales.Presentation
             :base(view)
         {
             this.saleType = saleType;
-            SaleHeader = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == saleType));
-            
+            CreateSale();
         }
-        
+
+        private void CreateSale()
+        {
+            SaleHeader = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == saleType));
+        }
+
         #region Overrides
         public override bool CanAccept(object parameter)
         {
