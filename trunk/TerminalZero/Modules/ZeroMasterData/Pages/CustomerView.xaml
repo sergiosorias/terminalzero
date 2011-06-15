@@ -1,0 +1,21 @@
+﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
+    x:Class="ZeroMasterData.Pages.CustomerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" Header="Lista de Clientes"
+            base:ZeroToolBar.NewCommand="{Binding CreateCommand, Mode=OneWay}"
+            base:ZeroToolBar.PrintCommand="{Binding PrintCommand, Mode=OneWay}"
+             mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroMasterData.Pages.Controls">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition MinHeight="100"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <baseControls:SearchBox SearchCommand="{Binding SearchCommand}" x:Name="searchboxControl" />
+        <myControls:CustomerLazyLoadingList SelectedItem="{Binding SelectedItem}" base:UIElementExtentions.ListCommanderName="searchboxControl" ItemsSource="{Binding CustomerList}"  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
+        <base:AutoCleanTextBlock x:Name="selectedItemMaximized" Visibility="Collapsed" FontSize="48" FontWeight="Heavy" Grid.Row="2" Text="{Binding Path=SelectedItem.Customer.Name1,ElementName=customerGrid, Mode=OneWay}"/>
+    </Grid>
+</base:NavigationBasePage>
