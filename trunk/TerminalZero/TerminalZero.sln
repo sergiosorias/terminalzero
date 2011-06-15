@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroLogHandle", "Modules\Ze
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroConfiguration", "Modules\ZeroConfiguration\ZeroConfiguration.csproj", "{C9C76953-5F0A-44AD-972D-A6CBAD600FFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroMasterData", "Modules\ZeroSalesMasterData\ZeroMasterData.csproj", "{442165DC-D727-4C61-8661-4E8695924093}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroMasterData", "Modules\ZeroMasterData\ZeroMasterData.csproj", "{442165DC-D727-4C61-8661-4E8695924093}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroStock", "Modules\ZeroStock\ZeroStock.csproj", "{D211E23A-306D-42C4-AA90-EB8BD49D77F1}"
 EndProject
@@ -45,6 +45,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{C5D4BFF1-9B1F-440D-909D-99BE478916B1}"
 	ProjectSection(SolutionItems) = preProject
 		SolutionItems\Interop.FiscalPrinterLib.dll = SolutionItems\Interop.FiscalPrinterLib.dll
+		SolutionItems\Microsoft.Expression.Interactions.dll = SolutionItems\Microsoft.Expression.Interactions.dll
+		SolutionItems\System.Windows.Interactivity.dll = SolutionItems\System.Windows.Interactivity.dll
+		SolutionItems\WPFToolkit.dll = SolutionItems\WPFToolkit.dll
 	EndProjectSection
 EndProject
 Global
