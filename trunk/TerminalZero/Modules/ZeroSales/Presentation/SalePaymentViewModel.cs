@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
+using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
@@ -11,7 +10,6 @@ using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroSales.Pages;
 using ZeroSales.Pages.Controls;
-using ZeroBusiness.Entities.Data;
 using ZeroSales.Properties;
 
 namespace ZeroSales.Presentation
@@ -110,9 +108,7 @@ namespace ZeroSales.Presentation
             bool ret = paymentInstrument.ShowInModalWindow();
             if (ret)
             {
-                var payment =
-                    Sale.SalePaymentHeader.SalePaymentItems.FirstOrDefault(
-                        item => item.PaymentInstrumentCode == paymentInstrument.SelectedItem.Code);
+                var payment = Sale.SalePaymentHeader.SalePaymentItems.FirstOrDefault(item => item.PaymentInstrumentCode == paymentInstrument.SelectedItem.Code);
                 if (payment == null)
                 {
                     var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, paymentInstrument.SelectedQuantity);
@@ -145,7 +141,7 @@ namespace ZeroSales.Presentation
             {
                 return customerSelectionCommand ??
                        (customerSelectionCommand =
-                        Terminal.Instance.Session.Actions[ZeroBusiness.Actions.OpenCustomersSelectionView]);
+                        Terminal.Instance.Session.Actions[Actions.OpenCustomersSelectionView]);
             }
             set
             {

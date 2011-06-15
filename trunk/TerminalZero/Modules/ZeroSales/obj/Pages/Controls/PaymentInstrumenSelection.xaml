@@ -1,0 +1,47 @@
+﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI" 
+             x:Class="ZeroSales.Pages.Controls.PaymentInstrumentSelection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Header="Forma de pago"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Loaded="ListNavigationControl_Loaded" base:UIElementExtentions.TabOnEnter="True"
+             xmlns:Controls="clr-namespace:ZeroSales.Pages.Controls" xmlns:Classes="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI" d:DesignHeight="300" Width="280" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Opción:" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding ElementName=paymentInstrumentsList,Path=SelectedItem.Code}" Grid.Column="1" FontSize="40" Margin="10,0,0,0" Name="multiOptions" PreviewKeyDown="multiOptions_PreviewKeyDown" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            </TextBox>
+        </Grid>
+        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList" LazyLoadEnable="False" ItemsLoaded="paymentInstrumentsList_ItemsLoaded" base:UIElementExtentions.ListCommanderName="multiOptions"/>
+        <TextBlock Grid.Row="2" FontSize="48" VerticalAlignment="Center" Text="{Binding Path=SelectedItem.Name, ElementName=paymentInstrumentsList, FallbackValue=''}" HorizontalAlignment="Center" FontWeight="Heavy" Foreground="#FFC52C19" />
+        <Grid Grid.Row="3" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Pesos:" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" FontSize="40" base:UIElementExtentions.TabOnEnter="True" Margin="10,0,0,0" GotFocus="quantitySelected_GotFocus" Name="quantitySelected" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <TextBox.Text>
+                    <Binding Path="SelectedQuantity" RelativeSource="{RelativeSource AncestorType=Controls:PaymentInstrumentSelection}" Mode="TwoWay" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <Classes:MandatoryRule ErrorMessage="Ingrese un monto"/>
+                            <Classes:IsDoubleRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+        </Grid>
+    </Grid>
+    
+</base:NavigationBasePage>
