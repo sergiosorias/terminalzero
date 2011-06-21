@@ -74,27 +74,27 @@ namespace ZeroConfiguration
             Terminal.Instance.Session[userpParam.Name] = userpParam;
 #else
             var view = new UserLogIn();
-            bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize);
+            bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize,MessageBoxButton.OKCancel);
             if (dialogResult.GetValueOrDefault())
             {
                 if (User.ValidateUser(view.UserName, view.UserPass))
                 {
                     ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(view.UserName, true),false);
-                    ZeroCommonClasses.Terminal.Instance.Session[typeof(User)] = userpParam;
+                    Terminal.Instance.Session[typeof(User)] = userpParam;
                 }
                 else
                 {
-                    ZeroMessageBox.Show(Resources.MsgIncorrectUserPassTryAgain, Resources.Fail, ResizeMode.NoResize);
+                    ZeroMessageBox.Show(Resources.MsgIncorrectUserPassTryAgain, Resources.Fail, ResizeMode.NoResize,MessageBoxButton.OK);
                     OpenLogInDialog();
                 }
             }
             else
             {
                 ZeroMessageBox.Show(Resources.MsgLogInPlease+"\nEl sistema se cerrara.", Resources.Fail, ResizeMode.NoResize, MessageBoxButton.OK);
-                ZeroAction action;
-                if(ExistsAction(Actions.AppExit,out action))
+                
+                if(Terminal.Instance.Session.Actions[Actions.AppExit]!=null)
                 {
-                    ExecuteAction(action);
+                    Terminal.Instance.Session.Actions[Actions.AppExit].Execute(null);
                 }
             }
 #endif

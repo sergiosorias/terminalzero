@@ -42,12 +42,12 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadTaxes()
         {
-            taxesComboBox.ItemsSource = BusinessContext.Instance.ModelManager.Taxes;
+            taxesComboBox.ItemsSource = BusinessContext.Instance.Model.Taxes;
         }
 
         private void LoadPriceWeights()
         {
-            foreach (var item in BusinessContext.Instance.ModelManager.Weights)
+            foreach (var item in BusinessContext.Instance.Model.Weights)
             {
                 weightBox.Items.Add(item);
             }
@@ -55,7 +55,7 @@ namespace ZeroMasterData.Pages.Controls
 
         private void LoadProductGroup()
         {
-            foreach (var item in BusinessContext.Instance.ModelManager.ProductGroups)
+            foreach (var item in BusinessContext.Instance.Model.ProductGroups)
             {
                 groupBox.Items.Add(item);
             }
@@ -81,8 +81,8 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewGroup);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.ModelManager.ProductGroups.AddObject(pgd.ProductGroupNew);
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.ProductGroups.AddObject(pgd.ProductGroupNew);
+                BusinessContext.Instance.Model.SaveChanges();
                 groupBox.Items.Add(pgd.ProductGroupNew);
                 ProductDetailViewModel.Product.ProductGroup = pgd.ProductGroupNew;
             }
@@ -94,8 +94,8 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.ModelManager.Weights.AddObject(pgd.CurrentWeigth);
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.Weights.AddObject(pgd.CurrentWeigth);
+                BusinessContext.Instance.Model.SaveChanges();
                 weightBox.Items.Add(pgd.CurrentWeigth);
                 ProductDetailViewModel.Product.Price1.Weight = pgd.CurrentWeigth;
             }
@@ -105,16 +105,16 @@ namespace ZeroMasterData.Pages.Controls
         {
             var t = (int)((Button)sender).DataContext;
             ProductGroup pgroup =
-            BusinessContext.Instance.ModelManager.ProductGroups.First(pg => pg.Code == t);
+            BusinessContext.Instance.Model.ProductGroups.First(pg => pg.Code == t);
             var pgd = new ProductGroupDetail(pgroup);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges();
             }
             else
             {
-                BusinessContext.Instance.ModelManager.Refresh(RefreshMode.StoreWins, pgroup);
+                BusinessContext.Instance.Model.Refresh(RefreshMode.StoreWins, pgroup);
             }
 
         }
@@ -123,16 +123,16 @@ namespace ZeroMasterData.Pages.Controls
         {
             var t = (int)((Button)sender).DataContext;
             var algo =
-            BusinessContext.Instance.ModelManager.Weights.First(w => w.Code == t);
+            BusinessContext.Instance.Model.Weights.First(w => w.Code == t);
             var pgd = new WeightDetail(algo);
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges();
             }
             else
             {
-                BusinessContext.Instance.ModelManager.Refresh(RefreshMode.StoreWins, algo);
+                BusinessContext.Instance.Model.Refresh(RefreshMode.StoreWins, algo);
             }
 
         }

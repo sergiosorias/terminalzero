@@ -40,7 +40,7 @@ namespace ZeroMasterData.Presentation
         {
             get
             {
-                return taxPositionList ?? (taxPositionList = new ObservableCollection<TaxPosition>(BusinessContext.Instance.ModelManager.TaxPositions));
+                return taxPositionList ?? (taxPositionList = new ObservableCollection<TaxPosition>(BusinessContext.Instance.Model.TaxPositions));
             }
             set
             {
@@ -58,7 +58,7 @@ namespace ZeroMasterData.Presentation
         {
             get
             {
-                return paymentInstrumentList ?? (paymentInstrumentList = new ObservableCollection<PaymentInstrument>(BusinessContext.Instance.ModelManager.PaymentInstruments));
+                return paymentInstrumentList ?? (paymentInstrumentList = new ObservableCollection<PaymentInstrument>(BusinessContext.Instance.Model.PaymentInstruments));
             }
             set
             {
@@ -88,11 +88,11 @@ namespace ZeroMasterData.Presentation
             
             if(ZeroMessageBox.Show(View, string.Format("Editar cliente {0}", Customer.Name1)).GetValueOrDefault())
             {
-                BusinessContext.Instance.ModelManager.Customers.ApplyCurrentValues(Customer);
+                BusinessContext.Instance.Model.Customers.ApplyCurrentValues(Customer);
             }
             else
             {
-                BusinessContext.Instance.ModelManager.Refresh(System.Data.Objects.RefreshMode.StoreWins, Customer);
+                BusinessContext.Instance.Model.Refresh(System.Data.Objects.RefreshMode.StoreWins, Customer);
             }
             
         }

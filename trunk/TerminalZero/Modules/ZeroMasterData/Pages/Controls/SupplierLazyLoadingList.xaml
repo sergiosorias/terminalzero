@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
             xmlns:Data="clr-namespace:ZeroBusiness.Manager.Data;assembly=ZeroBusiness"
-            ItemsSource="{Binding Path=ModelManager.Suppliers,Source={x:Static Data:BusinessContext.Instance}}"
+            ItemsSource="{Binding Path=Model.Suppliers,Source={x:Static Data:BusinessContext.Instance}}"
              SelectionUnit="FullRow">
     <DataGrid.Columns>
         <DataGridTextColumn x:Name="name1Column" Binding="{Binding Path=Name1}" Header="Nombre 1" Width="1*" MaxWidth="200"/>

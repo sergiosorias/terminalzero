@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
@@ -12,7 +11,6 @@ using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 using ZeroGUI;
 using ZeroMasterData.Pages;
-using ZeroMasterData.Pages.Controls;
 using ZeroMasterData.Presentation;
 using ZeroMasterData.Properties;
 
@@ -34,9 +32,8 @@ namespace ZeroMasterData
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView));
             Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView,null,false));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductPriceIncrease, OpenProductUpdateMessage, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
-            //Terminal.Instance.Session.AddAction(new ZeroAction( ActionType.MenuItem, Actions.ExecTestImportMasterData, TestImportDataPack));
+            //Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
         public override string[] GetFilesToSend()
@@ -57,7 +54,7 @@ namespace ZeroMasterData
             packReceived.Error += PackReceived_Error;
             if (packReceived.Import(path))
             {
-                Terminal.Instance.CurrentClient.Notifier.SendNotification("Importacion de master data completada con éxito!");
+                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false,"Importacion de master data completada con éxito!");
             }
             else
             {
@@ -95,16 +92,6 @@ namespace ZeroMasterData
                              MaxWidth = 600
                          };
             mb.Show();
-        }
-
-        private void OpenProductUpdateMessage(object parameter)
-        {
-            BusinessContext.Instance.BeginOperation();
-            ProductsUpdateViewModel viewModel = new ProductsUpdateViewModel();
-            if(viewModel.View.ShowInModalWindow())
-            {
-                BusinessContext.Instance.ModelManager.SaveChanges();
-            }
         }
 
         private void OpenNewProductMessage(object parameter)
@@ -157,15 +144,15 @@ namespace ZeroMasterData
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(10);
                 var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                info.AddEntities(modelManager.Prices);
-                info.AddEntities(modelManager.Weights);
-                info.AddEntities(modelManager.PaymentInstruments);
-                info.AddEntities(modelManager.ProductGroups);
-                info.AddEntities(modelManager.Taxes);
-                info.AddEntities(modelManager.TaxPositions);
-                info.AddEntities(modelManager.Suppliers);
-                info.AddEntities(modelManager.Products);
-                info.AddEntities(modelManager.Customers);
+                info.AddTable(modelManager.Prices);
+                info.AddTable(modelManager.Weights);
+                info.AddTable(modelManager.PaymentInstruments);
+                info.AddTable(modelManager.ProductGroups);
+                info.AddTable(modelManager.Taxes);
+                info.AddTable(modelManager.TaxPositions);
+                info.AddTable(modelManager.Suppliers);
+                info.AddTable(modelManager.Products);
+                info.AddTable(modelManager.Customers);
 
                 using (masterDataPackManager)
                 {
@@ -195,7 +182,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void TestImportDataPack()
+        private void TestImportDataPack(object parameter)
         {
             foreach (string s in GetFilesToSend())
             {

@@ -20,10 +20,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Opción:" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding ElementName=paymentInstrumentsList,Path=SelectedItem.Code}" Grid.Column="1" FontSize="40" Margin="10,0,0,0" base:UIElementExtentions.TabOnEnter="True" Name="multiOptions" PreviewKeyDown="multiOptions_PreviewKeyDown" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            <TextBox Text="{Binding ElementName=paymentInstrumentsList,Path=SelectedItem.Code}" Grid.Column="1" FontSize="40" Margin="10,0,0,0" Name="multiOptions" PreviewKeyDown="multiOptions_PreviewKeyDown" VerticalAlignment="Center" HorizontalAlignment="Stretch">
             </TextBox>
         </Grid>
-        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList" LazyLoadEnable="False"/>
+        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList" LazyLoadEnable="False" ItemsLoaded="paymentInstrumentsList_ItemsLoaded" base:UIElementExtentions.ListCommanderName="multiOptions"/>
         <TextBlock Grid.Row="2" FontSize="48" VerticalAlignment="Center" Text="{Binding Path=SelectedItem.Name, ElementName=paymentInstrumentsList, FallbackValue=''}" HorizontalAlignment="Center" FontWeight="Heavy" Foreground="#FFC52C19" />
         <Grid Grid.Row="3" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>

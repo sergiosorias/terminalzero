@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
@@ -66,8 +67,10 @@ namespace ZeroSales.Presentation
                 OnPropertyChanged("Message");
             }
         }
-
+        
         #endregion
+
+        #region Commands
 
         #region Save Command
         private ZeroActionDelegate saveCommand;
@@ -92,17 +95,20 @@ namespace ZeroSales.Presentation
         {
             try
             {
-                using (var salePaymentview = new SalePaymentViewModel(SaleHeader))
+                using (var salePaymentviewModel = new SalePaymentViewModel(SaleHeader))
                 {
-                    if (salePaymentview.View.ShowInModalWindow())
+                    if (salePaymentviewModel.View.ShowInModalWindow())
                     {
-                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
+                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true,SaleHeader,true);
                         PrintManager.PrintSale(SaleHeader);
-                        BusinessContext.Instance.ModelManager.SaveChanges();
-                        CancelOperation(null);
+                        BusinessContext.Instance.Model.SaveChanges();
+                        CreateSale();
+                        productList.Clear();
+                        saveCommand.RaiseCanExecuteChanged();
                         Message = Resources.SaveOk;
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -122,11 +128,11 @@ namespace ZeroSales.Presentation
 
         #region Cancel Command
 
-        private ICommand cancelCommand;
+        private ZeroActionDelegate cancelCommand;
 
-        public ICommand CancelCommand
+        public ZeroActionDelegate CancelCommand
         {
-            get { return cancelCommand ??(cancelCommand = new ZeroActionDelegate(CancelOperation)); }
+            get { return cancelCommand ??(cancelCommand = new ZeroActionDelegate(CancelOperation,o=> SaleHeader!=null && SaleHeader.HasChanges)); }
             set
             {
                 if (cancelCommand != value)
@@ -139,10 +145,11 @@ namespace ZeroSales.Presentation
 
         private void CancelOperation(object parameter)
         {
-            BusinessContext.Instance.BeginOperation();
+            ContextExtentions.DetachEntities(BusinessContext.Instance.Model, SaleHeader, SaleHeader.SaleItems);
             CreateSale();
             productList.Clear();
             saveCommand.RaiseCanExecuteChanged();
+            CancelCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -205,11 +212,11 @@ namespace ZeroSales.Presentation
         private bool BarcodeValidate(object parameter)
         {
             var e = parameter as BarCodeValidationEventArgs;
-            validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            validProd = BusinessContext.Instance.Model.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (validProd == null)
             {
                 string strCode = e.Parts[1].Code.ToString();
-                validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                validProd = BusinessContext.Instance.Model.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
                 if (validProd == null)
                 {
                     e.Parts[1].IsValid = false;
@@ -227,16 +234,13 @@ namespace ZeroSales.Presentation
 
         #endregion
 
+        #endregion
+
         public CreateSaleViewModel(NavigationBasePage view, int saleType)
             :base(view)
         {
             this.saleType = saleType;
             CreateSale();
-        }
-
-        private void CreateSale()
-        {
-            SaleHeader = new SaleHeader(BusinessContext.Instance.ModelManager.SaleTypes.First(st => st.Code == saleType));
         }
 
         #region Overrides
@@ -269,11 +273,17 @@ namespace ZeroSales.Presentation
         }
         #endregion
 
+        private void CreateSale()
+        {
+            SaleHeader = new SaleHeader(BusinessContext.Instance.Model.SaleTypes.First(st => st.Code == saleType));
+        }
+
         private void AddItem(Product prod, double quantity, string lot)
         {
             Message = prod.Name ?? validProd.ShortDescription ?? validProd.Description;
             SaleProductList.Add(new SaleItemExtended(saleHeader.AddNewSaleItem(prod, quantity, lot), DeleteItem));
             saveCommand.RaiseCanExecuteChanged();
+            CancelCommand.RaiseCanExecuteChanged();
         }
 
         private void DeleteItem(object parameter)
@@ -282,6 +292,8 @@ namespace ZeroSales.Presentation
             {
                 SaleHeader.RemoveSaleItem(parameter as SaleItem);
                 SaleProductList.Remove(SaleProductList.FirstOrDefault(si => si.SaleItem == parameter));
+                saveCommand.RaiseCanExecuteChanged();
+                CancelCommand.RaiseCanExecuteChanged();
             }
         }
 

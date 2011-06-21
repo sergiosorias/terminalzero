@@ -23,7 +23,7 @@ namespace ZeroStock.Presentation
 
         public ObservableCollection<DeliveryDocumentHeader> DeliveryDocumentCollection
         {
-            get { return deliveryDocumentCollection ?? (deliveryDocumentCollection = new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.ModelManager.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false))); }
+            get { return deliveryDocumentCollection ?? (deliveryDocumentCollection = new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false))); }
             set
             {
                 if (deliveryDocumentCollection != value)

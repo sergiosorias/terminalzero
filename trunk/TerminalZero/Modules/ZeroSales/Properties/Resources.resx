@@ -159,4 +159,7 @@
 	<data name="Change">
 		<value xml:space="preserve">Cambiar</value>
 	</data>
+	<data name="Refresh">
+		<value xml:space="preserve">Actualizar</value>
+	</data>
 </root>

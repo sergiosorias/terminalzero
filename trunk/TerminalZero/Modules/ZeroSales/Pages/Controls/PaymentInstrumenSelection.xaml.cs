@@ -24,17 +24,8 @@ namespace ZeroSales.Pages.Controls
 
         private void multiOptions_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            
             switch (e.Key)
             {
-                case Key.Up:
-                    paymentInstrumentsList.MovePrevious();
-                    e.Handled = true;
-                    break;
-                case Key.Down:
-                    paymentInstrumentsList.MoveNext();
-                    e.Handled = true;
-                    break;
                 case Key.D0:
                 case Key.NumPad0:
                     paymentInstrumentsList.SelectItemByData("0");
@@ -99,7 +90,6 @@ namespace ZeroSales.Pages.Controls
         private void ListNavigationControl_Loaded(object sender, RoutedEventArgs e)
         {
             multiOptions.Focus();
-            paymentInstrumentsList.SelectedIndex = 0;
         }
 
         private void quantitySelected_GotFocus(object sender, RoutedEventArgs e)
@@ -114,6 +104,11 @@ namespace ZeroSales.Pages.Controls
                 MessageBox.Show("Por favor seleccione una forma de pago!");
             }
             return base.CanAccept(parameter) && SelectedItem!=null;
+        }
+
+        private void paymentInstrumentsList_ItemsLoaded(object sender, System.EventArgs e)
+        {
+            paymentInstrumentsList.SelectedIndex = 0;
         }
     }
 }

@@ -20,7 +20,5 @@ namespace ZeroSales.Pages
         {
             ((UIElement)sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Previous));
         }
-
-        
     }
 }
