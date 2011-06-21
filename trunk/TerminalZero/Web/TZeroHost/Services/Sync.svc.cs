@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Web;
 using TZeroHost.Helpers;
 using ZeroBusiness.Entities.Configuration;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
-using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroConfiguration;
 
@@ -50,7 +49,7 @@ namespace TZeroHost.Services
             {
                 OperationContext context = OperationContext.Current;
                 MessageProperties messageProperties = context.IncomingMessageProperties;
-                RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+                var endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
 
                 if (endpointProperty != null) ret = endpointProperty.Address;
             }

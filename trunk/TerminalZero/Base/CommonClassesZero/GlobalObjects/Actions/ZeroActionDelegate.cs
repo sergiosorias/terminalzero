@@ -8,8 +8,15 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 {
     public class ZeroActionDelegate : ICommand
     {
+        public event EventHandler Finished;
+        protected void OnFinished()
+        {
+            if (Finished != null)
+                Finished(this, EventArgs.Empty);
+        }
+
         public Action<object> Action { get; private set; }
-        public Predicate<object> Predicate { get; private set; }
+        public Predicate<object> Predicate { get; set; }
 
         public ZeroActionDelegate(Action<object> action) : this(action, null)
         {
@@ -24,19 +31,20 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
         #region Implementation of ICommand
 
-        public void Execute(object parameter)
+        public virtual void Execute(object parameter)
         {
             Action(parameter);
+            OnFinished();
         }
 
-        public bool CanExecute(object parameter)
+        public virtual bool CanExecute(object parameter)
         {
             return Predicate == null || Predicate(parameter);
         }
 
         public event EventHandler CanExecuteChanged;
 
-        public void RaiseCanExecuteChanged()
+        public virtual void RaiseCanExecuteChanged()
         {
             EventHandler handler = CanExecuteChanged;
             if (handler != null) handler(this, EventArgs.Empty);

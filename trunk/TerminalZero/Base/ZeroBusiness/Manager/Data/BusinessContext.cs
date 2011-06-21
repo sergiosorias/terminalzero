@@ -23,17 +23,17 @@ namespace ZeroBusiness.Manager.Data
 
         public void BeginOperation(string actionName)
         {
-            if (_modelManager != null)
-                try{_modelManager.Dispose();}catch{}
+            if (model != null)
+                try{model.Dispose();}catch{}
             
-            _modelManager = new DataModelManager();
+            model = new DataModelManager();
             
         }
 
-        private DataModelManager _modelManager;
-        public DataModelManager ModelManager
+        private DataModelManager model;
+        public DataModelManager Model
         {
-            get { return _modelManager; }
+            get { return model; }
         }
 
         public static class Rules

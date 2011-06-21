@@ -10,7 +10,11 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SaleHeader : IExportableEntity
     {
-        private bool _printModeForced = false;
+        private static int GetNextSaleHeaderCode(int terminal)
+        {
+            return BusinessContext.Instance.Model.SaleHeaders.Count(hh => hh.TerminalCode == terminal) + 1;
+        }
+
         internal SaleHeader()
         {
                 
@@ -26,11 +30,7 @@ namespace ZeroBusiness.Entities.Data
             UserCode = User.GetCurrentUser().Code;
         }
 
-        private static int GetNextSaleHeaderCode(int terminal)
-        {
-            return BusinessContext.Instance.ModelManager.SaleHeaders.Count(hh => hh.TerminalCode == terminal)+1;
-        }
-
+        #region Included Properties
         public bool HasChanges
         {
             get
@@ -39,6 +39,35 @@ namespace ZeroBusiness.Entities.Data
                        SaleItems.All(si => si.EntityState != System.Data.EntityState.Unchanged);
             }
         }
+
+        private Customer customer;
+        
+        public Customer Customer
+        {
+            get { return customer; }
+            set
+            {
+                if (customer != value)
+                {
+                    customer = value;
+                    CustomerCode = customer.Code;
+                    OnPropertyChanged("Customer");
+                }
+            }
+        }
+
+        protected PrintMode PrintModeEnum
+        {
+            get
+            {
+                return (Data.PrintMode)PrintMode.GetValueOrDefault();
+            }
+            set
+            {
+                PrintMode = (int)value;
+            }
+        }
+        #endregion
 
         private void CalculateValues()
         {
@@ -52,6 +81,17 @@ namespace ZeroBusiness.Entities.Data
             {
                 PriceSumValue = TaxSumValue = Tax1SumValue = 0;
             }
+        }
+
+        public void UpdatePrintMode()
+        {
+            Data.PrintMode mode = SalePaymentHeader != null && SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == (int)Data.PrintMode.UseTax) ? Data.PrintMode.UseTax : Data.PrintMode.NoTax;
+            if (mode != Data.PrintMode.UseTax && Customer!=null && Customer.TaxPosition!=null )
+            {
+                mode = customer.TaxPosition.ResolvePrintMode();
+            }
+
+            PrintModeEnum = mode;
         }
 
         public SaleItem AddNewSaleItem(Product prod, double qty, string lot = "")
@@ -97,15 +137,9 @@ namespace ZeroBusiness.Entities.Data
             CalculateValues();
         }
 
-        public void ForcePrintMode(int mode)
+        public void AlternatePrintMode()
         {
-            _printModeForced = true;
-            PrintMode = mode;
-        }
-
-        partial void OnCustomerCodeChanged()
-        {
-            PrintMode = 1;
+            PrintModeEnum = PrintModeEnum == Data.PrintMode.NoTax? Data.PrintMode.UseTax: Data.PrintMode.NoTax;
         }
 
         #region Implementation of IExportableEntity
@@ -122,8 +156,8 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
-        
-        
+
+       
     }
 
     

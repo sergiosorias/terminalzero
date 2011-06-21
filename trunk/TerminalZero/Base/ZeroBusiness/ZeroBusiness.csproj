@@ -52,6 +52,7 @@
     <Compile Include="Actions.cs" />
     <Compile Include="Entities\Data\PrintMode.cs" />
     <Compile Include="Entities\Data\StockType.cs" />
+    <Compile Include="Entities\Data\TaxPosition.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Entities\Configuration\ConfigurationModelManager.cs" />
     <Compile Include="Entities\Configuration\ConfigurationModel.Designer.cs">

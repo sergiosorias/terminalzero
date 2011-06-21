@@ -5,5 +5,6 @@
         New = 0,
         Exported = 1,
         Imported = 2,
+        Modified = 3,
     }
 }

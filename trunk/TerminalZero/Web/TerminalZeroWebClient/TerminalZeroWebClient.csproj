@@ -290,6 +290,10 @@
       <Project>{9F59EFD4-BD4B-4A78-981A-CEC839A47034}</Project>
       <Name>SLFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TerminalZeroWebClientPresentation\TerminalZeroWebClientPresentation.csproj">
+      <Project>{21FAF410-9312-4A05-8E9E-D64BD0CC1B6C}</Project>
+      <Name>TerminalZeroWebClientPresentation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -56,7 +56,7 @@ namespace ZeroCommonClasses
                 {
                     if (Terminal.Instance.Session.Rules.Exists(item.Value.RuleToSatisfyName))
                     {
-                        item.Value.RuleToSatisfy = Terminal.Instance.Session.Rules[item.Value.RuleToSatisfyName];
+                        item.Value.Predicate = Terminal.Instance.Session.Rules[item.Value.RuleToSatisfyName];
                     }
                 }
             }

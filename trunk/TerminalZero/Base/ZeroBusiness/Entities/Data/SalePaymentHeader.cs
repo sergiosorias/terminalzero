@@ -25,7 +25,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextSalePaymentHeaderCode()
         {
-            return BusinessContext.Instance.ModelManager.SalePaymentHeaders.Count(p=>p.TerminalCode == Terminal.Instance.TerminalCode)+1;
+            return BusinessContext.Instance.Model.SalePaymentHeaders.Count(p=>p.TerminalCode == Terminal.Instance.TerminalCode)+1;
         }
 
         #region Generated Properties
@@ -54,16 +54,7 @@ namespace ZeroBusiness.Entities.Data
         public void AddPaymentInstrument(SalePaymentItem payment)
         {
             SalePaymentItems.Add(payment);
-            payment.PropertyChanged += payment_PropertyChanged;
             RefreshTotalQuantity();
-        }
-
-        private void payment_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == "Quantity")
-            {
-                RefreshTotalQuantity();
-            }
         }
 
         private void RefreshTotalQuantity()
@@ -74,7 +65,6 @@ namespace ZeroBusiness.Entities.Data
 
         public void RemovePaymentInstrument(SalePaymentItem payment)
         {
-            payment.PropertyChanged -= payment_PropertyChanged;
             SalePaymentItems.Remove(payment);
             RefreshTotalQuantity();
         }

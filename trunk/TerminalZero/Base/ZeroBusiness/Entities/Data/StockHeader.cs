@@ -42,7 +42,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextStockHeaderCode()
         {
-            return BusinessContext.Instance.ModelManager.StockHeaders.Count() > 0 ? BusinessContext.Instance.ModelManager.StockHeaders.Max(sh => sh.Code) + 1 : 1;
+            return BusinessContext.Instance.Model.StockHeaders.Count() > 0 ? BusinessContext.Instance.Model.StockHeaders.Max(sh => sh.Code) + 1 : 1;
         }
         
         public void UpdateStatus(EntityStatus status)

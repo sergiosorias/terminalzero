@@ -38,18 +38,20 @@ namespace ZeroBusiness.Entities.Data
             return _confModel.Terminals;
         }
 
-        public override int SaveChanges(SaveOptions options)
+        public int SaveChanges(SaveOptions options, bool markModifiedEntities)
         {
-            foreach (ObjectStateEntry entry in ObjectStateManager.GetObjectStateEntries(EntityState.Added))
+            if(markModifiedEntities)
             {
-                if(entry.Entity is IExportableEntity)
+                foreach (ObjectStateEntry entry in ObjectStateManager.GetObjectStateEntries(EntityState.Modified))
                 {
-                    ((IExportableEntity)entry.Entity).UpdateStatus(EntityStatus.New);
+                    if (entry.Entity is IExportableEntity)
+                    {
+                        ((IExportableEntity)entry.Entity).UpdateStatus(EntityStatus.Modified);
+                    }
                 }
             }
             return base.SaveChanges(options);
         }
 
-        
     }
 }

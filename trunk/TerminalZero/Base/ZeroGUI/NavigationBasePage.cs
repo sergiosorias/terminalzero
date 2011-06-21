@@ -64,6 +64,20 @@ namespace ZeroGUI
         // Using a DependencyProperty as the backing store for CommandBar.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ToolBarProperty =
             DependencyProperty.Register("CommandBar", typeof(ZeroToolBar), typeof(NavigationBasePage), null);
+        
+        public bool StartKeyRequired
+        {
+            get { return (bool)GetValue(StartKeyRequiredProperty); }
+            set
+            {
+                SetValue(StartKeyRequiredProperty, false);
+                SetValue(StartKeyRequiredProperty, value);
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for StartKeyRequired.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty StartKeyRequiredProperty =
+            DependencyProperty.Register("StartKeyRequired", typeof(bool), typeof(NavigationBasePage), new UIPropertyMetadata(false));
 
         protected override void OnInitialized(EventArgs e)
         {

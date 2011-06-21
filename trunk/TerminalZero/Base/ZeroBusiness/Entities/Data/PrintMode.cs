@@ -7,7 +7,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public enum PrintMode
     {
-        Default = 0,
-        FinalCustomer = 1
+        NoTax = 0,
+        UseTax = 1
     }
 }

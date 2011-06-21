@@ -7,10 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
-using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
 
-namespace ZeroCommonClasses.Helpers
+namespace ZeroCommonClasses.Entities
 {
     public static class  ContextExtentions
     {
@@ -64,7 +63,7 @@ namespace ZeroCommonClasses.Helpers
 
                 foreach (PropertyInfo propertyInfo in columnProperties)
                 {
-                    dataRow[propertyInfo.Name] = propertyInfo.GetValue(record, null) == null ? DBNull.Value : propertyInfo.GetValue(record, null);
+                    dataRow[propertyInfo.Name] = propertyInfo.GetValue(record, null) ?? DBNull.Value;
                 }
 
                 dtReturn.Rows.Add(dataRow);
@@ -72,7 +71,8 @@ namespace ZeroCommonClasses.Helpers
 
             return dtReturn;
         }
-        
+
+        [Obsolete]
         public static void Merge<T>(IEnumerable<T> targetList, T mergeItem, Action<T> insertMethod, MergeOption mergeOptions, 
             params string[] PropertiesKey)
             where T : EntityObject
@@ -93,7 +93,7 @@ namespace ZeroCommonClasses.Helpers
             MergeItem(targetList, mergeItem, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
 
         }
-
+        [Obsolete]
         public static void Merge<T>(IEnumerable<T> targetList, IEnumerable<T> sourceList, Action<T> insertMethod, MergeOption mergeOptions, 
             params string[] PropertiesKey)
             where T : EntityObject
@@ -169,28 +169,81 @@ namespace ZeroCommonClasses.Helpers
             }
         }
 
-        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities)
-        {
-            MergeEntities(context, entities, false);
-        }
-
-        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities, bool isExportable)
+        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities, Action<EntityObject> mergedEntityCallback)
         {
             foreach (var item in entities)
             {
-                if (isExportable)
-                    ((IExportableEntity)item).UpdateStatus(EntityStatus.Imported);
-                object entity;
-                if (context.TryGetObjectByKey(item.EntityKey, out entity))
+                MergeEntity(item, context);
+                if (mergedEntityCallback != null)
+                    mergedEntityCallback(item);
+            }
+        }
+
+        private static void MergeEntity(EntityObject item, ObjectContext context)
+        {
+            object entity;
+            if (context.TryGetObjectByKey(item.EntityKey, out entity))
+            {
+                context.ApplyCurrentValues(item.EntityKey.EntitySetName, item);
+            }
+            else
+            {
+                context.AddObject(item.EntityKey.EntitySetName, item);
+            }
+        }
+
+        public static void ImportEntities(ObjectContext context, IEnumerable<EntityObject> entities, Action<EntityObject> importedEntityCallback)
+        {
+            foreach (var item in entities)
+            {
+                context.AddObject(item.EntityKey.EntitySetName, item);
+                if (importedEntityCallback != null)
+                    importedEntityCallback(item);
+            }
+        }
+        
+        public static void DetachEntities<T>(ObjectContext contect, EntityObject parent, params EntityCollection<T>[] childs)
+            where T : EntityObject
+        {
+            if (childs != null)
+            {
+                EntityObject obj;
+                foreach (EntityCollection<T> entityCollection in childs)
                 {
-                    context.ApplyCurrentValues(item.EntityKey.EntitySetName, item);
-                }
-                else
-                {
-                    context.AddObject(item.EntityKey.EntitySetName, item);
+                    while (entityCollection.Count > 0)
+                    {
+                        obj = entityCollection.First();
+                        if (obj.EntityState == EntityState.Unchanged)
+                        {
+                            throw new InvalidOperationException(
+                                string.Format("Invalid detach operation was tried, Entity: {0}",
+                                              obj.EntityKey.EntitySetName));
+
+                        }
+                        contect.Detach(entityCollection.First());
+                    }
                 }
             }
-
+            if (parent != null)
+            {
+                switch (parent.EntityState)
+                {
+                    case EntityState.Detached:
+                    case EntityState.Unchanged:
+                    case EntityState.Deleted:
+                        throw new InvalidOperationException(
+                                string.Format("Invalid detach operation was tried, Entity: {0}",
+                                              parent.EntityKey.EntitySetName));
+                        break;
+                    case EntityState.Added:
+                    case EntityState.Modified:
+                        contect.Detach(parent);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ZeroBusiness.Entities.Data
 
         private static int GetNextDocumentHeaderCode()
         {
-            return BusinessContext.Instance.ModelManager.DeliveryDocumentHeaders.Count() + 1;
+            return BusinessContext.Instance.Model.DeliveryDocumentHeaders.Count() + 1;
         }
 
         public int TerminalDestination
