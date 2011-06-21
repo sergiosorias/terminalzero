@@ -33,7 +33,7 @@ namespace ZeroMasterData.Pages.Controls
         public SupplierDetail(int supplierCode)
             : this()
         {
-            CurrentSupplier = BusinessContext.Instance.ModelManager.Suppliers.First(s => s.Code == supplierCode);
+            CurrentSupplier = BusinessContext.Instance.Model.Suppliers.First(s => s.Code == supplierCode);
             ControlMode = ControlMode.Update;
         }
 
@@ -41,13 +41,13 @@ namespace ZeroMasterData.Pages.Controls
         {
             if (!IsInDesignMode)
             {
-                taxPositionCodeComboBox.ItemsSource = BusinessContext.Instance.ModelManager.TaxPositions;
-                paymentInstrumentCodeComboBox.ItemsSource = BusinessContext.Instance.ModelManager.PaymentInstruments;
+                taxPositionCodeComboBox.ItemsSource = BusinessContext.Instance.Model.TaxPositions;
+                paymentInstrumentCodeComboBox.ItemsSource = BusinessContext.Instance.Model.PaymentInstruments;
                 switch (ControlMode)
                 {
                     case ControlMode.New:
                         CurrentSupplier = Supplier.CreateSupplier(
-                            BusinessContext.Instance.ModelManager.Suppliers.Count()
+                            BusinessContext.Instance.Model.Suppliers.Count()
                             , true);
                         break;
                     case ControlMode.Update:
@@ -78,10 +78,10 @@ namespace ZeroMasterData.Pages.Controls
                 switch (ControlMode)
                 {
                     case ControlMode.New:
-                        BusinessContext.Instance.ModelManager.AddToSuppliers(CurrentSupplier);
+                        BusinessContext.Instance.Model.AddToSuppliers(CurrentSupplier);
                         break;
                     case ControlMode.Update:
-                        BusinessContext.Instance.ModelManager.Suppliers.ApplyCurrentValues(CurrentSupplier);
+                        BusinessContext.Instance.Model.Suppliers.ApplyCurrentValues(CurrentSupplier);
                         break;
                     case ControlMode.Delete:
                         break;
@@ -91,7 +91,7 @@ namespace ZeroMasterData.Pages.Controls
                         break;
                 }
 
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges();
             }
 
             return ret;
@@ -101,7 +101,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             EntityObject obj = CurrentSupplier;
             if (obj.EntityState == EntityState.Modified)
-                BusinessContext.Instance.ModelManager.Refresh(RefreshMode.StoreWins, CurrentSupplier);
+                BusinessContext.Instance.Model.Refresh(RefreshMode.StoreWins, CurrentSupplier);
 
             return true;
         }

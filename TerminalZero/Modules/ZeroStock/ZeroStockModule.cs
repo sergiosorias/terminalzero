@@ -91,10 +91,10 @@ namespace ZeroStock
                         ent.GetExportTerminal(Terminal.Instance.TerminalCode).Where(
                             t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
 
-                    info.AddExportableEntities(ent.StockHeaders);
-                    info.AddExportableEntities(ent.StockItems);
-                    info.AddExportableEntities(ent.DeliveryDocumentHeaders);
-                    info.AddExportableEntities(ent.DeliveryDocumentItems);
+                    info.AddTable(ent.StockHeaders);
+                    info.AddTable(ent.StockItems);
+                    info.AddTable(ent.DeliveryDocumentHeaders);
+                    info.AddTable(ent.DeliveryDocumentItems);
 
                     if (info.SomeEntityHasRows)
                     {
@@ -155,7 +155,7 @@ namespace ZeroStock
                 stockNew.AddNewStockItem(item.Product,item.Quantity,item.Batch);    
             }
 
-            //BusinessContext.Instance.ModelManager.AddToStockHeaders(stockNew);
+            //BusinessContext.Instance.Model.AddToStockHeaders(stockNew);
 
         }
 

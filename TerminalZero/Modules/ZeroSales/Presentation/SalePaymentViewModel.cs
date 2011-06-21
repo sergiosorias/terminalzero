@@ -4,7 +4,9 @@ using System.Linq;
 using System.Windows.Input;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
@@ -23,7 +25,6 @@ namespace ZeroSales.Presentation
             sale.SalePaymentHeader = new SalePaymentHeader(sale.TerminalToCode);
             ViewHeader = Resources.FinalCustomer;
             CustomerSelectionCommand.Finished += CustomerSelectionCommand_Finished;
-            SalePaymentItemsSource.CollectionChanged += (o, e) => { Sale.PrintMode = Sale.CustomerCode != null || Sale.SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == 1) ? 1 : 0; };
         }
 
         #region Properties
@@ -48,19 +49,9 @@ namespace ZeroSales.Presentation
             get { return sale.SalePaymentHeader; }
         }
 
-        private string customerName = Resources.FinalCustomer;
-
         public string CustomerName
         {
-            get { return customerName; }
-            set
-            {
-                if (customerName != value)
-                {
-                    customerName = value;
-                    OnPropertyChanged("CustomerName");
-                }
-            }
+            get { return Sale.Customer == null ? Resources.FinalCustomer : string.Concat(Sale.Customer.Name1 ?? Sale.Customer.Name2, " - ", Sale.Customer.LegalCode); }
         }
         
         private ObservableCollection<SalePaymentItemExtended> salePaymentItemsSource;
@@ -118,6 +109,7 @@ namespace ZeroSales.Presentation
                                                        PaymentItem = newItem,
                                                        DeleteCommand = new ZeroActionDelegate(RemovePaymentInstrument)
                                                    });
+                    Sale.UpdatePrintMode();
                 }
                 else
                 {
@@ -131,8 +123,27 @@ namespace ZeroSales.Presentation
         {
             Payment.RemovePaymentInstrument(parameter as SalePaymentItem);
             SalePaymentItemsSource.Remove(SalePaymentItemsSource.FirstOrDefault(item=>item.PaymentItem == parameter));
+            Sale.UpdatePrintMode();
         }
 
+        private ZeroActionDelegate alternatePrintModeCommand;
+
+        public ZeroActionDelegate AlternatePrintModeCommand
+        {
+            get
+            {
+                return alternatePrintModeCommand ?? (alternatePrintModeCommand = new ZeroActionDelegate((o) => Sale.AlternatePrintMode()));
+            }
+            set
+            {
+                if (alternatePrintModeCommand != value)
+                {
+                    alternatePrintModeCommand = value;
+                    OnPropertyChanged("AlternatePrintModeCommand");
+                }
+            }
+        }
+        
         private ZeroAction customerSelectionCommand;
 
         public ZeroAction CustomerSelectionCommand
@@ -158,8 +169,9 @@ namespace ZeroSales.Presentation
             var customer = Terminal.Instance.Session[typeof(Customer)];
             if (customer != null)
             {
-                CustomerName = string.Concat(((Customer)customer.Value).Name1 ?? ((Customer)customer.Value).Name2, " - ", ((Customer)customer.Value).LegalCode);
-                sale.CustomerCode = ((Customer)customer.Value).Code;
+                sale.Customer = ((Customer)customer.Value);
+                Sale.UpdatePrintMode();
+                OnPropertyChanged("CustomerName");
                 ViewHeader = "Factura 'A'";
             }
         }
@@ -169,8 +181,24 @@ namespace ZeroSales.Presentation
         #region Overrides
         public override bool CanAccept(object parameter)
         {
-            return base.CanAccept(parameter) && Payment.Ready;
+            if(!Payment.Ready)
+            {
+                //Por favor elija la forma de pago
+                return false;
+            }
+            
+            return base.CanAccept(parameter);
         }
+
+        public override bool CanCancel(object parameter)
+        {
+            Sale.PrintMode = (int) PrintMode.NoTax;
+            Sale.CustomerCode = null;
+            ContextExtentions.DetachEntities(BusinessContext.Instance.Model, Payment, Payment.SalePaymentItems);
+            Sale.SalePaymentHeader = null;
+            return base.CanCancel(parameter);
+        }
+
         public override void Dispose()
         {
             CustomerSelectionCommand.Finished -= CustomerSelectionCommand_Finished;

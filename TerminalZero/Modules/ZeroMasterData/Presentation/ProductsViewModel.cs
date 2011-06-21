@@ -19,6 +19,7 @@ namespace ZeroMasterData.Presentation
 {
     public class ProductsViewModel : ViewModelGui
     {
+        #region Commands
         public ZeroAction NewProductCommand
         {
             get
@@ -26,6 +27,54 @@ namespace ZeroMasterData.Presentation
                 return Terminal.Instance.Session.Actions[Actions.OpenNewProductsMessage];
             }
         }
+
+        private ZeroActionDelegate updatePricesCommand;
+
+        public ZeroActionDelegate UpdatePricesCommand
+        {
+            get { return updatePricesCommand ?? (updatePricesCommand = new ZeroActionDelegate(OpenIncreaseProductMessage, (o) => Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))); }
+            set
+            {
+                if (updatePricesCommand != value)
+                {
+                    updatePricesCommand = value;
+                    OnPropertyChanged("UpdatePricesCommand");
+                }
+            }
+        }
+
+        private void OpenIncreaseProductMessage(object parameter)
+        {
+            var viewModel = new ProductsUpdateViewModel();
+            if (viewModel.View.ShowInModalWindow())
+            {
+                BusinessContext.Instance.Model.SaveChanges();
+            }
+        }
+
+        private ZeroActionDelegate updateProductCommand;
+
+        public ZeroActionDelegate UpdateProductCommand
+        {
+            get { return updateProductCommand??(updatePricesCommand = new ZeroActionDelegate(o=>
+                                                                                                 {
+                                                                                                     if (SelectedProduct != null)
+                                                                                                     {
+                                                                                                         SelectedProduct.UpdateProductCommand.Execute(null);
+                                                                                                     }
+                                                                                                 }));
+            }
+            set
+            {
+                if (updateProductCommand != value)
+                {
+                    updateProductCommand = value;
+                    OnPropertyChanged("UpdateProductCommand");
+                }
+            }
+        }
+
+        #endregion
 
         private ObservableCollection<ProductExtended> productList;
 
@@ -60,7 +109,7 @@ namespace ZeroMasterData.Presentation
         protected override void PrintCommandExecution(object parameter)
         {
             ReportBuilder.Create("Lista de productos",
-                BusinessContext.Instance.ModelManager.Products.OrderBy(product => product.Name)
+                BusinessContext.Instance.Model.Products.OrderBy(product => product.Name)
                     .Select(product =>
                         new
                         {
@@ -80,7 +129,7 @@ namespace ZeroMasterData.Presentation
             :base(new ProductsView())
         {
 
-            ProductList = new ObservableCollection<ProductExtended>(BusinessContext.Instance.ModelManager.Products.Select(p => new ProductExtended { Product = p }));
+            ProductList = new ObservableCollection<ProductExtended>(BusinessContext.Instance.Model.Products.Select(p => new ProductExtended { Product = p }));
             NewProductCommand.Finished +=
                 (o, e) =>
                     {
@@ -96,14 +145,14 @@ namespace ZeroMasterData.Presentation
         public class ProductExtended : ViewModelBase, ISelectable
         {
             public Product Product { get; set; }
-            
-            private ICommand updateProductCommand;
 
-            public ICommand UpdateProductCommand
+            private ZeroActionDelegate updateProductCommand;
+
+            public ZeroActionDelegate UpdateProductCommand
             {
                 get
                 {
-                    return updateProductCommand??(updateProductCommand = new ZeroActionDelegate(this.UpdateProduct));
+                    return updateProductCommand??(updateProductCommand = new ZeroActionDelegate(UpdateProduct));
                 }
                 set
                 {
@@ -119,7 +168,7 @@ namespace ZeroMasterData.Presentation
             {
                 ProductDetailViewModel viewModel = new ProductDetailViewModel();
                 viewModel.Product = Product;
-                viewModel.View.ControlMode = ZeroCommonClasses.Interfaces.ControlMode.Update;
+                viewModel.View.ControlMode = ControlMode.Update;
                 ZeroMessageBox.Show(viewModel.View, Properties.Resources.ProductEdit);
             }
             

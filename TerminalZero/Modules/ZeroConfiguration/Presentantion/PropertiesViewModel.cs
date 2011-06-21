@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
@@ -23,7 +24,7 @@ namespace ZeroConfiguration.Presentantion
         private ICommand savePropertiesCommand;
         public ICommand SavePropertiesCommand
         {
-            get { return savePropertiesCommand ?? (savePropertiesCommand = new ZeroActionDelegate(SaveChanges)); }
+            get { return savePropertiesCommand ?? (savePropertiesCommand = new ZeroActionDelegate(SaveChanges, o=> ZeroCommonClasses.Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))); }
         }
 
         private Terminal selectedTerminal;
@@ -60,13 +61,14 @@ namespace ZeroConfiguration.Presentantion
                 {
                     AreControlsEnable = false;
                     result = dataProvider.Terminals.Where(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                    
                 }
                 else
                 {
                     AreControlsEnable = true;
                     result = dataProvider.Terminals;    
                 }
-                
+                SelectedTerminal = result.FirstOrDefault();
                 return result;
             }
         }

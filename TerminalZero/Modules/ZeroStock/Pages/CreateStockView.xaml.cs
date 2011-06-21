@@ -90,14 +90,14 @@ namespace ZeroStock.Pages
         private Product validProd;
         private void BarCodeTextBox_BarcodeValidating(object sender, BarCodeValidationEventArgs e)
         {
-            validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode == e.Code);
+            validProd = BusinessContext.Instance.Model.Products.FirstOrDefault(p => p.MasterCode == e.Code);
             if (validProd == null)
             {
                 BarCodePart Part = e.Parts.FirstOrDefault(p => p.Name == "Producto");
                 if (Part != null)
                 {
                     string strCode = Part.Code.ToString();
-                    validProd = BusinessContext.Instance.ModelManager.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
+                    validProd = BusinessContext.Instance.Model.Products.FirstOrDefault(p => p.MasterCode.Equals(strCode));
                     if (validProd == null)
                     {
                         Part.IsValid = false;
@@ -147,7 +147,7 @@ namespace ZeroStock.Pages
                 {
                     StockHeader.DeliveryDocumentHeader.Used = true;
                 }
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges();
                 MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                 ret = true;
             }

@@ -7,6 +7,7 @@ using System.Timers;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Files;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Helpers;

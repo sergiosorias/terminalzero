@@ -16,6 +16,14 @@ namespace ZeroMasterData.Pages
         public ProductsView()
         {
             InitializeComponent();
+            Loaded += new System.Windows.RoutedEventHandler(ProductsView_Loaded);
+        }
+
+        void ProductsView_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CommandBar.AppendButton("Actualizar Precios", ((ProductsViewModel)ViewModel).UpdatePricesCommand);
+            ((ProductsViewModel)ViewModel).UpdateProductCommand.Predicate = o => ControlMode == ControlMode.Update;
+
         }
         
         protected override void OnControlModeChanged(ControlMode newMode)

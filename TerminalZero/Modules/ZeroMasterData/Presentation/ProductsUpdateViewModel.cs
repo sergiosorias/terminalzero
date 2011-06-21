@@ -21,9 +21,9 @@ namespace ZeroMasterData.Presentation
                 {
                     selectedProductGroup = value;
                     if (SelectedProductGroup == allGroup)
-                        itemsCount = BusinessContext.Instance.ModelManager.Products.Count();
+                        itemsCount = BusinessContext.Instance.Model.Products.Count();
                     else 
-                        ItemsCount = BusinessContext.Instance.ModelManager.Products.Where(p => p.Group1.Value == value.Code).Count();
+                        ItemsCount = BusinessContext.Instance.Model.Products.Where(p => p.Group1.Value == value.Code).Count();
 
                     OnPropertyChanged("SelectedProductGroup");
                 }
@@ -39,7 +39,7 @@ namespace ZeroMasterData.Presentation
                 if(productGroupList==null)
                 {
                     productGroupList =
-                        new ObservableCollection<ProductGroup>(BusinessContext.Instance.ModelManager.ProductGroups);
+                        new ObservableCollection<ProductGroup>(BusinessContext.Instance.Model.ProductGroups);
                     productGroupList.Insert(0, allGroup);
                 }
                 return productGroupList;
@@ -96,14 +96,14 @@ namespace ZeroMasterData.Presentation
         {
             if (SelectedProductGroup == allGroup)
             {
-                foreach (Price price in BusinessContext.Instance.ModelManager.Products.Select(p=>p.Price1))
+                foreach (Price price in BusinessContext.Instance.Model.Products.Select(p=>p.Price1))
                 {
                     price.Value += (price.Value * (percentage / 100));
                 }
             }
             else
             {
-                foreach (Price price in BusinessContext.Instance.ModelManager.Products.Where(p => p.Group1.Value == SelectedProductGroup.Code).Select(p => p.Price1))
+                foreach (Price price in BusinessContext.Instance.Model.Products.Where(p => p.Group1.Value == SelectedProductGroup.Code).Select(p => p.Price1))
                 {
                     price.Value += (price.Value*(percentage/100));
                 }

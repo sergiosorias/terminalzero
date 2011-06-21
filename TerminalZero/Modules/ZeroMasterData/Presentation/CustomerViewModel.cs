@@ -85,7 +85,7 @@ namespace ZeroMasterData.Presentation
             : base(new CustomerView())
         {
             CustomerList = new ObservableCollection<CustomerDetailViewModel>(
-                    BusinessContext.Instance.ModelManager.Customers.Select(
+                    BusinessContext.Instance.Model.Customers.Select(
                                                     customer => new CustomerDetailViewModel
                                                     {
                                                         Customer = customer
@@ -98,7 +98,7 @@ namespace ZeroMasterData.Presentation
         protected override void PrintCommandExecution(object parameter)
         {
             base.PrintCommandExecution(parameter);
-            var query = from customer in BusinessContext.Instance.ModelManager.Customers
+            var query = from customer in BusinessContext.Instance.Model.Customers
                         orderby customer.Name1
                         select new
                         {
@@ -115,12 +115,12 @@ namespace ZeroMasterData.Presentation
         private void CreateCustomer(object parameter)
         {
             var viewmodel = new CustomerDetailViewModel(new CustomerDetail());
-            viewmodel.Customer = Customer.CreateCustomer(BusinessContext.Instance.ModelManager.GetNextCustomerCode(), 0, true);
+            viewmodel.Customer = Customer.CreateCustomer(BusinessContext.Instance.Model.GetNextCustomerCode(), 0, true);
             if (viewmodel.View.ShowInModalWindow())
             {
                 try
                 {
-                    BusinessContext.Instance.ModelManager.AddToCustomers(viewmodel.Customer);
+                    BusinessContext.Instance.Model.AddToCustomers(viewmodel.Customer);
                     CustomerList.Add(new CustomerDetailViewModel {Customer = viewmodel.Customer });
                 }
                 catch (Exception wx)

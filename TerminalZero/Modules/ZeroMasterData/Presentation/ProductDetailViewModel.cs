@@ -25,8 +25,8 @@ namespace ZeroMasterData.Presentation
             {
                 if(product==null)
                 {
-                    product = Product.CreateProduct(BusinessContext.Instance.ModelManager.Products.Count(), true, true);
-                    product.Price1 = Price.CreatePrice(BusinessContext.Instance.ModelManager.Prices.Count(), true, 0);
+                    product = Product.CreateProduct(BusinessContext.Instance.Model.Products.Count(), true, true);
+                    product.Price1 = Price.CreatePrice(BusinessContext.Instance.Model.Prices.Count(), true, 0);
                 }
                 return product;
             }
@@ -58,7 +58,7 @@ namespace ZeroMasterData.Presentation
             if (ret)
             {
                 if (View.ControlMode == ControlMode.New &&
-                    BusinessContext.Instance.ModelManager.Products.FirstOrDefault(pr => pr.MasterCode.Equals(Product.MasterCode)) != null)
+                    BusinessContext.Instance.Model.Products.FirstOrDefault(pr => pr.MasterCode.Equals(Product.MasterCode)) != null)
                 {
                     msg = "Codigo de product existente!\n Por favor ingrese otro código.";
                 }
@@ -92,7 +92,7 @@ namespace ZeroMasterData.Presentation
             }
             if(ret)
             {
-                BusinessContext.Instance.ModelManager.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges();
             }
             return ret;
         }
@@ -104,7 +104,7 @@ namespace ZeroMasterData.Presentation
             {
                 EntityObject obj = Product;
                 if (obj.EntityState == EntityState.Modified)
-                    BusinessContext.Instance.ModelManager.Refresh(RefreshMode.StoreWins, Product);
+                    BusinessContext.Instance.Model.Refresh(RefreshMode.StoreWins, Product);
             }
             return ret;
         }

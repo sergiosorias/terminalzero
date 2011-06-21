@@ -7,6 +7,9 @@
             xmlns:Controls="clr-namespace:ZeroSales.Pages.Controls" Loaded="NavigationBasePage_Loaded"
             xmlns:Converters="clr-namespace:ZeroGUI.Converters;assembly=ZeroGUI" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="420">
+    <base:NavigationBasePage.InputBindings>
+        <KeyBinding Command="{Binding AlternatePrintModeCommand}" Key="F9"/>
+    </base:NavigationBasePage.InputBindings>
     <StackPanel>
         <StackPanel.Background>
             <SolidColorBrush Color="{Binding Path=Sale.PrintMode, Mode=OneWay, FallbackValue=Transparent, Converter={x:Static Converters:PrintModeToColorConverter.Instance}}" Opacity=".4"/>
