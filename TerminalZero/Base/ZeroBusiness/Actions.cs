@@ -30,6 +30,7 @@
         public const string OpenDeliveryNoteView            = "Operaciones@Remitos de salida";
         public const string OpenNewSaleView                 = "Operaciones@Ventas@Nueva";
         public const string OpenCurrentSalesView            = "Operaciones@Ventas@Resumen de ventas";
+        public const string OpenSaleStatictics              = "Operaciones@Ventas@Estadísticas";
         public const string ExecCreateStockFromLastSale     = "Create@Stock from last sale";
 
         public const string OpenPaymentSelectionView        = "Operaciones@Ventas@Nueva@PaymentInstrument";

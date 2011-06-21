@@ -24,7 +24,7 @@ namespace ZeroBusiness.Entities.Data
     
         private static int GetNextCode()
         {
-            return BusinessContext.Instance.ModelManager.Weights.Count();
+            return BusinessContext.Instance.Model.Weights.Count();
         }
 
         partial void OnNameChanging(string value)

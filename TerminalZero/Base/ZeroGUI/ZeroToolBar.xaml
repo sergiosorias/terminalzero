@@ -3,10 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:ZeroGUI="clr-namespace:ZeroGUI"
              xmlns:Converters="clr-namespace:ZeroGUI.Converters">
-    <UserControl.InputBindings>
-        <KeyBinding x:Name="ShortCutAccept" Key="Enter" Modifiers="Control"/>
-        <KeyBinding x:Name="ShortCutCancel" Key="Escape"/>
-    </UserControl.InputBindings>
     <UserControl.Resources>
         <Style x:Key="printButton" TargetType="{x:Type Button}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>

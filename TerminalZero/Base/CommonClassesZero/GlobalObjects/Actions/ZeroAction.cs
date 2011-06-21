@@ -5,19 +5,11 @@ using System.Windows.Input;
 
 namespace ZeroCommonClasses.GlobalObjects.Actions
 {
-    public class ZeroAction : ICommand
+    public class ZeroAction : ZeroActionDelegate
     {
-        public event EventHandler Finished;
-        protected void OnFinished()
-        {
-            if (Finished != null)
-                Finished(this, EventArgs.Empty);
-        }
         public string Name { get; private set; }
         public string Alias { get; private set; }
         public string RuleToSatisfyName { get; private set; }
-        public Predicate<object> RuleToSatisfy { get; set; }
-        public Action<object> ExecuteAction { get; private set; }
         protected List<ActionParameterBase> Parameters { get; set; }
         public bool IsOnMenu { get; protected set; }
         public bool IsOnMainPage { get; protected set; }
@@ -25,9 +17,9 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         private bool _canExecute;
         
         public ZeroAction(string name, Action<object> executeAction, string ruleToSatisfy = null, bool isOnMenu = true)
+            :base(executeAction)
         {
             Name = name;
-            ExecuteAction = executeAction;
             Parameters = new List<ActionParameterBase>();
             IsOnMenu = isOnMenu;
             RuleToSatisfyName = ruleToSatisfy;
@@ -37,7 +29,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
         public event EventHandler CanExecuteChanged;
 
-        public virtual bool CanExecute(object parameter)
+        public override bool CanExecute(object parameter)
         {
             StringBuilder sb;
             if (parameter is StringBuilder)
@@ -47,9 +39,9 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
             _canExecute = ValidateActionParams(sb);
 
-            if (_canExecute && RuleToSatisfy != null)
+            if (_canExecute && Predicate != null)
             {
-                _canExecute = RuleToSatisfy(this);
+                _canExecute = Predicate(this);
             }
             else if (_canExecute && RuleToSatisfyName != null)
             {
@@ -58,18 +50,28 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             
             if(!_canExecute)
             {
-                System.Diagnostics.Trace.TraceWarning("Action {0} cannot execute - message {1}",ExecuteAction.Method,sb);
+                System.Diagnostics.Trace.TraceWarning("Action {0} cannot execute - message {1}",Action.Method,sb);
             }
             return _canExecute;
         }
 
-        public virtual void Execute(object parameter)
+        public override void Execute(object parameter)
         {
-            if (_canExecute)
+            try
             {
-                ExecuteAction(parameter);
-                OnFinished();
+                if (_canExecute)
+                {
+                    Action(parameter);
+                    OnFinished();
+                }
             }
+            catch (Exception ex)
+            {
+                Terminal.Instance.CurrentClient.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Ocurrio un error en la ejecución del comando {0}, ERROR - {1}",Name,ex));
+                Terminal.Instance.CurrentClient.Notifier.SendNotification("Ocurrio un error en la ejecución");
+
+            }
+            
         }
 
         public bool TryExecute()
@@ -107,7 +109,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             return ret;
         }
 
-        public virtual void RaiseCanExecuteChanged()
+        public override void RaiseCanExecuteChanged()
         {
             if (CanExecuteChanged != null)
             {

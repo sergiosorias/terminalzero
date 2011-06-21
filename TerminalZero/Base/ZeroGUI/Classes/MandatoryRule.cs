@@ -1,11 +1,12 @@
 ﻿using System.Globalization;
 using System.Windows.Controls;
+using ZeroGUI.Properties;
 
 namespace ZeroGUI.Classes
 {
     public class MandatoryRule : ValidationRule
     {
-        private string _errorMessage = "Campo obligatorio";
+        private string _errorMessage = Resources.MandatoryField;
         public string ErrorMessage
         {
             get { return _errorMessage; }

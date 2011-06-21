@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using ZeroCommonClasses.Entities;
@@ -33,11 +34,15 @@ namespace ZeroCommonClasses.Pack
         [DataMember]
         public List<PackTableInfo> Tables { get; set; }
 
-        public void AddEntities<T>(IEnumerable<T> entity)
+        public void AddTable<T>(IEnumerable<T> entity)
         {
             if (entity != null)
             {
-                PackTableInfo inf = PackTableInfo.Create(entity);
+                PackTableInfo inf;
+                if (entity.FirstOrDefault() is IExportableEntity)
+                    inf = PackTableInfo.Create(entity.Where(item => ((IExportableEntity)item).Status == (int)EntityStatus.New || ((IExportableEntity)item).Status == (int)EntityStatus.Modified));    
+                else
+                    inf = PackTableInfo.Create(entity);
                 if (inf.RowsCount > 0)
                 {
                     TableCount++;
@@ -47,22 +52,7 @@ namespace ZeroCommonClasses.Pack
 
             }
         }
-
-        public void AddExportableEntities<T>(IEnumerable<T> entity) where T : IExportableEntity
-        {
-            if (entity != null)
-            {
-                PackTableInfo inf = PackTableInfo.Create(entity.Where(item=>item.Status == (int)EntityStatus.New));
-                if (inf.RowsCount > 0)
-                {
-                    TableCount++;
-                    Tables.Add(inf);
-                    Token();
-                }
-
-            }
-        }
-
+        
         public bool ContainsTable<T>()
         {
             string typeToSearch = typeof(T).ToString();
@@ -77,24 +67,46 @@ namespace ZeroCommonClasses.Pack
 
         public void ExportTables()
         {
+            IEnumerable<IExportableEntity> exportableEntities;
             foreach (PackTableInfo info in Tables)
             {
                 info.SerializeRows(WorkingDirectory);
-
-                foreach (IExportableEntity exportable in info.GetRows().OfType<IExportableEntity>())
+                exportableEntities = info.GetRows().OfType<IExportableEntity>();
+                foreach (IExportableEntity exportable in exportableEntities)
                 {
                     exportable.UpdateStatus(EntityStatus.Exported);
-                    if (!TerminalToCodes.Contains(exportable.TerminalDestination))
+                }
+                foreach (int terminalToCode in exportableEntities.Select(item => item.TerminalDestination).Distinct())
+                {
+                    if (!TerminalToCodes.Contains(terminalToCode))
                     {
-                        TerminalToCodes.Add(exportable.TerminalDestination);
+                        TerminalToCodes.Add(terminalToCode);
                     }
                 }
+                
             }
-
-            
         }
 
-        
+        public void ImportTables(System.Data.Objects.ObjectContext context)
+        {
+            foreach (PackTableInfo info in Tables)
+            {
+                ContextExtentions.ImportEntities(context, info.GetRows(WorkingDirectory, System.Reflection.Assembly.GetAssembly(context.GetType())), SetEntityAsImported);
+            }
+        }
 
+        private static void SetEntityAsImported(EntityObject entity)
+        {
+            if (entity is IExportableEntity)
+                ((IExportableEntity) entity).UpdateStatus(EntityStatus.Imported);
+        }
+
+        public void MergeTables(System.Data.Objects.ObjectContext context)
+        {
+            foreach (PackTableInfo info in Tables)
+            {
+                ContextExtentions.MergeEntities(context, info.GetRows(WorkingDirectory, System.Reflection.Assembly.GetAssembly(context.GetType())), SetEntityAsImported);
+            }
+        }
     }
 }
