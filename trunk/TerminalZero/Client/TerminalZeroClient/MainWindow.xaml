@@ -3,7 +3,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Terminal Zero" MinHeight="300" MinWidth="300"
-        xmlns:my="clr-namespace:TerminalZeroClient.Pages" 
         xmlns:p="clr-namespace:TerminalZeroClient.Properties" xmlns:Converters="clr-namespace:ZeroGUI.Converters;assembly=ZeroGUI" StateChanged="Window_StateChanged" 
         Closing="Window_Closing" 
         Background="Gray" Loaded="Window_Loaded">
@@ -30,8 +29,6 @@
         </Style>
     </Window.Resources>
     <Grid>
-
-
         <Grid Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
@@ -42,7 +39,7 @@
                 <MenuItem Style="{DynamicResource masterMenuItem}" FontSize="18" FontWeight="Bold" Header="Inicio" Command="{Binding Path=GoHome,RelativeSource={RelativeSource AncestorType=current:MainWindow}}"/>
             </Menu>
             <ContentControl  Grid.Row="1"  Margin="3" x:Name="PrimaryWindow" IsTabStop="False">
-                <my:Home IsTabStop="False"/>
+                
             </ContentControl>
             <StatusBar Grid.Row="2" Background="Gainsboro" x:Name="mainBar">
                 <StatusBar.ItemsPanel>
@@ -74,7 +71,6 @@
                     <TextBlock x:Name="txbState" Text="{Binding Path=State, Mode=OneWay}" />
                 </StatusBarItem>
             </StatusBar>
-
         </Grid>
         <Border x:Name="backWindow" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Border.Background>

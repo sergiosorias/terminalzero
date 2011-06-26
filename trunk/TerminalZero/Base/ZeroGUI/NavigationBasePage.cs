@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroCommonClasses;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI.Classes;
 
@@ -114,9 +115,13 @@ namespace ZeroGUI
             return true;
         }
 
-        public virtual bool ShowInModalWindow()
+        public virtual bool ShowDialog()
         {
-            return ZeroMessageBox.Show(this, string.Empty, ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault();
+            bool ret = false;
+
+            Terminal.Instance.CurrentClient.ShowDialog(this,o => ret = o);
+
+            return ret;
         }
 
         protected virtual void OnControlModeChanged(ControlMode newMode)

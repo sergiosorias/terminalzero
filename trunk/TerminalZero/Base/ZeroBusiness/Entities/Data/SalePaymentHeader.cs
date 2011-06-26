@@ -30,14 +30,7 @@ namespace ZeroBusiness.Entities.Data
 
         #region Generated Properties
         
-        public double Change
-        {
-            get
-            {
-                var res = TotalQuantity- (SaleHeaders.Count>0? SaleHeaders.Select(sh=>sh.PriceSumValue).Sum():0);
-                return Math.Round(res > 0 ? res : 0,2);
-            }
-        }
+        public double Change { set; get; }
 
         public double RestToPay
         {

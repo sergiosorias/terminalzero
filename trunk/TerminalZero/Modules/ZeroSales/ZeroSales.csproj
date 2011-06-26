@@ -84,10 +84,16 @@
     <Compile Include="Pages\SalePaymentView.xaml.cs">
       <DependentUpon>SalePaymentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SaleReportView.xaml.cs">
+      <DependentUpon>SaleReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SaleStatistics.xaml.cs">
       <DependentUpon>SaleStatistics.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\Controls\SalePaymentItemViewModel.cs" />
     <Compile Include="Presentation\CreateSaleViewModel.cs" />
+    <Compile Include="Presentation\Controls\SaleLazyLoadingItemViewModel.cs" />
+    <Compile Include="Presentation\SaleReportViewModel.cs" />
     <Compile Include="Presentation\SaleSummary.cs" />
     <Compile Include="Presentation\SalePaymentViewModel.cs" />
     <Compile Include="Presentation\SaleStatisticsViewModel.cs" />
@@ -147,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SalePaymentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SaleReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

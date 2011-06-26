@@ -58,7 +58,11 @@
                     </Grid>
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="3" VerticalContentAlignment="Top">
-                    <Button x:Name="btnState" Visibility="Hidden" Content="Continuar" Click="btnState_Click"/>
+                        <Grid>
+                            <Button x:Name="btnClose" Visibility="Hidden" Content="Cerrar" Click="btnClose_Click"/>
+                            <Button x:Name="btnState" Visibility="Hidden" Content="Continuar" Click="btnState_Click"/>
+                        </Grid>
+                            
                 </StatusBarItem>
             </StatusBar>
         </Grid>

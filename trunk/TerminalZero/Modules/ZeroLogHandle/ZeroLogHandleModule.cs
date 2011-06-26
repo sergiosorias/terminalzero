@@ -17,15 +17,12 @@ namespace ZeroLogHandle
         {
             return new string[] { };
         }
-
-        #region IModule Members
-
-        public override void Init()
+        
+        public override void Initialize()
         {
             
         }
-        #endregion
-
+        
         #region ILogBuilder Members
 
         public void Add(string log)

@@ -23,6 +23,6 @@
                 <base:SearchBox Search="SearchBox_Search" ShowResultCount="True" Name="DeliveryGridCommander"/>
             </StackPanel>
         </Grid>
-        <controls:DeliveryDocumentLazyLoadingList Grid.Row="1" base:UIElementExtentions.ListCommanderName="DeliveryGridCommander" SelectedItem="{Binding SelectedDeliveryDocumentHeader}" x:Name="DeliveryGrid" ItemsSource="{Binding DeliveryDocumentCollection}" />
+        <controls:DeliveryDocumentLazyLoadingList Grid.Row="1" base:UIElementExtentions.ListCommander="{Binding ElementName=DeliveryGridCommander}" SelectedItem="{Binding SelectedDeliveryDocumentHeader}" x:Name="DeliveryGrid" ItemsSource="{Binding DeliveryDocumentCollection}" />
     </Grid>
 </base:NavigationBasePage>

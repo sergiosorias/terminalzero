@@ -46,7 +46,7 @@ namespace ZeroMasterData.Presentation
         private void OpenIncreaseProductMessage(object parameter)
         {
             var viewModel = new ProductsUpdateViewModel();
-            if (viewModel.View.ShowInModalWindow())
+            if (viewModel.View.ShowDialog())
             {
                 BusinessContext.Instance.Model.SaveChanges();
             }

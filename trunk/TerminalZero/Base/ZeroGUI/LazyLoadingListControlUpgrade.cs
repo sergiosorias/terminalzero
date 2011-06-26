@@ -67,6 +67,7 @@ namespace ZeroGUI
 
         private void LazyLoadingListControl_Loaded(object sender, RoutedEventArgs e)
         {
+            OnControlModeChanged(ControlMode);
             if (ItemsSource != null)
             {
                 IEnumerable items = ItemsSource;

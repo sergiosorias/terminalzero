@@ -21,17 +21,23 @@ namespace TerminalZeroClient.Business
         {
             ModuleList = new List<ZeroModule>();
             var param1 = new ActionParameter<ISyncService>(false, ConfigurationContext.CreateSyncConnection(), false);
-            var param2 = new ActionParameter<IFileTransfer>(false,ConfigurationContext.CreateFileTranferConnection(),false);
+            var param2 = new ActionParameter<IFileTransfer>(false, ConfigurationContext.CreateFileTranferConnection(), false);
             Terminal.Instance.Session[param1.Name] = param1;
             Terminal.Instance.Session[param2.Name] = param2;
         }
 
-        public bool Initialized { get; private set; }
+        public event EventHandler Loaded;
+
+        private void RaiseLoaded()
+        {
+            if (Loaded != null)
+                Loaded(this, EventArgs.Empty);
+        }
 
         public IProgressNotifier Notifier { get; set; }
-        
+
         public List<ZeroModule> ModuleList { get; private set; }
-        
+
         public ZeroMenu MainMenu
         {
             get
@@ -46,7 +52,7 @@ namespace TerminalZeroClient.Business
 
                 foreach (
                     var item in
-                        validActions.Where(a => a.IsOnMenu) )
+                        validActions.Where(a => a.IsOnMenu))
                 {
                     currentlevel = null;
                     aux = item.Name;
@@ -101,13 +107,7 @@ namespace TerminalZeroClient.Business
 
         public void ShowView(object view)
         {
-            if (view is ZeroMessageBox)
-            {
-                ((ZeroMessageBox)view).Owner = Application.Current.MainWindow;
-                ((ZeroMessageBox)view).Top = Application.Current.MainWindow.Top + 1;
-                ((ZeroMessageBox)view).ShowDialog();
-            }
-            else if (((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content is NavigationBasePage)
+            if (((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content is NavigationBasePage)
             {
                 if (((NavigationBasePage)((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content).CanAccept(null))
                 {
@@ -118,6 +118,32 @@ namespace TerminalZeroClient.Business
             {
                 ((MainWindow)Application.Current.MainWindow).PrimaryWindow.Content = view;
             }
+        }
+
+        public void ShowDialog(object view, Action<bool> result, MessageBoxButton buttons)
+        {
+            if (result == null)
+                result = new Action<bool>((o) => { });
+
+            result(ZeroMessageBox.Show(view, "",buttons).GetValueOrDefault());
+        }
+
+        public void ShowWindow(object view, Action closed)
+        {
+            var mb = new ZeroMessageBox
+            {
+                Content = view,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ShowActivated = true,
+                Topmost = true,
+                MaxWidth = 600
+            };
+            mb.Closed+=(o,e)=>
+            {
+                if (closed != null)
+                    closed();
+            };
+            mb.Show();
         }
 
         private int disableCount = 0;
@@ -132,12 +158,12 @@ namespace TerminalZeroClient.Business
             {
                 disableCount--;
                 if (disableCount == 0)
-                    ((MainWindow) Application.Current.MainWindow).backWindow.Visibility = Visibility.Collapsed;
+                    ((MainWindow)Application.Current.MainWindow).backWindow.Visibility = Visibility.Collapsed;
             }
 
         }
 
-        public void Initialize()
+        public bool Initialize()
         {
             bool canContinue;
             Notifier.SetProcess("Buscando Módulos");
@@ -171,9 +197,6 @@ namespace TerminalZeroClient.Business
                             Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación con algunos problemas encontrados.");
                         else
                             Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación correctamente!.");
-
-
-
                     }
                 }
             }
@@ -186,18 +209,26 @@ namespace TerminalZeroClient.Business
 
             if (!canContinue)
             {
-                Initialized = false;
                 Notifier.SendNotification("Ocurrio algun error en el momento de iniciar el programa, por favor lea el detalle del proceso!");
                 Notifier.SetUserMessage(true, "Error");
                 Notifier.SetProcess("Error!");
             }
             else
             {
-                Initialized = true;
                 Notifier.SetProcess("Listo");
             }
 
             Notifier.SetProgress(100);
+
+            return canContinue;
+        }
+
+        public void Load()
+        {
+            var win = new MainWindow();
+            App.Current.MainWindow = win;
+            win.Loaded += (o, e) => RaiseLoaded();
+            win.Show();
         }
 
         private bool InitializeTerminal()
@@ -207,20 +238,12 @@ namespace TerminalZeroClient.Business
             try
             {
                 Terminal.Instance.Manager.InitializeTerminal();
-                ModuleList.ForEach(c => c.TerminalStatus = Terminal.Instance.Manager.GetModuleStatus(c));
-                if (ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
-                {
-                    Initialized = false;
-                    Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
-                                                    + "por favor conectese con la central lo antes posible!");
-                }
             }
             catch (Exception ex)
             {
                 Notifier.SetUserMessage(false, "ERROR: " + ex);
                 ret = false;
             }
-
 
             return ret;
         }
@@ -238,7 +261,7 @@ namespace TerminalZeroClient.Business
                     Notifier.SetUserMessage(false, "Inicializando " + aux);
                     Assembly ass = Assembly.LoadFrom(item);
                     Type ty = ass.GetExportedTypes().FirstOrDefault(t => t.BaseType == typeof(ZeroModule));
-                    
+
                     object obj = ass.CreateInstance(ty.ToString(), false, BindingFlags.CreateInstance,
                         null, null, CultureInfo.CurrentCulture, null);
 
@@ -255,13 +278,12 @@ namespace TerminalZeroClient.Business
             {
                 return false;
             }
-            
+
             return true;
         }
 
         private void TryAddModule(object obj, string path)
         {
-
             if (obj is ZeroModule)
             {
                 var mod = obj as ZeroModule;
@@ -278,6 +300,5 @@ namespace TerminalZeroClient.Business
             }
         }
 
-        
     }
 }

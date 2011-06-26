@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -37,68 +39,93 @@ namespace ZeroGUI
             }
         }
 
+        //public static string GetListCommanderName(DependencyObject obj)
+        //{
+        //    return (string)obj.GetValue(ListCommanderNameProperty);
+        //}
 
-        public static string GetListCommanderName(DependencyObject obj)
+        //public static void SetListCommanderName(DependencyObject obj, string value)
+        //{
+        //    obj.SetValue(ListCommanderNameProperty, value);
+        //}
+
+        //// Using a DependencyProperty as the backing store for ListCommanderName.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ListCommanderNameProperty =
+        //    DependencyProperty.RegisterAttached("ListCommanderName", typeof(string), typeof(UIElementExtentions), new UIPropertyMetadata(null, OnListCommanderNameChanged));
+
+        //private static void OnListCommanderNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    if (d!= null && d is DataGrid)
+        //    {
+        //        var list = d as DataGrid;
+        //        list.Loaded += (hh, hj) =>
+        //        {
+        //            Window activeWindow = null;
+        //            for (int i = 0; i < Application.Current.Windows.Count; i++)
+        //            {
+        //                if (Application.Current.Windows[i].IsActive)
+        //                {
+        //                    activeWindow = Application.Current.Windows[i];
+        //                    break;
+        //                }
+        //            }
+        //            if (activeWindow != null)
+        //            {
+        //                var element = FindVisualChildByName<FrameworkElement>(activeWindow, e.NewValue.ToString());
+        //                if (element != null)
+        //                {
+        //                    AddKeyCommands(element, list);
+        //                }
+        //            }
+        //        };
+        //    }
+        //}
+
+        public static DependencyObject GetListCommander(DependencyObject obj)
         {
-            return (string)obj.GetValue(ListCommanderNameProperty);
+            return (DependencyObject)obj.GetValue(ListCommanderProperty);
         }
 
-        public static void SetListCommanderName(DependencyObject obj, string value)
+        public static void SetListCommander(DependencyObject obj, DependencyObject value)
         {
-            obj.SetValue(ListCommanderNameProperty, value);
+            obj.SetValue(ListCommanderProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for ListCommanderName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ListCommanderNameProperty =
-            DependencyProperty.RegisterAttached("ListCommanderName", typeof(string), typeof(UIElementExtentions), new UIPropertyMetadata(null, OnListCommanderNameChanged));
+        // Using a DependencyProperty as the backing store for ListCommander.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ListCommanderProperty =
+            DependencyProperty.RegisterAttached("ListCommander", typeof(DependencyObject), typeof(UIElementExtentions), new UIPropertyMetadata(null,OnListCommanderChanged));
 
-        private static void OnListCommanderNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnListCommanderChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d!= null && d is DataGrid)
+            if(d!=null && e.NewValue!=null)
             {
-                var list = d as DataGrid;
-                list.Loaded += (hh, hj) =>
-                {
-                    Window activeWindow = null;
-                    for (int i = 0; i < Application.Current.Windows.Count; i++)
-                    {
-                        if (Application.Current.Windows[i].IsActive)
-                        {
-                            activeWindow = Application.Current.Windows[i];
-                            break;
-                        }
-                    }
-                    if (activeWindow != null)
-                    {
-                        var element = FindVisualChildByName<FrameworkElement>(activeWindow, e.NewValue.ToString());
-                        if (element != null)
-                        {
-                            SetTabOnEnter(element, true);
-                            (element).PreviewKeyDown += (o, args) =>
-                                                   {
-                                                       switch (args.Key)
-                                                       {
-                                                           case Key.Up:
-                                                               if (list.SelectedIndex > 0)
-                                                                   list.SelectedIndex--;
-                                                               args.Handled = true;
-                                                               break;
-                                                           case Key.Down:
-                                                               if (list.SelectedIndex <= list.Items.Count)
-                                                               {
-                                                                   list.SelectedIndex++;
-                                                               }
-                                                               args.Handled = true;
-                                                               break;
-                                                       }
-                                                   };
-
-                        }
-                    }
-                };
+                AddKeyCommands((UIElement)e.NewValue, (Selector)d);
             }
         }
 
+        private static void AddKeyCommands(UIElement element, Selector list)
+        {
+            SetTabOnEnter(element, true);
+            (element).PreviewKeyDown += (o, args) =>
+            {
+                switch (args.Key)
+                {
+                    case Key.Up:
+                        if (list.SelectedIndex > 0)
+                            list.SelectedIndex--;
+                        args.Handled = true;
+                        break;
+                    case Key.Down:
+                        if (list.SelectedIndex <= list.Items.Count)
+                        {
+                            list.SelectedIndex++;
+                        }
+                        args.Handled = true;
+                        break;
+                }
+            };
+        }
+        
         public static T FindVisualChildByName<T>(DependencyObject parent, string name) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)

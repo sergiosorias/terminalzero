@@ -9,9 +9,9 @@ using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects.Actions;
-using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroGUI.Classes;
+using ZeroSales.Presentation.Controls;
 using ZeroSales.Printer;
 using ZeroSales.Properties;
 
@@ -41,11 +41,11 @@ namespace ZeroSales.Presentation
             }
         }
 
-        private ObservableCollection<SaleItemExtended> productList;
+        private ObservableCollection<SaleLazyLoadingItemViewModel> productList;
 
-        public ObservableCollection<SaleItemExtended> SaleProductList
+        public ObservableCollection<SaleLazyLoadingItemViewModel> SaleProductList
         {
-            get { return productList??(productList = new ObservableCollection<SaleItemExtended>()); }
+            get { return productList??(productList = new ObservableCollection<SaleLazyLoadingItemViewModel>()); }
             set
             {
                 if (productList != value)
@@ -97,7 +97,7 @@ namespace ZeroSales.Presentation
             {
                 using (var salePaymentviewModel = new SalePaymentViewModel(SaleHeader))
                 {
-                    if (salePaymentviewModel.View.ShowInModalWindow())
+                    if (salePaymentviewModel.View.ShowDialog())
                     {
                         Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true,SaleHeader,true);
                         PrintManager.PrintSale(SaleHeader);
@@ -281,7 +281,7 @@ namespace ZeroSales.Presentation
         private void AddItem(Product prod, double quantity, string lot)
         {
             Message = prod.Name ?? validProd.ShortDescription ?? validProd.Description;
-            SaleProductList.Add(new SaleItemExtended(saleHeader.AddNewSaleItem(prod, quantity, lot), DeleteItem));
+            SaleProductList.Add(new SaleLazyLoadingItemViewModel(saleHeader.AddNewSaleItem(prod, quantity, lot), DeleteItem));
             saveCommand.RaiseCanExecuteChanged();
             CancelCommand.RaiseCanExecuteChanged();
         }
@@ -296,48 +296,5 @@ namespace ZeroSales.Presentation
                 CancelCommand.RaiseCanExecuteChanged();
             }
         }
-
-        public class SaleItemExtended : ViewModelBase
-        {
-            private SaleItem saleItem;
-            private readonly Action<object> deleteAction;
-
-            public SaleItem SaleItem
-            {
-                get { return saleItem; }
-                set
-                {
-                    if (saleItem != value)
-                    {
-                        saleItem = value;
-                        OnPropertyChanged("SaleItem");
-                    }
-                }
-            }
-
-            private ICommand deleteCommand;
-
-            public ICommand DeleteCommand
-            {
-                get { return deleteCommand??(deleteCommand = new ZeroActionDelegate(deleteAction)); }
-                set
-                {
-                    if (deleteCommand != value)
-                    {
-                        deleteCommand = value;
-                        OnPropertyChanged("DeleteCommand");
-                    }
-                }
-            }
-
-            public SaleItemExtended(SaleItem saleItem, Action<object> deleteAction)
-            {
-                this.saleItem = saleItem;
-                this.deleteAction = deleteAction;
-            }
-        }
-        
     }
-
-    
 }

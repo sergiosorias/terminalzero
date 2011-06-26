@@ -15,9 +15,12 @@ namespace ZeroSales.Pages.Controls
 
         public double SelectedQuantity { get; set; }
 
+        private SaleHeader currentSale;
+
         public PaymentInstrumentSelection(SaleHeader header)
         {
             InitializeComponent();
+            currentSale = header;
             SelectedQuantity = header.SalePaymentHeader.RestToPay;
 
         }
@@ -99,11 +102,18 @@ namespace ZeroSales.Pages.Controls
 
         public override bool CanAccept(object parameter)
         {
+            bool ret = true;
             if (SelectedItem==null)
             {
-                MessageBox.Show("Por favor seleccione una forma de pago!");
+                MessageBox.Show(Properties.Resources.MandatoryPeymentInstrument);
+                ret = false;
             }
-            return base.CanAccept(parameter) && SelectedItem!=null;
+            else if(!SelectedItem.ChangeEnable.GetValueOrDefault() && SelectedQuantity > currentSale.SalePaymentHeader.RestToPay)
+            {
+                MessageBox.Show(Properties.Resources.InvalidAmount);
+                ret = false;
+            }
+            return base.CanAccept(parameter) && ret;
         }
 
         private void paymentInstrumentsList_ItemsLoaded(object sender, System.EventArgs e)

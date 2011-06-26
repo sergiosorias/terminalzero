@@ -106,11 +106,29 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El monto seleccionado no es válido!.
+        /// </summary>
+        internal static string InvalidAmount {
+            get {
+                return ResourceManager.GetString("InvalidAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ¿Esta seguro de eliminar este ítem?.
         /// </summary>
         internal static string ItemDeletingQuestion {
             get {
                 return ResourceManager.GetString("ItemDeletingQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor seleccione una forma de pago!.
+        /// </summary>
+        internal static string MandatoryPeymentInstrument {
+            get {
+                return ResourceManager.GetString("MandatoryPeymentInstrument", resourceCulture);
             }
         }
         

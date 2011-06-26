@@ -56,7 +56,7 @@ namespace ZeroSales
             PackReceived.Import(path);
         }
 
-        public override void Init()
+        public override void Initialize()
         {
            
         }
@@ -81,10 +81,9 @@ namespace ZeroSales
 
         private void OpenCurrentSalesView(object parameter)
         {
-            ///TODO:
-            //BusinessContext.Instance.BeginOperation();
-            //var view = new CreateSaleView();
-            //Terminal.Instance.CurrentClient.ShowView(view);
+            BusinessContext.Instance.BeginOperation();
+            SaleReportViewModel viewModel = new SaleReportViewModel();
+            Terminal.Instance.CurrentClient.ShowView(viewModel.View);
         }
 
         private void OpenSaleStatictics(object parameter)

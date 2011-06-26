@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <baseControls:SearchBox SearchCommand="{Binding SearchCommand}" x:Name="searchboxControl" />
-        <myControls:CustomerLazyLoadingList SelectedItem="{Binding SelectedItem}" base:UIElementExtentions.ListCommanderName="searchboxControl" ItemsSource="{Binding CustomerList}"  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
+        <myControls:CustomerLazyLoadingList SelectedItem="{Binding SelectedItem}" base:UIElementExtentions.ListCommander="{Binding ElementName=searchboxControl}"  ItemsSource="{Binding CustomerList}"  Grid.Row="1" HorizontalAlignment="Stretch" x:Name="customerGrid"/>
         <base:AutoCleanTextBlock x:Name="selectedItemMaximized" Visibility="Collapsed" FontSize="48" FontWeight="Heavy" Grid.Row="2" Text="{Binding Path=SelectedItem.Customer.Name1,ElementName=customerGrid, Mode=OneWay}"/>
     </Grid>
 </base:NavigationBasePage>

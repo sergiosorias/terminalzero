@@ -1,0 +1,80 @@
+﻿<base:NavigationBasePage x:Class="ZeroConfiguration.Pages.HomePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Header="Página de Inicio"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI" mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="NavigationBasePage_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Margin="5" BorderThickness="2" BorderBrush="White" CornerRadius="4" Padding="2" FocusVisualStyle="{x:Null}" KeyDown="Border_KeyDown">
+            <ListBox x:Name="algo" Background="Transparent" ItemsSource="{Binding ShortcutActions}" SelectedItem="{Binding SelectedAction}" AllowDrop="True"
+                     SelectionMode="Single" BorderBrush="Transparent">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Background="Transparent"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Action.Alias}" IsHitTestVisible="False" FontSize="28" FontWeight="Bold" Foreground="{Binding Foreground}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="-0.01509,0.49999" EndPoint="1.0151,0.49999">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Color="#FF676767" Offset="0"/>
+                                        <GradientStop Color="#FF8A8A8A" Offset="0.147895"/>
+                                        <GradientStop Color="#FFAEAEAE" Offset="0.374359"/>
+                                        <GradientStop Color="#FF909090" Offset="0.610256"/>
+                                        <GradientStop Color="#FFB8B7B7" Offset="0.923077"/>
+                                        <GradientStop Color="#FFE1DFDF" Offset="1"/>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Grid Margin="2" MouseLeftButtonUp="algo_MouseLeftButtonDown">
+                                        <Border CornerRadius="2" BorderThickness="2" BorderBrush="Black" Margin="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsMouseOver" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="IsSelected" Value="True"/>
+                                        </MultiTrigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="White" />
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Black" />
+                                        </Trigger>
+                                        
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Border>
+
+
+
+    </Grid>
+</base:NavigationBasePage>

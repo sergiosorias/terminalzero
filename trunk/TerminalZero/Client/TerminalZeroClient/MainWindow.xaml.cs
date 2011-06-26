@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using TerminalZeroClient.Pages;
+using System.Windows.Input;
 using TerminalZeroClient.Properties;
 using ZeroBusiness;
 using ZeroCommonClasses;
@@ -26,18 +26,15 @@ namespace TerminalZeroClient
     /// </summary>
     public partial class MainWindow : Window, IProgressNotifier
     {
+        public ICommand GoHome
+        {
+            get { return Terminal.Instance.Session.Actions[Actions.AppHome]; }
+        }
+        
         public MainWindow()
         {
             InitializeComponent();
             Messages = new Queue<string>(10);
-        }
-
-        public ZeroAction GoHome
-        {
-            get
-            {
-                return new ZeroBackgroundAction(Actions.AppHome, OpenHome, null, false, false);
-            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -46,15 +43,6 @@ namespace TerminalZeroClient
             LoadConfigs();
             Terminal.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
             Terminal.Instance.CurrentClient.Notifier = this;
-            try
-            {
-                Terminal.Instance.CurrentClient.ModuleList.ForEach(m => m.Init());
-            }
-            catch (Exception ex)
-            {
-                SendNotification(string.Format("Error on Init. Error: {0}",ex));
-            }
-            
         }
 
         void Manager_ConfigurationRequired(object sender, EventArgs e)
@@ -67,17 +55,11 @@ namespace TerminalZeroClient
             object item = mainMenu.Items[0];
             mainMenu.Items.Clear();
             mainMenu.Items.Add(item);
-            if (!Terminal.Instance.Session.Actions.Exists(Actions.AppHome))
+            if (!Terminal.Instance.Session.Actions.Exists(Actions.AppExit))
             {
-                Terminal.Instance.Session.Actions.Add(GoHome);
                 Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppExit, ForceClose, null, false));
             }
             InternalBuildMenu(Terminal.Instance.CurrentClient.MainMenu, mainMenu.Items);
-        }
-
-        private static void OpenHome(object parameter)
-        {
-            Terminal.Instance.CurrentClient.ShowView(new Home());
         }
 
         private void InternalBuildMenu(ZeroMenu menu, ItemCollection items)
@@ -185,6 +167,7 @@ namespace TerminalZeroClient
             _isForced = true;
             Close();
         }
+
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (Settings.Default.AskForClose && !_isForced)

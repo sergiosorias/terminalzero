@@ -32,7 +32,7 @@ namespace ZeroStock
             Terminal.Instance.Session.Actions.Add(createStockFromSale);
         }
 
-        public override void Init()
+        public override void Initialize()
         {
 
         }

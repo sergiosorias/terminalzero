@@ -24,6 +24,17 @@ namespace ZeroCommonClasses
             Description = description;
         }
 
+        private void CurrentClientInitialized(object sender, EventArgs e)
+        {
+            Initialize();
+            Terminal.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
+        }
+
+        private void Manager_ConfigurationRequired(object sender, EventArgs e)
+        {
+            LoadConfiguration();
+        }
+
         [DataMember]
         public int ModuleCode { get; private set; }
         [DataMember]
@@ -82,11 +93,16 @@ namespace ZeroCommonClasses
         {
             return new string[] {};
         }
-        
+
         /// <summary>
         /// en este momento es donde se cargan y se hacen las cosas necesarias para el modulo
         /// </summary>
-        public abstract void Init();
+        public abstract void Initialize();
+
+        protected virtual void LoadConfiguration()
+        {
+            
+        }
 
         public virtual void NewPackReceived(string path)
         {
