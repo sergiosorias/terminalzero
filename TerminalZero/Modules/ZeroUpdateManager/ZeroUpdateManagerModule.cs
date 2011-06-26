@@ -24,7 +24,7 @@ namespace ZeroUpdateManager
             return new string[] { };
         }
 
-        public override void Init()
+        public override void Initialize()
         {
             
         }

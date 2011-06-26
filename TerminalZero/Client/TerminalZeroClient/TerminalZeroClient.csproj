@@ -84,9 +84,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Pages\Home.xaml.cs">
-      <DependentUpon>Home.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
     </Compile>
@@ -103,10 +100,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\Home.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SplashView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -160,6 +153,10 @@
     <ProjectReference Include="..\..\Extras\SharpZipLib\SharpZipLib.csproj">
       <Project>{95BC2D08-4F2C-43A9-9BB9-77BBE11B2FAC}</Project>
       <Name>SharpZipLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\ZeroConfiguration\ZeroConfiguration.csproj">
+      <Project>{C9C76953-5F0A-44AD-972D-A6CBAD600FFD}</Project>
+      <Name>ZeroConfiguration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Modules\ZeroLogHandle\ZeroLogHandle.csproj">
       <Project>{577D6AFF-3DBA-48C2-9A55-56980822D236}</Project>

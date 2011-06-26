@@ -116,7 +116,7 @@ namespace ZeroMasterData.Presentation
         {
             var viewmodel = new CustomerDetailViewModel(new CustomerDetail());
             viewmodel.Customer = Customer.CreateCustomer(BusinessContext.Instance.Model.GetNextCustomerCode(), 0, true);
-            if (viewmodel.View.ShowInModalWindow())
+            if (viewmodel.View.ShowDialog())
             {
                 try
                 {

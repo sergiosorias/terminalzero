@@ -13,6 +13,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <base:SearchBox Search="SearchBox_Search" ShowResultCount="True" x:Name="productListCommanderName"/>
-        <myControls:ProductLazyLoadingList Grid.Row="1" x:Name="productList" base:UIElementExtentions.ListCommanderName="productListCommanderName" ItemsSource="{Binding ProductList}" SelectedItem="{Binding SelectedProduct}"/>
+        <myControls:ProductLazyLoadingList Grid.Row="1" x:Name="productList" base:UIElementExtentions.ListCommander="{Binding ElementName=productListCommanderName}" ItemsSource="{Binding ProductList}" SelectedItem="{Binding SelectedProduct}"/>
     </Grid>
 </base:NavigationBasePage>

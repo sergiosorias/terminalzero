@@ -10,6 +10,7 @@ using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroConfiguration.Pages;
 using ZeroConfiguration.Pages.Controls;
+using ZeroConfiguration.Presentantion;
 using ZeroConfiguration.Properties;
 using ZeroGUI;
 using Terminal = ZeroCommonClasses.Terminal;
@@ -39,6 +40,7 @@ namespace ZeroConfiguration
             SyncAction = new ZeroBackgroundAction( Actions.ExecSync, StartSync,null, false, false);
             SyncAction.AddParam(typeof(ISyncService), true);
             Terminal.Instance.Session.Actions.Add(SyncAction);
+            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppHome, OpenHomePage,null,false));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration,null,true));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenUserListView, OpenUsers, Rules.IsValidUser, true));
             var changePassAction = new ZeroAction( Actions.OpenUserPasswordChangeMessage, OpenChangePassword,null,true);
@@ -52,11 +54,12 @@ namespace ZeroConfiguration
             Terminal.Instance.Session.Rules.Add(Rules.IsTerminalZero, IsTerminalZero);
         }
 
-        public override void Init()
+        public override void Initialize()
         {
             StartSyncronizer();
             ValidateAdminUser();
             OpenLogInDialog();
+            Terminal.Instance.CurrentClient.Loaded += (o, e) => OpenHomePage(null);
         }
 
         private void ValidateAdminUser()
@@ -138,10 +141,14 @@ namespace ZeroConfiguration
             _sync.Start();
         }
 
+        private void OpenHomePage(object obj)
+        {
+            Terminal.Instance.CurrentClient.ShowView(new HomePage());
+        }
+        
         private void OpenUsers(object parameter)
         {
             Terminal.Instance.CurrentClient.ShowView(new Users());
-            
         }
 
         private void OpenChangePassword(object parameter)
@@ -189,13 +196,19 @@ namespace ZeroConfiguration
                 ConfigurationRequired(this, EventArgs.Empty);
         }
 
-        public ModuleStatus GetModuleStatus(ZeroModule module)
+        private ModuleStatus GetModuleStatus(ZeroModule module)
         {
             return ConfigurationModelManager.GetTerminalModuleStatus(new ConfigurationModelManager(), Terminal.Instance.TerminalCode, module);
         }
 
-        public void InitializeTerminal()
+        public object GetMainViewModel()
         {
+            return new MainViewModel();
+        }
+        
+        public bool InitializeTerminal()
+        {
+            bool initialized = false;
             using (var conf = new ConfigurationModelManager())
             {
                 ZeroBusiness.Entities.Configuration.Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == Terminal.Instance.TerminalCode);
@@ -213,37 +226,24 @@ namespace ZeroConfiguration
                     }
                 }
                 ConfigurationModelManager.CreateTerminalProperties(conf,Terminal.Instance.TerminalCode);
-            }
 
-        }
-
-        public List<ZeroAction> GetShorcutActions()
-        {
-            var actions = new List<ZeroAction>();
-            var ret = new string[] { };
-            using (var conf = new ConfigurationModelManager())
-            {
-                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == Terminal.Instance.TerminalCode && tp.Code == SystemProperty.HomeShortcut.Code);
-                if (prop != null)
+                Terminal.Instance.CurrentClient.ModuleList.ForEach(c => { 
+                    c.TerminalStatus = GetModuleStatus(c);
+                    c.Initialize();
+                });
+                if (Terminal.Instance.CurrentClient.ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
                 {
-                    if (prop.LargeValue != null)
-                    {
-                        ret = prop.LargeValue.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                        ZeroAction act = null;
-                        foreach (var item in ret)
-                        {
-                            string[] actParts = item.Split('|');
-                            if (Terminal.Instance.Session.Actions.Exists(actParts[0].Trim()))
-                            {
-                                act = Terminal.Instance.Session.Actions[actParts[0].Trim()];
-                                act.SetAlias(actParts);
-                                actions.Add(act);
-                            }
-                        }
-                    }
+                    Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
+                                                    + "por favor conectese con la central lo antes posible!");
+                }
+                else
+                {
+                    initialized = true;
                 }
             }
-            return actions;
+
+            return initialized;
+
         }
 
         #endregion

@@ -41,7 +41,7 @@ namespace ZeroMasterData
             return PackManager.GetPacks(ModuleCode, WorkingDirectory);
         }
 
-        public override void Init()
+        public override void Initialize()
         {
         }
 
@@ -82,22 +82,15 @@ namespace ZeroMasterData
         private void OpenProductMessage(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new ProductsView { ControlMode = ControlMode.ReadOnly };
-            var mb = new ZeroMessageBox
-                         {
-                             Content = view,
-                             SizeToContent = SizeToContent.WidthAndHeight,
-                             ShowActivated = true,
-                             Topmost = true,
-                             MaxWidth = 600
-                         };
-            mb.Show();
+            var view = new ProductsViewModel();
+            view.View.ControlMode = ControlMode.ReadOnly;
+            Terminal.Instance.CurrentClient.ShowWindow(view.View);
         }
 
         private void OpenNewProductMessage(object parameter)
         {
             var detail = new ProductDetailViewModel();
-            if (detail.View.ShowInModalWindow() && detail.View.ControlMode == ControlMode.New)
+            if (detail.View.ShowDialog() && detail.View.ControlMode == ControlMode.New)
             {
                 Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.Product,true);
             }

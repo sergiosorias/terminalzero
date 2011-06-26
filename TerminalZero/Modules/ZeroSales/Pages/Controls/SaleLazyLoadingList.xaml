@@ -10,9 +10,10 @@
         <!--<DataGridTextColumn x:Name="productMasterCodeColumn" IsReadOnly="True" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />-->
         <DataGridTextColumn x:Name="productNameColumn" KeyboardNavigation.IsTabStop="True"  MinWidth="210" IsReadOnly="True" Binding="{Binding Path=SaleItem.Product.Name}" Header="Nombre" Width="*" />
         <DataGridTextColumn x:Name="quantityColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.Quantity}" Header="Cantidad" Width="100" />
-        <DataGridTextColumn x:Name="netPriceValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.NetPriceValue}" Header="Precio Neto" Width="100" />
-        <DataGridTextColumn x:Name="taxValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.TaxValue}" Header="IVA" Width="100" />
-        <DataGridTextColumn x:Name="priceValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.PriceValue}" Header="Precio" Width="100" />
+        <DataGridTextColumn x:Name="unitPrice"  IsReadOnly="True" Binding="{Binding Path=SaleItem.Product.Price1.Value, StringFormat='C'}" Header="Precio unit." Width="SizeToHeader" />
+        <DataGridTextColumn x:Name="netPriceValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.NetPriceValue, StringFormat='C'}" Header="Precio Neto" Width="100" />
+        <DataGridTextColumn x:Name="taxValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.TaxValue, StringFormat='C'}" Header="IVA" Width="100" />
+        <DataGridTextColumn x:Name="priceValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.PriceValue, StringFormat='C'}" Header="Total" Width="100" />
         <DataGridTemplateColumn x:Name="removeColumn" Width="25">
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>

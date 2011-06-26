@@ -77,41 +77,36 @@ namespace ZeroGUI
         public BarCodeTextBox()
         {
             InitializeComponent();
-            barCode.PreviewKeyDown += barCode_PreviewKeyDown;
         }
 
         private void barCode_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && !string.IsNullOrEmpty(Text))
+            if (e.Key == Key.Enter)
             {
-                e.Handled = true; 
+                if (Text != null && Composition != null && Text.Length == Composition.Length && !Validation.GetHasError(barCode))
+                {
+                    string barcodeText = Text;
+                    Text = "";
+                    Dispatcher.BeginInvoke(new Update(() =>
+                    {
+                        var args = new BarCodeEventArgs(barcodeText, BarCodePart.BuildComposition(Composition, barcodeText));
+                        if (BarcodeReceivedCommand != null)
+                        {
+                            BarcodeReceivedCommand.Execute(args);
+                        }
+                        OnBarcodeReceived(args);
+                    }), null);
+                }
+                else
+                {
+                    e.Handled = true;     
+                }
             }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             barCode.DataContext = this;
-        }
-
-        private void barCode_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (Text != null &&
-                Composition != null &&
-                Text.Length == Composition.Length
-                && !Validation.GetHasError(barCode))
-            {
-                string barcodeText = Text;
-                Text = "";
-                Dispatcher.BeginInvoke(new MethodInvoker(() =>
-                {
-                    var args = new BarCodeEventArgs(barcodeText,BarCodePart.BuildComposition(Composition,barcodeText));
-                    OnBarcodeReceived(args);
-                    if (BarcodeReceivedCommand != null)
-                    {
-                        BarcodeReceivedCommand.Execute(args);
-                    }
-                    }), null);
-            }
         }
 
         private void IsBarCodeRule_Validating(object sender, ValidationResultEventArgs e)

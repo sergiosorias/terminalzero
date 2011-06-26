@@ -11,5 +11,14 @@ namespace ZeroSales.Pages.Controls
         {
             InitializeComponent();
         }
+
+        protected override void OnControlModeChanged(ZeroCommonClasses.Interfaces.ControlMode newMode)
+        {
+            base.OnControlModeChanged(newMode);
+            if(newMode == ZeroCommonClasses.Interfaces.ControlMode.ReadOnly)
+            {
+                removeColumn.Visibility = System.Windows.Visibility.Collapsed;
+            }
+        }
     }
 }

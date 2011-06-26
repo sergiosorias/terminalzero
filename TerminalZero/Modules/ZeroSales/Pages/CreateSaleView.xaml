@@ -6,7 +6,7 @@
              mc:Ignorable="d" Header="{Binding ViewTitle, FallbackValue='Nueva venta'}"
              baseControls:ZeroToolBar.SaveCommand="{Binding SaveCommand}"
              baseControls:ZeroToolBar.CancelCommand="{Binding CancelCommand}"
-             xmlns:controls="clr-namespace:ZeroSales.Pages.Controls" StartKeyRequired="True"
+             xmlns:controls="clr-namespace:ZeroSales.Pages.Controls" StartKeyRequired="False"
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" 
             d:DesignHeight="300" d:DesignWidth="500">
     <base:NavigationBasePage.InputBindings>
@@ -32,11 +32,11 @@
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                     <Label Content="Lote:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                    <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode"  BarcodeReceivedCommand="{Binding LotBarcodeProductCommand}" Composition="NNNYYYYMMDDNN"/>
+                    <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode"  BarcodeReceivedCommand="{Binding LotBarcodeProductCommand}" BarcodeReceived="BarcodeReceived" Composition="NNNYYYYMMDDNN"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                    <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" Composition="NPPPPPPQQQQQN" BarcodeReceivedCommand="{Binding BarcodeProductCommand}"/>
+                    <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeReceivedCommand="{Binding BarcodeProductCommand}" BarcodeReceived="BarcodeReceived" Composition="NPPPPPPQQQQQN"/>
                 </StackPanel>
             </Grid>
             <controls:SaleLazyLoadingList Grid.Row="1" x:Name="saleGrid" ItemsSource="{Binding Path=SaleProductList}"/>

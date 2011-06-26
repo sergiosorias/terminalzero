@@ -162,4 +162,10 @@
 	<data name="Refresh">
 		<value xml:space="preserve">Actualizar</value>
 	</data>
+	<data name="InvalidAmount">
+		<value xml:space="preserve">El monto seleccionado no es válido!</value>
+	</data>
+	<data name="MandatoryPeymentInstrument">
+		<value xml:space="preserve">Por favor seleccione una forma de pago!</value>
+	</data>
 </root>

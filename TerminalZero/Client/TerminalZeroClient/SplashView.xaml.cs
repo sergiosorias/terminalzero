@@ -26,31 +26,31 @@ namespace TerminalZeroClient
             appName.Content = Settings.Default.ApplicationName;
             Terminal.Instance.CurrentClient.Notifier = this;
             var work = new BackgroundWorker();
-            work.DoWork += work_DoWork;
-            work.RunWorkerCompleted += work_RunWorkerCompleted;
+            work.DoWork += (o, args) =>
+                               {
+                                   if (Terminal.Instance.CurrentClient.Initialize())
+                                   {
+                                       Action action;
+                                       if (!ConfigurationContext.LogLevel.TraceVerbose)
+                                       {
+                                           action = delegate() { btnState_Click(null, null); };
+                                       }
+                                       else
+                                       {
+                                           action = delegate() { btnState.Visibility = Visibility.Visible; };
+                                       }
+
+                                       Dispatcher.Invoke(action, null);
+                                   }
+                                   else
+                                   {
+                                       btnClose.Visibility = Visibility.Visible;
+                                   }
+                               };
             work.RunWorkerAsync();
         }
         
-        void work_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Terminal.Instance.CurrentClient.Initialize();
-        }
-
-        void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Action action;
-            if (Terminal.Instance.CurrentClient.Initialized && !ConfigurationContext.LogLevel.TraceVerbose)
-            {
-                action = delegate() { btnState_Click(null, null); };
-            }
-            else
-            {
-                action = delegate() { btnState.Visibility = Visibility.Visible; };
-            }
-
-            Dispatcher.Invoke(action, null);
-        }
-
+        
         #region IProgressNotifier Members
 
         public void SetProcess(string newProgress)
@@ -89,10 +89,8 @@ namespace TerminalZeroClient
 
         private void btnState_Click(object sender, RoutedEventArgs e)
         {
-            var win = new MainWindow();
+            Terminal.Instance.CurrentClient.Load();
             Close();
-            App.Current.MainWindow = win;
-            win.Show();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -120,6 +118,11 @@ namespace TerminalZeroClient
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         

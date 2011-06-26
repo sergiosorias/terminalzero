@@ -12,6 +12,7 @@ using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroSales.Pages;
 using ZeroSales.Pages.Controls;
+using ZeroSales.Presentation.Controls;
 using ZeroSales.Properties;
 
 namespace ZeroSales.Presentation
@@ -54,11 +55,11 @@ namespace ZeroSales.Presentation
             get { return Sale.Customer == null ? Resources.FinalCustomer : string.Concat(Sale.Customer.Name1 ?? Sale.Customer.Name2, " - ", Sale.Customer.LegalCode); }
         }
         
-        private ObservableCollection<SalePaymentItemExtended> salePaymentItemsSource;
+        private ObservableCollection<SalePaymentItemViewModel> salePaymentItemsSource;
 
-        public ObservableCollection<SalePaymentItemExtended> SalePaymentItemsSource
+        public ObservableCollection<SalePaymentItemViewModel> SalePaymentItemsSource
         {
-            get { return salePaymentItemsSource ?? (salePaymentItemsSource = new ObservableCollection<SalePaymentItemExtended>()); }
+            get { return salePaymentItemsSource ?? (salePaymentItemsSource = new ObservableCollection<SalePaymentItemViewModel>()); }
             set
             {
                 if (salePaymentItemsSource != value)
@@ -96,15 +97,16 @@ namespace ZeroSales.Presentation
         private void AddPaymentInstrument(object parameter)
         {
             var paymentInstrument = new PaymentInstrumentSelection(Sale);
-            bool ret = paymentInstrument.ShowInModalWindow();
+            bool ret = paymentInstrument.ShowDialog();
             if (ret)
             {
                 var payment = Sale.SalePaymentHeader.SalePaymentItems.FirstOrDefault(item => item.PaymentInstrumentCode == paymentInstrument.SelectedItem.Code);
+                Sale.SalePaymentHeader.Change = paymentInstrument.SelectedQuantity - Sale.SalePaymentHeader.RestToPay;
                 if (payment == null)
                 {
-                    var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, paymentInstrument.SelectedQuantity);
+                    var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, Sale.SalePaymentHeader.Change > 0 ? Sale.SalePaymentHeader.RestToPay : paymentInstrument.SelectedQuantity);
                     Sale.SalePaymentHeader.AddPaymentInstrument(newItem);
-                    SalePaymentItemsSource.Add(new SalePaymentItemExtended
+                    SalePaymentItemsSource.Add(new SalePaymentItemViewModel
                                                    {
                                                        PaymentItem = newItem,
                                                        DeleteCommand = new ZeroActionDelegate(RemovePaymentInstrument)
@@ -113,7 +115,7 @@ namespace ZeroSales.Presentation
                 }
                 else
                 {
-                    payment.Quantity += paymentInstrument.SelectedQuantity;
+                    payment.Quantity += Sale.SalePaymentHeader.Change > 0 ? Sale.SalePaymentHeader.RestToPay : paymentInstrument.SelectedQuantity;
                 }
             }
             addPaymnentInstrumentCommand.RaiseCanExecuteChanged();
@@ -145,7 +147,7 @@ namespace ZeroSales.Presentation
         }
         
         private ZeroAction customerSelectionCommand;
-
+        
         public ZeroAction CustomerSelectionCommand
         {
             get
@@ -206,38 +208,7 @@ namespace ZeroSales.Presentation
         }
         #endregion
 
-        public class SalePaymentItemExtended : ViewModelBase
-        {
-            private SalePaymentItem paymentItem;
-
-            public SalePaymentItem PaymentItem
-            {
-                get { return paymentItem; }
-                set
-                {
-                    if (paymentItem != value)
-                    {
-                        paymentItem = value;
-                        OnPropertyChanged("PaymentItem");
-                    }
-                }
-            }
-
-            private ICommand deleteCommand;
-
-            public ICommand DeleteCommand
-            {
-                get { return deleteCommand; }
-                set
-                {
-                    if (deleteCommand != value)
-                    {
-                        deleteCommand = value;
-                        OnPropertyChanged("DeleteCommand");
-                    }
-                }
-            }
-        }
+        
 
     }
 }

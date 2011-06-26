@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Navigation;
 using TerminalZeroClient.Business;
-using TerminalZeroClient.Properties;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
-using ZeroCommonClasses.GlobalObjects;
-using ZeroCommonClasses.Interfaces;
-using ZeroCommonClasses.Interfaces.Services;
 
 namespace TerminalZeroClient
 {
@@ -21,10 +18,10 @@ namespace TerminalZeroClient
             var set = new AppDomainSetup { PrivateBinPath = ConfigurationContext.Directories.ModulesFolder };
             AppDomain.CreateDomain("Modules folder", null, set);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            ZeroCommonClasses.Terminal.Instance.CurrentClient = new WpfClient();
+            Terminal.Instance.CurrentClient = new WpfClient();
         }
 
-        void App_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        void App_LoadCompleted(object sender, NavigationEventArgs e)
         {
             
         }

@@ -19,7 +19,7 @@ namespace ZeroBarcode
             return new string[0];
         }
 
-        public override void Init()
+        public override void Initialize()
         {
             
         }
