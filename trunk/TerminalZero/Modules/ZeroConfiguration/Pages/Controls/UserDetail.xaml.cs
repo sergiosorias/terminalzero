@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Interfaces;
+using ZeroGUI;
 
 namespace ZeroConfiguration.Pages.Controls
 {
@@ -19,11 +20,11 @@ namespace ZeroConfiguration.Pages.Controls
 
         private void btnResetPassword_Click(object sender, RoutedEventArgs e)
         {
-            if(MessageBox.Show("Esta a punto de cambiar la contraseña por una nueva, ¿esta seguro?","Precaución",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if(ZeroMessageBox.Show("Esta a punto de cambiar la contraseña por una nueva, ¿esta seguro?","Precaución",MessageBoxButton.YesNo).GetValueOrDefault())
             {
                 var usr = ((User)DataContext);
                 usr.ResetPassword();
-                MessageBox.Show("La nueva contraseña es: " + usr.Password, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
+                ZeroMessageBox.Show("La nueva contraseña es: " + usr.Password, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
                 Trace.WriteLine(string.Format("User {0} Password Changed",usr.UserName));
             }
         }

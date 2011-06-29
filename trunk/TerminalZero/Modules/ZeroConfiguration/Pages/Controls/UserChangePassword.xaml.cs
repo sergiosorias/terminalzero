@@ -22,12 +22,12 @@ namespace ZeroConfiguration.Pages.Controls
             if (!ret || _user.GetPassword() != oldPass.Password)
             {
                 ret = false;
-                MessageBox.Show(ZeroConfiguration.Properties.Resources.MsgVerifyInsertedInfo, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
+                ZeroMessageBox.Show(ZeroConfiguration.Properties.Resources.MsgVerifyInsertedInfo, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
             }
             else
             {
                 _user.ChangePassword(_user.GetPassword(), newPass.Password);
-                MessageBox.Show(ZeroConfiguration.Properties.Resources.MsgPasswordSuccessfullyModificated, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
+                ZeroMessageBox.Show(ZeroConfiguration.Properties.Resources.MsgPasswordSuccessfullyModificated, ZeroConfiguration.Properties.Resources.Information, MessageBoxButton.OK);
             }
             
             return ret ;

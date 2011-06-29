@@ -30,7 +30,7 @@ namespace ZeroMasterData.Pages
                 }
                 catch (Exception wx)
                 {
-                    MessageBox.Show(wx.ToString());
+                    ZeroMessageBox.Show(wx.ToString(),"Error");
                 }
             }
         }

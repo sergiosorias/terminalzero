@@ -68,7 +68,7 @@ namespace ZeroStock.Presentation
                 ret = (SelectedDeliveryDocumentHeader != null);
                 if (!ret)
                 {
-                    MessageBox.Show("¡Por favor seleccione un documento!", "Atención", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    ZeroMessageBox.Show("¡Por favor seleccione un documento!", "Atención", MessageBoxButton.OK);
                 }
 
             }

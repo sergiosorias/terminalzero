@@ -36,7 +36,9 @@ namespace ZeroSales.Presentation
         public SaleHeader SaleHeader
         {
             get { return saleHeader; }
-            set { saleHeader = value;
+            set
+            {
+                saleHeader = value;
                 OnPropertyChanged("SaleHeader");
             }
         }
@@ -45,7 +47,7 @@ namespace ZeroSales.Presentation
 
         public ObservableCollection<SaleLazyLoadingItemViewModel> SaleProductList
         {
-            get { return productList??(productList = new ObservableCollection<SaleLazyLoadingItemViewModel>()); }
+            get { return productList ?? (productList = new ObservableCollection<SaleLazyLoadingItemViewModel>()); }
             set
             {
                 if (productList != value)
@@ -67,7 +69,7 @@ namespace ZeroSales.Presentation
                 OnPropertyChanged("Message");
             }
         }
-        
+
         #endregion
 
         #region Commands
@@ -99,7 +101,7 @@ namespace ZeroSales.Presentation
                 {
                     if (salePaymentviewModel.View.ShowDialog())
                     {
-                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true,SaleHeader,true);
+                        Terminal.Instance.Session[typeof(SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
                         PrintManager.PrintSale(SaleHeader);
                         BusinessContext.Instance.Model.SaveChanges();
                         CreateSale();
@@ -112,7 +114,7 @@ namespace ZeroSales.Presentation
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, Resources.SaveError, MessageBoxButton.OK, MessageBoxImage.Error);
+                ZeroMessageBox.Show(ex.Message, Resources.SaveError, MessageBoxButton.OK);
                 Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
                 View.GoHomeOrDisable();
             }
@@ -121,7 +123,7 @@ namespace ZeroSales.Presentation
 
         private bool CanSaveOperation(object parameter)
         {
-            return SaleHeader != null && saleHeader.SaleItems != null && SaleHeader.SaleItems.Count>0;
+            return SaleHeader != null && saleHeader.SaleItems != null && SaleHeader.SaleItems.Count > 0;
         }
 
         #endregion
@@ -132,7 +134,7 @@ namespace ZeroSales.Presentation
 
         public ZeroActionDelegate CancelCommand
         {
-            get { return cancelCommand ??(cancelCommand = new ZeroActionDelegate(CancelOperation,o=> SaleHeader!=null && SaleHeader.HasChanges)); }
+            get { return cancelCommand ?? (cancelCommand = new ZeroActionDelegate(CancelOperation, o => SaleHeader != null && SaleHeader.HasChanges)); }
             set
             {
                 if (cancelCommand != value)
@@ -237,7 +239,7 @@ namespace ZeroSales.Presentation
         #endregion
 
         public CreateSaleViewModel(NavigationBasePage view, int saleType)
-            :base(view)
+            : base(view)
         {
             this.saleType = saleType;
             CreateSale();
@@ -249,17 +251,9 @@ namespace ZeroSales.Presentation
             bool ret = base.CanAccept(parameter);
             if (ret && SaleHeader.HasChanges)
             {
-                MessageBoxResult quest = MessageBox.Show(Resources.QuestionSaveCurrentData, Resources.Important,
-                    MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                switch (quest)
+                if (ZeroMessageBox.Show(Resources.QuestionSaveCurrentData, Resources.Important, MessageBoxButton.YesNo).GetValueOrDefault())
                 {
-                    case MessageBoxResult.OK:
-                    case MessageBoxResult.Yes:
-                        SaveOperation(null);
-                        break;
-                    default:
-                        break;
+                    SaveOperation(null);
                 }
             }
 

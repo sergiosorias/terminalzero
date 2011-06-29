@@ -67,11 +67,11 @@ namespace ZeroStock.Pages.Controls
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        ZeroMessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK);
                     }
                 }
 
-                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ZeroMessageBox.Show(msg, "Error", MessageBoxButton.OK);
             }
             return ret;
         }

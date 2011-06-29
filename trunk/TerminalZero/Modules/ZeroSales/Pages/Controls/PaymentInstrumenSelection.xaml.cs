@@ -105,12 +105,12 @@ namespace ZeroSales.Pages.Controls
             bool ret = true;
             if (SelectedItem==null)
             {
-                MessageBox.Show(Properties.Resources.MandatoryPeymentInstrument);
+                ZeroMessageBox.Show(Properties.Resources.MandatoryPeymentInstrument,Properties.Resources.Important);
                 ret = false;
             }
             else if(!SelectedItem.ChangeEnable.GetValueOrDefault() && SelectedQuantity > currentSale.SalePaymentHeader.RestToPay)
             {
-                MessageBox.Show(Properties.Resources.InvalidAmount);
+                ZeroMessageBox.Show(Properties.Resources.InvalidAmount, Properties.Resources.Important);
                 ret = false;
             }
             return base.CanAccept(parameter) && ret;

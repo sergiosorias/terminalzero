@@ -19,7 +19,7 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Path=Action.Alias}" IsHitTestVisible="False" FontSize="28" FontWeight="Bold" Foreground="{Binding Foreground}" />
+                        <TextBlock Text="{Binding Path=Action.Alias}" IsHitTestVisible="False" FontSize="28" FontWeight="Bold" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>

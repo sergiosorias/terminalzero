@@ -124,13 +124,10 @@
             <TranslateTransform X="0"/>
         </Grid.RenderTransform>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label x:Name="dummy" Visibility="{Binding Content, ElementName=contentpress,Converter={x:Static Converters:TypeToVisibilityConverter.Instance},ConverterParameter='ZeroGUI.NavigationBasePage'}"/>
-        <Label Style="{DynamicResource titleLabelStyle}" MouseLeftButtonDown="CurrentMouseLeftButtonDown" Content="{Binding Title,FallbackValue='Terminal Zero'}" Visibility="{Binding Visibility, ElementName=dummy,Converter={x:Static Converters:InvertVisibilityConverter.Instance}}"/>
-        <ContentControl Grid.Row="1" Margin="4,0,4,0" x:Name="contentpress" HorizontalAlignment="Stretch" Focusable="False" VerticalAlignment="Stretch">
+        <ContentControl Grid.Row="0" Margin="4,0,4,0" x:Name="contentpress" HorizontalAlignment="Stretch" Focusable="False" VerticalAlignment="Stretch">
 
         </ContentControl>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="2,-1.5,12,1">
