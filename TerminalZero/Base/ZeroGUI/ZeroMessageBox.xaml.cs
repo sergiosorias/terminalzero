@@ -62,16 +62,18 @@ namespace ZeroGUI
             }
             set
             {
-                
-                
                 if (value is string)
                 {
-                    Label label = new Label();
+                    NavigationBasePage nvp = new NavigationBasePage();
+                    var label = new TextBlock();
+                    nvp.MaxWidth = 500;
+                    nvp.Header = Title;
+                    label.TextWrapping = TextWrapping.Wrap;
+                    nvp.Content = label;
                     label.FontSize = 18;
                     label.FontWeight = FontWeights.Bold;
-                    label.Content = value;
-                    Content = label;
-                    contentpress.Background = Brushes.Gray;
+                    label.Text = (string)value;
+                    Content = nvp;
                 }
                 else
                 {

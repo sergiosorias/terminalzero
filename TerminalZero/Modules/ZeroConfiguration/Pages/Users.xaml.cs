@@ -76,7 +76,7 @@ namespace ZeroConfiguration.Pages
                     LoadUsers();
                 else
                 {
-                    MessageBox.Show(message, "Error");    
+                    ZeroMessageBox.Show(message, "Error");    
                 }
             }
         }

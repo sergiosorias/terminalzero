@@ -125,7 +125,7 @@ namespace ZeroMasterData.Presentation
                 }
                 catch (Exception wx)
                 {
-                    MessageBox.Show(wx.ToString(),"Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                    ZeroMessageBox.Show(wx.ToString(),"Error",MessageBoxButton.OK);
                     Trace.TraceError("Error updating Customer {0}", viewmodel.Customer.Name1);
                 }
             }

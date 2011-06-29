@@ -51,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintersTest", "Extras\PrintersTest\PrintersTest.csproj", "{5D937D91-691D-47D7-928B-343D4449F0E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdatesManager", "UpdatesManager\UpdatesManager.csproj", "{CBF54CE7-9EEF-44ED-B954-F3FF133095BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdatesManager", "Extras\UpdatesManager\UpdatesManager.csproj", "{CBF54CE7-9EEF-44ED-B954-F3FF133095BD}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

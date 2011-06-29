@@ -72,21 +72,15 @@ namespace ZeroMasterData.Presentation
                 {
                     if (Product.Price1.Value == 0)
                     {
-                        switch (
-                            MessageBox.Show("¿Esta seguro que desea dejar el valor en cero?", "Precaución",
-                                            MessageBoxButton.YesNo, MessageBoxImage.Question))
+                        if(!ZeroMessageBox.Show("¿Esta seguro que desea dejar el valor en cero?", "Precaución",MessageBoxButton.YesNo).GetValueOrDefault())
                         {
-                            case MessageBoxResult.Cancel:
-                            case MessageBoxResult.No:
-                            case MessageBoxResult.None:
-                                ret = false;
-                                break;
+                            ret = false;
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ZeroMessageBox.Show(msg, "Error", MessageBoxButton.OK);
                     ret = false;
                 }
             }

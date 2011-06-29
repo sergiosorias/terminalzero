@@ -52,7 +52,7 @@ namespace ZeroStock.Pages
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail);
+                        ZeroMessageBox.Show(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail);
                         GoHomeOrDisable();
                     }
                 }
@@ -65,23 +65,14 @@ namespace ZeroStock.Pages
             
             if (ret && StockHeader != null && StockHeader.HasChanges)
             {
-                MessageBoxResult quest = MessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
-                    MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                switch (quest)
+                if (ZeroMessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
+                                        MessageBoxButton.YesNo).GetValueOrDefault())
                 {
-                    case MessageBoxResult.Cancel:
-                        break;
-                    case MessageBoxResult.No:
-                        ret = true;
-                        break;
-                    case MessageBoxResult.None:
-                        break;
-                    case MessageBoxResult.OK:
-                    case MessageBoxResult.Yes:
-                        ret = SaveData();
-
-                        break;
+                    ret = SaveData();
+                }
+                else
+                {
+                    ret = true;
                 }
             }
             return ret;
@@ -148,13 +139,13 @@ namespace ZeroStock.Pages
                     StockHeader.DeliveryDocumentHeader.Used = true;
                 }
                 BusinessContext.Instance.Model.SaveChanges();
-                MessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                ZeroMessageBox.Show("Datos Guardados", "Información", MessageBoxButton.OK);
                 ret = true;
             }
             catch (Exception ex)
             {
                 ret = false;
-                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+                ZeroMessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK);
                 Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
             }
             return ret;
