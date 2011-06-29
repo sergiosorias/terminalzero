@@ -21,11 +21,6 @@ namespace TerminalZeroClient
             Terminal.Instance.CurrentClient = new WpfClient();
         }
 
-        void App_LoadCompleted(object sender, NavigationEventArgs e)
-        {
-            
-        }
-
         public static string Name
         {
             get { return TerminalZeroClient.Properties.Resources.AppName; }
@@ -39,6 +34,8 @@ namespace TerminalZeroClient
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            Terminal.Instance.CurrentClient.Dispose();
+            Terminal.Instance.CurrentClient = null;
         }
 
         

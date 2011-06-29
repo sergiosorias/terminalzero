@@ -7,7 +7,7 @@ using ZeroCommonClasses.GlobalObjects;
 
 namespace ZeroCommonClasses.Interfaces
 {
-    public interface IZeroClient
+    public interface IZeroClient : IDisposable
     {
         event EventHandler Loaded;
         IProgressNotifier Notifier { get; set; }

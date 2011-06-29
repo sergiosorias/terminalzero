@@ -14,6 +14,7 @@
         public const string OpenUserListView                = "Configuración@Usuarios@Lista de Usuarios";
         public const string OpenUserPasswordChangeMessage   = "Configuración@Usuarios@Cambiar contraseña";
         public const string ExecUpgradeProcess              = "Configuración@Actualizar";
+        public const string ExecUpgradeAppProcess           = "Configuración@Actualizar App";
 
         public const string OpenProductsView                = "Tablas Maestras@Productos@Lista de Productos";
         public const string OpenNewProductsMessage          = "Tablas Maestras@Productos@Nuevo";

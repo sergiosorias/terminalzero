@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using TerminalZeroClient.Business;
 using TerminalZeroClient.Properties;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
@@ -26,31 +31,32 @@ namespace TerminalZeroClient
             appName.Content = Settings.Default.ApplicationName;
             Terminal.Instance.CurrentClient.Notifier = this;
             var work = new BackgroundWorker();
-            work.DoWork += (o, args) =>
-                               {
-                                   if (Terminal.Instance.CurrentClient.Initialize())
-                                   {
-                                       Action action;
-                                       if (!ConfigurationContext.LogLevel.TraceVerbose)
-                                       {
-                                           action = delegate() { btnState_Click(null, null); };
-                                       }
-                                       else
-                                       {
-                                           action = delegate() { btnState.Visibility = Visibility.Visible; };
-                                       }
-
-                                       Dispatcher.Invoke(action, null);
-                                   }
-                                   else
-                                   {
-                                       btnClose.Visibility = Visibility.Visible;
-                                   }
-                               };
+            work.DoWork += (o, ea) => Run();
             work.RunWorkerAsync();
         }
         
-        
+        private void Run()
+        {
+            if (Terminal.Instance.CurrentClient.Initialize())
+            {
+                Action action;
+                if (!ConfigurationContext.LogLevel.TraceVerbose)
+                {
+                    action = delegate() { btnState_Click(null, null); };
+                }
+                else
+                {
+                    action = delegate() { btnState.Visibility = Visibility.Visible; };
+                }
+
+                Dispatcher.Invoke(action, null);
+            }
+            else
+            {
+                btnClose.Visibility = Visibility.Visible;
+            }
+        }
+
         #region IProgressNotifier Members
 
         public void SetProcess(string newProgress)
