@@ -106,7 +106,7 @@ namespace ZeroGUI
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            barCode.DataContext = this;
+            
         }
 
         private void IsBarCodeRule_Validating(object sender, ValidationResultEventArgs e)

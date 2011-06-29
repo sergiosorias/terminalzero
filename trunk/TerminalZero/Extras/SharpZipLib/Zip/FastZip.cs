@@ -630,7 +630,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 		{
 			return (name != null) &&
 				(name.Length > 0) &&
-				(name.IndexOfAny(Path.InvalidPathChars) < 0);
+				(name.IndexOfAny(Path.GetInvalidPathChars()) < 0);
 		}
 #else
 		static bool NameIsValid(string name)
