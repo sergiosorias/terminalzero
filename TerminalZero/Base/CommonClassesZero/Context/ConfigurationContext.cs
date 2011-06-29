@@ -128,6 +128,31 @@ namespace ZeroCommonClasses.Context
             {
                 get { return Path.Combine(Environment.CurrentDirectory, "Upgrade"); }
             }
+
+            public static string ApplicationFolder
+            {
+                get { return Environment.CurrentDirectory; }
+            }
+
+            public static string ApplicationPath
+            {
+                get
+                {
+                    if(Environment.GetCommandLineArgs().Length == 0)
+                        return Path.Combine(Environment.CurrentDirectory, "");
+
+                    return Environment.GetCommandLineArgs()[0];
+                }
+            }
+
+            public static string ApplicationUpdaterPath
+            {
+                get
+                {
+                    return string.Format("{0}.Updater.exe",ApplicationPath);
+                }
+            }
+
         }
 
         #endregion

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using TerminalZeroClient.Properties;
+using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
 using ZeroCommonClasses.GlobalObjects;
@@ -125,7 +128,8 @@ namespace TerminalZeroClient.Business
             if (result == null)
                 result = new Action<bool>((o) => { });
 
-            result(ZeroMessageBox.Show(view, "",buttons).GetValueOrDefault());
+            Application.Current.Dispatcher.BeginInvoke(
+                new Update(() => result(ZeroMessageBox.Show(view, "", buttons).GetValueOrDefault())));
         }
 
         public void ShowWindow(object view, Action closed)
@@ -146,7 +150,7 @@ namespace TerminalZeroClient.Business
             mb.Show();
         }
 
-        private int disableCount = 0;
+        private int disableCount;
         public void ShowEnable(bool enable)
         {
             if (!enable)
@@ -226,9 +230,49 @@ namespace TerminalZeroClient.Business
         public void Load()
         {
             var win = new MainWindow();
-            App.Current.MainWindow = win;
+            Application.Current.MainWindow = win;
             win.Loaded += (o, e) => RaiseLoaded();
+            if (!Terminal.Instance.Session.Actions.Exists(Actions.AppExit))
+            {
+                Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppExit, ForceClose, null, false));
+            }
+            win.Closing += win_Closing;
             win.Show();
+        }
+
+        private bool _isForced;
+        private void win_Closing(object sender, CancelEventArgs e)
+        {
+            if (Settings.Default.AskForClose && !_isForced)
+            {
+                var res = MessageBox.Show(Resources.QuestionAreYouSureAppClosing,
+                                          Resources.Closing, MessageBoxButton.YesNoCancel,
+                                          MessageBoxImage.Question);
+                switch (res)
+                {
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.No:
+                        e.Cancel = true;
+                        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+                        break;
+                    case MessageBoxResult.None:
+                        break;
+                    case MessageBoxResult.OK:
+                    case MessageBoxResult.Yes:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void ForceClose(object parameter)
+        {
+            _isForced = true;
+            Application.Current.MainWindow.Close();
         }
 
         private bool InitializeTerminal()
@@ -299,6 +343,14 @@ namespace TerminalZeroClient.Business
                 Notifier.SetUserMessage(false, "Módulo invalido --> ''''");
             }
         }
+        
+        #region IDisposable Members
 
+        public void Dispose()
+        {
+                
+        }
+
+        #endregion
     }
 }

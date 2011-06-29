@@ -4,7 +4,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Terminal Zero" MinHeight="300" MinWidth="300"
         xmlns:p="clr-namespace:TerminalZeroClient.Properties" xmlns:Converters="clr-namespace:ZeroGUI.Converters;assembly=ZeroGUI" StateChanged="Window_StateChanged" 
-        Closing="Window_Closing" 
         Background="Gray" Loaded="Window_Loaded">
     <Window.InputBindings>
         <KeyBinding x:Name="ShortCutHome" Key="H" Modifiers="Ctrl"/>

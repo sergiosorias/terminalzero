@@ -55,10 +55,7 @@ namespace TerminalZeroClient
             object item = mainMenu.Items[0];
             mainMenu.Items.Clear();
             mainMenu.Items.Add(item);
-            if (!Terminal.Instance.Session.Actions.Exists(Actions.AppExit))
-            {
-                Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppExit, ForceClose, null, false));
-            }
+            
             InternalBuildMenu(Terminal.Instance.CurrentClient.MainMenu, mainMenu.Items);
         }
 
@@ -161,48 +158,14 @@ namespace TerminalZeroClient
         
         #endregion
 
-        private bool _isForced;
-        private void ForceClose(object parameter)
+        
+        
+
+        protected override void OnClosed(EventArgs e)
         {
-            _isForced = true;
-            Close();
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            if (Settings.Default.AskForClose && !_isForced)
-            {
-                var res = MessageBox.Show(Properties.Resources.QuestionAreYouSureAppClosing,
-                                          Properties.Resources.Closing, MessageBoxButton.YesNoCancel,
-                                          MessageBoxImage.Question);
-                switch (res)
-                {
-                    case MessageBoxResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                    case MessageBoxResult.No:
-                        e.Cancel = true;
-                        WindowState = WindowState.Minimized;
-                        break;
-                    case MessageBoxResult.None:
-                        break;
-                    case MessageBoxResult.OK:
-                    case MessageBoxResult.Yes:
-                        _notifyIcon.Dispose();
-                        _notifyIcon = null;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                _notifyIcon.Dispose();
-                _notifyIcon = null;
-            }
-
-            
-
+            _notifyIcon.Dispose();
+            _notifyIcon = null;
+            base.OnClosed(e);
         }
 
         private void PopUpNotify(string text)
@@ -295,5 +258,7 @@ namespace TerminalZeroClient
         }
 
         #endregion
+
+        
     }
 }
