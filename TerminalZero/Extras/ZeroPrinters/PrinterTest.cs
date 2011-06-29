@@ -2,126 +2,180 @@
 using System.Collections.Generic;
 using System.Reflection;
 using FiscalPrinterLib;
-using System.Linq;
 
 namespace ZeroPrinters
 {
+    public class PrinterCustomer
+    {
+
+        public TiposDeResponsabilidades TaxPosition { get; set; }
+
+        public TiposDeDocumento DNIType { get; set; }
+
+        public string DNI { get; set; }
+
+        public string Name { get; set; }
+
+        public string Address { get; set; }
+    }
+
     public class PrinterTest
     {
-        private HASAR hassar1;
-
-        private Dictionary<int, KeyValuePair<string,Action>> actionCommands;
+        public Dictionary<int, KeyValuePair<string, Action>> ActionCommands { get; private set; }
+        private HASAR printer;
         private List<Action> initializationList;
-
-        public PrinterTest()
+        private Action<string> Log;
+        private Predicate<string> CanExecute;
+        private PrinterCustomer customer;
+        public PrinterTest(int port, Action<string> log, Predicate<string> canExecute)
         {
-            hassar1 = new HASAR();
-            Console.WriteLine("Inicializando impresora");
-            hassar1.Transporte = TiposDeTransporte.PUERTO_SERIE;
-            hassar1.Puerto = 1;
+            printer = new HASAR();
+            Log = log;
+            CanExecute = canExecute;
+            Log("Inicializando impresora");
+            printer.Transporte = TiposDeTransporte.PUERTO_SERIE;
+            printer.Puerto = port;
+            Log(string.Format("Puerto {0}", printer.Puerto));
+            printer.Modelo = ModelosDeImpresoras.MODELO_715;
+            LoadDummyData();
             LoadEvents();
             LoadActions();
             LoadInitializationData();
         }
 
+        private void LoadDummyData()
+        {
+            Log("Cargando data de prueba");
+            customer = new PrinterCustomer
+            {
+                Name = "Cliente Dummy",
+                DNI = "31032240",
+                DNIType = TiposDeDocumento.TIPO_DNI,
+                TaxPosition = TiposDeResponsabilidades.CONSUMIDOR_FINAL,
+                Address = "Alguna calle 252"
+            };
+
+        }
+
         private void LoadEvents()
         {
-            Console.WriteLine("Cargando eventos");
-            hassar1.ErrorFiscal += hassar1_ErrorFiscal;
-            hassar1.ErrorImpresora += hassar1_ErrorImpresora;
-            hassar1.EventoFiscal += hassar1_EventoFiscal;
-            hassar1.EventoImpresora += hassar1_EventoImpresora;
-            hassar1.FaltaPapel += hassar1_FaltaPapel;
-            hassar1.ImpresoraNoResponde += hassar1_ImpresoraNoResponde;
-            hassar1.ImpresoraOcupada += hassar1_ImpresoraOcupada;
-            hassar1.ImpresoraOK += hassar1_ImpresoraOK;
-            hassar1.ProgresoDeteccion += hassar1_ProgresoDeteccion;
+            Log("Cargando eventos");
+            printer.ErrorFiscal += ErrorFiscal;
+            printer.ErrorImpresora += ErrorImpresora;
+            printer.EventoFiscal += EventoFiscal;
+            printer.EventoImpresora += EventoImpresora;
+            printer.FaltaPapel += FaltaPapel;
+            printer.ImpresoraNoResponde += ImpresoraNoResponde;
+            printer.ImpresoraOcupada += ImpresoraOcupada;
+            printer.ImpresoraOK += ImpresoraOK;
+            printer.ProgresoDeteccion += ProgresoDeteccion;
         }
 
         private void LoadActions()
         {
-            Console.WriteLine("Cargando acciones");
-            actionCommands = new Dictionary<int, KeyValuePair<string, Action>>();
-            actionCommands.Add(0, new KeyValuePair<string, Action>("Ver Configuración", () => { LoadInfo(); }));
-            actionCommands.Add(1, new KeyValuePair<string, Action>("AutodetectarControlador", () => { hassar1.AutodetectarControlador(1); }));
-            actionCommands.Add(2, new KeyValuePair<string, Action>("AutodetectarModelo", () => { hassar1.AutodetectarModelo(); }));
-            actionCommands.Add(3, new KeyValuePair<string, Action>("VerificarModelo", () =>  { hassar1.VerificarModelo(); }));
-            actionCommands.Add(4, new KeyValuePair<string, Action>("TratarDeCancelarTodo", () =>  { hassar1.TratarDeCancelarTodo(); }));
-            actionCommands.Add(5, new KeyValuePair<string, Action>("Comenzar", () =>  { hassar1.Comenzar(); } ));
-            actionCommands.Add(6, new KeyValuePair<string, Action>("ObtenerDatosDeInicializacion", () =>  { ObtenerDatosDeInicializacion(); }));
-            actionCommands.Add(7, new KeyValuePair<string, Action>("ObtenerConfiguracion", () =>  { ObtenerConfiguracion(); }));
-            actionCommands.Add(8, new KeyValuePair<string, Action>("ObtenerDatosDeConfiguracion", () =>  { hassar1.ObtenerDatosDeConfiguracion(); }));
-            actionCommands.Add(9, new KeyValuePair<string, Action>("VerificarModelo", () => { hassar1.VerificarModelo(); }));
-            actionCommands.Add(10, new KeyValuePair<string, Action>("ObtenerConfiguracionCompleta", () => { hassar1.ObtenerConfiguracionCompleta(); }));
-            actionCommands.Add(11, new KeyValuePair<string, Action>("TratarDeCancelarTodo", () => { hassar1.TratarDeCancelarTodo(); }));
+            Log("Cargando acciones");
+            ActionCommands = new Dictionary<int, KeyValuePair<string, Action>>();
+            ActionCommands.Add(0, new KeyValuePair<string, Action>("Ver Configuración", LoadInfo));
+            ActionCommands.Add(1, new KeyValuePair<string, Action>("Autodetectar Controlador", () => printer.AutodetectarControlador(printer.Puerto)));
+            ActionCommands.Add(2, new KeyValuePair<string, Action>("Autodetectar Modelo", () => printer.AutodetectarModelo()));
+            ActionCommands.Add(3, new KeyValuePair<string, Action>("Verificar Modelo", () => printer.VerificarModelo()));
+            ActionCommands.Add(4, new KeyValuePair<string, Action>("Tratar De CancelarTodo", () => printer.TratarDeCancelarTodo()));
+            ActionCommands.Add(5, new KeyValuePair<string, Action>("Comenzar", () => printer.Comenzar()));
+            ActionCommands.Add(6, new KeyValuePair<string, Action>("Obtener Datos De Inicializacion", ObtenerDatosDeInicializacion));
+            ActionCommands.Add(7, new KeyValuePair<string, Action>("Obtener Configuracion", ObtenerConfiguracion));
+            ActionCommands.Add(8, new KeyValuePair<string, Action>("Obtener Datos De Configuracion", () => printer.ObtenerDatosDeConfiguracion()));
+            ActionCommands.Add(9, new KeyValuePair<string, Action>("Verificar Modelo", () => printer.VerificarModelo()));
+            ActionCommands.Add(10, new KeyValuePair<string, Action>("Obtener Configuracion Completa", () => printer.ObtenerConfiguracionCompleta()));
+            ActionCommands.Add(11, new KeyValuePair<string, Action>("Tratar De Cancelar Todo", () => printer.TratarDeCancelarTodo()));
+            ActionCommands.Add(12, new KeyValuePair<string, Action>("Datos Cliente", () => printer.DatosCliente(customer.Name, customer.DNI, customer.DNIType, customer.TaxPosition, customer.Address)));
+            ActionCommands.Add(13, new KeyValuePair<string, Action>("Abrir documento fiscal (A)", () => printer.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_FACTURA_A)));
+            ActionCommands.Add(14, new KeyValuePair<string, Action>("Imprimir Texto Fiscal ", () => printer.ImprimirTextoFiscal("Mi Texto Fiscal")));
+            ActionCommands.Add(15, new KeyValuePair<string, Action>("Imprimir Item ", () => printer.ImprimirItem("Dummy item",10,100,0.21,0)));
+            ActionCommands.Add(16, new KeyValuePair<string, Action>("Subtotal ", Subtotal));
+            ActionCommands.Add(17, new KeyValuePair<string, Action>("Codigo de barras ", ()=>printer.ImprimirCodigoDeBarras(TiposDeCodigoDeBarras.CODIGO_TIPO_EAN_13,"000201102002",false,true)));
+            ActionCommands.Add(18, new KeyValuePair<string, Action>("Cerrar Documento fiscal (A) ", ()=>
+                                                                                                        {
+                                                                                                            object number;
+                                                                                                            printer.CerrarComprobanteFiscal(1,out number);
+                                                                                                            Log(string.Format("Factura A Numero{0}",number));
+                                                                                                        }));
 
+        }
+
+        private void Subtotal()
+        {
+            object o1, o2, o3, o4, o5, o6;
+            printer.Subtotal(true, out o1, out o2, out o3, out o4, out o5, out o6);
+            Log(string.Format("Cantidad de items: {0} -Monto Ventas: {1} -Monto IVA: {2} -Monto Pagado: {3} -Monto IVA No Inscripto: {4} -Monto Impuestos internos: {5}", o1, o2, o3, o4, o5, o6));
         }
 
         private void ObtenerConfiguracion()
         {
             object o1, o2, o3, o4, o5, o6,o7, o8,o9,o10,o11,o12,o13,o14,o15,o16, o17;
-            hassar1.ObtenerConfiguracion(out o1,out o2,out o3,out o4,out o5,out o6,out o7,out o8,out o9,out o10,out o11,out o12,out o13, out o14,out o15, out o16,out o17);
-            Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} - {8} - {9} - {10} - {11} - {12} - {13} - {14} - {15} - {16} - {17}", o1, o2, o3, o4, o5, o6, o7, o8,o9,o10,o11,o12,o12,o13,o14,o15,o16,o17);
+            printer.ObtenerConfiguracion(out o1,out o2,out o3,out o4,out o5,out o6,out o7,out o8,out o9,out o10,out o11,out o12,out o13, out o14,out o15, out o16,out o17);
+            Log(string.Format("Limite consumidor final: {0} -Limite Factura {1} -ProcentajeIvaNoInscripto: {2} -Numero de copias Maximo: {3} -Imprimer Cambio: {4} -"+
+            "Imprimer leyendas opcionales: {5} -Tipo de corte: {6} -Imprimer Marco: {7} -Re imprimer documentos: {8} -"+
+            "Descripción del medio de pago: {9} -Sonido: {10} -Alto hoja: {11} -Ancho hoja: {12} - Estación impresion reportes XZ: {13} -Modo impresion: {14} - Chequeo desborde cmpleto: {15} - Chequeo tapa abierta: {16} - {17}", o1, o2, o3, o4, o5, o6, o7, o8,o9,o10,o11,o12,o12,o13,o14,o15,o16,o17));
         }
 
         private void ObtenerDatosDeInicializacion()
         {
             object o1, o2, o3, o4, o5, o6,o7, o8;
-            hassar1.ObtenerDatosDeInicializacion(out o1, out o2, out o3, out o4, out o5, out o6, out o7, out o8);
-            Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} ", o1, o2, o3, o4, o5, o6, o7, o8);
+            printer.ObtenerDatosDeInicializacion(out o1, out o2, out o3, out o4, out o5, out o6, out o7, out o8);
+            Log(string.Format("{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} ", o1, o2, o3, o4, o5, o6, o7, o8));
         }
 
         private void LoadInitializationData()
         {
-            Console.WriteLine("Cargando datos de inicialización");
+            Log("Cargando datos de inicialización");
             initializationList = new List<Action>
             {
-                () => Console.WriteLine("Baudios {0}", hassar1.Baudios),
-                () => Console.WriteLine("Cajon Abierto {0}", hassar1.CajonAbierto),
-                () => Console.WriteLine("ContadorImpresoraOcupada {0}",hassar1.ContadorImpresoraOcupada),
-                () => Console.WriteLine("DescripcionDocumentoEnCurso {0}", hassar1.DescripcionDocumentoEnCurso),
-                () => Console.WriteLine("DescripcionesLargas {0}", hassar1.DescripcionesLargas),
-                () => Console.WriteLine("DireccionIP {0}", hassar1.DireccionIP),
-                () => Console.WriteLine("DobleAncho {0}", hassar1.DobleAncho),
-                () => Console.WriteLine("DocumentoDeReferencia {0}", hassar1.DocumentoDeReferencia[0]),
-                () => Console.WriteLine("DocumentoEnCurso {0}", hassar1.DocumentoEnCurso),
-                () => Console.WriteLine("Encabezado {0}", hassar1.Encabezado[0]),
-                () => Console.WriteLine("EstadoControlador {0}", hassar1.EstadoControlador),
-                () => Console.WriteLine("EventosIndividuales {0}", hassar1.EventosIndividuales),
-                () => Console.WriteLine("FechaHoraFiscal {0}", hassar1.FechaHoraFiscal),
-                () => Console.WriteLine("HuboErrorFiscal {0}", hassar1.HuboErrorFiscal),
-                () => Console.WriteLine("HuboErrorMecanico {0}", hassar1.HuboErrorMecanico),
-                () => Console.WriteLine("HuboFaltaPapel {0}", hassar1.HuboFaltaPapel),
-                () => Console.WriteLine("HuboStatPrn {0}", hassar1.HuboStatPrn),
-                () => Console.WriteLine("ImpuestoInternoFijo {0}", hassar1.ImpuestoInternoFijo),
-                () => Console.WriteLine("ImpuestoInternoPorMonto {0}",hassar1.ImpuestoInternoPorMonto),
-                () => Console.WriteLine("IndicadorFiscal {0}", hassar1.IndicadorFiscal[0]),
-                () => Console.WriteLine("IndicadorImpresora {0}", hassar1.IndicadorImpresora[0]),
-                () => Console.WriteLine("Interlineado {0}", hassar1.Interlineado),
-                () => Console.WriteLine("kIVA {0}", hassar1.kIVA),
-                () => Console.WriteLine("Modelo {0}", hassar1.Modelo),
-                () => Console.WriteLine("ModoStatPrn {0}", hassar1.ModoStatPrn),
-                () => Console.WriteLine("NombreDeFantasia {0}", hassar1.NombreDeFantasia[0]),
-                () => Console.WriteLine("PaginasDeUltimoDocumento {0}",hassar1.PaginasDeUltimoDocumento),
-                () => Console.WriteLine("PrecioBase {0}", hassar1.PrecioBase),
-                () => Console.WriteLine("Puerto {0}", hassar1.Puerto),
-                () => Console.WriteLine("ReintentoConstante {0}", hassar1.ReintentoConstante),
-                () => Console.WriteLine("Reintentos {0}", hassar1.Reintentos),
-                () => Console.WriteLine("Respuesta {0}", hassar1.Respuesta[0]),
-                () => Console.WriteLine("ResumenIVA {0}", hassar1.ResumenIVA),
-                () => Console.WriteLine("SoportaStatPRN {0}", hassar1.SoportaStatPRN),
-                () => Console.WriteLine("TiempoDeEspera {0}", hassar1.TiempoDeEspera),
-                () => Console.WriteLine("Transporte {0}", hassar1.Transporte),
-                () => Console.WriteLine("UltimaNotaCreditoA {0}", hassar1.UltimaNotaCreditoA),
-                () => Console.WriteLine("UltimaNotaCreditoBC {0}", hassar1.UltimaNotaCreditoBC),
-                () => Console.WriteLine("UltimoDocumentoFiscalA {0}", hassar1.UltimoDocumentoFiscalA),
-                () => Console.WriteLine("UltimoDocumentoFiscalBC {0}",hassar1.UltimoDocumentoFiscalBC),
-                () => Console.WriteLine("UltimoDocumentoFueCancelado {0}",hassar1.UltimoDocumentoFueCancelado),
-                () => Console.WriteLine("UltimoRemito {0}", hassar1.UltimoRemito),
-                () => Console.WriteLine("UsarASCII {0}", hassar1.UsarASCII),
-                () => Console.WriteLine("UsarDisplay {0}", hassar1.UsarDisplay),
-                () => Console.WriteLine("VerificacionCompletaDeErrores {0}", hassar1.VerificacionCompletaDeErrores),
-                () => Console.WriteLine("Version {0}", hassar1.Version)
+                () => Log(string.Format("Baudios {0}", printer.Baudios)),
+                () => Log(string.Format("Cajon Abierto {0}", printer.CajonAbierto)),
+                () => Log(string.Format("Contador Impresora Ocupada {0}",printer.ContadorImpresoraOcupada)),
+                () => Log(string.Format("Descripcion Documento En Curso {0}", printer.DescripcionDocumentoEnCurso)),
+                () => Log(string.Format("Descripciones Largas {0}", printer.DescripcionesLargas)),
+                () => Log(string.Format("Direccion IP {0}", printer.DireccionIP)),
+                () => Log(string.Format("Doble Ancho {0}", printer.DobleAncho)),
+                () => Log(string.Format("Documento De Referencia {0}", printer.DocumentoDeReferencia[0])),
+                () => Log(string.Format("Documento En Curso {0}", printer.DocumentoEnCurso)),
+                () => Log(string.Format("Encabezado {0}", printer.Encabezado[0])),
+                () => Log(string.Format("Estado Controlador {0}", printer.EstadoControlador)),
+                () => Log(string.Format("Eventos Individuales {0}", printer.EventosIndividuales)),
+                () => Log(string.Format("Fecha Hora Fiscal {0}", printer.FechaHoraFiscal)),
+                () => Log(string.Format("Hubo Error Fiscal {0}", printer.HuboErrorFiscal)),
+                () => Log(string.Format("Hubo Error Mecanico {0}", printer.HuboErrorMecanico)),
+                () => Log(string.Format("Hubo Falta Papel {0}", printer.HuboFaltaPapel)),
+                () => Log(string.Format("Hubo Stat Prn {0}", printer.HuboStatPrn)),
+                () => Log(string.Format("Impuesto Interno Fijo {0}", printer.ImpuestoInternoFijo)),
+                () => Log(string.Format("ImpuestoInterno Por Monto {0}",printer.ImpuestoInternoPorMonto)),
+                () => Log(string.Format("Indicador Fiscal {0}", printer.IndicadorFiscal[0])),
+                () => Log(string.Format("Indicador Impresora {0}", printer.IndicadorImpresora[0])),
+                () => Log(string.Format("Interlineado {0}", printer.Interlineado)),
+                () => Log(string.Format("kIVA {0}", printer.kIVA)),
+                () => Log(string.Format("Modelo {0}", printer.Modelo)),
+                () => Log(string.Format("Modo Stat Prn {0}", printer.ModoStatPrn)),
+                () => Log(string.Format("Nombre De Fantasia {0}", printer.NombreDeFantasia[0])),
+                () => Log(string.Format("Paginas De Ultimo Documento {0}",printer.PaginasDeUltimoDocumento)),
+                () => Log(string.Format("Precio Base {0}", printer.PrecioBase)),
+                () => Log(string.Format("Puerto {0}", printer.Puerto)),
+                () => Log(string.Format("Reintento Constante {0}", printer.ReintentoConstante)),
+                () => Log(string.Format("Reintentos {0}", printer.Reintentos)),
+                () => Log(string.Format("Respuesta {0}", printer.Respuesta[0])),
+                () => Log(string.Format("Resumen IVA {0}", printer.ResumenIVA)),
+                () => Log(string.Format("Soporta Stat PRN {0}", printer.SoportaStatPRN)),
+                () => Log(string.Format("Tiempo De Espera {0}", printer.TiempoDeEspera)),
+                () => Log(string.Format("Transporte {0}", printer.Transporte)),
+                () => Log(string.Format("Ultima Nota CreditoA {0}", printer.UltimaNotaCreditoA)),
+                () => Log(string.Format("Ultima Nota CreditoBC {0}", printer.UltimaNotaCreditoBC)),
+                () => Log(string.Format("Ultimo Documento FiscalA {0}", printer.UltimoDocumentoFiscalA)),
+                () => Log(string.Format("Ultimo Documento Fiscal BC {0}",printer.UltimoDocumentoFiscalBC)),
+                () => Log(string.Format("Ultimo Documento Fue Cancelado {0}",printer.UltimoDocumentoFueCancelado)),
+                () => Log(string.Format("Ultimo Remito {0}", printer.UltimoRemito)),
+                () => Log(string.Format("Usar ASCII {0}", printer.UsarASCII)),
+                () => Log(string.Format("Usar Display {0}", printer.UsarDisplay)),
+                () => Log(string.Format("Verificacion Completa De Errores {0}", printer.VerificacionCompletaDeErrores)),
+                () => Log(string.Format("Version {0}", printer.Version))
             };
         }
 
@@ -135,68 +189,75 @@ namespace ZeroPrinters
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Log(ex.Message);
                 }
             }
 
         }
 
         #region Handlers
-        void hassar1_ProgresoDeteccion(int Puerto, int Velocidad)
+        void ProgresoDeteccion(int Puerto, int Velocidad)
         {
-            Console.WriteLine(string.Format("Evento {0} - Puerto {1} - Velocidad {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, Puerto, Velocidad));
+            Log(string.Format("Evento {0} - Puerto {1} - Velocidad {2}", MethodBase.GetCurrentMethod().Name, Puerto, Velocidad));
         }
 
-        void hassar1_ImpresoraOK()
+        void ImpresoraOK()
         {
-            Console.WriteLine(string.Format("Evento {0} - {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name));
+            Log(string.Format("Evento {0}", MethodBase.GetCurrentMethod().Name));
         }
 
-        void hassar1_ImpresoraOcupada()
+        void ImpresoraOcupada()
         {
-            Console.WriteLine(string.Format("Evento {0} - {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name));
+            Log(string.Format("Evento {0}", MethodBase.GetCurrentMethod().Name));
         }
 
-        void hassar1_ImpresoraNoResponde(int CantidadReintentos)
+        void ImpresoraNoResponde(int CantidadReintentos)
         {
-            Console.WriteLine(string.Format("Evento {0} - CantidadReintentos {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, CantidadReintentos));
+            Log(string.Format("Evento {0} - CantidadReintentos {1}", MethodBase.GetCurrentMethod().Name, CantidadReintentos));
         }
 
-        void hassar1_FaltaPapel()
+        void FaltaPapel()
         {
-            Console.WriteLine(string.Format("Evento {0} - {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name));
+            Log(string.Format("Evento {0}", MethodBase.GetCurrentMethod().Name));
         }
 
-        void hassar1_EventoImpresora(int Flags)
+        void EventoImpresora(int Flags)
         {
-            Console.WriteLine(string.Format("Evento {0} - Flags {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, Flags));
+            Log(string.Format("Evento {0} - Flags {1}", MethodBase.GetCurrentMethod().Name, Flags));
         }
 
-        void hassar1_EventoFiscal(int Flags)
+        void EventoFiscal(int Flags)
         {
-            Console.WriteLine(string.Format("Evento {0} - Flags {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, Flags));
+            Log(string.Format("Evento {0} - Flags {1}", MethodBase.GetCurrentMethod().Name, Flags));
         }
 
-        void hassar1_ErrorImpresora(int Flags)
+        void ErrorImpresora(int Flags)
         {
-            Console.WriteLine(string.Format("Evento {0} - Flags {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, Flags));
+            Log(string.Format("Evento {0} - Flags {1}", MethodBase.GetCurrentMethod().Name, Flags));
         }
 
-        void hassar1_ErrorFiscal(int Flags)
+        void ErrorFiscal(int Flags)
         {
-            Console.WriteLine(string.Format("Evento {0} - Flags {1} - {2}", System.Reflection.MethodBase.GetCurrentMethod().Name, Flags));
+            Log(string.Format("Evento {0} - Flags {1} - {2}", MethodBase.GetCurrentMethod().Name, Flags));
         }
 
         #endregion
         
         public void TryExecute(int action)
         {
-            if(actionCommands.ContainsKey(action))
+            if(ActionCommands.ContainsKey(action))
             {
-                Console.WriteLine(string.Format("Acción {0} ", actionCommands[action].Key));
-                Console.WriteLine("Execute? y/n"); 
-                if(Console.ReadKey().Key == ConsoleKey.Y)
-                    actionCommands[action].Value();
+                try
+                {
+                    Log(string.Format("Acción {0} ", ActionCommands[action].Key));
+                    if (CanExecute(string.Format("Ejecutar {0}?", ActionCommands[action].Key)))
+                        ActionCommands[action].Value();
+                }
+                catch (Exception ex)
+                {
+                    Log(string.Format("Error: {0}", ex.Message));
+                }
+                
             }
         }
     }

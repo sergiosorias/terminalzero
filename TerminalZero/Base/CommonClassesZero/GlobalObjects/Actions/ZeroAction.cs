@@ -27,8 +27,6 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
         #region ICommand Members
 
-        public event EventHandler CanExecuteChanged;
-
         public override bool CanExecute(object parameter)
         {
             StringBuilder sb;
@@ -108,6 +106,8 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             }
             return ret;
         }
+
+        public override event EventHandler CanExecuteChanged;
 
         public override void RaiseCanExecuteChanged()
         {

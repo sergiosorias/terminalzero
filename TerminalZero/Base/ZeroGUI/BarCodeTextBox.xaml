@@ -8,7 +8,7 @@
              mc:Ignorable="d" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Loaded="UserControl_Loaded">
     <TextBox x:Name="barCode" PreviewKeyDown="barCode_PreviewKeyDown" b:Masking.Mask="^[0-9]{0,13}$" AcceptsReturn="False" AcceptsTab="False">
         <TextBox.Text>
-            <Binding Path="Text"  UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
+            <Binding Path="Text" UpdateSourceTrigger="PropertyChanged" NotifyOnValidationError="True">
                 <Binding.ValidationRules>
                     <r:IsBarCodeRule Validating="IsBarCodeRule_Validating" />
                 </Binding.ValidationRules>

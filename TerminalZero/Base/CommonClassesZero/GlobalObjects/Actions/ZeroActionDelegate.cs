@@ -42,7 +42,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             return Predicate == null || Predicate(parameter);
         }
 
-        public event EventHandler CanExecuteChanged;
+        public virtual event EventHandler CanExecuteChanged;
 
         public virtual void RaiseCanExecuteChanged()
         {
