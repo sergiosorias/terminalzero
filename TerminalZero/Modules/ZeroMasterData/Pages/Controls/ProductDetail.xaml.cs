@@ -82,7 +82,7 @@ namespace ZeroMasterData.Pages.Controls
             if (res.HasValue && res.Value)
             {
                 BusinessContext.Instance.Model.ProductGroups.AddObject(pgd.ProductGroupNew);
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
                 groupBox.Items.Add(pgd.ProductGroupNew);
                 ProductDetailViewModel.Product.ProductGroup = pgd.ProductGroupNew;
             }
@@ -95,7 +95,7 @@ namespace ZeroMasterData.Pages.Controls
             if (res.HasValue && res.Value)
             {
                 BusinessContext.Instance.Model.Weights.AddObject(pgd.CurrentWeigth);
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
                 weightBox.Items.Add(pgd.CurrentWeigth);
                 ProductDetailViewModel.Product.Price1.Weight = pgd.CurrentWeigth;
             }
@@ -110,7 +110,7 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
             }
             else
             {
@@ -128,7 +128,7 @@ namespace ZeroMasterData.Pages.Controls
             bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditMeasurementUnit);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
             }
             else
             {

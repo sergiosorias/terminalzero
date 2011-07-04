@@ -112,8 +112,6 @@ namespace ZeroBusiness.Entities.Data
                 SaleItems.Count,
                 TerminalCode,
                 Code,
-                true,
-                (int) EntityStatus.New,
                 TerminalToCode,
                 lot,
                 prod.Code,

@@ -25,8 +25,8 @@ namespace ZeroMasterData.Presentation
             {
                 if(product==null)
                 {
-                    product = Product.CreateProduct(BusinessContext.Instance.Model.Products.Count(), true, true);
-                    product.Price1 = Price.CreatePrice(BusinessContext.Instance.Model.Prices.Count(), true, 0);
+                    product = Product.CreateProduct(BusinessContext.Instance.Model.Products.Count(), true);
+                    product.Price1 = Price.CreatePrice(BusinessContext.Instance.Model.Prices.Count(), 0);
                 }
                 return product;
             }
@@ -86,7 +86,7 @@ namespace ZeroMasterData.Presentation
             }
             if(ret)
             {
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave,true);
             }
             return ret;
         }

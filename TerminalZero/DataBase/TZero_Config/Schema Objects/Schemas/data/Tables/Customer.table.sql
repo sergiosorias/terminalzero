@@ -3,6 +3,7 @@
 	Code int NOT NULL, 
 	TerminalCode int NOT NULL CONSTRAINT DF_Customer_TerminalCode DEFAULT(0),
 	[Stamp] datetime NULL CONSTRAINT DF_Customer_Stamp DEFAULT (Getdate()),
+	[Status] smallint NOT NULL CONSTRAINT DF_Customer_Status DEFAULT (0),
 	[Enable] bit NOT NULL CONSTRAINT DF_Customer_Enable DEFAULT (1),
 	[Name1] nvarchar(100) NULL,
 	[Name2] nvarchar(300) NULL,

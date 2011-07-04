@@ -18,8 +18,7 @@ namespace ZeroMasterData.Pages.Controls
         {
             InitializeComponent();
             ProductGroupNew = ProductGroup.CreateProductGroup(
-                    BusinessContext.Instance.Model.ProductGroups.Count(),
-                     true);
+                    BusinessContext.Instance.Model.ProductGroups.Count());
         }
 
         public ProductGroupDetail(ProductGroup Data) :this()

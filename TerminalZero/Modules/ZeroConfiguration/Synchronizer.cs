@@ -302,7 +302,15 @@ namespace ZeroConfiguration
                 Config.Notifier.SetProcess("Enviando Paquetes de datos");
                 foreach (var module in Config.Modules)
                 {
-                    string[] filesToSend = module.GetFilesToSend();
+                    string[] filesToSend = new string[] {};
+                    try
+                    {
+                        filesToSend = module.GetFilesToSend();
+                    }
+                    catch (Exception exe)
+                    {
+                        Config.Notifier.SetUserMessage(true, "Error al generar paquetes del módulo N°" + module.ModuleCode);
+                    }
                     if (filesToSend.Length > 0)
                     {
                         Config.Notifier.SetUserMessage(false, "Enviando paquetes del módulo N°" + module.ModuleCode);
@@ -327,7 +335,6 @@ namespace ZeroConfiguration
                         }
                     }
                 }
-                ret = true;
             }
             catch (Exception ex)
             {

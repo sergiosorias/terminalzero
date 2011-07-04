@@ -1,13 +1,13 @@
-﻿using System.ComponentModel;
+﻿using System;
 using System.Linq;
-using System.Xml.Serialization;
 using ZeroBusiness.Exceptions;
 using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Weight
+    public partial class Weight : IExportableEntity
     {
         internal Weight()
         {
@@ -43,6 +43,21 @@ namespace ZeroBusiness.Entities.Data
                 throw new BusinessValidationException("La cantidad tiene que ser mayor a cero");
             }
         }
+
+        #region Implementation of IExportableEntity
+
+        public int TerminalDestination
+        {
+            get { return 0; }
+        }
+
+        public void UpdateStatus(EntityStatus status)
+        {
+            Stamp = DateTime.Now;
+            Status = (short)status;
+        }
+
+        #endregion
 
     }
 }

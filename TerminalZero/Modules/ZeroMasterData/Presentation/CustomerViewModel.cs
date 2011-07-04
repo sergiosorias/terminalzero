@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
@@ -115,7 +116,7 @@ namespace ZeroMasterData.Presentation
         private void CreateCustomer(object parameter)
         {
             var viewmodel = new CustomerDetailViewModel(new CustomerDetail());
-            viewmodel.Customer = Customer.CreateCustomer(BusinessContext.Instance.Model.GetNextCustomerCode(), 0, true);
+            viewmodel.Customer = new Customer(Terminal.Instance.TerminalCode);
             if (viewmodel.View.ShowDialog())
             {
                 try

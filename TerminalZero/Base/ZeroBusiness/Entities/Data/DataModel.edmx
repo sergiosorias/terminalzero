@@ -170,6 +170,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="TerminalCode" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Name1" Type="nvarchar" MaxLength="100" />
           <Property Name="Name2" Type="nvarchar" MaxLength="300" />
@@ -271,6 +272,7 @@
           </Key>
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
@@ -283,6 +285,7 @@
           </Key>
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
@@ -297,6 +300,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="MasterCode" Type="varchar" MaxLength="20" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
@@ -317,6 +321,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
         </EntityType>
@@ -327,6 +332,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
         </EntityType>
@@ -474,6 +480,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Name1" Type="nvarchar" MaxLength="100" />
           <Property Name="Name2" Type="nvarchar" MaxLength="300" />
           <Property Name="Country" Type="nvarchar" MaxLength="250" />
@@ -498,6 +505,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
           <Property Name="Value" Type="float" Nullable="false" />
@@ -510,6 +518,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
         </EntityType>
@@ -520,6 +529,7 @@
           <Property Name="Code" Type="int" Nullable="false" />
           <Property Name="Stamp" Type="datetime" />
           <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
           <Property Name="Quantity" Type="float" Nullable="false" />
@@ -1023,7 +1033,7 @@
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name1" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Name2" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Name="Country" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
@@ -1045,6 +1055,7 @@
           <Property Name="LegalCode" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="TaxPosition" Relationship="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="Customer" ToRole="TaxPosition" />
           <NavigationProperty Name="PaymentInstrument" Relationship="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="Customer" ToRole="PaymentInstrument" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="DeliveryDocumentHeader">
           <Key>
@@ -1054,8 +1065,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="UserCode" Type="Guid" />
@@ -1076,8 +1087,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="DeliveryDocumentHeaderCode" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="ProductCode" Type="Int32" Nullable="false" />
@@ -1097,8 +1108,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="UserCode" Type="Guid" />
           <Property Name="SupplierCode" Type="Int32" />
@@ -1130,7 +1141,7 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Name="PrintModeDefault" Type="Int32" />
@@ -1138,6 +1149,7 @@
           <NavigationProperty Name="Suppliers" Relationship="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" FromRole="PaymentInstrument" ToRole="Supplier" />
           <NavigationProperty Name="SalePaymentItems" Relationship="TZeroDataModel.FK_StockHeader_PaymentInstrument" FromRole="PaymentInstrument" ToRole="SalePaymentItem" />
           <Property Type="Boolean" Name="ChangeEnable" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Price">
           <Key>
@@ -1145,7 +1157,7 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Name="UnitWeightCode" Type="Int32" />
@@ -1155,6 +1167,7 @@
           <NavigationProperty Name="Products1" Relationship="TZeroDataModel.FK_Product_Price" FromRole="Price" ToRole="Product" />
           <NavigationProperty Name="Weight" Relationship="TZeroDataModel.FK_SaleWeight_Price_Weight" FromRole="Price" ToRole="Weight" />
           <NavigationProperty Name="Weight1" Relationship="TZeroDataModel.FK_UnitWeight_Price_Weight" FromRole="Price" ToRole="Weight" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -1162,7 +1175,7 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="MasterCode" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
@@ -1183,6 +1196,7 @@
           <NavigationProperty Name="StockItems" Relationship="TZeroDataModel.FK_StockItem_Product" FromRole="Product" ToRole="StockItem" />
           <NavigationProperty Name="Tax" Relationship="TZeroDataModel.FK_Tax1_Product_Tax" FromRole="Product" ToRole="Tax" />
           <NavigationProperty Name="Tax1" Relationship="TZeroDataModel.FK_Tax2_Product_Tax" FromRole="Product" ToRole="Tax" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="ProductGroup">
           <Key>
@@ -1190,11 +1204,12 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Products" Relationship="TZeroDataModel.FK_Group1_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
           <NavigationProperty Name="Products1" Relationship="TZeroDataModel.FK_Group2_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="ReturnReason">
           <Key>
@@ -1202,9 +1217,10 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="SaleHeader">
           <Key>
@@ -1214,8 +1230,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="UserCode" Type="Guid" />
@@ -1243,8 +1259,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="SaleHeaderCode" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="ProductCode" Type="Int32" Nullable="false" />
@@ -1268,8 +1284,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="TotalQuantity" Type="Double" Nullable="false" />
           <NavigationProperty Name="SaleHeaders" Relationship="TZeroDataModel.FK_SaleHeader_SalePaymentHeader" FromRole="SalePaymentHeader" ToRole="SaleHeader" />
@@ -1285,8 +1301,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="SalePaymentHeaderCode" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="PaymentInstrumentCode" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Double" Nullable="false" />
@@ -1299,7 +1315,7 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="SaleHeaders" Relationship="TZeroDataModel.FK_SaleHeader_SaleType" FromRole="SaleType" ToRole="SaleHeader" />
@@ -1312,8 +1328,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="UserCode" Type="Guid" />
@@ -1334,8 +1350,8 @@
           <Property Name="TerminalCode" Type="Int32" Nullable="false" />
           <Property Name="StockHeaderCode" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="Status" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="TerminalToCode" Type="Int32" Nullable="false" />
           <Property Name="Batch" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
           <Property Name="ProductCode" Type="Int32" Nullable="false" />
@@ -1354,7 +1370,7 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="StockHeaders" Relationship="TZeroDataModel.FK_StockHeader_StockType" FromRole="StockType" ToRole="StockHeader" />
@@ -1365,7 +1381,7 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name1" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Name2" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Name="Country" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
@@ -1385,6 +1401,7 @@
           <NavigationProperty Name="DeliveryDocumentHeaders" Relationship="TZeroDataModel.FK_DeliveryDocumentHeader_Supplier" FromRole="Supplier" ToRole="DeliveryDocumentHeader" />
           <NavigationProperty Name="PaymentInstrument" Relationship="TZeroDataModel.FK_PaymentInstrumentCode_Supplier_PaymentInstrument" FromRole="Supplier" ToRole="PaymentInstrument" />
           <NavigationProperty Name="TaxPosition" Relationship="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition" FromRole="Supplier" ToRole="TaxPosition" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Tax">
           <Key>
@@ -1392,13 +1409,14 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="ProductDefault" Type="Boolean" />
           <NavigationProperty Name="Products" Relationship="TZeroDataModel.FK_Tax1_Product_Tax" FromRole="Tax" ToRole="Product" />
           <NavigationProperty Name="Products1" Relationship="TZeroDataModel.FK_Tax2_Product_Tax" FromRole="Tax" ToRole="Product" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="TaxPosition">
           <Key>
@@ -1406,11 +1424,12 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Customers" Relationship="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="TaxPosition" ToRole="Customer" />
           <NavigationProperty Name="Suppliers" Relationship="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition" FromRole="TaxPosition" ToRole="Supplier" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="Weight">
           <Key>
@@ -1418,12 +1437,13 @@
           </Key>
           <Property Name="Code" Type="Int32" Nullable="false" />
           <Property Name="Stamp" Type="DateTime" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Name="Quantity" Type="Double" Nullable="false" />
           <NavigationProperty Name="Prices" Relationship="TZeroDataModel.FK_SaleWeight_Price_Weight" FromRole="Weight" ToRole="Price" />
           <NavigationProperty Name="Prices1" Relationship="TZeroDataModel.FK_UnitWeight_Price_Weight" FromRole="Weight" ToRole="Price" />
+          <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
         </EntityType>
         <EntityType Name="StockCreateSummary">
           <Key>
@@ -1777,7 +1797,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TZeroDataModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="Customers"><EntityTypeMapping TypeName="TZeroDataModel.Customer"><MappingFragment StoreEntitySet="Customer">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
@@ -1859,7 +1880,8 @@
             <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="PaymentInstruments"><EntityTypeMapping TypeName="TZeroDataModel.PaymentInstrument"><MappingFragment StoreEntitySet="PaymentInstrument">
-            <ScalarProperty Name="ChangeEnable" ColumnName="ChangeEnable" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ChangeEnable" ColumnName="ChangeEnable" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
@@ -1868,7 +1890,8 @@
             <ScalarProperty Name="PrintModeDefault" ColumnName="PrintModeDefault" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Prices"><EntityTypeMapping TypeName="TZeroDataModel.Price"><MappingFragment StoreEntitySet="Price">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1878,7 +1901,8 @@
             <ScalarProperty Name="Value" ColumnName="Value" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Products"><EntityTypeMapping TypeName="TZeroDataModel.Product"><MappingFragment StoreEntitySet="Product">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="MasterCode" ColumnName="MasterCode" />
@@ -1895,14 +1919,16 @@
             <ScalarProperty Name="DueDays" ColumnName="DueDays" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ProductGroups"><EntityTypeMapping TypeName="TZeroDataModel.ProductGroup"><MappingFragment StoreEntitySet="ProductGroup">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="Description" ColumnName="Description" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ReturnReasons"><EntityTypeMapping TypeName="TZeroDataModel.ReturnReason"><MappingFragment StoreEntitySet="ReturnReason">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -2013,7 +2039,8 @@
             <ScalarProperty Name="Description" ColumnName="Description" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Suppliers"><EntityTypeMapping TypeName="TZeroDataModel.Supplier"><MappingFragment StoreEntitySet="Supplier">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name1" ColumnName="Name1" />
@@ -2034,7 +2061,8 @@
             <ScalarProperty Name="LegalCode" ColumnName="LegalCode" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Taxes"><EntityTypeMapping TypeName="TZeroDataModel.Tax"><MappingFragment StoreEntitySet="Tax">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -2043,14 +2071,16 @@
             <ScalarProperty Name="ProductDefault" ColumnName="ProductDefault" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="TaxPositions"><EntityTypeMapping TypeName="TZeroDataModel.TaxPosition"><MappingFragment StoreEntitySet="TaxPosition">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="Description" ColumnName="Description" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Weights"><EntityTypeMapping TypeName="TZeroDataModel.Weight"><MappingFragment StoreEntitySet="Weight">
-            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
             <ScalarProperty Name="Name" ColumnName="Name" />

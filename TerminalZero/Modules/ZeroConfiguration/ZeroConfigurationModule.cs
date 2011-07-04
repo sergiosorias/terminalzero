@@ -36,20 +36,20 @@ namespace ZeroConfiguration
         private void BuildPosibleActions()
         {
             //actions.Add(new ZeroAction(ActionType.MenuItem, "Reload", (rule) => { OnConfigurationRequired(); }));
-            
-            SyncAction = new ZeroBackgroundAction( Actions.ExecSync, StartSync,null, false, false);
+
+            SyncAction = new ZeroBackgroundAction(Actions.ExecSync, StartSync, null, false, false);
             SyncAction.AddParam(typeof(ISyncService), true);
             Terminal.Instance.Session.Actions.Add(SyncAction);
-            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppHome, OpenHomePage,null,false));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration,null,true));
+            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppHome, OpenHomePage, null, false));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration, null, true));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenUserListView, OpenUsers, Rules.IsValidUser, true));
-            var changePassAction = new ZeroAction( Actions.OpenUserPasswordChangeMessage, OpenChangePassword,null,true);
-            changePassAction.AddParam(typeof (User), true);
+            var changePassAction = new ZeroAction(Actions.OpenUserPasswordChangeMessage, OpenChangePassword, null, true);
+            changePassAction.AddParam(typeof(User), true);
             Terminal.Instance.Session.Actions.Add(changePassAction);
         }
 
         private void BuildRulesActions()
-        {   
+        {
             Terminal.Instance.Session.Rules.Add(Rules.IsValidUser, CanOpenConfiguration);
             Terminal.Instance.Session.Rules.Add(Rules.IsTerminalZero, IsTerminalZero);
         }
@@ -58,8 +58,7 @@ namespace ZeroConfiguration
         {
             StartSyncronizer();
             ValidateAdminUser();
-            OpenLogInDialog();
-            Terminal.Instance.CurrentClient.Loaded += (o, e) => OpenHomePage(null);
+            Terminal.Instance.CurrentClient.Loaded += (o, e) => { OpenLogInDialog(); };
         }
 
         private void ValidateAdminUser()
@@ -72,35 +71,38 @@ namespace ZeroConfiguration
 
         private void OpenLogInDialog()
         {
-#if DEBUG
-            ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(K_administrator, true), false);
-            Terminal.Instance.Session[userpParam.Name] = userpParam;
-#else
+//#if DEBUG
+//            ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(K_administrator, true), false);
+//            Terminal.Instance.Session[userpParam.Name] = userpParam;
+//#else
             var view = new UserLogIn();
-            bool? dialogResult = ZeroMessageBox.Show(view, Resources.LogIn,ResizeMode.NoResize,MessageBoxButton.OKCancel);
-            if (dialogResult.GetValueOrDefault())
+            Terminal.Instance.CurrentClient.ShowDialog(view, dialogResult =>
             {
-                if (User.ValidateUser(view.UserName, view.UserPass))
+                if (dialogResult)
                 {
-                    ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(view.UserName, true),false);
-                    Terminal.Instance.Session[typeof(User)] = userpParam;
+                    if (User.ValidateUser(view.UserName, view.UserPass))
+                    {
+                        ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(view.UserName, true), false);
+                        Terminal.Instance.Session[typeof(User)] = userpParam;
+                        OpenHomePage(null);
+                    }
+                    else
+                    {
+                        Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgIncorrectUserPassTryAgain, (res) => { OpenLogInDialog(); }, MessageBoxButton.OK);
+                    }
                 }
                 else
                 {
-                    ZeroMessageBox.Show(Resources.MsgIncorrectUserPassTryAgain, Resources.Fail, ResizeMode.NoResize,MessageBoxButton.OK);
-                    OpenLogInDialog();
-                }
-            }
-            else
-            {
-                ZeroMessageBox.Show(Resources.MsgLogInPlease+"\nEl sistema se cerrara.", Resources.Fail, ResizeMode.NoResize, MessageBoxButton.OK);
-                
-                if(Terminal.Instance.Session.Actions[Actions.AppExit]!=null)
-                {
-                    Terminal.Instance.Session.Actions[Actions.AppExit].Execute(null);
-                }
-            }
-#endif
+                    Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgLogInPlease + "\nEl sistema se cerrara.",(res)=>
+                    {
+                        if (Terminal.Instance.Session.Actions[Actions.AppExit] != null)
+                        {
+                            Terminal.Instance.Session.Actions[Actions.AppExit].TryExecute();
+                        }                                                                                                         
+                    }, MessageBoxButton.OK);
+}
+            });
+//#endif
         }
 
         private void StartSyncronizer()
@@ -109,7 +111,7 @@ namespace ZeroConfiguration
             double milsec;
             using (var conf = new ConfigurationModelManager())
             {
-                milsec = _sync.LoadConfiguration(conf, Terminal.Instance.Session);    
+                milsec = _sync.LoadConfiguration(conf, Terminal.Instance.Session);
             }
 
             Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
@@ -145,7 +147,7 @@ namespace ZeroConfiguration
         {
             Terminal.Instance.CurrentClient.ShowView(new HomePage());
         }
-        
+
         private void OpenUsers(object parameter)
         {
             Terminal.Instance.CurrentClient.ShowView(new Users());
@@ -155,7 +157,7 @@ namespace ZeroConfiguration
         {
             var pswChange = new UserChangePassword();
             pswChange.DataContext = Terminal.Instance.Session[typeof(User)].Value;
-            ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize,MessageBoxButton.OKCancel);
+            ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize, MessageBoxButton.OKCancel);
         }
 
         private void OpenConfiguration(object parameter)
@@ -205,7 +207,7 @@ namespace ZeroConfiguration
         {
             return new MainViewModel();
         }
-        
+
         public bool InitializeTerminal()
         {
             bool initialized = false;
@@ -216,18 +218,19 @@ namespace ZeroConfiguration
                 {
                     ZeroBusiness.Entities.Configuration.Terminal.AddNewTerminal(conf, Terminal.Instance.TerminalCode, Terminal.Instance.TerminalName);
                 }
-                else 
+                else
                 {
                     _isTerminalZero = T.IsTerminalZero;
-                    if(Terminal.Instance.TerminalCode == 0 && !T.IsTerminalZero)
+                    if (Terminal.Instance.TerminalCode == 0 && !T.IsTerminalZero)
                     {
                         T.IsTerminalZero = true;
                         conf.SaveChanges();
                     }
                 }
-                ConfigurationModelManager.CreateTerminalProperties(conf,Terminal.Instance.TerminalCode);
+                ConfigurationModelManager.CreateTerminalProperties(conf, Terminal.Instance.TerminalCode);
 
-                Terminal.Instance.CurrentClient.ModuleList.ForEach(c => { 
+                Terminal.Instance.CurrentClient.ModuleList.ForEach(c =>
+                {
                     c.TerminalStatus = GetModuleStatus(c);
                     c.Initialize();
                 });

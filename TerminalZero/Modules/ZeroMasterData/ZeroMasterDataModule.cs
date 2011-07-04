@@ -32,12 +32,13 @@ namespace ZeroMasterData
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView));
             Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView,null,false));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, ExportMasterDataPack, Rules.IsTerminalZero));
+            //Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, TryExportMasterDataPack, Rules.IsTerminalZero));
             //Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
         public override string[] GetFilesToSend()
         {
+            TryExportMasterDataPack(null);
             return PackManager.GetPacks(ModuleCode, WorkingDirectory);
         }
 
@@ -129,7 +130,7 @@ namespace ZeroMasterData
             }
         }
 
-        private void ExportMasterDataPack(object parameter)
+        private void TryExportMasterDataPack(object parameter)
         {
             var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
             using (var modelManager = BusinessContext.CreateTemporaryModelManager(masterDataPackManager))
@@ -137,47 +138,50 @@ namespace ZeroMasterData
                 Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
                 Terminal.Instance.CurrentClient.Notifier.SetProgress(10);
                 var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                info.AddTable(modelManager.Prices);
-                info.AddTable(modelManager.Weights);
-                info.AddTable(modelManager.PaymentInstruments);
+                //info.AddTable(modelManager.TaxPositions);
+                //info.AddTable(modelManager.PaymentInstruments);
+                //info.AddTable(modelManager.Taxes);
                 info.AddTable(modelManager.ProductGroups);
-                info.AddTable(modelManager.Taxes);
-                info.AddTable(modelManager.TaxPositions);
+                info.AddTable(modelManager.Weights);
+                info.AddTable(modelManager.Prices);
                 info.AddTable(modelManager.Suppliers);
                 info.AddTable(modelManager.Products);
                 info.AddTable(modelManager.Customers);
 
-                using (masterDataPackManager)
+                if (info.HasRowsToProcess)
                 {
-                    masterDataPackManager.Exported += (sender, e) =>
-                            {
-                                Terminal.Instance.CurrentClient.Notifier.SetProgress(60);
-                                Terminal.Instance.CurrentClient.Notifier.SetProcess("Datos Exportados");
-                                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false,"Datos Exportados al directorio: " + WorkingDirectory);
-                                Terminal.Instance.CurrentClient.Notifier.SetProgress(80);
+                    using (masterDataPackManager)
+                    {
+                        //masterDataPackManager.Exported += (sender, e) =>
+                        //{
+                        //    Terminal.Instance.CurrentClient.Notifier.SetProgress(60);
+                        //    Terminal.Instance.CurrentClient.Notifier.SetProcess("Datos Exportados");
+                        //    Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false,"Datos Exportados al directorio: " + WorkingDirectory);
+                        //    Terminal.Instance.CurrentClient.Notifier.SetProgress(80);
+                        //};
+                        try
+                        {
+                            //Terminal.Instance.CurrentClient.Notifier.SetProcess("Creando paquete");
+                            if(masterDataPackManager.Export(info))
+                                modelManager.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
+                        }
 
-                            };
-                    try
-                    {
-                        Terminal.Instance.CurrentClient.Notifier.SetProcess("Creando paquete");
-                        masterDataPackManager.Export(info);
                     }
-                    catch (Exception ex)
-                    {
-                        Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
-                    }
+                    //Terminal.Instance.CurrentClient.Notifier.SetProcess("Listo");
+                    //Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, "Terminado");
+                    //Terminal.Instance.CurrentClient.Notifier.SetProgress(100);
 
                 }
-                Terminal.Instance.CurrentClient.Notifier.SetProcess("Listo");
-                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, "Terminado");
-                Terminal.Instance.CurrentClient.Notifier.SetProgress(100);
-
             }
         }
 
         private void TestImportDataPack(object parameter)
         {
-            foreach (string s in GetFilesToSend())
+            foreach (string s in PackManager.GetPacks(ModuleCode, WorkingDirectoryIn))
             {
                 NewPackReceived(s);
             }

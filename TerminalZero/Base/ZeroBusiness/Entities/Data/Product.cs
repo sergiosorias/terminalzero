@@ -1,11 +1,12 @@
 ﻿using System;
 using ZeroBusiness.Exceptions;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Product : ISelectable
+    public partial class Product : ISelectable, IExportableEntity
     {
         #region ISelectable Members
 
@@ -44,6 +45,21 @@ namespace ZeroBusiness.Entities.Data
                 throw new BusinessValidationException("Grupo obligatorio");
             }
         }
+
+        #region Implementation of IExportableEntity
+
+        public int TerminalDestination
+        {
+            get { return 0; }
+        }
+
+        public void UpdateStatus(EntityStatus status)
+        {
+            Stamp = DateTime.Now;
+            Status = (short)status;
+        }
+
+        #endregion
 
        
     }
