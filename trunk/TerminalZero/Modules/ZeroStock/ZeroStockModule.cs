@@ -96,7 +96,7 @@ namespace ZeroStock
                     info.AddTable(ent.DeliveryDocumentHeaders);
                     info.AddTable(ent.DeliveryDocumentItems);
 
-                    if (info.SomeEntityHasRows)
+                    if (info.HasRowsToProcess)
                     {
                         using (manager)
                         {

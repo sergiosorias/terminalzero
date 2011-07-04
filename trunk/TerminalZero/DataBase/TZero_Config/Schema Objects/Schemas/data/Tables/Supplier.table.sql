@@ -3,6 +3,7 @@
 	Code int NOT NULL,
 	[Stamp] DATETIME NULL CONSTRAINT DF_Supplier_Stamp DEFAULT (Getdate()),
 	[Enable] BIT NOT NULL CONSTRAINT DF_Supplier_Enable DEFAULT (1),
+	[Status] smallint NOT NULL CONSTRAINT DF_Supplier_Status DEFAULT (0),
 	[Name1] nvarchar(100) NULL,
 	[Name2] nvarchar(300) NULL,
 	[Country] nvarchar(250) NULL,

@@ -99,6 +99,8 @@ namespace ZeroPrinters
                                                                                                             printer.CerrarComprobanteFiscal(1,out number);
                                                                                                             Log(string.Format("Factura A Numero{0}",number));
                                                                                                         }));
+            //ActionCommands.Add(19, new KeyValuePair<string, Action>("", printer.ReporteZ()));
+            
 
         }
 
@@ -113,7 +115,7 @@ namespace ZeroPrinters
         {
             object o1, o2, o3, o4, o5, o6,o7, o8,o9,o10,o11,o12,o13,o14,o15,o16, o17;
             printer.ObtenerConfiguracion(out o1,out o2,out o3,out o4,out o5,out o6,out o7,out o8,out o9,out o10,out o11,out o12,out o13, out o14,out o15, out o16,out o17);
-            Log(string.Format("Limite consumidor final: {0} -Limite Factura {1} -ProcentajeIvaNoInscripto: {2} -Numero de copias Maximo: {3} -Imprimer Cambio: {4} -"+
+            Log(string.Format("Limite consumidor final: {0} - Limite Factura {1} -ProcentajeIvaNoInscripto: {2} -Numero de copias Maximo: {3} -Imprimer Cambio: {4} -"+
             "Imprimer leyendas opcionales: {5} -Tipo de corte: {6} -Imprimer Marco: {7} -Re imprimer documentos: {8} -"+
             "Descripción del medio de pago: {9} -Sonido: {10} -Alto hoja: {11} -Ancho hoja: {12} - Estación impresion reportes XZ: {13} -Modo impresion: {14} - Chequeo desborde cmpleto: {15} - Chequeo tapa abierta: {16} - {17}", o1, o2, o3, o4, o5, o6, o7, o8,o9,o10,o11,o12,o12,o13,o14,o15,o16,o17));
         }

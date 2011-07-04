@@ -23,7 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\Deploy_Release\Modules\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -84,6 +84,9 @@
     <Compile Include="Pages\SalePaymentView.xaml.cs">
       <DependentUpon>SalePaymentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SaleReportItemView.xaml.cs">
+      <DependentUpon>SaleReportItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SaleReportView.xaml.cs">
       <DependentUpon>SaleReportView.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,7 @@
     <Compile Include="Presentation\Controls\SalePaymentItemViewModel.cs" />
     <Compile Include="Presentation\CreateSaleViewModel.cs" />
     <Compile Include="Presentation\Controls\SaleLazyLoadingItemViewModel.cs" />
+    <Compile Include="Presentation\SaleReportItemViewModel.cs" />
     <Compile Include="Presentation\SaleReportViewModel.cs" />
     <Compile Include="Presentation\SaleSummary.cs" />
     <Compile Include="Presentation\SalePaymentViewModel.cs" />
@@ -153,6 +157,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SalePaymentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SaleReportItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

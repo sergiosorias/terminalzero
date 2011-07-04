@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Data.Objects;
 using System.Data.Objects.SqlClient;
 using System.Linq;
 using System.Windows;
@@ -48,7 +49,7 @@ namespace ZeroMasterData.Presentation
             var viewModel = new ProductsUpdateViewModel();
             if (viewModel.View.ShowDialog())
             {
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
             }
         }
 

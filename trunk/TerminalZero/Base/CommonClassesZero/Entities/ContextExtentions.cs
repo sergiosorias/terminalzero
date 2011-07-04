@@ -169,13 +169,13 @@ namespace ZeroCommonClasses.Entities
             }
         }
 
-        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities, Action<EntityObject> mergedEntityCallback)
+        public static void MergeEntities(ObjectContext context, IEnumerable<EntityObject> entities, Action<EntityObject> mergingEntityCallback)
         {
             foreach (var item in entities)
             {
+                if (mergingEntityCallback != null)
+                    mergingEntityCallback(item);
                 MergeEntity(item, context);
-                if (mergedEntityCallback != null)
-                    mergedEntityCallback(item);
             }
         }
 
@@ -192,13 +192,13 @@ namespace ZeroCommonClasses.Entities
             }
         }
 
-        public static void ImportEntities(ObjectContext context, IEnumerable<EntityObject> entities, Action<EntityObject> importedEntityCallback)
+        public static void ImportEntities(ObjectContext context, IEnumerable<EntityObject> entities, Action<EntityObject> importingEntityCallback)
         {
             foreach (var item in entities)
             {
+                if (importingEntityCallback != null)
+                    importingEntityCallback(item);
                 context.AddObject(item.EntityKey.EntitySetName, item);
-                if (importedEntityCallback != null)
-                    importedEntityCallback(item);
             }
         }
         

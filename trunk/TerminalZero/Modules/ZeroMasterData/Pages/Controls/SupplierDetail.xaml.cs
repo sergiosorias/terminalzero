@@ -46,9 +46,7 @@ namespace ZeroMasterData.Pages.Controls
                 switch (ControlMode)
                 {
                     case ControlMode.New:
-                        CurrentSupplier = Supplier.CreateSupplier(
-                            BusinessContext.Instance.Model.Suppliers.Count()
-                            , true);
+                        CurrentSupplier = Supplier.CreateSupplier(BusinessContext.Instance.Model.Suppliers.Count());
                         break;
                     case ControlMode.Update:
                         if (!CurrentSupplier.TaxPositionReference.IsLoaded)
@@ -91,7 +89,7 @@ namespace ZeroMasterData.Pages.Controls
                         break;
                 }
 
-                BusinessContext.Instance.Model.SaveChanges();
+                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
             }
 
             return ret;

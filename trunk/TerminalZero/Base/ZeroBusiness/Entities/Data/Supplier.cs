@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 using ZeroBusiness.Exceptions;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Helpers;
 using ZeroCommonClasses.Interfaces;
 using System.ComponentModel;
@@ -8,8 +9,9 @@ using System.Linq;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Supplier : ISelectable
+    public partial class Supplier : ISelectable, IExportableEntity
     {
+        #region ISelectable
         public bool Contains(string data)
         {
             return ComparisonExtentions.ContainsIgnoreCase(data, Name1, Name2);
@@ -19,7 +21,7 @@ namespace ZeroBusiness.Entities.Data
         {
             throw new NotImplementedException();
         }
-        
+        #endregion
         partial void OnName1Changing(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -44,6 +46,21 @@ namespace ZeroBusiness.Entities.Data
                 throw new BusinessValidationException("Campo obligatorio");
             }
         }
+
+        #region Implementation of IExportableEntity
+
+        public int TerminalDestination
+        {
+            get { return 0; }
+        }
+
+        public void UpdateStatus(EntityStatus status)
+        {
+            Stamp = DateTime.Now;
+            Status = (short)status;
+        }
+
+        #endregion
        
     }
 }

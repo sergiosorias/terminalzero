@@ -44,8 +44,6 @@ namespace ZeroBusiness.Entities.Data
                     (DeliveryDocumentItems.Count,
                     TerminalCode,
                     Code,
-                    true,
-                    (int)EntityStatus.New,
                     TerminalToCode,
                     lot,
                     prod.Code,

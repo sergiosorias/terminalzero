@@ -743,13 +743,11 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static Customer CreateCustomer(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Boolean enable)
+        public static Customer CreateCustomer(global::System.Int32 code, global::System.Int32 terminalCode)
         {
             Customer customer = new Customer();
             customer.Code = code;
             customer.TerminalCode = terminalCode;
-            customer.Enable = enable;
             return customer;
         }
 
@@ -854,7 +852,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -1313,6 +1311,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.String _LegalCode;
         partial void OnLegalCodeChanging(global::System.String value);
         partial void OnLegalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -1412,17 +1434,13 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="date">Initial value of the Date property.</param>
-        public static DeliveryDocumentHeader CreateDeliveryDocumentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.DateTime date)
+        public static DeliveryDocumentHeader CreateDeliveryDocumentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Int32 terminalToCode, global::System.DateTime date)
         {
             DeliveryDocumentHeader deliveryDocumentHeader = new DeliveryDocumentHeader();
             deliveryDocumentHeader.TerminalCode = terminalCode;
             deliveryDocumentHeader.Code = code;
-            deliveryDocumentHeader.Enable = enable;
-            deliveryDocumentHeader.Status = status;
             deliveryDocumentHeader.TerminalToCode = terminalToCode;
             deliveryDocumentHeader.Date = date;
             return deliveryDocumentHeader;
@@ -1529,7 +1547,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -1553,7 +1571,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -1806,8 +1824,6 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="deliveryDocumentHeaderCode">Initial value of the DeliveryDocumentHeaderCode property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="batch">Initial value of the Batch property.</param>
         /// <param name="productCode">Initial value of the ProductCode property.</param>
@@ -1815,14 +1831,12 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="productByWeight">Initial value of the ProductByWeight property.</param>
         /// <param name="priceValue">Initial value of the PriceValue property.</param>
         /// <param name="quantity">Initial value of the Quantity property.</param>
-        public static DeliveryDocumentItem CreateDeliveryDocumentItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 deliveryDocumentHeaderCode, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.String batch, global::System.Int32 productCode, global::System.String productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity)
+        public static DeliveryDocumentItem CreateDeliveryDocumentItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 deliveryDocumentHeaderCode, global::System.Int32 terminalToCode, global::System.String batch, global::System.Int32 productCode, global::System.String productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity)
         {
             DeliveryDocumentItem deliveryDocumentItem = new DeliveryDocumentItem();
             deliveryDocumentItem.Code = code;
             deliveryDocumentItem.TerminalCode = terminalCode;
             deliveryDocumentItem.DeliveryDocumentHeaderCode = deliveryDocumentHeaderCode;
-            deliveryDocumentItem.Enable = enable;
-            deliveryDocumentItem.Status = status;
             deliveryDocumentItem.TerminalToCode = terminalToCode;
             deliveryDocumentItem.Batch = batch;
             deliveryDocumentItem.ProductCode = productCode;
@@ -1961,7 +1975,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -1985,7 +1999,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -2265,16 +2279,12 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="date">Initial value of the Date property.</param>
-        public static DeliveryNoteHeader CreateDeliveryNoteHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.DateTime date)
+        public static DeliveryNoteHeader CreateDeliveryNoteHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.DateTime date)
         {
             DeliveryNoteHeader deliveryNoteHeader = new DeliveryNoteHeader();
             deliveryNoteHeader.TerminalCode = terminalCode;
             deliveryNoteHeader.Code = code;
-            deliveryNoteHeader.Enable = enable;
-            deliveryNoteHeader.Status = status;
             deliveryNoteHeader.Date = date;
             return deliveryNoteHeader;
         }
@@ -2380,7 +2390,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -2404,7 +2414,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -2891,12 +2901,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new PaymentInstrument object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static PaymentInstrument CreatePaymentInstrument(global::System.Int32 code, global::System.Boolean enable)
+        public static PaymentInstrument CreatePaymentInstrument(global::System.Int32 code)
         {
             PaymentInstrument paymentInstrument = new PaymentInstrument();
             paymentInstrument.Code = code;
-            paymentInstrument.Enable = enable;
             return paymentInstrument;
         }
 
@@ -2974,7 +2982,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -3073,6 +3081,30 @@ namespace ZeroBusiness.Entities.Data
         private Nullable<global::System.Boolean> _ChangeEnable;
         partial void OnChangeEnableChanging(Nullable<global::System.Boolean> value);
         partial void OnChangeEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -3161,13 +3193,11 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new Price object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="value">Initial value of the Value property.</param>
-        public static Price CreatePrice(global::System.Int32 code, global::System.Boolean enable, global::System.Double value)
+        public static Price CreatePrice(global::System.Int32 code, global::System.Double value)
         {
             Price price = new Price();
             price.Code = code;
-            price.Enable = enable;
             price.Value = value;
             return price;
         }
@@ -3246,7 +3276,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -3369,6 +3399,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.Double _Value;
         partial void OnValueChanging(global::System.Double value);
         partial void OnValueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -3511,13 +3565,11 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new Product object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="byWeight">Initial value of the ByWeight property.</param>
-        public static Product CreateProduct(global::System.Int32 code, global::System.Boolean enable, global::System.Boolean byWeight)
+        public static Product CreateProduct(global::System.Int32 code, global::System.Boolean byWeight)
         {
             Product product = new Product();
             product.Code = code;
-            product.Enable = enable;
             product.ByWeight = byWeight;
             return product;
         }
@@ -3596,7 +3648,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -3887,6 +3939,30 @@ namespace ZeroBusiness.Entities.Data
         private Nullable<global::System.Int32> _DueDays;
         partial void OnDueDaysChanging(Nullable<global::System.Int32> value);
         partial void OnDueDaysChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -4181,12 +4257,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new ProductGroup object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static ProductGroup CreateProductGroup(global::System.Int32 code, global::System.Boolean enable)
+        public static ProductGroup CreateProductGroup(global::System.Int32 code)
         {
             ProductGroup productGroup = new ProductGroup();
             productGroup.Code = code;
-            productGroup.Enable = enable;
             return productGroup;
         }
 
@@ -4264,7 +4338,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -4315,6 +4389,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.String _Description;
         partial void OnDescriptionChanging(global::System.String value);
         partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -4381,12 +4479,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new ReturnReason object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static ReturnReason CreateReturnReason(global::System.Int32 code, global::System.Boolean enable)
+        public static ReturnReason CreateReturnReason(global::System.Int32 code)
         {
             ReturnReason returnReason = new ReturnReason();
             returnReason.Code = code;
-            returnReason.Enable = enable;
             return returnReason;
         }
 
@@ -4464,7 +4560,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -4515,6 +4611,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.String _Description;
         partial void OnDescriptionChanging(global::System.String value);
         partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -4535,8 +4655,6 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="date">Initial value of the Date property.</param>
         /// <param name="saleTypeCode">Initial value of the SaleTypeCode property.</param>
@@ -4546,13 +4664,11 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="tax1SumValue">Initial value of the Tax1SumValue property.</param>
         /// <param name="summarized">Initial value of the Summarized property.</param>
         /// <param name="historized">Initial value of the Historized property.</param>
-        public static SaleHeader CreateSaleHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.DateTime date, global::System.Int32 saleTypeCode, global::System.Boolean payIsComplete, global::System.Double priceSumValue, global::System.Double taxSumValue, global::System.Double tax1SumValue, global::System.Boolean summarized, global::System.Boolean historized)
+        public static SaleHeader CreateSaleHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Int32 terminalToCode, global::System.DateTime date, global::System.Int32 saleTypeCode, global::System.Boolean payIsComplete, global::System.Double priceSumValue, global::System.Double taxSumValue, global::System.Double tax1SumValue, global::System.Boolean summarized, global::System.Boolean historized)
         {
             SaleHeader saleHeader = new SaleHeader();
             saleHeader.TerminalCode = terminalCode;
             saleHeader.Code = code;
-            saleHeader.Enable = enable;
-            saleHeader.Status = status;
             saleHeader.TerminalToCode = terminalToCode;
             saleHeader.Date = date;
             saleHeader.SaleTypeCode = saleTypeCode;
@@ -4666,7 +4782,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -4690,7 +4806,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -5127,8 +5243,6 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="saleHeaderCode">Initial value of the SaleHeaderCode property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="batch">Initial value of the Batch property.</param>
         /// <param name="productCode">Initial value of the ProductCode property.</param>
@@ -5139,14 +5253,12 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="taxValue">Initial value of the TaxValue property.</param>
         /// <param name="tax1Value">Initial value of the Tax1Value property.</param>
         /// <param name="netPriceValue">Initial value of the NetPriceValue property.</param>
-        public static SaleItem CreateSaleItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 saleHeaderCode, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.String batch, global::System.Int32 productCode, global::System.String productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity, global::System.Double taxValue, global::System.Double tax1Value, global::System.Double netPriceValue)
+        public static SaleItem CreateSaleItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 saleHeaderCode, global::System.Int32 terminalToCode, global::System.String batch, global::System.Int32 productCode, global::System.String productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity, global::System.Double taxValue, global::System.Double tax1Value, global::System.Double netPriceValue)
         {
             SaleItem saleItem = new SaleItem();
             saleItem.Code = code;
             saleItem.TerminalCode = terminalCode;
             saleItem.SaleHeaderCode = saleHeaderCode;
-            saleItem.Enable = enable;
-            saleItem.Status = status;
             saleItem.TerminalToCode = terminalToCode;
             saleItem.Batch = batch;
             saleItem.ProductCode = productCode;
@@ -5288,7 +5400,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -5312,7 +5424,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -5702,17 +5814,13 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="totalQuantity">Initial value of the TotalQuantity property.</param>
-        public static SalePaymentHeader CreateSalePaymentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.Double totalQuantity)
+        public static SalePaymentHeader CreateSalePaymentHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Int32 terminalToCode, global::System.Double totalQuantity)
         {
             SalePaymentHeader salePaymentHeader = new SalePaymentHeader();
             salePaymentHeader.TerminalCode = terminalCode;
             salePaymentHeader.Code = code;
-            salePaymentHeader.Enable = enable;
-            salePaymentHeader.Status = status;
             salePaymentHeader.TerminalToCode = terminalToCode;
             salePaymentHeader.TotalQuantity = totalQuantity;
             return salePaymentHeader;
@@ -5819,7 +5927,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -5843,7 +5951,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -5962,19 +6070,15 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="salePaymentHeaderCode">Initial value of the SalePaymentHeaderCode property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="paymentInstrumentCode">Initial value of the PaymentInstrumentCode property.</param>
         /// <param name="quantity">Initial value of the Quantity property.</param>
-        public static SalePaymentItem CreateSalePaymentItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 salePaymentHeaderCode, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.Int32 paymentInstrumentCode, global::System.Double quantity)
+        public static SalePaymentItem CreateSalePaymentItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 salePaymentHeaderCode, global::System.Int32 terminalToCode, global::System.Int32 paymentInstrumentCode, global::System.Double quantity)
         {
             SalePaymentItem salePaymentItem = new SalePaymentItem();
             salePaymentItem.Code = code;
             salePaymentItem.TerminalCode = terminalCode;
             salePaymentItem.SalePaymentHeaderCode = salePaymentHeaderCode;
-            salePaymentItem.Enable = enable;
-            salePaymentItem.Status = status;
             salePaymentItem.TerminalToCode = terminalToCode;
             salePaymentItem.PaymentInstrumentCode = paymentInstrumentCode;
             salePaymentItem.Quantity = quantity;
@@ -6109,7 +6213,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -6133,7 +6237,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -6306,12 +6410,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new SaleType object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static SaleType CreateSaleType(global::System.Int32 code, global::System.Boolean enable)
+        public static SaleType CreateSaleType(global::System.Int32 code)
         {
             SaleType saleType = new SaleType();
             saleType.Code = code;
-            saleType.Enable = enable;
             return saleType;
         }
 
@@ -6389,7 +6491,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -6665,17 +6767,13 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="date">Initial value of the Date property.</param>
-        public static StockHeader CreateStockHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.DateTime date)
+        public static StockHeader CreateStockHeader(global::System.Int32 terminalCode, global::System.Int32 code, global::System.Int32 terminalToCode, global::System.DateTime date)
         {
             StockHeader stockHeader = new StockHeader();
             stockHeader.TerminalCode = terminalCode;
             stockHeader.Code = code;
-            stockHeader.Enable = enable;
-            stockHeader.Status = status;
             stockHeader.TerminalToCode = terminalToCode;
             stockHeader.Date = date;
             return stockHeader;
@@ -6782,7 +6880,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -6806,7 +6904,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -7075,8 +7173,6 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
         /// <param name="stockHeaderCode">Initial value of the StockHeaderCode property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        /// <param name="status">Initial value of the Status property.</param>
         /// <param name="terminalToCode">Initial value of the TerminalToCode property.</param>
         /// <param name="batch">Initial value of the Batch property.</param>
         /// <param name="productCode">Initial value of the ProductCode property.</param>
@@ -7084,14 +7180,12 @@ namespace ZeroBusiness.Entities.Data
         /// <param name="productByWeight">Initial value of the ProductByWeight property.</param>
         /// <param name="priceValue">Initial value of the PriceValue property.</param>
         /// <param name="quantity">Initial value of the Quantity property.</param>
-        public static StockItem CreateStockItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 stockHeaderCode, global::System.Boolean enable, global::System.Int16 status, global::System.Int32 terminalToCode, global::System.String batch, global::System.Int32 productCode, global::System.String productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity)
+        public static StockItem CreateStockItem(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Int32 stockHeaderCode, global::System.Int32 terminalToCode, global::System.String batch, global::System.Int32 productCode, global::System.String productMasterCode, global::System.Boolean productByWeight, global::System.Double priceValue, global::System.Double quantity)
         {
             StockItem stockItem = new StockItem();
             stockItem.Code = code;
             stockItem.TerminalCode = terminalCode;
             stockItem.StockHeaderCode = stockHeaderCode;
-            stockItem.Enable = enable;
-            stockItem.Status = status;
             stockItem.TerminalToCode = terminalToCode;
             stockItem.Batch = batch;
             stockItem.ProductCode = productCode;
@@ -7230,7 +7324,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -7254,7 +7348,7 @@ namespace ZeroBusiness.Entities.Data
                 OnStatusChanged();
             }
         }
-        private global::System.Int16 _Status;
+        private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
     
@@ -7931,12 +8025,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new StockType object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static StockType CreateStockType(global::System.Int32 code, global::System.Boolean enable)
+        public static StockType CreateStockType(global::System.Int32 code)
         {
             StockType stockType = new StockType();
             stockType.Code = code;
-            stockType.Enable = enable;
             return stockType;
         }
 
@@ -8014,7 +8106,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -8109,12 +8201,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new Supplier object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static Supplier CreateSupplier(global::System.Int32 code, global::System.Boolean enable)
+        public static Supplier CreateSupplier(global::System.Int32 code)
         {
             Supplier supplier = new Supplier();
             supplier.Code = code;
-            supplier.Enable = enable;
             return supplier;
         }
 
@@ -8192,7 +8282,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -8579,6 +8669,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.String _LegalCode;
         partial void OnLegalCodeChanging(global::System.String value);
         partial void OnLegalCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -8699,13 +8813,11 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new Tax object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="value">Initial value of the Value property.</param>
-        public static Tax CreateTax(global::System.Int32 code, global::System.Boolean enable, global::System.Double value)
+        public static Tax CreateTax(global::System.Int32 code, global::System.Double value)
         {
             Tax tax = new Tax();
             tax.Code = code;
-            tax.Enable = enable;
             tax.Value = value;
             return tax;
         }
@@ -8784,7 +8896,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -8883,6 +8995,30 @@ namespace ZeroBusiness.Entities.Data
         private Nullable<global::System.Boolean> _ProductDefault;
         partial void OnProductDefaultChanging(Nullable<global::System.Boolean> value);
         partial void OnProductDefaultChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -8949,12 +9085,10 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new TaxPosition object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
-        public static TaxPosition CreateTaxPosition(global::System.Int32 code, global::System.Boolean enable)
+        public static TaxPosition CreateTaxPosition(global::System.Int32 code)
         {
             TaxPosition taxPosition = new TaxPosition();
             taxPosition.Code = code;
-            taxPosition.Enable = enable;
             return taxPosition;
         }
 
@@ -9032,7 +9166,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -9083,6 +9217,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.String _Description;
         partial void OnDescriptionChanging(global::System.String value);
         partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     
@@ -9257,13 +9415,11 @@ namespace ZeroBusiness.Entities.Data
         /// Create a new Weight object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        /// <param name="enable">Initial value of the Enable property.</param>
         /// <param name="quantity">Initial value of the Quantity property.</param>
-        public static Weight CreateWeight(global::System.Int32 code, global::System.Boolean enable, global::System.Double quantity)
+        public static Weight CreateWeight(global::System.Int32 code, global::System.Double quantity)
         {
             Weight weight = new Weight();
             weight.Code = code;
-            weight.Enable = enable;
             weight.Quantity = quantity;
             return weight;
         }
@@ -9342,7 +9498,7 @@ namespace ZeroBusiness.Entities.Data
                 OnEnableChanged();
             }
         }
-        private global::System.Boolean _Enable;
+        private global::System.Boolean _Enable = true;
         partial void OnEnableChanging(global::System.Boolean value);
         partial void OnEnableChanged();
     
@@ -9417,6 +9573,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.Double _Quantity;
         partial void OnQuantityChanging(global::System.Double value);
         partial void OnQuantityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int16 _Status = 0;
+        partial void OnStatusChanging(global::System.Int16 value);
+        partial void OnStatusChanged();
 
         #endregion
     

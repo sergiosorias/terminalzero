@@ -110,7 +110,7 @@ namespace ZeroSales
                     info.AddTable(modelManager.SalePaymentHeaders);
                     info.AddTable(modelManager.SalePaymentItems);
                     
-                    if (info.SomeEntityHasRows)
+                    if (info.HasRowsToProcess)
                     {
                         using (manager)
                         {

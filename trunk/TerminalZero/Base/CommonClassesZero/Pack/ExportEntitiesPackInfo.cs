@@ -26,7 +26,7 @@ namespace ZeroCommonClasses.Pack
         public int TableCount { get; set; }
 
         [IgnoreDataMember]
-        public bool SomeEntityHasRows 
+        public bool HasRowsToProcess 
         {
             get { return TableCount > 0; }
         }
