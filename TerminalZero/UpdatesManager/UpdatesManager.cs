@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -16,9 +17,15 @@ namespace UpdatesManager
         public static IEnumerable<AppVersion> GetNewerVersions()
         {
             var versions = new List<AppVersion>();
+            AppVersion version;
             foreach (var item in Directory.GetDirectories(Path.Combine(Environment.CurrentDirectory, "Upgrade")))
             {
-                versions.Add(new AppVersionCleaner(new SimpleAppVersion(item)));
+                version = new SimpleAppVersion(item);
+
+                if(((IList) Environment.GetCommandLineArgs()).Contains("-c"))
+                    version = new AppVersionCleaner(version);
+
+                versions.Add(version);
             }
             return versions;
         }

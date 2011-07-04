@@ -5,16 +5,6 @@ using System.Threading;
 
 namespace UpdatesManager
 {
-    public abstract class AppVersion
-    {
-        public const int KRetries = 5;
-        public abstract string RootDir { get; protected set; }
-        public abstract string Version { get; protected set; }
-        public abstract void RunUpdate();
-
-        public abstract event EventHandler<AppVersionUpdateProgress> ProgressChanged;
-    }
-
     public class SimpleAppVersion : AppVersion
     {
         public override string RootDir { get; protected set; }
@@ -98,64 +88,6 @@ namespace UpdatesManager
         {
             EventHandler<AppVersionUpdateProgress> handler = ProgressChanged;
             if (handler != null) handler(this, e);
-        }
-    }
-
-    public class AppVersionDecorator : AppVersion
-    {
-        public override string RootDir
-        {
-            get { return AppVersion.RootDir; }
-            protected set { /*AppVersion.RootDir = value;*/ }
-        }
-
-        public override string Version
-        {
-            get { return AppVersion.Version; }
-            protected set { /*AppVersion.Version = value;*/ }
-        }
-
-        public override event EventHandler<AppVersionUpdateProgress> ProgressChanged
-        {
-            add { AppVersion.ProgressChanged += value; }
-            remove { AppVersion.ProgressChanged -= value; }
-        }
-
-        protected AppVersion AppVersion {get; private set;}
-
-        public AppVersionDecorator(AppVersion appVersion)
-        {
-            AppVersion = appVersion;
-        }
-
-        #region Overrides of AppVersion
-
-        public override void RunUpdate()
-        {
-            AppVersion.RunUpdate();
-            Console.Write("NULL DECORATOR");
-        }
-
-        #endregion
-    }
-
-    public class AppVersionCleaner : AppVersionDecorator
-    {
-        public AppVersionCleaner(AppVersion appVersion)
-            :base(appVersion)
-        {
-            
-        }
-
-        public override void RunUpdate()
-        {
-            base.RunUpdate();
-            CleanPackages();
-        }
-
-        private void CleanPackages()
-        {
-            //Aca hay que limpiar el directorio de la app
         }
     }
 }
