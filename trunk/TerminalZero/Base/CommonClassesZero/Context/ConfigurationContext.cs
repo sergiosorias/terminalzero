@@ -107,6 +107,10 @@ namespace ZeroCommonClasses.Context
 
         public class Directories
         {
+            public static string ExtrasFolder
+            {
+                get { return Path.Combine(Environment.CurrentDirectory, "Extras"); }
+            }
             public const string WorkingDirSubfix = ".WD";
 
             static Directories()

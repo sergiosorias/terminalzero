@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
+using ZeroPrinters;
 
 namespace ZeroGUI.Reporting
 {
@@ -14,30 +15,29 @@ namespace ZeroGUI.Reporting
                 {
                     view.Columns.Add(info);
                 }
-            if(ZeroMessageBox.Show(view, ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault())
-            {
-                var dialog = new PrintDialog();
-                if (dialog.ShowDialog().GetValueOrDefault())
-                {
-                    view.SetPageSize(dialog.PrintableAreaHeight,dialog.PrintableAreaWidth);
-                    dialog.PrintDocument(view.PaginatorSource.DocumentPaginator, "");
-                }
-            }
+            PrintReport(view);
         }
 
         public static void Create(string reportHeader, LazyLoadingListControl list)
         {
             var view = new GridReport { Header = reportHeader, DataSource = list.Items };
-            
+            PrintReport(view);
+        }
+
+        private static void PrintReport(GridReport view)
+        {
             if (ZeroMessageBox.Show(view, ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault())
             {
-                var dialog = new PrintDialog();
-                if (dialog.ShowDialog().GetValueOrDefault())
+                PrintDialog dialog = null;
+                if ((SystemPrinters.Instance.GeneralPrinter.Exists && SystemPrinters.Instance.GeneralPrinter.LoadPrintDialog(out dialog))
+                    || (!SystemPrinters.Instance.GeneralPrinter.IsExistanceMandatory && dialog.ShowDialog().GetValueOrDefault()))
                 {
                     view.SetPageSize(dialog.PrintableAreaHeight, dialog.PrintableAreaWidth);
                     dialog.PrintDocument(view.PaginatorSource.DocumentPaginator, "");
                 }
             }
         }
+
+        
     }
 }

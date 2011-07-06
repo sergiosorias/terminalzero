@@ -17,7 +17,7 @@ namespace ZeroBusiness.Entities.Data
             
         }
 
-        private ConfigurationModelManager _confModel;
+        private ConfigurationModelManager confModel;
 
         public int GetNextCustomerCode()
         {
@@ -32,10 +32,10 @@ namespace ZeroBusiness.Entities.Data
 
         public IEnumerable<Terminal> GetExportTerminal(int terminal)
         {
-            if (_confModel == null)
-                _confModel = new ConfigurationModelManager();
+            if (confModel == null)
+                confModel = new ConfigurationModelManager();
 
-            return _confModel.Terminals;
+            return confModel.Terminals;
         }
 
         public int SaveChanges(SaveOptions options, bool markModifiedEntities)

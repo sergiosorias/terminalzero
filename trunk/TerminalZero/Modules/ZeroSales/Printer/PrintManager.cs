@@ -15,10 +15,17 @@ namespace ZeroSales.Printer
 
         public static void PrintSale(SaleHeader header)
         {
-            if(!header.PrintMode.HasValue)
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.CancelPrint();
+            foreach (var saleItem in header.SaleItems)
             {
-                
+                ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine(string.Format("{0} -- ${1}", saleItem.Product.Name, saleItem.PriceValue));
             }
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine();
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine(string.Format("Total: ${0}", header.PriceSumValue));
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine();
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine("Gracias por su visita");
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.Print();
+
         }
     }
 }

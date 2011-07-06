@@ -97,11 +97,13 @@ namespace ZeroSales.Presentation
         {
             try
             {
-                using (var salePaymentviewModel = new SalePaymentViewModel(SaleHeader))
+                var salePaymentviewModel = new SalePaymentViewModel(SaleHeader);
+                Terminal.Instance.CurrentClient.ShowDialog(salePaymentviewModel.View,
+                canSave =>
                 {
-                    if (salePaymentviewModel.View.ShowDialog())
+                    if (canSave)
                     {
-                        Terminal.Instance.Session[typeof(SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
+                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
                         PrintManager.PrintSale(SaleHeader);
                         BusinessContext.Instance.Model.SaveChanges();
                         CreateSale();
@@ -109,7 +111,9 @@ namespace ZeroSales.Presentation
                         saveCommand.RaiseCanExecuteChanged();
                         Message = Resources.SaveOk;
                     }
-                }
+                    salePaymentviewModel.Dispose();
+                });
+                
 
             }
             catch (Exception ex)

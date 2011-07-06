@@ -168,4 +168,7 @@
 	<data name="MandatoryPeymentInstrument">
 		<value xml:space="preserve">Por favor seleccione una forma de pago!</value>
 	</data>
+	<data name="InvoiceTypeA">
+		<value><![CDATA[Factura 'A']]></value>
+	</data>
 </root>

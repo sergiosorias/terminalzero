@@ -115,6 +115,15 @@ namespace ZeroSales.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Factura &apos;A&apos;.
+        /// </summary>
+        internal static string InvoiceTypeA {
+            get {
+                return ResourceManager.GetString("InvoiceTypeA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ¿Esta seguro de eliminar este ítem?.
         /// </summary>
         internal static string ItemDeletingQuestion {

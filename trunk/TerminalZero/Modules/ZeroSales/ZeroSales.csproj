@@ -127,6 +127,11 @@
       <Name>ZeroGUI</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Extras\ZeroPrinters\ZeroPrinters.csproj">
+      <Project>{770F2FD0-3E74-4057-8CF9-C8E43C7D011E}</Project>
+      <Name>ZeroPrinters</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

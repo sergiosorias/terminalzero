@@ -47,10 +47,14 @@ namespace ZeroMasterData.Presentation
         private void OpenIncreaseProductMessage(object parameter)
         {
             var viewModel = new ProductsUpdateViewModel();
-            if (viewModel.View.ShowDialog())
+            Terminal.Instance.CurrentClient.ShowDialog(viewModel.View,
+            result =>
             {
-                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
-            }
+                if (result)
+                {
+                    BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
+                }
+            });
         }
 
         private ZeroActionDelegate updateProductCommand;

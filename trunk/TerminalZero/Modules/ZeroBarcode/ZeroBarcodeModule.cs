@@ -11,7 +11,7 @@ namespace ZeroBarcode
         public ZeroBarcodeModule()
             :base(6,Resources.BarcodeModuleDescription)
         {
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenBarcodeGeneratorView, OpenCodebarView, null, true));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenBarcodeGeneratorView, OpenCodebarView));
         }
 
         public override string[] GetFilesToSend()

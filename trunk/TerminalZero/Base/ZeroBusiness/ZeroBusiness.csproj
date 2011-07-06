@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="ActionParameters.cs" />
     <Compile Include="Actions.cs" />
+    <Compile Include="Entities\Configuration\Printer.cs" />
+    <Compile Include="Entities\Configuration\PrinterParameter.cs" />
     <Compile Include="Entities\Data\PrintMode.cs" />
     <Compile Include="Entities\Data\StockType.cs" />
     <Compile Include="Entities\Data\TaxPosition.cs" />
