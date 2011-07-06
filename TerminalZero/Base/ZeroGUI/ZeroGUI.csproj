@@ -182,6 +182,11 @@
     <Resource Include="Resources\symbol_wrong.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Extras\ZeroPrinters\ZeroPrinters.csproj">
+      <Project>{770F2FD0-3E74-4057-8CF9-C8E43C7D011E}</Project>
+      <Name>ZeroPrinters</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\CommonClassesZero\ZeroCommonClasses.csproj">
       <Project>{2AC599DD-4010-49A3-B595-715FE549C6B9}</Project>
       <Name>ZeroCommonClasses</Name>

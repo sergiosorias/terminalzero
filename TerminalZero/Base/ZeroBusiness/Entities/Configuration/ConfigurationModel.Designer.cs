@@ -22,6 +22,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_Connection_Terminal", "Terminal", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroBusiness.Entities.Configuration.Terminal), "Connection", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Configuration.Connection), true)]
 [assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_TerminalProperty_Terminal", "Terminal", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroBusiness.Entities.Configuration.Terminal), "TerminalProperty", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Configuration.TerminalProperty), true)]
 [assembly: EdmRelationshipAttribute("TZero_ConfigModel", "Terminal_Module", "Module", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Configuration.Module), "Terminal", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Configuration.Terminal))]
+[assembly: EdmRelationshipAttribute("TZero_ConfigModel", "FK_PrinterParameter_Printer", "Printer", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroBusiness.Entities.Configuration.Printer), "PrinterParameter", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Configuration.PrinterParameter), true)]
 
 #endregion
 
@@ -168,6 +169,38 @@ namespace ZeroBusiness.Entities.Configuration
             }
         }
         private ObjectSet<TerminalProperty> _TerminalProperties;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Printer> Printers
+        {
+            get
+            {
+                if ((_Printers == null))
+                {
+                    _Printers = base.CreateObjectSet<Printer>("Printers");
+                }
+                return _Printers;
+            }
+        }
+        private ObjectSet<Printer> _Printers;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<PrinterParameter> PrinterParameters
+        {
+            get
+            {
+                if ((_PrinterParameters == null))
+                {
+                    _PrinterParameters = base.CreateObjectSet<PrinterParameter>("PrinterParameters");
+                }
+                return _PrinterParameters;
+            }
+        }
+        private ObjectSet<PrinterParameter> _PrinterParameters;
 
         #endregion
         #region AddTo Methods
@@ -218,6 +251,22 @@ namespace ZeroBusiness.Entities.Configuration
         public void AddToTerminalProperties(TerminalProperty terminalProperty)
         {
             base.AddObject("TerminalProperties", terminalProperty);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Printers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPrinters(Printer printer)
+        {
+            base.AddObject("Printers", printer);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PrinterParameters EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPrinterParameters(PrinterParameter printerParameter)
+        {
+            base.AddObject("PrinterParameters", printerParameter);
         }
 
         #endregion
@@ -711,6 +760,451 @@ namespace ZeroBusiness.Entities.Configuration
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Terminal>("TZero_ConfigModel.Terminal_Module", "Terminal", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZero_ConfigModel", Name="Printer")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Printer : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Printer object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        public static Printer CreatePrinter(global::System.Int32 code)
+        {
+            Printer printer = new Printer();
+            printer.Code = code;
+            return printer;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable = true;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Type
+        {
+            get
+            {
+                return _Type;
+            }
+            set
+            {
+                OnTypeChanging(value);
+                ReportPropertyChanging("Type");
+                _Type = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Type");
+                OnTypeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Type;
+        partial void OnTypeChanging(Nullable<global::System.Int32> value);
+        partial void OnTypeChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZero_ConfigModel", "FK_PrinterParameter_Printer", "PrinterParameter")]
+        public EntityCollection<PrinterParameter> PrinterParameters
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<PrinterParameter>("TZero_ConfigModel.FK_PrinterParameter_Printer", "PrinterParameter");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<PrinterParameter>("TZero_ConfigModel.FK_PrinterParameter_Printer", "PrinterParameter", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TZero_ConfigModel", Name="PrinterParameter")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class PrinterParameter : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new PrinterParameter object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="printerCode">Initial value of the PrinterCode property.</param>
+        public static PrinterParameter CreatePrinterParameter(global::System.Int32 code, global::System.Int32 printerCode)
+        {
+            PrinterParameter printerParameter = new PrinterParameter();
+            printerParameter.Code = code;
+            printerParameter.PrinterCode = printerCode;
+            return printerParameter;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                if (_Code != value)
+                {
+                    OnCodeChanging(value);
+                    ReportPropertyChanging("Code");
+                    _Code = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Code");
+                    OnCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Code;
+        partial void OnCodeChanging(global::System.Int32 value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 PrinterCode
+        {
+            get
+            {
+                return _PrinterCode;
+            }
+            set
+            {
+                if (_PrinterCode != value)
+                {
+                    OnPrinterCodeChanging(value);
+                    ReportPropertyChanging("PrinterCode");
+                    _PrinterCode = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("PrinterCode");
+                    OnPrinterCodeChanged();
+                }
+            }
+        }
+        private global::System.Int32 _PrinterCode;
+        partial void OnPrinterCodeChanging(global::System.Int32 value);
+        partial void OnPrinterCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Stamp
+        {
+            get
+            {
+                return _Stamp;
+            }
+            set
+            {
+                OnStampChanging(value);
+                ReportPropertyChanging("Stamp");
+                _Stamp = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stamp");
+                OnStampChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Stamp;
+        partial void OnStampChanging(Nullable<global::System.DateTime> value);
+        partial void OnStampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable = true;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Description
+        {
+            get
+            {
+                return _Description;
+            }
+            set
+            {
+                OnDescriptionChanging(value);
+                ReportPropertyChanging("Description");
+                _Description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Description");
+                OnDescriptionChanged();
+            }
+        }
+        private global::System.String _Description;
+        partial void OnDescriptionChanging(global::System.String value);
+        partial void OnDescriptionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Value
+        {
+            get
+            {
+                return _Value;
+            }
+            set
+            {
+                OnValueChanging(value);
+                ReportPropertyChanging("Value");
+                _Value = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Value");
+                OnValueChanged();
+            }
+        }
+        private global::System.String _Value;
+        partial void OnValueChanging(global::System.String value);
+        partial void OnValueChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZero_ConfigModel", "FK_PrinterParameter_Printer", "Printer")]
+        public Printer Printer
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Printer>("TZero_ConfigModel.FK_PrinterParameter_Printer", "Printer").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Printer>("TZero_ConfigModel.FK_PrinterParameter_Printer", "Printer").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Printer> PrinterReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Printer>("TZero_ConfigModel.FK_PrinterParameter_Printer", "Printer");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Printer>("TZero_ConfigModel.FK_PrinterParameter_Printer", "Printer", value);
                 }
             }
         }
@@ -1312,6 +1806,60 @@ namespace ZeroBusiness.Entities.Configuration
                 }
             }
         }
+
+        #endregion
+    }
+
+    #endregion
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="TZero_ConfigModel", Name="LegalPrinter")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class LegalPrinter : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new LegalPrinter object.
+        /// </summary>
+        /// <param name="property">Initial value of the Property property.</param>
+        public static LegalPrinter CreateLegalPrinter(global::System.Guid property)
+        {
+            LegalPrinter legalPrinter = new LegalPrinter();
+            legalPrinter.Property = property;
+            return legalPrinter;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid Property
+        {
+            get
+            {
+                return _Property;
+            }
+            set
+            {
+                OnPropertyChanging(value);
+                ReportPropertyChanging("Property");
+                _Property = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Property");
+                OnPropertyChanged();
+            }
+        }
+        private global::System.Guid _Property;
+        partial void OnPropertyChanging(global::System.Guid value);
+        partial void OnPropertyChanged();
 
         #endregion
     }

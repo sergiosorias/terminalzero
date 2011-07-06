@@ -13,6 +13,7 @@ using ZeroConfiguration.Pages.Controls;
 using ZeroConfiguration.Presentantion;
 using ZeroConfiguration.Properties;
 using ZeroGUI;
+using ZeroPrinters;
 using Terminal = ZeroCommonClasses.Terminal;
 
 namespace ZeroConfiguration
@@ -61,6 +62,24 @@ namespace ZeroConfiguration
             Terminal.Instance.CurrentClient.Loaded += (o, e) => { OpenLogInDialog(); };
         }
 
+        private void LoadPrintersConfig(ConfigurationModelManager manager)
+        {
+            var algo = new List<PrinterInfo>();
+            foreach (Printer printer in manager.Printers.ToList())
+            {
+                var aprinter = new PrinterInfo();
+                aprinter.Name = printer.Name;
+                aprinter.Type = printer.Type.HasValue ? printer.Type.Value : 1;
+                aprinter.InitializeParameters = new Dictionary<string, string>();
+                foreach (var VARIABLE in printer.PrinterParameters)
+                {
+                    aprinter.InitializeParameters.Add(VARIABLE.Name, VARIABLE.Value);
+                }
+                algo.Add(aprinter);
+            }
+            SystemPrinters.Instance.Load(algo);    
+        }
+
         private void ValidateAdminUser()
         {
             if (User.GetUser(K_administrator) == null)
@@ -71,10 +90,10 @@ namespace ZeroConfiguration
 
         private void OpenLogInDialog()
         {
-//#if DEBUG
-//            ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(K_administrator, true), false);
-//            Terminal.Instance.Session[userpParam.Name] = userpParam;
-//#else
+#if DEBUG
+            ActionParameterBase userpParam = new ActionParameter<User>(false, User.GetUser(K_administrator, true), false);
+            Terminal.Instance.Session[userpParam.Name] = userpParam;
+#else
             var view = new UserLogIn();
             Terminal.Instance.CurrentClient.ShowDialog(view, dialogResult =>
             {
@@ -102,7 +121,7 @@ namespace ZeroConfiguration
                     }, MessageBoxButton.OK);
 }
             });
-//#endif
+#endif
         }
 
         private void StartSyncronizer()
@@ -243,6 +262,7 @@ namespace ZeroConfiguration
                 {
                     initialized = true;
                 }
+                LoadPrintersConfig(conf);
             }
 
             return initialized;

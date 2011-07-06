@@ -73,7 +73,7 @@
                 <DataGridTextColumn x:Name="nameColumn2" Binding="{Binding Path=Name}" Header="Nombre" MinWidth="200" />
                 <DataGridTextColumn x:Name="netWeightColumn2" Binding="{Binding Path=NetWeight}" Header="Neto" Width="100" CanUserResize="False" />
                 <DataGridTextColumn x:Name="quantityKGColumn2" Binding="{Binding Path=QuantityKG}" Header="KG" Width="100" CanUserResize="False" />
-                <DataGridTextColumn x:Name="productCountColumn2" Binding="{Binding Path=ProductCount}" Header="Product Count" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="productCountColumn2" Binding="{Binding Path=ProductCount}" Header="Unidades" Width="SizeToHeader" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

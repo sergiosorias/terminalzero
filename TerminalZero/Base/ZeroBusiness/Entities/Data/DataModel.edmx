@@ -901,7 +901,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TZeroDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true" a:TypeAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration">
           <EntitySet Name="Customers" EntityType="TZeroDataModel.Customer" />
           <EntitySet Name="DeliveryDocumentHeaders" EntityType="TZeroDataModel.DeliveryDocumentHeader" />
           <EntitySet Name="DeliveryDocumentItems" EntityType="TZeroDataModel.DeliveryDocumentItem" />

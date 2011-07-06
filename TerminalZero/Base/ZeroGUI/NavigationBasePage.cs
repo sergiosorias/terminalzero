@@ -115,15 +115,6 @@ namespace ZeroGUI
             return true;
         }
 
-        public virtual bool ShowDialog()
-        {
-            bool ret = false;
-
-            Terminal.Instance.CurrentClient.ShowDialog(this,o => ret = o);
-
-            return ret;
-        }
-
         protected virtual void OnControlModeChanged(ControlMode newMode)
         {
             

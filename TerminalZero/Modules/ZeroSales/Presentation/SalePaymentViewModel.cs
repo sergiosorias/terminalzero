@@ -97,28 +97,34 @@ namespace ZeroSales.Presentation
         private void AddPaymentInstrument(object parameter)
         {
             var paymentInstrument = new PaymentInstrumentSelection(Sale);
-            bool ret = paymentInstrument.ShowDialog();
-            if (ret)
-            {
-                var payment = Sale.SalePaymentHeader.SalePaymentItems.FirstOrDefault(item => item.PaymentInstrumentCode == paymentInstrument.SelectedItem.Code);
-                Sale.SalePaymentHeader.Change = paymentInstrument.SelectedQuantity - Sale.SalePaymentHeader.RestToPay;
-                if (payment == null)
+            Terminal.Instance.CurrentClient.ShowDialog(paymentInstrument,
+            (canAddPayment) =>
                 {
-                    var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, Sale.SalePaymentHeader.Change > 0 ? Sale.SalePaymentHeader.RestToPay : paymentInstrument.SelectedQuantity);
-                    Sale.SalePaymentHeader.AddPaymentInstrument(newItem);
-                    SalePaymentItemsSource.Add(new SalePaymentItemViewModel
-                                                   {
-                                                       PaymentItem = newItem,
-                                                       DeleteCommand = new ZeroActionDelegate(RemovePaymentInstrument)
-                                                   });
-                    Sale.UpdatePrintMode();
-                }
-                else
-                {
-                    payment.Quantity += Sale.SalePaymentHeader.Change > 0 ? Sale.SalePaymentHeader.RestToPay : paymentInstrument.SelectedQuantity;
-                }
-            }
-            addPaymnentInstrumentCommand.RaiseCanExecuteChanged();
+                    if (canAddPayment)
+                    {
+                        var payment =
+                            Sale.SalePaymentHeader.SalePaymentItems.
+                                FirstOrDefault(item =>item.PaymentInstrumentCode == paymentInstrument.SelectedItem.Code);
+                        Sale.SalePaymentHeader.Change = paymentInstrument.SelectedQuantity - Sale.SalePaymentHeader.RestToPay;
+                        if (payment == null)
+                        {
+                            var newItem = new SalePaymentItem(Sale.SalePaymentHeader, paymentInstrument.SelectedItem, 
+                                Sale.SalePaymentHeader.Change > 0 ? Sale.SalePaymentHeader.RestToPay : paymentInstrument.SelectedQuantity);
+                            Sale.SalePaymentHeader.AddPaymentInstrument(newItem);
+                            SalePaymentItemsSource.Add(new SalePaymentItemViewModel
+                                                            {
+                                                                PaymentItem = newItem,
+                                                                DeleteCommand = new ZeroActionDelegate(RemovePaymentInstrument)
+                                                            });
+                            Sale.UpdatePrintMode();
+                        }
+                        else
+                        {
+                            payment.Quantity += Sale.SalePaymentHeader.Change > 0 ? Sale.SalePaymentHeader.RestToPay : paymentInstrument.SelectedQuantity;
+                        }
+                    }
+                    addPaymnentInstrumentCommand.RaiseCanExecuteChanged();
+                });
         }
 
         private void RemovePaymentInstrument(object parameter)
@@ -174,7 +180,7 @@ namespace ZeroSales.Presentation
                 sale.Customer = ((Customer)customer.Value);
                 Sale.UpdatePrintMode();
                 OnPropertyChanged("CustomerName");
-                ViewHeader = "Factura 'A'";
+                ViewHeader = Resources.InvoiceTypeA;
             }
         }
         

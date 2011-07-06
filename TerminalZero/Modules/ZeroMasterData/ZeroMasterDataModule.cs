@@ -91,10 +91,13 @@ namespace ZeroMasterData
         private void OpenNewProductMessage(object parameter)
         {
             var detail = new ProductDetailViewModel();
-            if (detail.View.ShowDialog() && detail.View.ControlMode == ControlMode.New)
+            Terminal.Instance.CurrentClient.ShowDialog(detail.View, (canAdd) =>
             {
-                Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.Product,true);
-            }
+                if (canAdd && detail.View.ControlMode == ControlMode.New)
+                {
+                    Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.Product, true);
+                }
+            });
         }
 
         private void OpenSupplierView(object parameter)

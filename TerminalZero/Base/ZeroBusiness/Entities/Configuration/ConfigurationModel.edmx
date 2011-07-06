@@ -9,6 +9,8 @@
           <EntitySet Name="Connection" EntityType="TZero_ConfigModel.Store.Connection" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ConnectionStatus" EntityType="TZero_ConfigModel.Store.ConnectionStatus" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Module" EntityType="TZero_ConfigModel.Store.Module" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Printer" EntityType="TZero_ConfigModel.Store.Printer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PrinterParameter" EntityType="TZero_ConfigModel.Store.PrinterParameter" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SystemProperty" EntityType="TZero_ConfigModel.Store.SystemProperty" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Terminal" EntityType="TZero_ConfigModel.Store.Terminal" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Terminal_Module" EntityType="TZero_ConfigModel.Store.Terminal_Module" store:Type="Tables" Schema="dbo" />
@@ -20,6 +22,10 @@
           <AssociationSet Name="FK_Connection_Terminal" Association="TZero_ConfigModel.Store.FK_Connection_Terminal">
             <End Role="Terminal" EntitySet="Terminal" />
             <End Role="Connection" EntitySet="Connection" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrinterParameter_Printer" Association="TZero_ConfigModel.Store.FK_PrinterParameter_Printer">
+            <End Role="Printer" EntitySet="Printer" />
+            <End Role="PrinterParameter" EntitySet="PrinterParameter" />
           </AssociationSet>
           <AssociationSet Name="FK_Terminal_Module_Module" Association="TZero_ConfigModel.Store.FK_Terminal_Module_Module">
             <End Role="Module" EntitySet="Module" />
@@ -58,6 +64,30 @@
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="200" />
           <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Printer">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityType Name="PrinterParameter">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="PrinterCode" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="PrinterCode" Type="int" Nullable="false" />
+          <Property Name="Stamp" Type="datetime" />
+          <Property Name="Enable" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Value" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="SystemProperty">
           <Key>
@@ -120,6 +150,18 @@
             </Principal>
             <Dependent Role="Connection">
               <PropertyRef Name="TerminalCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrinterParameter_Printer">
+          <End Role="Printer" Type="TZero_ConfigModel.Store.Printer" Multiplicity="1" />
+          <End Role="PrinterParameter" Type="TZero_ConfigModel.Store.PrinterParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Printer">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="PrinterParameter">
+              <PropertyRef Name="PrinterCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -195,7 +237,13 @@
           <FunctionImport Name="GetPacksToSend">
           <Parameter Name="TerminalCode" Mode="In" Type="Int32" />
           </FunctionImport>
-        </EntityContainer>
+          <EntitySet Name="Printers" EntityType="TZero_ConfigModel.Printer" />
+          <EntitySet Name="PrinterParameters" EntityType="TZero_ConfigModel.PrinterParameter" />
+          <AssociationSet Name="FK_PrinterParameter_Printer" Association="TZero_ConfigModel.FK_PrinterParameter_Printer">
+            <End Role="Printer" EntitySet="Printers" />
+            <End Role="PrinterParameter" EntitySet="PrinterParameters" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Connection">
           <Key>
             <PropertyRef Name="Code" />
@@ -301,6 +349,47 @@
           <End Role="Module" Type="TZero_ConfigModel.Module" Multiplicity="*" />
           <End Role="Terminal" Type="TZero_ConfigModel.Terminal" Multiplicity="*" />
         </Association>
+        <EntityType Name="Printer">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="DateTime" Name="Stamp" />
+          <Property Type="Boolean" Name="Enable" Nullable="false" DefaultValue="true" />
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Type" />
+          <NavigationProperty Name="PrinterParameters" Relationship="TZero_ConfigModel.FK_PrinterParameter_Printer" FromRole="Printer" ToRole="PrinterParameter" />
+        </EntityType>
+        <EntityType Name="PrinterParameter">
+          <Key>
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="PrinterCode" />
+          </Key>
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="Int32" Name="PrinterCode" Nullable="false" />
+          <Property Type="DateTime" Name="Stamp" />
+          <Property Type="Boolean" Name="Enable" Nullable="false" DefaultValue="true" />
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Value" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Printer" Relationship="TZero_ConfigModel.FK_PrinterParameter_Printer" FromRole="PrinterParameter" ToRole="Printer" />
+        </EntityType>
+        <Association Name="FK_PrinterParameter_Printer">
+          <End Type="TZero_ConfigModel.Printer" Role="Printer" Multiplicity="1" />
+          <End Type="TZero_ConfigModel.PrinterParameter" Role="PrinterParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Printer">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="PrinterParameter">
+              <PropertyRef Name="PrinterCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="LegalPrinter" >
+          <Property Type="Guid" Name="Property" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -353,7 +442,32 @@
               <ScalarProperty Name="Code" ColumnName="TerminalCode" />
             </EndProperty>
           </AssociationSetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Printers">
+            <EntityTypeMapping TypeName="IsTypeOf(TZero_ConfigModel.Printer)">
+              <MappingFragment StoreEntitySet="Printer">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrinterParameters">
+            <EntityTypeMapping TypeName="TZero_ConfigModel.PrinterParameter">
+              <MappingFragment StoreEntitySet="PrinterParameter">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Stamp" ColumnName="Stamp" />
+                <ScalarProperty Name="PrinterCode" ColumnName="PrinterCode" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -373,7 +487,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="Configuration">
+      <Diagram Name="Configuration" ZoomLevel="55">
         <EntityTypeShape EntityType="TZero_ConfigModel.Connection" Width="1.5" PointX="4.5" PointY="0.5" Height="2.3648893229166674" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.ConnectionStatu" Width="1.5" PointX="4.375" PointY="3.25" Height="1.5956835937499996" IsExpanded="true" />
         <EntityTypeShape EntityType="TZero_ConfigModel.Module" Width="1.5" PointX="2.5" PointY="0.5" Height="1.9802864583333339" IsExpanded="true" />
@@ -396,7 +510,13 @@
           <ConnectorPoint PointX="2.5" PointY="1.4901432291666668" />
           <ConnectorPoint PointX="2.125" PointY="1.4901432291666668" />
         </AssociationConnector>
-      </Diagram>
+        <EntityTypeShape EntityType="TZero_ConfigModel.Printer" Width="1.5" PointX="5.375" PointY="6" Height="2.3648893229166754" />
+        <EntityTypeShape EntityType="TZero_ConfigModel.PrinterParameter" Width="1.5" PointX="7.625" PointY="6" Height="2.5571907552083317" />
+        <AssociationConnector Association="TZero_ConfigModel.FK_PrinterParameter_Printer" >
+          <ConnectorPoint PointX="6.875" PointY="7.1824446614583373" />
+          <ConnectorPoint PointX="7.625" PointY="7.1824446614583373" />
+        </AssociationConnector>
+        </Diagram>
     </Diagrams>
   </Designer>
 </edmx:Edmx>

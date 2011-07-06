@@ -117,19 +117,22 @@ namespace ZeroMasterData.Presentation
         {
             var viewmodel = new CustomerDetailViewModel(new CustomerDetail());
             viewmodel.Customer = new Customer(Terminal.Instance.TerminalCode);
-            if (viewmodel.View.ShowDialog())
+            Terminal.Instance.CurrentClient.ShowDialog(viewmodel.View, result =>
             {
-                try
+                if (result)
                 {
-                    BusinessContext.Instance.Model.AddToCustomers(viewmodel.Customer);
-                    CustomerList.Add(new CustomerDetailViewModel {Customer = viewmodel.Customer });
+                    try
+                    {
+                        BusinessContext.Instance.Model.AddToCustomers(viewmodel.Customer);
+                        CustomerList.Add(new CustomerDetailViewModel {Customer = viewmodel.Customer});
+                    }
+                    catch (Exception wx)
+                    {
+                        ZeroMessageBox.Show(wx.ToString(), "Error", MessageBoxButton.OK);
+                        Trace.TraceError("Error updating Customer {0}", viewmodel.Customer.Name1);
+                    }
                 }
-                catch (Exception wx)
-                {
-                    ZeroMessageBox.Show(wx.ToString(),"Error",MessageBoxButton.OK);
-                    Trace.TraceError("Error updating Customer {0}", viewmodel.Customer.Name1);
-                }
-            }
+            });
         }
 
         private void SearchCustomer(object parameter)
