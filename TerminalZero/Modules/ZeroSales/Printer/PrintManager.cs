@@ -18,7 +18,7 @@ namespace ZeroSales.Printer
             ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.CancelPrint();
             ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine(string.Format("Fecha: {0}",DateTime.Now.Date.ToString("dd/MM/yy")));
             ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine();
-            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendColumnsLine("Descripción","cant","P.Unit.","Precio");
+            ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendColumnsLine("Descripción  ","Cant. ","P.Unit. ","Precio");
             ZeroPrinters.SystemPrinters.Instance.TextOnlyPrinter.AppendLine("-",'-');
             foreach (var saleItem in header.SaleItems)
             {
