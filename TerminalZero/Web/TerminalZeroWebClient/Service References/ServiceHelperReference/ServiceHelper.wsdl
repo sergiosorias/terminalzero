@@ -39,6 +39,12 @@
   <wsdl:message name="ServiceHelper_GetPack_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPackResponse" />
   </wsdl:message>
+  <wsdl:message name="ServiceHelper_GetPackData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPackData" />
+  </wsdl:message>
+  <wsdl:message name="ServiceHelper_GetPackData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPackDataResponse" />
+  </wsdl:message>
   <wsdl:message name="ServiceHelper_GetTerminalsStatus_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTerminalsStatus" />
   </wsdl:message>
@@ -57,6 +63,10 @@
     <wsdl:operation name="GetPack">
       <wsdl:input wsaw:Action="http://tempuri.org/ServiceHelper/GetPack" message="tns:ServiceHelper_GetPack_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ServiceHelper/GetPackResponse" message="tns:ServiceHelper_GetPack_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPackData">
+      <wsdl:input wsaw:Action="http://tempuri.org/ServiceHelper/GetPackData" message="tns:ServiceHelper_GetPackData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ServiceHelper/GetPackDataResponse" message="tns:ServiceHelper_GetPackData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetTerminalsStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/ServiceHelper/GetTerminalsStatus" message="tns:ServiceHelper_GetTerminalsStatus_InputMessage" />
@@ -86,6 +96,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPack">
       <soap12:operation soapAction="http://tempuri.org/ServiceHelper/GetPack" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPackData">
+      <soap12:operation soapAction="http://tempuri.org/ServiceHelper/GetPackData" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

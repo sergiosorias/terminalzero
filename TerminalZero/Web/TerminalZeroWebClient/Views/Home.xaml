@@ -4,26 +4,34 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
-    xmlns:myControls="clr-namespace:ZeroGUI"
-    Title="Home" 
+    xmlns:myControls="clr-namespace:ZeroGUI" xmlns:Controls="clr-namespace:TerminalZeroWebClient.Controls" Title="Home" 
     Style="{StaticResource PageStyle}">
 
     <Grid x:Name="LayoutRoot">
-        <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             <Grid>
                 <StackPanel x:Name="ContentStackPanel">
-
-                    <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
-                                   Text="Home"/>
+                    <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" Text="Home"/>
                     <myControls:RefreshTimer Tick="RefreshTimerTick" TickOnStartEnable="True" RefreshEvery="20" Width="150" HorizontalAlignment="Left"/>
-                    <StackPanel Name="terminalContent" HorizontalAlignment="Left">
-
-                    </StackPanel>
                 </StackPanel>
-                <myControls:WaitCursor x:Name="waitCursorHome" WaitingText="Cargando.."/>
             </Grid>
-            
-        </ScrollViewer>
+            <ListBox Name="terminalList" Grid.Row="1" ItemsSource="1" Width="Auto">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Controls:TerminalStatus Width="320"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <myControls:WaitCursor x:Name="waitCursorHome" WaitingText="Cargando.."/>
     </Grid>
 
 </navigation:Page>

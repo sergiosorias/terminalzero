@@ -73,8 +73,8 @@
             width: 400;
             background: #222;
             font-size: 15px;
-            text-align:center;
-            vertical-align:middle;
+            text-align: center;
+            vertical-align: middle;
             background: url(topnav_bg.gif) repeat-x;
         }
         ul.topnav li
@@ -132,7 +132,7 @@
         }
         html ul.topnav li ul.subnav li a
         {
-            font-size:10px;
+            font-size: 10px;
             float: left;
             width: 180px;
             background: #333 url(Images/icon_template_inac.png) no-repeat 10px center;
@@ -163,6 +163,24 @@
                 <ul class="subnav" id="filesToDownload">
                 </ul>
             </li>
+            <li><a href="#">Upload</a>
+                <ul class="subnav">
+                    <li>
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <asp:FileUpload ID="FileUpload1" runat="server" Width="180px" />
+                                    </td>
+                                    <td>
+                                        <asp:Button ID="btnUpload" OnClick="btnUploadClick" runat="server" Text="UP" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div id="minimizedHeader" style="display: none" class="headerButtonParent">
@@ -177,7 +195,7 @@
                     $("#filesToDownload").append("<li><a href=\"upload/" + array[file] + "\" target=\"_blank\">" + array[file] + "</a></li>");
                 }
             }
-            
+
             $("ul.topnav li span").click(function () { //When trigger is clicked...
                 //Following events are applied to the subnav itself (moving subnav up and down)
 
@@ -204,7 +222,7 @@
             $("#HyperLink1").click(function () {
                 setFrameSource('./TerminalZero.aspx');
             });
-            
+
             $("#HyperLink2").click(function () {
                 setFrameSource("./tsweb");
             });

@@ -26,25 +26,14 @@ namespace TerminalZeroWebClient.Views
         {
             if (e.Result.IsValid)
             {
-                terminalContent.Children.Clear();
-                foreach (var item in e.Result.Result)
-                {
-                    var terminalStatus = new Controls.TerminalStatus
-                        {
-                            Margin = new Thickness(1, 1.5, 1, 1.5),
-                            DataContext = item,
-                            Width = 300
-                        };
-                    terminalContent.Children.Add(terminalStatus);
-                }
-                
+                terminalList.ItemsSource = e.Result.Result;
             }
-            waitCursorHome.Stop();
+            waitCursorHome.IsWaitEnable = false;
         }
 
         private void RefreshTimerTick(object sender, EventArgs e)
         {
-            waitCursorHome.Start();
+            waitCursorHome.IsWaitEnable = true;
             _client.GetTerminalsStatusAsync();
         }
     }

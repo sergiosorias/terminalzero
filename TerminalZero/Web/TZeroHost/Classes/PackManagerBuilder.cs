@@ -20,7 +20,6 @@ namespace TZeroHost.Classes
             {
                 get { return _instance ?? (_instance = new ServerTerminal()); }
             }
-
             
             #region Implementation of ITerminal
 
@@ -29,8 +28,6 @@ namespace TZeroHost.Classes
             private string _terminalName = "WebServer";
 
             private ZeroSession _session;
-
-            private ITerminalManager _manager;
 
             public int TerminalCode
             {
@@ -47,10 +44,7 @@ namespace TZeroHost.Classes
                 get { return _session; }
             }
 
-            public ITerminalManager Manager
-            {
-                get { return _manager; }
-            }
+            public ITerminalManager Manager { get; private set; }
 
             #endregion
 
@@ -96,6 +90,7 @@ namespace TZeroHost.Classes
             switch (PackManager.GetModule(Path.GetFileName(packPath)))
             {
                 case 1:
+                    manager = new ZeroConfiguration.ConfigurationPackManager(ServerTerminal.Instance);
                     break;
                 case 2:
                     break;

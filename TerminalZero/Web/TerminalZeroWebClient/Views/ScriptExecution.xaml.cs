@@ -62,7 +62,7 @@ namespace TerminalZeroWebClient.Views
         {
             if (e.Error != null)
             {
-                MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButton.OK);
+                MessageBox.Show(e.Error.Message, "Error", MessageBoxButton.OK);
             }
             else
             {
@@ -70,7 +70,7 @@ namespace TerminalZeroWebClient.Views
                 dataGrid1.ItemsSource = pcv;
                 dataGrid1.UpdateLayout();
             }
-            waitCursor.Stop();
+            waitCursor.IsWaitEnable = false;
         }
         
         private void entitiesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -78,7 +78,7 @@ namespace TerminalZeroWebClient.Views
             IQueryableEntity ent = entitiesGrid.SelectedItem as IQueryableEntity;
             if (ent != null)
             {
-                waitCursor.Start();
+                waitCursor.IsWaitEnable = true;
                 ent.LoadAsync();
             }
         }

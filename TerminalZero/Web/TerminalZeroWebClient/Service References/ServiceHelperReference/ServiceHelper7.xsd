@@ -47,6 +47,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPackData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.Entities" minOccurs="0" name="pack" nillable="true" type="q4:Pack" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPackDataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.Entities" minOccurs="0" name="GetPackDataResult" nillable="true" type="q5:Pack" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetTerminalsStatus">
     <xs:complexType>
       <xs:sequence />
@@ -55,7 +69,7 @@
   <xs:element name="GetTerminalsStatusResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" minOccurs="0" name="GetTerminalsStatusResult" nillable="true" type="q4:ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ZeroCommonClasses.GlobalObjects" minOccurs="0" name="GetTerminalsStatusResult" nillable="true" type="q6:ZeroResponseOfArrayOfTerminalStatusCdnY_SwiG" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
