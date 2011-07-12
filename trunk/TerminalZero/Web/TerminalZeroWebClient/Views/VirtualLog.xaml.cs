@@ -55,13 +55,13 @@ namespace TerminalZeroWebClient.Views
                         SearchBox_Search(null, new SearchCriteriaEventArgs(searchBox.txtSearchCriteria.Text));
                     }
 
-                    waitCursor.Stop();
+                    waitCursor.IsWaitEnable = false;
                 });
         }
         
         private void RefreshTimer_Tick(object sender, EventArgs e)
         {
-            waitCursor.Start();
+            waitCursor.IsWaitEnable = true;
             _client.GetLogsAsync(DateTime.Now);
         }
 

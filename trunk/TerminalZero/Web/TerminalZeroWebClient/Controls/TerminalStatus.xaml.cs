@@ -53,9 +53,9 @@ namespace TerminalZeroWebClient.Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Point Position = ControlsExtentions.GetPosition(sender as UIElement, this);
-            popUpMoreInfo.HorizontalOffset = Position.X -60;
-            popUpMoreInfo.VerticalOffset = Position.Y -20;
+            Point position = ControlsExtentions.GetPosition(sender as UIElement, this);
+            popUpMoreInfo.HorizontalOffset = position.X -60;
+            popUpMoreInfo.VerticalOffset = position.Y -20;
             popUpMoreInfo.IsOpen = true;
         }
 

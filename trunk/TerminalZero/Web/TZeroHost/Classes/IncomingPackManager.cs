@@ -54,7 +54,7 @@ namespace TZeroHost.Classes
                         Trace.WriteIf(ZeroCommonClasses.Context.ConfigurationContext.LogLevel.TraceInfo, string.Format("Starting import: ConnID = {0}", data.ConnId), "Information");
                         packManager.ConnectionID = data.ConnId;
                         packManager.Imported += a_Imported;
-                        packManager.Error += a_Error;
+                        packManager.Error += PackError;
                         try
                         {
                             packManager.Import(data.PackPath);
@@ -66,17 +66,17 @@ namespace TZeroHost.Classes
                         finally
                         {
                             packManager.Imported -= a_Imported;
-                            packManager.Error -= a_Error;
+                            packManager.Error -= PackError;
                         }
 
-                        Thread.Sleep(500);
+                        Thread.Sleep(200);
                     }
                 }
 
             }
         }
 
-        private void a_Error(object sender, ErrorEventArgs e)
+        private void PackError(object sender, ErrorEventArgs e)
         {
             var pack = sender as PackManager;
             if (pack != null)
@@ -92,7 +92,6 @@ namespace TZeroHost.Classes
 
             if (e.Pack.PackStatusCode == (int)PackManager.PackStatus.Imported)
             {
-
                 if ((e.Pack.IsMasterData.GetValueOrDefault()) || (e.Pack.IsUpgrade.GetValueOrDefault()))
                 {
                     using (var packEnt = new CommonEntitiesManager())

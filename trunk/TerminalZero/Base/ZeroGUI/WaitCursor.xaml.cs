@@ -25,8 +25,28 @@ namespace ZeroGUI
         // Using a DependencyProperty as the backing store for WaitingText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty WaitingTextProperty =
             DependencyProperty.Register("WaitingText", typeof(string), typeof(WaitCursor), new PropertyMetadata("Loading.."));
+
+
+
+        public bool IsWaitEnable
+        {
+            get { return (bool)GetValue(IsWaitEnableProperty); }
+            set { SetValue(IsWaitEnableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsWaitEnable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsWaitEnableProperty =
+            DependencyProperty.Register("IsWaitEnable", typeof(bool), typeof(WaitCursor), new PropertyMetadata(false, OnIsWaitEnableChanged));
+
+        private static void OnIsWaitEnableChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            if((bool)args.NewValue)
+                ((WaitCursor)sender).Start();
+            else
+                ((WaitCursor)sender).Stop();
+        }
         
-        public void Start()
+        private void Start()
         {
             Visibility = System.Windows.Visibility.Visible;
             Storyboard sb = Resources["rotation"] as Storyboard;
@@ -36,7 +56,7 @@ namespace ZeroGUI
             }
         }
 
-        public void Stop()
+        private void Stop()
         {
             Storyboard sb = Resources["rotation"] as Storyboard;
             if (sb != null)

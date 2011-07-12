@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using TZeroHost.Handlers;
 using TZeroHost.Helpers;
 using ZeroCommonClasses.Context;
@@ -55,7 +54,7 @@ namespace TZeroHost.Services
             }
             else
             {
-                using (var ent = new ZeroCommonClasses.Entities.CommonEntitiesManager())
+                using (var ent = new CommonEntitiesManager())
                 {
 
                     Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);

@@ -31,5 +31,14 @@ namespace TZeroHost
 
             return value;
         }
+
+        protected void btnUploadClick(object sender, EventArgs e)
+        {
+            if(FileUpload1.HasFile)
+            {
+                string downloadFolder = MapPath("./DOWNLOADS");
+                FileUpload1.SaveAs(Path.Combine(downloadFolder, Path.GetFileName(FileUpload1.FileName)));
+            }
+        }
     }
 }

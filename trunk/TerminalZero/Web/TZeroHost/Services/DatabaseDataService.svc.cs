@@ -11,7 +11,7 @@ namespace TZeroHost.Services
         // This method is called only once to initialize service-wide policies.
         public static void InitializeService(DataServiceConfiguration config)
         {
-            EntitySetRights rw = EntitySetRights.AllRead | EntitySetRights.WriteReplace;
+            EntitySetRights rw = EntitySetRights.AllRead;
             config.SetEntitySetAccessRule("Customers",rw);
             config.SetEntitySetAccessRule("Products", rw);
             config.SetEntitySetAccessRule("Prices", rw);

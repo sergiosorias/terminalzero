@@ -26,6 +26,7 @@ namespace TerminalZeroWebClient.Views
             client = new ServiceHelperClient();
             client.GetPackCompleted += client_GetPackCompleted;
             _uploadClient.UploadFileSilverlightCompleted += _uploadClient_UploadFileSilverlightCompleted;
+            client.GetPackDataCompleted += client_GetPackDataCompleted;
             startDate.SelectedDate = DateTime.Now.Date;
             endDate.SelectedDate = DateTime.Now.AddDays(1).Date;
         }
@@ -49,7 +50,7 @@ namespace TerminalZeroWebClient.Views
                 
             });
 
-            waitCursor.Stop();
+            waitCursor.IsWaitEnable = false;
         }
 
         private void btnUpload_Click(object sender, RoutedEventArgs e)
@@ -69,7 +70,8 @@ namespace TerminalZeroWebClient.Views
 
         private void UploadFile(string fileName, byte[] data)
         {
-            waitCursor.Start();
+            waitCursor.IsWaitEnable = true; ;
+            _uploadClient.UploadFileSilverlightAsync(fileName, data);
             //UriBuilder ub = new UriBuilder(new Uri(Application.Current.Host.Source, "../filereceiver.ashx"));
             //ub.Query = string.Format("filename={0}", fileName.Name);
 
@@ -82,12 +84,11 @@ namespace TerminalZeroWebClient.Views
             //};
             //c.OpenWriteAsync(ub.Uri);
             //OperationContext.Current.OutgoingMessageHeaders
-            _uploadClient.UploadFileSilverlightAsync(fileName, data);
         }
         
         private void _uploadClient_UploadFileSilverlightCompleted(object sender, UploadFileSilverlightCompletedEventArgs e)
         {
-            waitCursor.Stop();
+            waitCursor.IsWaitEnable = false;
             fileProgress.Value = 100;
         }
 
@@ -107,7 +108,7 @@ namespace TerminalZeroWebClient.Views
 
         private void RefreshTimer_Tick(object sender, EventArgs e)
         {
-            waitCursor.Start();
+            waitCursor.IsWaitEnable = true;
             client.GetPackAsync(startDate.SelectedDate.GetValueOrDefault(), endDate.SelectedDate.GetValueOrDefault());
         }
 
@@ -133,22 +134,45 @@ namespace TerminalZeroWebClient.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var sfd = new SaveFileDialog();
-            sfd.Filter = "Zip File (.zip)|*.zip";
-            if (sfd.ShowDialog().GetValueOrDefault())
+            Pack pack = ((Pack)packDataGrid.SelectedItem);
+            if (pack.Data != null)
             {
-                using (Stream fs = sfd.OpenFile())
+                var sfd = new SaveFileDialog();
+                sfd.Filter = "Zip File (.zip)|*.zip";
+                if (sfd.ShowDialog().GetValueOrDefault())
                 {
-                    Pack pack = ((Pack)packDataGrid.SelectedItem);
-                    fs.Write(pack.Data, 0, pack.Data.Length);
+                    using (Stream fs = sfd.OpenFile())
+                    {
+                        fs.Write(pack.Data, 0, pack.Data.Length);
+                    }
                 }
+            }
+            else
+            {
+                PackAction = pack1 =>
+                                 {
+                                     pack.Data = pack1.Data;
+                                 };
+                client.GetPackDataAsync(pack);
+                waitCursor.IsWaitEnable = true;
+            }
+        }
+
+        private Action<Pack> PackAction;
+
+        private void client_GetPackDataCompleted(object sender, GetPackDataCompletedEventArgs args)
+        {
+            waitCursor.IsWaitEnable = false;
+            if (args.Error == null && PackAction != null)
+            {
+                Dispatcher.BeginInvoke(PackAction, args.Result);
             }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             Button ele = sender as Button;
-            DataGridRow row = Classes.Extensions.FindAncestor<DataGridRow>(ele);
+            DataGridRow row = SLFramework.ControlsExtentions.FindAncestor<DataGridRow>(ele);
             if (row != null)
             {
                 row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
@@ -158,15 +182,15 @@ namespace TerminalZeroWebClient.Views
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
             Pack pack = ((Pack) packDataGrid.SelectedItem);
-            if(MessageBox.Show("¿Esta seguro de reprocesar el paquete?",string.Format("Re-proceso pack {0}",pack.Code),MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                UploadFile(pack.Name, pack.Data);
+            if (MessageBox.Show("¿Esta seguro de reprocesar el paquete?", string.Format("Re-proceso pack {0}", pack.Code), MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                PackAction = pack1 =>
+                {
+                    UploadFile(pack1.Name, pack1.Data);
+                };
+                client.GetPackDataAsync(pack);
+                waitCursor.IsWaitEnable = true;
+            }
         }
-
-        private void TextBox_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-        }
-
-        
     }
 }
