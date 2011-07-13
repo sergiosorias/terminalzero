@@ -23,7 +23,7 @@ namespace ZeroStock.Presentation
 
         public ObservableCollection<DeliveryDocumentHeader> DeliveryDocumentCollection
         {
-            get { return deliveryDocumentCollection ?? (deliveryDocumentCollection = new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false))); }
+            get { return deliveryDocumentCollection ?? (deliveryDocumentCollection = LoadCollection()); }
             set
             {
                 if (deliveryDocumentCollection != value)
@@ -33,6 +33,15 @@ namespace ZeroStock.Presentation
                 }
             }
         }
+
+        private ObservableCollection<DeliveryDocumentHeader> LoadCollection()
+        {
+            if(View.ControlMode== ControlMode.Selection)
+                return new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false));
+            
+            return new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.Model.DeliveryDocumentHeaders);
+        }
+
         #endregion
 
         #region Commands

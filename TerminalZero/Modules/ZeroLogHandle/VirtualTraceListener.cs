@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using ZeroLogHandle.Classes;
 
 namespace ZeroLogHandle
 {
-    public class VirtualTraceListener : System.Diagnostics.TraceListener
+    public class VirtualTraceListener : TraceListener
     {
         private const int LogEntryTimeOut = 600;
         private const int LogEntryMaxCount = 500;
 
-        readonly Timer _timer;
+        private readonly Timer timer;
         public VirtualTraceListener()
         {
-            _timer = new Timer(1000 * LogEntryTimeOut);
-            _timer.Elapsed += new ElapsedEventHandler(Clean);
-            _timer.Start();
+            timer = new Timer(1000 * LogEntryTimeOut);
+            timer.Elapsed += Clean;
+            timer.Start();
         }
 
         private List<VirtualLogEntry> Logs = new List<VirtualLogEntry>();
-        private readonly object _oSync = new object();
+        private readonly object oSync = new object();
 
         public List<VirtualLogEntry> GetLogs()
         {
@@ -35,13 +36,13 @@ namespace ZeroLogHandle
         private void Clean(object sender, ElapsedEventArgs e)
         {
             DateTime maxStamp = DateTime.Now.AddSeconds(LogEntryTimeOut*-1);
-            lock (_oSync)
+            lock (oSync)
             {
                 Logs.RemoveAll(l => l.Stamp < maxStamp);
             }
             if (Logs.Count > LogEntryMaxCount)
             {
-                lock (_oSync)
+                lock (oSync)
                 {
                     Logs.RemoveRange(0, Logs.Count - LogEntryMaxCount);
                 }
@@ -49,14 +50,10 @@ namespace ZeroLogHandle
             
         }
 
-        #region ILogBuilder Members
-
-        #endregion
-
         public override void Write(string message)
         {
-            VirtualLogEntry args = new VirtualLogEntry(message);
-            lock (_oSync)
+            var args = new VirtualLogEntry(message);
+            lock (oSync)
             {
                 Logs.Add(args);
             }

@@ -6,6 +6,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ZeroGUI="clr-namespace:ZeroGUI;assembly=ZeroGUI" xmlns:Converters="clr-namespace:ZeroGUI.Converters;assembly=ZeroGUI" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" MinHeight="300" MinWidth="300">
     <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Text="EN CONSTRUCCIÓN"/>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Content="Re Imprimir" Command="{Binding RePrintCommand}" />
     </Grid>
 </ZeroGUI:NavigationBasePage>

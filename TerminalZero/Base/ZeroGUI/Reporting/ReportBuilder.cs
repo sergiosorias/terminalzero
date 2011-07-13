@@ -29,8 +29,8 @@ namespace ZeroGUI.Reporting
             if (ZeroMessageBox.Show(view, ResizeMode.NoResize, MessageBoxButton.OKCancel).GetValueOrDefault())
             {
                 PrintDialog dialog = null;
-                if ((SystemPrinters.Instance.GeneralPrinter.Exists && SystemPrinters.Instance.GeneralPrinter.LoadPrintDialog(out dialog))
-                    || (!SystemPrinters.Instance.GeneralPrinter.IsExistanceMandatory && dialog.ShowDialog().GetValueOrDefault()))
+                if ((TerminalPrinters.Instance.GeneralPrinter.IsOnLine && TerminalPrinters.Instance.GeneralPrinter.LoadPrintDialog(out dialog))
+                    || (!TerminalPrinters.Instance.GeneralPrinter.IsExistanceMandatory && dialog.ShowDialog().GetValueOrDefault()))
                 {
                     view.SetPageSize(dialog.PrintableAreaHeight, dialog.PrintableAreaWidth);
                     dialog.PrintDocument(view.PaginatorSource.DocumentPaginator, "");

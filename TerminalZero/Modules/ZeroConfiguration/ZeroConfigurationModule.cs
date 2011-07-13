@@ -5,6 +5,7 @@ using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses;
+using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
@@ -77,7 +78,7 @@ namespace ZeroConfiguration
                 }
                 algo.Add(aprinter);
             }
-            SystemPrinters.Instance.Load(algo);    
+            TerminalPrinters.Instance.Load(algo);    
         }
 
         private void ValidateAdminUser()
@@ -107,7 +108,7 @@ namespace ZeroConfiguration
                     }
                     else
                     {
-                        Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgIncorrectUserPassTryAgain, (res) => { OpenLogInDialog(); }, MessageBoxButton.OK);
+                        Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgIncorrectUserPassTryAgain, (res) => { OpenLogInDialog(); }, MessageBoxButtonEnum.OK);
                     }
                 }
                 else
@@ -118,7 +119,7 @@ namespace ZeroConfiguration
                         {
                             Terminal.Instance.Session.Actions[Actions.AppExit].TryExecute();
                         }                                                                                                         
-                    }, MessageBoxButton.OK);
+                    }, MessageBoxButtonEnum.OK);
 }
             });
 #endif

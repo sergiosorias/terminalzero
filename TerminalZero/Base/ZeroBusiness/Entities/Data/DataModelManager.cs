@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Objects;
 using System.Linq;
@@ -11,7 +12,10 @@ namespace ZeroBusiness.Entities.Data
 {
     public class DataModelManager : Entities
     {
-        internal DataModelManager()
+        /// <summary>
+        /// Must be public because of the data service
+        /// </summary>
+        public DataModelManager()
             : base(ConfigurationContext.GetConnectionForCurrentEnvironment("Data.DataModel"))
         {
             
@@ -21,12 +25,18 @@ namespace ZeroBusiness.Entities.Data
 
         public int GetNextCustomerCode()
         {
-            return Customers.Count()+1;
+            return Customers.Count() == 0 ? 1: Customers.Max(p=>p.Code) + 1;
         }
 
         public int GetNextProductCode()
         {
-            int ret = Products.Count() == 0 ? 1 : (int.Parse(Products.Select(p => p.MasterCode).Max()) + 1);
+            int ret = Products.Count() == 0 ? 1 : Products.Max(p=>p.Code) + 1;
+            return ret;
+        }
+
+        public int GetNextPriceCode()
+        {
+            int ret = Prices.Count() == 0 ? 1 : Prices.Max(p => p.Code) + 1;
             return ret;
         }
 
@@ -40,17 +50,25 @@ namespace ZeroBusiness.Entities.Data
 
         public int SaveChanges(SaveOptions options, bool markModifiedEntities)
         {
-            if(markModifiedEntities)
+            try
             {
-                foreach (ObjectStateEntry entry in ObjectStateManager.GetObjectStateEntries(EntityState.Modified))
+                if (markModifiedEntities)
                 {
-                    if (entry.Entity is IExportableEntity)
+                    foreach (ObjectStateEntry entry in ObjectStateManager.GetObjectStateEntries(EntityState.Modified))
                     {
-                        ((IExportableEntity)entry.Entity).UpdateStatus(EntityStatus.Modified);
+                        if (entry.Entity is IExportableEntity)
+                        {
+                            ((IExportableEntity)entry.Entity).UpdateStatus(EntityStatus.Modified);
+                        }
                     }
                 }
+                return base.SaveChanges(options);
             }
-            return base.SaveChanges(options);
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                throw;
+            }
         }
 
     }

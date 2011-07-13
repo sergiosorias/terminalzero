@@ -123,13 +123,28 @@ namespace TerminalZeroClient.Business
             }
         }
 
-        public void ShowDialog(object view, Action<bool> result, MessageBoxButton buttons)
+        public void ShowDialog(object view, Action<bool> result, MessageBoxButtonEnum buttons)
         {
             if (result == null)
                 result = new Action<bool>((o) => { });
 
+            MessageBoxButton button = MessageBoxButton.OKCancel;
+            switch (buttons)
+            {
+                case MessageBoxButtonEnum.OK:
+                    button = MessageBoxButton.OK;
+                    break;
+                case MessageBoxButtonEnum.OkCancel:
+                    button = MessageBoxButton.OKCancel;
+                    break;
+                case MessageBoxButtonEnum.YesNo:
+                    button = MessageBoxButton.YesNo;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("buttons");
+            }
             Application.Current.Dispatcher.BeginInvoke(
-                new Update(() => result(ZeroMessageBox.Show(view, "", buttons).GetValueOrDefault())));
+                new Update(() => result(ZeroMessageBox.Show(view, "", button).GetValueOrDefault())));
         }
 
         public void ShowWindow(object view, Action closed)

@@ -13,7 +13,7 @@ namespace ZeroUpdateManager
 {
     public class UpdateManagerPackManager : PackManager
     {
-        private StringBuilder outMessage = new StringBuilder();
+        private readonly StringBuilder outMessage = new StringBuilder();
         
         public UpdateManagerPackManager(ITerminal terminal)
             : base(terminal)

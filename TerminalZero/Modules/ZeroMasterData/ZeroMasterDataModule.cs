@@ -28,7 +28,6 @@ namespace ZeroMasterData
         {
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductsView, OpenProductView));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenProductMessage, OpenProductMessage));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewProductsMessage, OpenNewProductMessage, Rules.IsTerminalZero, false));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView));
             Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView,null,false));
@@ -86,18 +85,6 @@ namespace ZeroMasterData
             var view = new ProductsViewModel();
             view.View.ControlMode = ControlMode.ReadOnly;
             Terminal.Instance.CurrentClient.ShowWindow(view.View);
-        }
-
-        private void OpenNewProductMessage(object parameter)
-        {
-            var detail = new ProductDetailViewModel();
-            Terminal.Instance.CurrentClient.ShowDialog(detail.View, (canAdd) =>
-            {
-                if (canAdd && detail.View.ControlMode == ControlMode.New)
-                {
-                    Terminal.Instance.Session[typeof (Product)] = new ActionParameter<Product>(false, detail.Product, true);
-                }
-            });
         }
 
         private void OpenSupplierView(object parameter)
