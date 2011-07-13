@@ -24,7 +24,7 @@ namespace ZeroGUI.Converters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return Properties.Resources.ResourceManager.GetObject(parameter.ToString(), culture);
+            return "Not implemented method";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

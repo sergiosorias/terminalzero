@@ -13,27 +13,37 @@ using ZeroCommonClasses.MVVMSupport;
 using ZeroGUI;
 using ZeroGUI.Reporting;
 using ZeroMasterData.Pages;
-using System.Windows.Input;
-using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Presentation
 {
     public class ProductsViewModel : ViewModelGui
     {
         #region Commands
-        public ZeroAction NewProductCommand
+
+        private ZeroActionDelegate newProductCommand;
+        public ZeroActionDelegate NewProductCommand
         {
-            get
+            get { return newProductCommand ?? (newProductCommand = new ZeroActionDelegate(NewProductCommandExecute, o => Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))); }
+        }
+
+        private void NewProductCommandExecute(object sender)
+        {
+            var detail = new ProductDetailViewModel();
+            Terminal.Instance.CurrentClient.ShowDialog(detail.View, canAdd =>
             {
-                return Terminal.Instance.Session.Actions[Actions.OpenNewProductsMessage];
-            }
+                if (canAdd && detail.View.ControlMode == ControlMode.New)
+                {
+                    ProductList.Add(new ProductExtended { Product = detail.Product });
+                }
+            });
+            
         }
 
         private ZeroActionDelegate updatePricesCommand;
 
         public ZeroActionDelegate UpdatePricesCommand
         {
-            get { return updatePricesCommand ?? (updatePricesCommand = new ZeroActionDelegate(OpenIncreaseProductMessage, (o) => Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))); }
+            get { return updatePricesCommand ?? (updatePricesCommand = new ZeroActionDelegate(OpenIncreaseProductMessage, o => Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))); }
             set
             {
                 if (updatePricesCommand != value)
@@ -113,6 +123,7 @@ namespace ZeroMasterData.Presentation
         
         protected override void PrintCommandExecution(object parameter)
         {
+            
             ReportBuilder.Create("Lista de productos",
                 BusinessContext.Instance.Model.Products.OrderBy(product => product.Name)
                     .Select(product =>
@@ -134,19 +145,9 @@ namespace ZeroMasterData.Presentation
             :base(new ProductsView())
         {
 
-            ProductList = new ObservableCollection<ProductExtended>(BusinessContext.Instance.Model.Products.Select(p => new ProductExtended { Product = p }));
-            NewProductCommand.Finished +=
-                (o, e) =>
-                    {
-                        var param = Terminal.Instance.Session[typeof (Product)];
-                        if(param !=null)
-                        ProductList.Add(new ProductExtended
-                                            {Product = (Product) param.Value});
-                    };
-
+            ProductList = new ObservableCollection<ProductExtended>(BusinessContext.Instance.Model.Products.OrderBy(o=>o.Name).Select(p => new ProductExtended { Product = p }));
         }
-
-
+        
         public class ProductExtended : ViewModelBase, ISelectable
         {
             public Product Product { get; set; }

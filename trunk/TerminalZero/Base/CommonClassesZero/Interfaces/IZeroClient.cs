@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using ZeroCommonClasses.GlobalObjects;
 
 namespace ZeroCommonClasses.Interfaces
@@ -16,7 +13,7 @@ namespace ZeroCommonClasses.Interfaces
         bool Initialize();
         void Load();
         void ShowView(object view);
-        void ShowDialog(object view, Action<bool> result, MessageBoxButton buttons = MessageBoxButton.OKCancel);
+        void ShowDialog(object view, Action<bool> result, MessageBoxButtonEnum buttons = MessageBoxButtonEnum.OkCancel);
         void ShowWindow(object view, Action closed = null);
         void ShowEnable(bool enable);
     }

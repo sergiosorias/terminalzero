@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Data;
+using System.Linq;
 using ZeroGUI;
 
 namespace ZeroSales.Pages.Controls
@@ -11,18 +13,9 @@ namespace ZeroSales.Pages.Controls
     /// </summary>
     public partial class PaymentInstrumentSelection : NavigationBasePage
     {
-        public PaymentInstrument SelectedItem { get { return (PaymentInstrument)paymentInstrumentsList.SelectedItem; } }
-
-        public double SelectedQuantity { get; set; }
-
-        private SaleHeader currentSale;
-
-        public PaymentInstrumentSelection(SaleHeader header)
+        public PaymentInstrumentSelection()
         {
             InitializeComponent();
-            currentSale = header;
-            SelectedQuantity = header.SalePaymentHeader.RestToPay;
-
         }
 
         private void multiOptions_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -98,22 +91,6 @@ namespace ZeroSales.Pages.Controls
         private void quantitySelected_GotFocus(object sender, RoutedEventArgs e)
         {
             ((TextBox) sender).SelectAll();
-        }
-
-        public override bool CanAccept(object parameter)
-        {
-            bool ret = true;
-            if (SelectedItem==null)
-            {
-                ZeroMessageBox.Show(Properties.Resources.MandatoryPeymentInstrument,Properties.Resources.Important);
-                ret = false;
-            }
-            else if(!SelectedItem.ChangeEnable.GetValueOrDefault() && SelectedQuantity > currentSale.SalePaymentHeader.RestToPay)
-            {
-                ZeroMessageBox.Show(Properties.Resources.InvalidAmount, Properties.Resources.Important);
-                ret = false;
-            }
-            return base.CanAccept(parameter) && ret;
         }
 
         private void paymentInstrumentsList_ItemsLoaded(object sender, System.EventArgs e)

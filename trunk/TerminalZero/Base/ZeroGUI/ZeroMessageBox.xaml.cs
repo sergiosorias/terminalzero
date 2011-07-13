@@ -65,7 +65,10 @@ namespace ZeroGUI
                 if (value is string)
                 {
                     NavigationBasePage nvp = new NavigationBasePage();
-                    var label = new TextBlock();
+                    var label = new TextBox();
+                    label.BorderBrush = Brushes.Transparent;
+                    label.Background = Brushes.Transparent;
+                    label.IsReadOnly = true;
                     nvp.MaxWidth = 500;
                     nvp.Header = Title;
                     label.TextWrapping = TextWrapping.Wrap;

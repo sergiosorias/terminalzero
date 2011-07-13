@@ -23,7 +23,7 @@
             <TextBox Text="{Binding ElementName=paymentInstrumentsList,Path=SelectedItem.Code}" Grid.Column="1" FontSize="40" Margin="10,0,0,0" Name="multiOptions" PreviewKeyDown="multiOptions_PreviewKeyDown" VerticalAlignment="Center" HorizontalAlignment="Stretch">
             </TextBox>
         </Grid>
-        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList" LazyLoadEnable="False" ItemsLoaded="paymentInstrumentsList_ItemsLoaded" base:UIElementExtentions.ListCommander="{Binding ElementName=multiOptions}"/>
+        <Controls:PaymentInstrumentLazyLoadingList x:Name="paymentInstrumentsList" LazyLoadEnable="False" ItemsLoaded="paymentInstrumentsList_ItemsLoaded" base:UIElementExtentions.ListCommander="{Binding ElementName=multiOptions}" ItemsSource="{Binding Payments}" SelectedItem="{Binding SelectedItem}"/>
         <TextBlock Grid.Row="2" FontSize="48" VerticalAlignment="Center" Text="{Binding Path=SelectedItem.Name, ElementName=paymentInstrumentsList, FallbackValue=''}" HorizontalAlignment="Center" FontWeight="Heavy" Foreground="#FFC52C19" />
         <Grid Grid.Row="3" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
@@ -33,9 +33,9 @@
             <TextBlock Text="Pesos:" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBox Grid.Column="1" FontSize="40" base:UIElementExtentions.TabOnEnter="True" Margin="10,0,0,0" GotFocus="quantitySelected_GotFocus" Name="quantitySelected" VerticalAlignment="Center" HorizontalAlignment="Stretch">
                 <TextBox.Text>
-                    <Binding Path="SelectedQuantity" RelativeSource="{RelativeSource AncestorType=Controls:PaymentInstrumentSelection}" Mode="TwoWay" NotifyOnValidationError="True">
+                    <Binding Path="SelectedQuantity" Mode="TwoWay" NotifyOnValidationError="True">
                         <Binding.ValidationRules>
-                            <Classes:MandatoryRule ErrorMessage="Ingrese un monto"/>
+                            <Classes:MandatoryRule ErrorMessage="Ingrese un Monto"/>
                             <Classes:IsDoubleRule/>
                         </Binding.ValidationRules>
                     </Binding>

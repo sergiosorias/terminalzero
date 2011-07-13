@@ -114,6 +114,7 @@ namespace ZeroGUI
                         if (list.SelectedIndex > 0)
                             list.SelectedIndex--;
                         args.Handled = true;
+                        ScrollToItem(list);
                         break;
                     case Key.Down:
                         if (list.SelectedIndex <= list.Items.Count)
@@ -121,9 +122,18 @@ namespace ZeroGUI
                             list.SelectedIndex++;
                         }
                         args.Handled = true;
+                        ScrollToItem(list);
                         break;
                 }
             };
+        }
+
+        private static void ScrollToItem(Selector list)
+        {
+            if (list.SelectedItem != null && list is DataGrid)
+            {
+                ((DataGrid)list).ScrollIntoView(list.SelectedItem);
+            }
         }
         
         public static T FindVisualChildByName<T>(DependencyObject parent, string name) where T : DependencyObject

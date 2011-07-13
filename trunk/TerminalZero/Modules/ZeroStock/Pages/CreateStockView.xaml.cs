@@ -70,10 +70,6 @@ namespace ZeroStock.Pages
                 {
                     ret = SaveData();
                 }
-                else
-                {
-                    ret = true;
-                }
             }
             return ret;
         }
@@ -102,7 +98,7 @@ namespace ZeroStock.Pages
         {
             if (validProd != null)
             {
-                if (!StockHeader.DeliveryDocumentHeaderReference.IsLoaded)
+                if (StockHeader.DeliveryDocumentHeaderCode.HasValue && !StockHeader.DeliveryDocumentHeaderReference.IsLoaded)
                 {
                     StockHeader.DeliveryDocumentHeaderReference.Load();
                 }
@@ -178,7 +174,6 @@ namespace ZeroStock.Pages
         {
             _lot = string.Format("{0:0000}{1:00}{2:00}", e.Parts[1].Code, e.Parts[2].Code, e.Parts[3].Code);
             mainBarcode.SetFocus();
-
         }
 
 

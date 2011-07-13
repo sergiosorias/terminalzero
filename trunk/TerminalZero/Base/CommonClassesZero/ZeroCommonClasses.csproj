@@ -65,6 +65,7 @@
     <Compile Include="GlobalObjects\Actions\ZeroBackgroundAction.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroTriggerAction.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
+    <Compile Include="GlobalObjects\MessageBoxButton.cs" />
     <Compile Include="GlobalObjects\ZeroMenu.cs" />
     <Compile Include="Helpers\ComparisonExtentions.cs" />
     <Compile Include="Interfaces\IExportableEntity.cs" />
