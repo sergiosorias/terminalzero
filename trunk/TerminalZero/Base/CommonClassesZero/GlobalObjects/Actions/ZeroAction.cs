@@ -60,14 +60,12 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
                 if (_canExecute)
                 {
                     Action(parameter);
-                    OnFinished();
                 }
             }
             catch (Exception ex)
             {
                 Terminal.Instance.CurrentClient.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Ocurrio un error en la ejecución del comando {0}, ERROR - {1}",Name,ex));
-                Terminal.Instance.CurrentClient.Notifier.SendNotification("Ocurrio un error en la ejecución");
-
+                Terminal.Instance.CurrentClient.Notifier.SendNotification("Ocurrio un error en la ejecución, por favor\n contacte al administrador del sistema.");
             }
             
         }
@@ -120,6 +118,11 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
                     CanExecuteChanged(this, EventArgs.Empty);
                 }
             }
+        }
+
+        public void RaiseExecuted()
+        {
+            base.OnExecuted();
         }
 
         public void SetAlias(string[] nameParts)

@@ -16,10 +16,28 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Fecha:" VerticalAlignment="Center" FontSize="15" Margin="2"/>
-            <DatePicker SelectedDate="{Binding Path=Today}" FontSize="12" Margin="2,0,0,0"/>    
-        </StackPanel>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="2" Width="130">
+                <RadioButton FontSize="14" GroupName="selectionMode" Content="Por Fercha" Name="dateFilter" IsChecked="{Binding IsByDate, Mode=TwoWay}"/>
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsChecked, ElementName=dateFilter}">
+                    <DatePicker  SelectedDate="{Binding Path=SelectedDate}" FontSize="12" Margin="2,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="2" Grid.Column="1">
+                <RadioButton FontSize="14" GroupName="selectionMode" Content="Por Cliente" Name="customerFilter" IsChecked="False"/>
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsChecked, ElementName=customerFilter}">
+                    <Button Content="Buscar" FontSize="14" Command="{Binding CustomerSelectionCommand}"/>
+                    <TextBlock VerticalAlignment="Center" FontWeight="Bold" FontSize="14" Margin="2,0,0,0" Text="{Binding Path=SelectedCustomer.Name1}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+       
+        
+        
         <Grid Grid.Row="1" Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -28,7 +46,7 @@
             <TextBlock Text="Ventas:" FontSize="20" FontWeight="Heavy" Margin="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <DataGrid Grid.Row="1" Style="{DynamicResource dataGridStyle}" SelectedItem="{Binding SelectedItem}" Name="headerList" ItemsSource="{Binding Path=Sales}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True" CanUserResize="False" Binding="{Binding Path=SaleHeader.Stamp,StringFormat=t}" Header="Hora" Width="100" />
+                    <DataGridTextColumn IsReadOnly="True" CanUserResize="False" Binding="{Binding Path=SaleHeader.Stamp,StringFormat='{}{0:dd/MM/yy hh:mm}'}" Header="Fecha" Width="120" />
                     <DataGridTextColumn IsReadOnly="True" CanUserResize="False" Binding="{Binding Path=SaleHeader.SaleItems.Count}" Header="Articulos" Width="SizeToHeader" />
                     <DataGridTextColumn IsReadOnly="True" CanUserResize="False" Binding="{Binding Path=SaleHeader.PriceSumValue,StringFormat='C'}" Header="Total" Width="120" />
                     <DataGridTemplateColumn x:Name="removeColumn" Width="35" CanUserResize="False">

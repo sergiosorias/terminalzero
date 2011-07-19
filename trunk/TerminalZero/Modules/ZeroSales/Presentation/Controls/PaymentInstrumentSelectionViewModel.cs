@@ -76,7 +76,7 @@ namespace ZeroSales.Presentation.Controls
                 Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.MandatoryPeymentInstrument, null, MessageBoxButtonEnum.OK);
                 ret = false;
             }
-            else if(ret && !SelectedItem.ChangeEnable.GetValueOrDefault() && SelectedQuantity > currentSale.SalePaymentHeader.RestToPay)
+            else if(ret && SelectedQuantity == 0 || (!SelectedItem.ChangeEnable.GetValueOrDefault() && SelectedQuantity > currentSale.SalePaymentHeader.RestToPay))
             {
                 Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.InvalidAmount, null, MessageBoxButtonEnum.OK);
                 ret = false;

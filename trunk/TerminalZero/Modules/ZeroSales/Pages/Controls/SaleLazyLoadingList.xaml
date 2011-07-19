@@ -8,7 +8,7 @@
 
     <DataGrid.Columns>
         <!--<DataGridTextColumn x:Name="productMasterCodeColumn" IsReadOnly="True" Binding="{Binding Path=ProductMasterCode}" Header="Código" Width="SizeToHeader" />-->
-        <DataGridTextColumn x:Name="productNameColumn" KeyboardNavigation.IsTabStop="True"  MinWidth="210" IsReadOnly="True" Binding="{Binding Path=SaleItem.Product.Name}" Header="Nombre" Width="*" />
+        <DataGridTextColumn x:Name="productNameColumn" KeyboardNavigation.IsTabStop="True"  MinWidth="210" IsReadOnly="True" Binding="{Binding Path=SaleItem.Product.Name}" Header="Producto" Width="*" />
         <DataGridTextColumn x:Name="quantityColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.Quantity}" Header="Cantidad" Width="100" />
         <DataGridTextColumn x:Name="unitPrice"  IsReadOnly="True" Binding="{Binding Path=SaleItem.Product.Price1.Value, StringFormat='C'}" Header="Precio unit." Width="SizeToHeader" />
         <DataGridTextColumn x:Name="netPriceValueColumn"  IsReadOnly="True" Binding="{Binding Path=SaleItem.NetPriceValue, StringFormat='C'}" Header="Precio Neto" Width="100" />

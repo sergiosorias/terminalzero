@@ -23,9 +23,6 @@ namespace ZeroCommonClasses.Pack
         public List<int> TerminalToCodes { get; set; }
 
         [XmlIgnore]
-        public string RootDirectory { get; set; }
-
-        [XmlIgnore]
         public string WorkingDirectory { get; set; }
 
         [DataMember]

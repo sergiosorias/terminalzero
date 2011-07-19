@@ -26,7 +26,7 @@ namespace ZeroStock.Pages.Controls
             if (!IsInDesignMode)
             {
                 CurrentDocumentDelivery = new DeliveryDocumentHeader(Terminal.Instance.TerminalCode);
-                grid1.DataContext = CurrentDocumentDelivery;
+                DataContext = CurrentDocumentDelivery;
                 supplierBox.ItemsSource = BusinessContext.Instance.Model.Suppliers;
                 cbTerminals.ItemsSource = BusinessContext.Instance.Model.GetExportTerminal(Terminal.Instance.TerminalCode);
             }
@@ -76,9 +76,9 @@ namespace ZeroStock.Pages.Controls
             return ret;
         }
 
-        private void supplierBox_Unloaded(object sender, RoutedEventArgs e)
+        public override bool CanCancel(object parameter)
         {
-            
+            return base.CanCancel(parameter);
         }
 
         private void cbTerminals_SelectionChanged(object sender, SelectionChangedEventArgs e)

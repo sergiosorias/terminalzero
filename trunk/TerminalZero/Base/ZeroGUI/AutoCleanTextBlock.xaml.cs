@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -38,7 +39,7 @@ namespace ZeroGUI
 
         private void cleanResTimer_Elapsed(object o)
         {
-            Dispatcher.BeginInvoke(new Update(() => Opacity = 0), null);
+            Dispatcher.BeginInvoke(new Action(() => Opacity = 0), null);
         }
 
         

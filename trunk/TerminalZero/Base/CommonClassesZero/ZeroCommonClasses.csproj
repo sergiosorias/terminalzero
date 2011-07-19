@@ -77,7 +77,7 @@
     <Compile Include="Pack\ExportEntitiesPackInfo.cs" />
     <Compile Include="Pack\PackInfoBase.cs" />
     <Compile Include="Interfaces\IZeroPage.cs" />
-    <Compile Include="Pack\PackProcessesHandlers.cs" />
+    <Compile Include="Pack\PackProcessEventArgs.cs" />
     <Compile Include="GlobalObjects\RemoteFilesInfo.cs" />
     <Compile Include="GlobalObjects\ServerFileInfo.cs" />
     <Compile Include="Entities\ContextExtentions.cs" />

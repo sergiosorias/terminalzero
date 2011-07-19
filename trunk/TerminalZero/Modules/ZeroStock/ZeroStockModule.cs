@@ -15,8 +15,10 @@ namespace ZeroStock
 {
     public class ZeroStockModule : ZeroModule
     {
+        public const int Code = 4;
+
         public ZeroStockModule()
-            : base(4, Resources.StockModuleDescription)
+            : base(Code, Resources.StockModuleDescription)
         {
             BuildPosibleActions();
         }
@@ -46,7 +48,7 @@ namespace ZeroStock
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new ZeroStockPackManager(Terminal.Instance);
+            var PackReceived = new ZeroStockPackManager();
             PackReceived.Imported += (o, e) =>
             {
                 try
@@ -66,7 +68,7 @@ namespace ZeroStock
 
         }
 
-        private void PackReceived_Imported(object sender, PackProcessingEventArgs e)
+        private void PackReceived_Imported(object sender, PackProcessEventArgs e)
         {
             Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Info,
                                           string.Format(
@@ -83,30 +85,7 @@ namespace ZeroStock
         {
             try
             {
-                var manager = new ZeroStockPackManager(Terminal.Instance);
-                using (var ent = BusinessContext.CreateTemporaryModelManager(manager))
-                {
-                    var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                    info.TerminalToCodes.AddRange(
-                        ent.GetExportTerminal(Terminal.Instance.TerminalCode).Where(
-                            t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
-
-                    info.AddTable(ent.StockHeaders);
-                    info.AddTable(ent.StockItems);
-                    info.AddTable(ent.DeliveryDocumentHeaders);
-                    info.AddTable(ent.DeliveryDocumentItems);
-
-                    if (info.HasRowsToProcess)
-                    {
-                        using (manager)
-                        {
-                            if (manager.Export(info))
-                            {
-                                ent.SaveChanges();
-                            }
-                        }
-                    }
-                }
+                new ZeroStockPackManager().Export(WorkingDirectory);
             }
             catch (Exception ex)
             {

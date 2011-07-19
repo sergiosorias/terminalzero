@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using ZeroCommonClasses.GlobalObjects.Barcode;
 using ZeroGUI.Classes;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace ZeroGUI
 {
     /// <summary>
     /// Interaction logic for BarCodeTextBox.xaml
     /// </summary>
-    public partial class BarCodeTextBox : UserControl
+    public partial class BarCodeTextBox : TextBox
     {
         public event EventHandler<BarCodeValidationEventArgs> BarcodeValidating;
 
@@ -33,16 +32,6 @@ namespace ZeroGUI
                 BarcodeReceived(this, args);
             }
         }
-
-        public string Text
-        {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(BarCodeTextBox), new PropertyMetadata(""));
 
         public string Composition
         {
@@ -73,60 +62,77 @@ namespace ZeroGUI
         // Using a DependencyProperty as the backing store for BarcodeReceivedCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BarcodeReceivedCommandProperty =
             DependencyProperty.Register("BarcodeReceivedCommand", typeof(ICommand), typeof(BarCodeTextBox), null);
+        
+        public FrameworkElement NextControl
+        {
+            get { return (FrameworkElement)GetValue(NextControlProperty); }
+            set { SetValue(NextControlProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NextControl.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NextControlProperty =
+            DependencyProperty.Register("NextControl", typeof(FrameworkElement), typeof(BarCodeTextBox), new UIPropertyMetadata(null));
+
+        private bool isValid;
+        private List<BarCodePart> compositionParts;
 
         public BarCodeTextBox()
         {
             InitializeComponent();
         }
 
-        private void barCode_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void barCode_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (!string.IsNullOrEmpty(Text) && !string.IsNullOrEmpty(Composition) && Text.Length == Composition.Length)
             {
-                if (Text != null && Composition != null && Text.Length == Composition.Length && !Validation.GetHasError(barCode))
+                ValidateText();
+                if (e.Key == Key.Enter)
                 {
-                    string barcodeText = Text;
-                    Text = "";
-                    Dispatcher.BeginInvoke(new Update(() =>
+                    if (isValid)
                     {
-                        var args = new BarCodeEventArgs(barcodeText, BarCodePart.BuildComposition(Composition, barcodeText));
-                        if (BarcodeReceivedCommand != null)
-                        {
-                            BarcodeReceivedCommand.Execute(args);
-                        }
-                        OnBarcodeReceived(args);
-                    }), null);
-                }
-                else
-                {
-                    e.Handled = true;     
+                        SendNewBarcode();
+                    }
+                    else
+                    {
+                        e.Handled = true;
+                    }
                 }
             }
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void SendNewBarcode()
         {
-            
-        }
-
-        private void IsBarCodeRule_Validating(object sender, ValidationResultEventArgs e)
-        {
-            if (Composition.Length == e.Value.ToString().Length)
+            string barcodeText = Text;
+            Text = "";
+                        
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                BarCodeValidationEventArgs args = new BarCodeValidationEventArgs(e.Value.ToString(), BarCodePart.BuildComposition(Composition, e.Value.ToString()));
-                OnBarcodeValidating(args);
+                var args = new BarCodeEventArgs(barcodeText, compositionParts);
                 if (BarcodeReceivedCommand != null)
                 {
-                    BarcodeReceivedCommand.CanExecute(args);
+                    BarcodeReceivedCommand.Execute(args);
                 }
-                e.IsValid = args.Parts.TrueForAll(p => p.IsValid);
-                e.ErrorContent = args.Error;
-            }
+                OnBarcodeReceived(args);
+                if (NextControl != null)
+                    NextControl.Focus();
+                
+            }), null);
         }
 
-        public void SetFocus()
+        private void ValidateText()
         {
-            bool b = barCode.Focus();
+            isValid = true;
+            compositionParts = BarCodePart.BuildComposition(Composition, Text);
+            var validating = new BarCodeValidationEventArgs(Text, compositionParts);
+            OnBarcodeValidating(validating);
+            if (BarcodeReceivedCommand != null)
+            {
+                BarcodeReceivedCommand.CanExecute(validating);
+            }
+            if (!validating.Parts.TrueForAll(p => p.IsValid))
+            {
+                isValid = false;
+            }
         }
     }
 

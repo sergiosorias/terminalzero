@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
 using ZeroMasterData.Presentation;
@@ -77,14 +78,12 @@ namespace ZeroMasterData.Pages.Controls
 
         private void groupBtn_Click(object sender, RoutedEventArgs e)
         {
-            var pgd = new ProductGroupDetail();
-            bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.NewGroup);
+            var pgd = new ProductGroupDetailViewModel();
+            bool? res = ZeroMessageBox.Show(pgd.View, Properties.Resources.NewGroup);
             if (res.HasValue && res.Value)
             {
-                BusinessContext.Instance.Model.ProductGroups.AddObject(pgd.ProductGroupNew);
-                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
-                groupBox.Items.Add(pgd.ProductGroupNew);
-                ProductDetailViewModel.Product.ProductGroup = pgd.ProductGroupNew;
+                groupBox.Items.Add(pgd.CurrentProductGroup);
+                ProductDetailViewModel.Product.ProductGroup = pgd.CurrentProductGroup;
             }
         }
 
@@ -104,19 +103,9 @@ namespace ZeroMasterData.Pages.Controls
         private void ClickeableItemButton_Click(object sender, RoutedEventArgs e)
         {
             var t = (int)((Button)sender).DataContext;
-            ProductGroup pgroup =
-            BusinessContext.Instance.Model.ProductGroups.First(pg => pg.Code == t);
-            var pgd = new ProductGroupDetail(pgroup);
-            bool? res = ZeroMessageBox.Show(pgd, Properties.Resources.EditGroup);
-            if (res.HasValue && res.Value)
-            {
-                BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
-            }
-            else
-            {
-                BusinessContext.Instance.Model.Refresh(RefreshMode.StoreWins, pgroup);
-            }
-
+            ProductGroup pgroup = BusinessContext.Instance.Model.ProductGroups.First(pg => pg.Code == t);
+            var pgd = new ProductGroupDetailViewModel(pgroup);
+            Terminal.Instance.CurrentClient.ShowDialog(pgd.View, (o) => { if(o)ProductDetailViewModel.Product.ProductGroup = pgd.CurrentProductGroup; });
         }
 
         private void weightBoxItemButton_Click(object sender, RoutedEventArgs e)

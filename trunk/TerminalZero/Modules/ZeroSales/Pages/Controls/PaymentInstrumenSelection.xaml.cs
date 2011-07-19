@@ -1,9 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ZeroBusiness.Entities.Data;
-using ZeroBusiness.Manager.Data;
-using System.Linq;
 using ZeroGUI;
 
 namespace ZeroSales.Pages.Controls
@@ -93,7 +91,7 @@ namespace ZeroSales.Pages.Controls
             ((TextBox) sender).SelectAll();
         }
 
-        private void paymentInstrumentsList_ItemsLoaded(object sender, System.EventArgs e)
+        private void paymentInstrumentsList_ItemsLoaded(object sender, EventArgs e)
         {
             paymentInstrumentsList.SelectedIndex = 0;
         }

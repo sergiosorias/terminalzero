@@ -3,8 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
+using ZeroCommonClasses;
 using ZeroCommonClasses.Context;
-using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
 using ZeroUpdateManager.Database;
 using ZeroUpdateManager.Properties;
@@ -14,14 +14,13 @@ namespace ZeroUpdateManager
     public class UpdateManagerPackManager : PackManager
     {
         private readonly StringBuilder outMessage = new StringBuilder();
-        
-        public UpdateManagerPackManager(ITerminal terminal)
-            : base(terminal)
+
+        protected override PackInfoBase BuildPackInfo()
         {
-            
+            throw new NotImplementedException();
         }
 
-        protected override void ImportProcess(PackProcessingEventArgs args)
+        protected override void ImportProcess(PackProcessEventArgs args)
         {
             base.ImportProcess(args);
             args.Pack.IsUpgrade = true;

@@ -17,25 +17,6 @@ namespace ZeroMasterData.Pages.Controls
         public ProductGroupDetail()
         {
             InitializeComponent();
-            ProductGroupNew = ProductGroup.CreateProductGroup(
-                    BusinessContext.Instance.Model.ProductGroups.Count());
         }
-
-        public ProductGroupDetail(ProductGroup Data) :this()
-        {
-            ControlMode = ControlMode.Update;
-            ProductGroupNew = Data;
-        }
-
-        public ProductGroup ProductGroupNew { get; private set; }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!IsInDesignMode)
-            {
-                grid1.DataContext = ProductGroupNew;
-            }
-        }
-        
     }
 }

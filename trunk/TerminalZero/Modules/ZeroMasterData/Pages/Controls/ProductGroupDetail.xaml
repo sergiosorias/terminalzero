@@ -1,12 +1,12 @@
 ﻿<base:NavigationBasePage xmlns:base="clr-namespace:ZeroGUI;assembly=ZeroGUI"
-             x:Class="ZeroMasterData.Pages.Controls.ProductGroupDetail" Header="Grupo de productos"
+             x:Class="ZeroMasterData.Pages.Controls.ProductGroupDetail" Header="{Binding ViewHeader}"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              >
 
-    <Grid Name="grid1" Loaded="UserControl_Loaded">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="200" />
@@ -17,9 +17,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Nombre:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" VerticalAlignment="Center" >
+        <TextBox Tag="Nombre" Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" VerticalAlignment="Center" >
             <TextBox.Text>
-                <Binding Path="Name" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
+                <Binding Path="CurrentProductGroup.Name" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
                     <Binding.ValidationRules>
                         <ExceptionValidationRule/>
                     </Binding.ValidationRules>
@@ -27,7 +27,7 @@
             </TextBox.Text>
         </TextBox>
         <Label Content="Descripción:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="descriptionTextBox" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
+        <TextBox Tag="Descripción" Grid.Column="1" Grid.Row="4" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="descriptionTextBox" Text="{Binding Path=CurrentProductGroup.Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center" />
     </Grid>
 
 

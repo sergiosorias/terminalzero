@@ -6,6 +6,7 @@ namespace ZeroPrinters.Printers
     public abstract class TextOnlyPrinterBase : General
     {
         private const string kColumns = "Columns";
+        protected string newLineSeparator = "\r\n";
 
         protected StringBuilder Data;
 
@@ -35,7 +36,7 @@ namespace ZeroPrinters.Printers
         public void AppendLine(string line, char fillChar = ' ')
         {
             LineCount++;
-            Data.Append(line.PadRight(MaxColumns, fillChar)+"\r\n");
+            Data.Append(line.PadRight(MaxColumns, fillChar) + newLineSeparator);
         }
 
         public void AppendColumnsLine(params string[] columns)
@@ -62,7 +63,7 @@ namespace ZeroPrinters.Printers
             AppendLine(string.Empty);
         }
 
-        public abstract void Print();
+        public new abstract void Print();
         
         public override void CancelPrint()
         {

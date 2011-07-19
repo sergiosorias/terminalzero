@@ -97,7 +97,7 @@ namespace ZeroGUI
                     DependencyObject obj = Validator.GetFirstChildWithError(this);
                     if (obj != null && obj is UIElement)
                     {
-                        Dispatcher.BeginInvoke(new Update(()=> ((UIElement)obj).Focus()));
+                        Dispatcher.BeginInvoke(new Action(() => ((UIElement)obj).Focus()));
                     }
                 }
             }

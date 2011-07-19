@@ -2,6 +2,7 @@
 using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Interfaces;
 
@@ -15,10 +16,9 @@ namespace ZeroCommonClasses.Pack
             
         }
 
-        public ExportEntitiesPackInfo(int moduleCode, string workingDir)
+        public ExportEntitiesPackInfo(int moduleCode)
         {
             ModuleCode = moduleCode;
-            RootDirectory = workingDir;
             Tables = new List<PackTableInfo>();
         }
 
@@ -87,26 +87,32 @@ namespace ZeroCommonClasses.Pack
             }
         }
 
-        public void ImportTables(System.Data.Objects.ObjectContext context)
-        {
-            foreach (PackTableInfo info in Tables)
-            {
-                ContextExtentions.ImportEntities(context, info.GetRows(WorkingDirectory, System.Reflection.Assembly.GetAssembly(context.GetType())), SetEntityAsImported);
-            }
-        }
-
         private static void SetEntityAsImported(EntityObject entity)
         {
             if (entity is IExportableEntity)
                 ((IExportableEntity) entity).UpdateStatus(EntityStatus.Imported);
         }
 
-        public void MergeTables(System.Data.Objects.ObjectContext context)
+        public string ImportTables(System.Data.Objects.ObjectContext context)
         {
+            StringBuilder sb = new StringBuilder();
             foreach (PackTableInfo info in Tables)
             {
+                sb.AppendLine(string.Format("Entity: {0} - Count: {1}", info.RowTypeName, info.RowsCount));
+                ContextExtentions.ImportEntities(context, info.GetRows(WorkingDirectory, System.Reflection.Assembly.GetAssembly(context.GetType())), SetEntityAsImported);
+            }
+            return sb.ToString();
+        }
+
+        public string MergeTables(System.Data.Objects.ObjectContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (PackTableInfo info in Tables)
+            {
+                sb.AppendLine(string.Format("Entity: {0} - Count: {1}", info.RowTypeName, info.RowsCount));
                 ContextExtentions.MergeEntities(context, info.GetRows(WorkingDirectory, System.Reflection.Assembly.GetAssembly(context.GetType())), SetEntityAsImported);
             }
+            return sb.ToString();
         }
     }
 }

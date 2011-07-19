@@ -70,7 +70,7 @@ namespace ZeroGUI
             if (stamp > maxTime)
             {
                 lastUpdate = stamp;
-                Dispatcher.BeginInvoke(new Update(OnTick),null);
+                Dispatcher.BeginInvoke(new Action(OnTick), null);
             }
 
         }

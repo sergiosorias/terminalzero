@@ -25,7 +25,7 @@ namespace ZeroSales.Presentation
             this.sale = sale;
             sale.SalePaymentHeader = new SalePaymentHeader(sale.TerminalToCode);
             ViewHeader = Resources.FinalCustomer;
-            CustomerSelectionCommand.Finished += CustomerSelectionCommand_Finished;
+            CustomerSelectionCommand.Executed += CustomerSelectionCommandExecuted;
         }
 
         #region Properties
@@ -172,7 +172,7 @@ namespace ZeroSales.Presentation
             }
         }
 
-        private void CustomerSelectionCommand_Finished(object sender, EventArgs e)
+        private void CustomerSelectionCommandExecuted(object sender, EventArgs e)
         {
             var customer = Terminal.Instance.Session[typeof(Customer)];
             if (customer != null)
@@ -191,7 +191,6 @@ namespace ZeroSales.Presentation
         {
             if(!Payment.Ready)
             {
-                //Por favor elija la forma de pago
                 return false;
             }
             
@@ -202,14 +201,14 @@ namespace ZeroSales.Presentation
         {
             Sale.PrintMode = (int) PrintMode.NoTax;
             Sale.CustomerCode = null;
-            ContextExtentions.DetachEntities(BusinessContext.Instance.Model, Payment, Payment.SalePaymentItems);
+            if (Payment != null) ContextExtentions.DetachEntities(BusinessContext.Instance.Model, Payment, Payment.SalePaymentItems);
             Sale.SalePaymentHeader = null;
             return base.CanCancel(parameter);
         }
 
         public override void Dispose()
         {
-            CustomerSelectionCommand.Finished -= CustomerSelectionCommand_Finished;
+            CustomerSelectionCommand.Executed -= CustomerSelectionCommandExecuted;
             base.Dispose();
         }
         #endregion

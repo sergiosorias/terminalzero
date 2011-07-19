@@ -121,7 +121,7 @@ namespace ZeroStock.Pages
                     StockHeader.DeliveryDocumentHeader.AddNewDeliveryDocumentItem(validProd, qty, _lot);
 
                 _lot = "";
-                lotBarcode.SetFocus();
+                lotBarcode.Focus();
             }
         }
 
@@ -173,7 +173,7 @@ namespace ZeroStock.Pages
         private void lotBarcode_BarcodeReceived(object sender, BarCodeEventArgs e)
         {
             _lot = string.Format("{0:0000}{1:00}{2:00}", e.Parts[1].Code, e.Parts[2].Code, e.Parts[3].Code);
-            mainBarcode.SetFocus();
+            mainBarcode.Focus();
         }
 
 

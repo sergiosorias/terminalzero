@@ -144,7 +144,7 @@ namespace TerminalZeroClient.Business
                     throw new ArgumentOutOfRangeException("buttons");
             }
             Application.Current.Dispatcher.BeginInvoke(
-                new Update(() => result(ZeroMessageBox.Show(view, "", button).GetValueOrDefault())));
+                new Action(() => result(ZeroMessageBox.Show(view, "", button).GetValueOrDefault())));
         }
 
         public void ShowWindow(object view, Action closed)
@@ -155,7 +155,7 @@ namespace TerminalZeroClient.Business
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ShowActivated = true,
                 Topmost = true,
-                MaxWidth = 600
+                MaxWidth = 600,
             };
             mb.Closed+=(o,e)=>
             {
@@ -232,11 +232,7 @@ namespace TerminalZeroClient.Business
                 Notifier.SetUserMessage(true, "Error");
                 Notifier.SetProcess("Error!");
             }
-            else
-            {
-                Notifier.SetProcess("Listo");
-            }
-
+            
             Notifier.SetProgress(100);
 
             return canContinue;
@@ -347,7 +343,6 @@ namespace TerminalZeroClient.Business
             {
                 var mod = obj as ZeroModule;
                 mod.TerminalStatus = ModuleStatus.Unknown;
-                mod.UserStatus = ModuleStatus.Unknown;
                 mod.WorkingDirectory = path + ConfigurationContext.Directories.WorkingDirSubfix;
                 ModuleList.Add(mod);
                 Notifier.SetUserMessage(false, "Módulo ensamblado --> ''" + mod.Description + "''");

@@ -90,23 +90,23 @@ namespace TZeroHost.Classes
             switch (PackManager.GetModule(Path.GetFileName(packPath)))
             {
                 case 1:
-                    manager = new ZeroConfiguration.ConfigurationPackManager(ServerTerminal.Instance);
+                    manager = new ZeroConfiguration.ConfigurationPackManager();
                     break;
                 case 2:
                     break;
                 case 3:
-                    manager = new MasterDataPackManager(ServerTerminal.Instance);
+                    manager = new MasterDataPackManager();
                     break;
                 case 4:
-                    manager = new ZeroStock.ZeroStockPackManager(ServerTerminal.Instance);
+                    manager = new ZeroStock.ZeroStockPackManager();
                     break;
                 case 5:
-                    manager = new ZeroUpdateManager.UpdateManagerPackManager(ServerTerminal.Instance);
+                    manager = new ZeroUpdateManager.UpdateManagerPackManager();
                     break;
                 case 6:
                     break;
                 case 7:
-                    manager = new ZeroSales.ZeroSalesPackManager(ServerTerminal.Instance);
+                    manager = new ZeroSales.ZeroSalesPackManager();
                     break;
                 default:
                     manager = PackManager.GetDefaultManager();

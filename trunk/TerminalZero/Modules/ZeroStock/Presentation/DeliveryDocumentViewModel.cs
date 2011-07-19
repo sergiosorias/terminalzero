@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
+using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
-using ZeroStock.Pages;
 using ZeroStock.Pages.Controls;
+using ZeroStock.Properties;
 
 namespace ZeroStock.Presentation
 {
@@ -37,9 +36,9 @@ namespace ZeroStock.Presentation
         private ObservableCollection<DeliveryDocumentHeader> LoadCollection()
         {
             if(View.ControlMode== ControlMode.Selection)
-                return new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false));
+                return new ObservableCollection<DeliveryDocumentHeader>(BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false));
             
-            return new ObservableCollection<DeliveryDocumentHeader>(ZeroBusiness.Manager.Data.BusinessContext.Instance.Model.DeliveryDocumentHeaders);
+            return new ObservableCollection<DeliveryDocumentHeader>(BusinessContext.Instance.Model.DeliveryDocumentHeaders);
         }
 
         #endregion
@@ -54,7 +53,7 @@ namespace ZeroStock.Presentation
         private void OpenNewDocument(object parameter)
         {
             var det = new DocumentDeliveryDetail();
-            bool? res = ZeroMessageBox.Show(det, Properties.Resources.NewDeliveryNote);
+            bool? res = ZeroMessageBox.Show(det, Resources.NewDeliveryNote);
             if (res.HasValue && res.Value)
             {
                 DeliveryDocumentCollection.Add(det.CurrentDocumentDelivery);
@@ -77,11 +76,9 @@ namespace ZeroStock.Presentation
                 ret = (SelectedDeliveryDocumentHeader != null);
                 if (!ret)
                 {
-                    ZeroMessageBox.Show("¡Por favor seleccione un documento!", "Atención", MessageBoxButton.OK);
+                    Terminal.Instance.CurrentClient.ShowDialog("¡Por favor seleccione un documento!",(o)=> { }, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
                 }
-
             }
-
             return ret;
         }
         #endregion

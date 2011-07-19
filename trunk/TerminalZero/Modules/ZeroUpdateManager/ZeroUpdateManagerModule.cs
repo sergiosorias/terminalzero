@@ -74,10 +74,10 @@ namespace ZeroUpdateManager
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new UpdateManagerPackManager(Terminal.Instance);
-            PackReceived.Imported += (o, e) => { try { File.Delete(path); } catch { Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
-            PackReceived.Error += PackReceived_Error;
-            if (PackReceived.Import(path))
+            var packManager = new UpdateManagerPackManager();
+            packManager.Imported += (o, e) => { try { File.Delete(path); } catch { Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
+            packManager.Error += PackReceived_Error;
+            if (packManager.Import(path))
             {
                 Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
             }
