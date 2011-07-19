@@ -37,9 +37,9 @@ namespace TerminalZeroClient
         
         private void Run()
         {
+            Action action;
             if (Terminal.Instance.CurrentClient.Initialize())
             {
-                Action action;
                 if (!ConfigurationContext.LogLevel.TraceVerbose)
                 {
                     action = delegate() { btnState_Click(null, null); };
@@ -48,13 +48,13 @@ namespace TerminalZeroClient
                 {
                     action = delegate() { btnState.Visibility = Visibility.Visible; };
                 }
-
-                Dispatcher.Invoke(action, null);
             }
             else
             {
-                btnClose.Visibility = Visibility.Visible;
+                action = delegate() { btnClose.Visibility = Visibility.Visible; };
             }
+
+            Dispatcher.Invoke(action, null);
         }
 
         #region IProgressNotifier Members

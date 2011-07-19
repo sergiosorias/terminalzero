@@ -32,11 +32,11 @@
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                     <Label Content="Lote:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                    <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode"  BarcodeReceivedCommand="{Binding LotBarcodeProductCommand}" BarcodeReceived="BarcodeReceived" Composition="NNNYYYYMMDDNN"/>
+                    <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode" NextControl="{Binding ElementName=mainBarcode}"  BarcodeReceivedCommand="{Binding LotBarcodeProductCommand}" Composition="NNNYYYYMMDDNN"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                    <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeReceivedCommand="{Binding BarcodeProductCommand}" BarcodeReceived="BarcodeReceived" Composition="NPPPPPPQQQQQN"/>
+                    <baseControls:BarCodeTextBox NextControl="{Binding ElementName=lotBarcode}" Name="mainBarcode" Width="200" FontSize="16" BarcodeReceivedCommand="{Binding BarcodeProductCommand}" Composition="NPPPPPPQQQQQN"/>
                 </StackPanel>
             </Grid>
             <controls:SaleLazyLoadingList Grid.Row="1" x:Name="saleGrid" ItemsSource="{Binding Path=SaleProductList}"/>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
@@ -9,7 +8,6 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Pack;
-using ZeroGUI;
 using ZeroMasterData.Pages;
 using ZeroMasterData.Presentation;
 using ZeroMasterData.Properties;
@@ -18,8 +16,10 @@ namespace ZeroMasterData
 {
     public class ZeroMasterDataModule : ZeroModule
     {
+        public const int Code = 3;
+
         public ZeroMasterDataModule()
-            : base(3, Resources.MasterDataModuleDescription)
+            : base(Code, Resources.MasterDataModuleDescription)
         {
             BuildPosibleActions();
         }
@@ -31,7 +31,7 @@ namespace ZeroMasterData
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSupplierView, OpenSupplierView, Rules.IsTerminalZero));
             Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCustomersView, OpenCustomerView));
             Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.OpenCustomersSelectionView, OpenCustomerSelectionView,null,false));
-            //Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, TryExportMasterDataPack, Rules.IsTerminalZero));
+            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecExportMasterData, TryExportMasterDataPack, Rules.IsTerminalZero));
             //Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.ExecTestImportMasterData, TestImportDataPack));
         }
 
@@ -48,7 +48,7 @@ namespace ZeroMasterData
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var packReceived = new MasterDataPackManager(Terminal.Instance);
+            var packReceived = new MasterDataPackManager();
             packReceived.Imported += (o, e) =>{try{File.Delete(path);}catch{}};
             Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, "Starting Master Data pack import process");
             packReceived.Error += PackReceived_Error;
@@ -113,59 +113,26 @@ namespace ZeroMasterData
             {
                 view.View.ControlMode |= ControlMode.Update;
             }
-            bool? ret = ZeroMessageBox.Show(view.View, Resources.CustomerSelection);
-            if (ret.HasValue && ret.Value)
+            Terminal.Instance.CurrentClient.ShowDialog(view.View, (res) =>
             {
-                Terminal.Instance.Session[typeof(Customer)] = new ActionParameter<Customer>(false, view.SelectedItem.Customer, true);
-            }
+                if (res)
+                {
+                    Terminal.Instance.Session[typeof(Customer)] = new ActionParameter<Customer>(false, view.SelectedItem.Customer, true);
+                }
+                Terminal.Instance.Session.Actions[Actions.OpenCustomersSelectionView].RaiseExecuted();
+            });
+            
         }
 
         private void TryExportMasterDataPack(object parameter)
         {
-            var masterDataPackManager = new MasterDataPackManager(Terminal.Instance);
-            using (var modelManager = BusinessContext.CreateTemporaryModelManager(masterDataPackManager))
+            try
             {
-                Terminal.Instance.CurrentClient.Notifier.SetProcess("Armando paquete");
-                Terminal.Instance.CurrentClient.Notifier.SetProgress(10);
-                var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                //info.AddTable(modelManager.TaxPositions);
-                //info.AddTable(modelManager.PaymentInstruments);
-                //info.AddTable(modelManager.Taxes);
-                info.AddTable(modelManager.ProductGroups);
-                info.AddTable(modelManager.Weights);
-                info.AddTable(modelManager.Prices);
-                info.AddTable(modelManager.Suppliers);
-                info.AddTable(modelManager.Products);
-                info.AddTable(modelManager.Customers);
-
-                if (info.HasRowsToProcess)
-                {
-                    using (masterDataPackManager)
-                    {
-                        //masterDataPackManager.Exported += (sender, e) =>
-                        //{
-                        //    Terminal.Instance.CurrentClient.Notifier.SetProgress(60);
-                        //    Terminal.Instance.CurrentClient.Notifier.SetProcess("Datos Exportados");
-                        //    Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false,"Datos Exportados al directorio: " + WorkingDirectory);
-                        //    Terminal.Instance.CurrentClient.Notifier.SetProgress(80);
-                        //};
-                        try
-                        {
-                            //Terminal.Instance.CurrentClient.Notifier.SetProcess("Creando paquete");
-                            if(masterDataPackManager.Export(info))
-                                modelManager.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-                            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
-                        }
-
-                    }
-                    //Terminal.Instance.CurrentClient.Notifier.SetProcess("Listo");
-                    //Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, "Terminado");
-                    //Terminal.Instance.CurrentClient.Notifier.SetProgress(100);
-
-                }
+                new MasterDataPackManager().Export(WorkingDirectory);
+            }
+            catch (Exception ex)
+            {
+                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
 

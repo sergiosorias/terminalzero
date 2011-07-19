@@ -52,7 +52,7 @@
         <Setter Property="ToolTipService.ShowDuration" Value="10000"/>
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="BorderThickness" Value="1.4,1.4,1,1"/>
         <Setter Property="BorderBrush" Value="Silver"/>
         <Setter Property="Validation.ErrorTemplate">
@@ -107,7 +107,7 @@
                     <Grid>
                         <Border x:Name="BorderBase" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="6" />
                         <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" x:Name="TextPrompt" Text="{TemplateBinding Tag}" Visibility="Collapsed" Focusable="False" IsHitTestVisible="False"  Foreground="Silver"/>
-                        <ScrollViewer Padding="2,0,0,0" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" x:Name="PART_ContentHost" />
+                        <ScrollViewer Margin="2,2,2,2" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" x:Name="PART_ContentHost" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>

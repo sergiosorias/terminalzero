@@ -104,7 +104,6 @@
     </Compile>
     <Compile Include="Classes\Delegates.cs" />
     <Compile Include="Classes\EventArgs.cs" />
-    <Compile Include="Classes\IsBarCodeRule.cs" />
     <Compile Include="Classes\IsDoubleRule.cs" />
     <Compile Include="Classes\IsPercentageRule.cs" />
     <Compile Include="Classes\MandatoryRule.cs" />

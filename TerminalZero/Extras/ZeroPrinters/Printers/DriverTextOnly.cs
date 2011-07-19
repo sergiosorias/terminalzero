@@ -60,8 +60,8 @@ namespace ZeroPrinters.Printers
                 page.Width = t.DesiredSize.Width;
                 var p = new PageContent { Child = page };
                 document.Pages.Add(p);
-                document.DocumentPaginator.PageSize = new Size(MaxColumns * 7, LineCount * 15);
-                dialog.PrintDocument(document.DocumentPaginator, "");
+
+                Print(document, dialog);
             }
         }
 
@@ -70,22 +70,24 @@ namespace ZeroPrinters.Printers
             PrintDialog dialog;
             if (LoadPrintDialog(out dialog))
             {
-                var document = new FlowDocument();
-                IDocumentPaginatorSource idoc = document;
+                var fdoc = new FlowDocument();
                 var parag = new Paragraph(new Run(Data.ToString()))
-                                {
-                                    FontSize = kFontSize, 
-                                    FontFamily = font,
+                {
+                    FontSize = kFontSize, 
+                    FontFamily = font,
                                     
-                                };
-                document.Blocks.Add(parag);
-                idoc.DocumentPaginator.PageSize = new Size(MaxColumns*7, LineCount*15);
-                
-                dialog.PrintTicket.PageMediaSize = new PageMediaSize(MaxColumns*7, LineCount*15);
-                
-                dialog.PrintDocument(idoc.DocumentPaginator, "");
+                };
+                fdoc.Blocks.Add(parag);
+
+                Print(fdoc, dialog);
             }
         }
 
+        private void Print(IDocumentPaginatorSource document, PrintDialog dialog)
+        {
+            document.DocumentPaginator.PageSize = new Size(MaxColumns * 7, LineCount * 15);
+            dialog.PrintTicket.PageMediaSize = new PageMediaSize(MaxColumns*7, LineCount*15+2);
+            dialog.PrintDocument(document.DocumentPaginator, "");
+        }
     }
 }

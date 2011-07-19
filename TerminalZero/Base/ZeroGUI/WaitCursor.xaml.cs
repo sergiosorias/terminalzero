@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
@@ -63,7 +64,7 @@ namespace ZeroGUI
             {
                 sb.Stop();
             }
-            Dispatcher.BeginInvoke(new Update(() =>
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 Visibility = Visibility.Collapsed;
             }), null);

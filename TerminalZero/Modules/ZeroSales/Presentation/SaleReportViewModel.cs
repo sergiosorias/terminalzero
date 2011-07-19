@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Objects;
-using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Windows.Input;
+using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
@@ -57,23 +57,56 @@ namespace ZeroSales.Presentation
         public SaleReportViewModel()
             :base(new SaleReportView())
         {
-            Today = DateTime.Now.Date;
+            SelectedDate = DateTime.Now.Date;
+            IsByDate = true;
             LoadSalesForCurrentUser();
+            CustomerSelectionCommand.Executed += CustomerSelectionCommandFinished;
         }
 
         #region Properties
 
-        private DateTime today;
+        private bool isByDate;
 
-        public DateTime Today
+        public bool IsByDate
         {
-            get { return today; }
+            get { return isByDate; }
             set
             {
-                if (today != value)
+                if (isByDate != value)
                 {
-                    today = value;
-                    OnPropertyChanged("Today");
+                    isByDate = value;
+                    SelectedCustomer = null;
+                    OnPropertyChanged("IsByDate");
+                }
+            }
+        }
+        
+        private DateTime selectedDate;
+
+        public DateTime SelectedDate
+        {
+            get { return selectedDate; }
+            set
+            {
+                if (selectedDate != value)
+                {
+                    selectedDate = value;
+                    OnPropertyChanged("SelectedDate");
+                }
+            }
+        }
+
+        private Customer selectedCustomer;
+
+        public Customer SelectedCustomer
+        {
+            get { return selectedCustomer; }
+            set
+            {
+                if (selectedCustomer != value)
+                {
+                    selectedCustomer = value;
+                    OnPropertyChanged("SelectedCustomer");
                 }
             }
         }
@@ -99,9 +132,38 @@ namespace ZeroSales.Presentation
         public ICommand UpdateCommand
         {
             get {
-                return updateCommand ?? (updateCommand = new ZeroActionDelegate((o) => LoadSalesForCurrentUser()));
+                return updateCommand ?? (updateCommand = new ZeroActionDelegate((o) => LoadSalesForCurrentUser(), (o) => IsByDate || (!IsByDate && SelectedCustomer != null)));
             }
             set{ updateCommand = value;}
+        }
+
+        private ZeroAction customerSelectionCommand;
+
+        public ZeroAction CustomerSelectionCommand
+        {
+            get
+            {
+                return customerSelectionCommand ??
+                       (customerSelectionCommand =
+                        Terminal.Instance.Session.Actions[Actions.OpenCustomersSelectionView]);
+            }
+            set
+            {
+                if (customerSelectionCommand != value)
+                {
+                    customerSelectionCommand = value;
+                    OnPropertyChanged("CustomerSelectionCommand");
+                }
+            }
+        }
+
+        private void CustomerSelectionCommandFinished(object sender, EventArgs e)
+        {
+            var customer = Terminal.Instance.Session[typeof(Customer)];
+            if (customer != null)
+            {
+                SelectedCustomer = (Customer)customer.Value;
+            }
         }
         
         public User User { get { return Terminal.Instance.Session[typeof(User)].Value as User; } }
@@ -188,8 +250,15 @@ namespace ZeroSales.Presentation
         private void LoadSalesForCurrentUser()
         {
             ObservableCollection<SaleReportItem> result;
-            IQueryable<SaleHeader> query = BusinessContext.Instance.Model.SaleHeaders.Where(
-                sh => sh.UserCode == User.Code && EntityFunctions.TruncateTime(sh.Date) == today);
+
+            System.Linq.Expressions.Expression<Func<SaleHeader, bool>> predicate;
+
+            if (IsByDate)
+                predicate = sh => sh.UserCode == User.Code && EntityFunctions.TruncateTime(sh.Date) == SelectedDate;
+            else
+                predicate = sh => sh.CustomerCode != null && sh.CustomerCode == SelectedCustomer.Code;
+
+            IQueryable<SaleHeader> query = BusinessContext.Instance.Model.SaleHeaders.Where(predicate);
 
             result = new ObservableCollection<SaleReportItem>(query.Select(sh => new SaleReportItem { SaleHeader = sh }));
 

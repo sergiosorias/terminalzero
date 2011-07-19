@@ -12,7 +12,7 @@ namespace ZeroBusiness.Entities.Data
     {
         private static int GetNextSaleHeaderCode(int terminal)
         {
-            return BusinessContext.Instance.Model.SaleHeaders.Count(hh => hh.TerminalCode == terminal) + 1;
+            return BusinessContext.Instance.Model.SaleHeaders.Where(hh => hh.TerminalCode == terminal).Max(s => s.Code) + 1;
         }
 
         internal SaleHeader()

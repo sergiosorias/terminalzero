@@ -91,6 +91,7 @@
     <Compile Include="Presentation\CustomerDetailViewModel.cs" />
     <Compile Include="Presentation\CustomerViewModel.cs" />
     <Compile Include="Presentation\ProductDetailViewModel.cs" />
+    <Compile Include="Presentation\ProductGroupDetailViewModel.cs" />
     <Compile Include="Presentation\ProductsUpdateViewModel.cs" />
     <Compile Include="Presentation\ProductsViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

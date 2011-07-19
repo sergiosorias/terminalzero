@@ -91,7 +91,7 @@ namespace ZeroGUI
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(new Update(OnSearch), null);
+            Dispatcher.BeginInvoke(new Action(OnSearch), null);
         }
 
         private void txtSearchCriteria_KeyUp(object sender, KeyEventArgs e)
@@ -149,7 +149,7 @@ namespace ZeroGUI
 
         void cleanResTimer_Elapsed(object o)
         {
-            Dispatcher.BeginInvoke(new Update(
+            Dispatcher.BeginInvoke(new Action(
                 () => { quantityPopup.IsOpen = false; quantity.Text = ""; }
                 ), null);
 

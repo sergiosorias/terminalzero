@@ -24,17 +24,6 @@ namespace ZeroCommonClasses
             Description = description;
         }
 
-        private void CurrentClientInitialized(object sender, EventArgs e)
-        {
-            Initialize();
-            Terminal.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
-        }
-
-        private void Manager_ConfigurationRequired(object sender, EventArgs e)
-        {
-            LoadConfiguration();
-        }
-
         [DataMember]
         public int ModuleCode { get; private set; }
         [DataMember]
@@ -43,8 +32,6 @@ namespace ZeroCommonClasses
         public string Version { get; set; }
         [DataMember]
         public ModuleStatus TerminalStatus { get; set; }
-        [DataMember]
-        public ModuleStatus UserStatus { get; set; }
         [DataMember]
         public bool? IsActive { get; set; }
 

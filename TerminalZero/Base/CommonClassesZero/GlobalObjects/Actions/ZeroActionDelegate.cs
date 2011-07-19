@@ -8,11 +8,12 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 {
     public class ZeroActionDelegate : ICommand
     {
-        public event EventHandler Finished;
-        protected void OnFinished()
+        public event EventHandler Executed;
+
+        protected virtual void OnExecuted()
         {
-            if (Finished != null)
-                Finished(this, EventArgs.Empty);
+            if (Executed != null)
+                Executed(this, EventArgs.Empty);
         }
 
         public Action<object> Action { get; private set; }
@@ -34,7 +35,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
         public virtual void Execute(object parameter)
         {
             Action(parameter);
-            OnFinished();
+            OnExecuted();
         }
 
         public virtual bool CanExecute(object parameter)

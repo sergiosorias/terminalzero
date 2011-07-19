@@ -6,21 +6,33 @@ using System.Xml;
 using System.Xml.Serialization;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
-using ZeroCommonClasses.Entities;
-using ZeroCommonClasses.Interfaces;
+using ZeroCommonClasses;
 using ZeroCommonClasses.Pack;
 
 namespace ZeroStock
 {
     public class ZeroStockPackManager : PackManager
     {
-        public ZeroStockPackManager(ITerminal termminal)
-            : base(termminal)
+        private DataModelManager modelManager;
+
+        public ZeroStockPackManager()
+            : base()
         {
-            
+            modelManager = BusinessContext.CreateTemporaryModelManager(this);    
         }
 
-        protected override void ImportProcess(PackProcessingEventArgs args)
+        protected override PackInfoBase BuildPackInfo()
+        {
+            var info = new ExportEntitiesPackInfo(ZeroStockModule.Code);
+            info.TerminalToCodes.AddRange(modelManager.GetExportTerminal(Terminal.Instance.TerminalCode).Where(t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
+            info.AddTable(modelManager.StockHeaders);
+            info.AddTable(modelManager.StockItems);
+            info.AddTable(modelManager.DeliveryDocumentHeaders);
+            info.AddTable(modelManager.DeliveryDocumentItems);
+            return info;
+        }
+
+        protected override void ImportProcess(PackProcessEventArgs args)
         {
  	        base.ImportProcess(args);
             args.Pack.IsMasterData = false;
@@ -28,15 +40,23 @@ namespace ZeroStock
             ImportEntities(args);
         }
 
-        protected override void ExportProcess(PackProcessingEventArgs args)
+        protected override void ExportProcess(PackProcessEventArgs args)
         {
             base.ExportProcess(args);
-            var packInfo = (ExportEntitiesPackInfo)args.PackInfo;
-            packInfo.ExportTables();
+            var info = ((ExportEntitiesPackInfo)args.PackInfo);
+            if (info.HasRowsToProcess)
+            {
+                info.ExportTables();
+                modelManager.SaveChanges();
+            }
+            else
+            {
+                args.Cancel = true;
+            }
 
         }
 
-        private void ImportEntities(PackProcessingEventArgs e)
+        private void ImportEntities(PackProcessEventArgs e)
         {
             var packInfo = (ExportEntitiesPackInfo)e.PackInfo;
             using (var ent = BusinessContext.CreateTemporaryModelManager(this))
@@ -44,6 +64,12 @@ namespace ZeroStock
                 packInfo.ImportTables(ent);
                 ent.SaveChanges();
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            modelManager.Dispose();
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using ZeroGUI;
 using ZeroSales.Presentation;
 
@@ -14,18 +15,18 @@ namespace ZeroSales.Pages
             InitializeComponent();
         }
 
-        private void NavigationBasePage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void NavigationBasePage_Loaded(object sender, RoutedEventArgs e)
         {
             if(ViewModel!=null)
                 CommandBar.AppendButton(Properties.Resources.Change, ((SalePaymentViewModel)ViewModel).CustomerSelectionCommand);
 
-            addPaymentInstrument.IsVisibleChanged += new System.Windows.DependencyPropertyChangedEventHandler(addPaymentInstrument_IsVisibleChanged);
+            addPaymentInstrument.IsVisibleChanged += addPaymentInstrument_IsVisibleChanged;
         }
 
-        void addPaymentInstrument_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        void addPaymentInstrument_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (((UIElement)sender).IsFocused)
-                ((UIElement) sender).MoveFocus(new System.Windows.Input.TraversalRequest(System.Windows.Input.FocusNavigationDirection.Next));
+                ((UIElement) sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
     }
 }

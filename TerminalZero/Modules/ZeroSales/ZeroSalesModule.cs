@@ -15,8 +15,10 @@ namespace ZeroSales
 {
     public class ZeroSalesModule : ZeroModule
     {
+        public const int Code = 7;
+
         public ZeroSalesModule()
-            : base(7, Resources.SalesModuleDescription)
+            : base(Code, Resources.SalesModuleDescription)
         {
             BuildPosibleActions();
         }
@@ -32,7 +34,7 @@ namespace ZeroSales
         public override void NewPackReceived(string path)
         {
             base.NewPackReceived(path);
-            var PackReceived = new ZeroSalesPackManager(Terminal.Instance);
+            var PackReceived = new ZeroSalesPackManager();
             PackReceived.Imported += (o, e) =>
             {
                 try
@@ -97,30 +99,7 @@ namespace ZeroSales
         {
             try
             {
-                var manager = new ZeroSalesPackManager(Terminal.Instance);
-                using (var modelManager = BusinessContext.CreateTemporaryModelManager(manager))
-                {
-                    var info = new ExportEntitiesPackInfo(ModuleCode, WorkingDirectory);
-                    info.TerminalToCodes.AddRange(
-                        modelManager.GetExportTerminal(Terminal.Instance.TerminalCode).Where(
-                            t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
-
-                    info.AddTable(modelManager.SaleHeaders);
-                    info.AddTable(modelManager.SaleItems);
-                    info.AddTable(modelManager.SalePaymentHeaders);
-                    info.AddTable(modelManager.SalePaymentItems);
-                    
-                    if (info.HasRowsToProcess)
-                    {
-                        using (manager)
-                        {
-                            if (manager.Export(info))
-                            {
-                                modelManager.SaveChanges();
-                            }
-                        }
-                    }
-                }
+                new ZeroSalesPackManager().Export(WorkingDirectory);
             }
             catch (Exception ex)
             {

@@ -13,6 +13,7 @@ namespace ZeroBusiness.Entities.Data
         {
             
         }
+
         public DeliveryDocumentHeader(int terminalToCode)
         {
             Code = GetNextDocumentHeaderCode();
