@@ -20,7 +20,7 @@ namespace ZeroCommonClasses
         
         public void Add(ZeroAction action)
         {
-            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, "Acción --> ''" + action.Name + "''");
+            Terminal.Instance.Client.Notifier.SetUserMessage(false, "Acción --> ''" + action.Name + "''");
             SystemActions.Add(action.Name, action);
         }
 

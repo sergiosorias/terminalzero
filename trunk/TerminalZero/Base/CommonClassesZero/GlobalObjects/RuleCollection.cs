@@ -17,7 +17,7 @@ namespace ZeroCommonClasses
 
         public void Add(string name, Predicate<object> rule)
         {
-            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, "Regla --> '" + name + "'");
+            Terminal.Instance.Client.Notifier.SetUserMessage(false, "Regla --> '" + name + "'");
             SystemRules.Add(name, rule);
         }
 

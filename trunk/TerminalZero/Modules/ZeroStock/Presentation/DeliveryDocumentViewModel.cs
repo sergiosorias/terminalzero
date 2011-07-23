@@ -93,7 +93,7 @@ namespace ZeroStock.Presentation
                 ret = (SelectedDeliveryDocumentHeader != null);
                 if (!ret)
                 {
-                    Terminal.Instance.CurrentClient.ShowDialog("¡Por favor seleccione un documento!","Atención",(o)=> { }, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
+                    Terminal.Instance.Client.ShowDialog("¡Por favor seleccione un documento!","Atención",(o)=> { }, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
                 }
             }
             return ret;

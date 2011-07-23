@@ -110,7 +110,7 @@ namespace ZeroConfiguration
 
         private double LoadSyncRecurrence(ConfigurationModelManager Context)
         {
-            var ter = Context.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
+            var ter = Context.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.Code);
             if (!ter.TerminalProperties.IsLoaded)
                 ter.TerminalProperties.Load();
             TerminalProperty value = ter.TerminalProperties.FirstOrDefault(tp => tp.Code == "SYNC_EVERY");
@@ -352,7 +352,7 @@ namespace ZeroConfiguration
             bool ret = true;
             Config.Notifier.SetUserMessage(false, "Enviando 'hola'");
 
-            ZeroResponse<string> r = Config.SyncService.SayHello(ZeroCommonClasses.Terminal.Instance.TerminalName, ZeroCommonClasses.Terminal.Instance.TerminalCode);
+            ZeroResponse<string> r = Config.SyncService.SayHello(ZeroCommonClasses.Terminal.Instance.TerminalName, ZeroCommonClasses.Terminal.Instance.Code);
             msg = r.Message;
             if (r.IsValid)
                 CurrentConnectionID = r.Result;
@@ -375,7 +375,7 @@ namespace ZeroConfiguration
             msg = r.Message;
             if (r.IsValid && r.Result != DateTime.MinValue)
             {
-                CurrentContext.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode).LastSync = DateTime.Now;
+                CurrentContext.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.Code).LastSync = DateTime.Now;
                 CurrentContext.SaveChanges();
             }
 
@@ -399,7 +399,7 @@ namespace ZeroConfiguration
             }
             else
             {
-                var T = CurrentContext.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                var T = CurrentContext.Terminals.First(t => t.Code == ZeroCommonClasses.Terminal.Instance.Code);
                 if (!T.Modules.IsLoaded)
                     T.Modules.Load();
 

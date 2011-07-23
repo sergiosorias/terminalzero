@@ -9,7 +9,7 @@ using System.Windows.Input;
 using TerminalZeroClient.Properties;
 using ZeroBusiness;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
@@ -42,7 +42,7 @@ namespace TerminalZeroClient
             InitTryIcon();
             LoadConfigs();
             Terminal.Instance.Manager.ConfigurationRequired += Manager_ConfigurationRequired;
-            Terminal.Instance.CurrentClient.Notifier = this;
+            Terminal.Instance.Client.Notifier = this;
         }
 
         void Manager_ConfigurationRequired(object sender, EventArgs e)
@@ -56,7 +56,7 @@ namespace TerminalZeroClient
             mainMenu.Items.Clear();
             mainMenu.Items.Add(item);
             
-            InternalBuildMenu(Terminal.Instance.CurrentClient.MainMenu, mainMenu.Items);
+            InternalBuildMenu(Terminal.Instance.Client.MainMenu, mainMenu.Items);
         }
 
         private void InternalBuildMenu(ZeroMenu menu, ItemCollection items)
@@ -70,7 +70,7 @@ namespace TerminalZeroClient
                 else
                 {
                     menuitem.Command = item.Value.MenuAction;
-                    //Esto hay que hacerlo algun dia!
+                    //TODO: Esto hay que hacerlo algun dia!
                     //menuitem.ContextMenu = new System.Windows.Controls.ContextMenu();
                     //menuitem.ContextMenu.Items.Add(new System.Windows.Controls.MenuItem {Header = "Anclar al Inicio", IsCheckable=true});
 

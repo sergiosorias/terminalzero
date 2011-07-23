@@ -18,14 +18,14 @@ namespace ZeroBusiness.Entities.Data
         {
             Code = GetNextSalePaymentHeaderCode();
             TerminalToCode = terminalToCode;
-            TerminalCode = Terminal.Instance.TerminalCode;
+            TerminalCode = Terminal.Instance.Code;
             TotalQuantity = 0;
             UpdateStatus(EntityStatus.New);
         }
 
         private static int GetNextSalePaymentHeaderCode()
         {
-            return BusinessContext.Instance.Model.SalePaymentHeaders.Count(p=>p.TerminalCode == Terminal.Instance.TerminalCode)+1;
+            return BusinessContext.Instance.Model.SalePaymentHeaders.Count(p=>p.TerminalCode == Terminal.Instance.Code)+1;
         }
 
         #region Generated Properties

@@ -3,10 +3,10 @@ namespace ZeroCommonClasses.Interfaces
 {
     public interface ITerminal
     {
-        int TerminalCode { get; }
+        int Code { get; }
         string TerminalName { get; }
         ZeroSession Session { get; }
         ITerminalManager Manager { get; set; }
-        IZeroClient CurrentClient { get; set; }
+        IZeroClient Client { get; set; }
     }
 }

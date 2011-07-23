@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.Interfaces;
 
 namespace ZeroCommonClasses
@@ -11,7 +11,7 @@ namespace ZeroCommonClasses
     {
         private Terminal()
         {
-            TerminalCode = ConfigurationContext.TerminalCode;
+            Code = ConfigurationContext.TerminalCode;
             TerminalName = ConfigurationContext.TerminalName;
             Session = new ZeroSession();
         }
@@ -23,11 +23,11 @@ namespace ZeroCommonClasses
         }
         #endregion
 
-        public int TerminalCode { get; private set; }
+        public int Code { get; private set; }
         public string TerminalName { get; private set; }
         public ZeroSession Session { get; private set; }
         public ITerminalManager Manager { get; set; }
-        public IZeroClient CurrentClient { get; set; }
+        public IZeroClient Client { get; set; }
 
     }
 }

@@ -50,22 +50,22 @@ namespace ZeroMasterData
             base.NewPackReceived(path);
             var packReceived = new MasterDataPackManager();
             packReceived.Imported += (o, e) =>{try{File.Delete(path);}catch{}};
-            Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, "Starting Master Data pack import process");
+            Terminal.Instance.Client.Notifier.Log(TraceLevel.Verbose, "Starting Master Data pack import process");
             packReceived.Error += PackReceived_Error;
             if (packReceived.Import(path))
             {
-                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false,"Importacion de master data completada con éxito!");
+                Terminal.Instance.Client.Notifier.SetUserMessage(false,"Importacion de master data completada con éxito!");
             }
             else
             {
-                Terminal.Instance.CurrentClient.Notifier.SendNotification(
+                Terminal.Instance.Client.Notifier.SendNotification(
                     "Ocurrio un error durante el proceso de importacion de master data!");
             }
         }
 
         private void PackReceived_Error(object sender, ErrorEventArgs e)
         {
-            Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
+            Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
         }
 
         #region Actions Handle
@@ -76,7 +76,7 @@ namespace ZeroMasterData
             var view = new ProductsViewModel();
             if (!Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
                 view.View.ControlMode = ControlMode.ReadOnly;
-            Terminal.Instance.CurrentClient.ShowView(view.View);
+            Terminal.Instance.Client.ShowView(view.View);
         }
 
         private void OpenProductMessage(object parameter)
@@ -84,14 +84,14 @@ namespace ZeroMasterData
             BusinessContext.Instance.BeginOperation();
             var view = new ProductsViewModel();
             view.View.ControlMode = ControlMode.ReadOnly;
-            Terminal.Instance.CurrentClient.ShowWindow(view.View);
+            Terminal.Instance.Client.ShowWindow(view.View);
         }
 
         private void OpenSupplierView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new SupplierView();
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.Client.ShowView(view);
         }
 
         private void OpenCustomerView(object parameter)
@@ -102,7 +102,7 @@ namespace ZeroMasterData
             {
                 view.View.ControlMode = ControlMode.Update;
             }
-            Terminal.Instance.CurrentClient.ShowView(view.View);
+            Terminal.Instance.Client.ShowView(view.View);
         }
 
         private void OpenCustomerSelectionView(object parameter)
@@ -113,7 +113,7 @@ namespace ZeroMasterData
             {
                 view.View.ControlMode |= ControlMode.Update;
             }
-            Terminal.Instance.CurrentClient.ShowDialog(view.View,null, (res) =>
+            Terminal.Instance.Client.ShowDialog(view.View,null, (res) =>
             {
                 if (res)
                 {
@@ -132,7 +132,7 @@ namespace ZeroMasterData
             }
             catch (Exception ex)
             {
-                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
+                Terminal.Instance.Client.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
 

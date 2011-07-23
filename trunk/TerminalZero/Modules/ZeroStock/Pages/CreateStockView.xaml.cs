@@ -37,14 +37,14 @@ namespace ZeroStock.Pages
         {
             if (!IsInDesignMode)
             {
-                StockHeader = new StockHeader(_stockType,Terminal.Instance.TerminalCode);
+                StockHeader = new StockHeader(_stockType,Terminal.Instance.Code);
                 
                 if (BusinessContext.Rules.IsDeliveryDocumentMandatory(_stockType))
                 {
                     var viewModel =
                         new DeliveryDocumentViewModel(new DeliveryDocumentView {ControlMode = ControlMode.Selection});
 
-                    Terminal.Instance.CurrentClient.ShowDialog(viewModel.View, Properties.Resources.DeliveryNoteSelection, (res) =>
+                    Terminal.Instance.Client.ShowDialog(viewModel.View, Properties.Resources.DeliveryNoteSelection, (res) =>
                     {
                         if (res)
                         {
@@ -53,7 +53,7 @@ namespace ZeroStock.Pages
                         }
                         else
                         {
-                            Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail, (o) => GoHomeOrDisable());
+                            Terminal.Instance.Client.ShowDialog(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail, (o) => GoHomeOrDisable());
                         }
                     });
                 }
@@ -144,7 +144,7 @@ namespace ZeroStock.Pages
             {
                 ret = false;
                 ZeroMessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK);
-                Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
+                Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, ex.ToString());
             }
             return ret;
         }

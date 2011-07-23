@@ -97,7 +97,7 @@ namespace ZeroSales.Presentation
         private void AddPaymentInstrument(object parameter)
         {
             var paymentInstrument = new PaymentInstrumentSelectionViewModel(Sale);
-            Terminal.Instance.CurrentClient.ShowDialog(paymentInstrument.View,null,
+            Terminal.Instance.Client.ShowDialog(paymentInstrument.View,null,
             (canAddPayment) =>
                 {
                     if (canAddPayment)

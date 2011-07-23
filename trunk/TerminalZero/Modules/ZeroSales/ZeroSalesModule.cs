@@ -43,10 +43,10 @@ namespace ZeroSales
                 }
                 catch
                 {
-                    Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path));
+                    Terminal.Instance.Client.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path));
                 }
             };
-            PackReceived.Imported += (o,e)=> Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Info,
+            PackReceived.Imported += (o,e)=> Terminal.Instance.Client.Notifier.Log(TraceLevel.Info,
                                                                                           string.Format(
                                                                                               "Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}",
                                                                                               e.ConnectionID, e.Pack.Code,
@@ -54,7 +54,7 @@ namespace ZeroSales
                                                                                                   ? e.PackInfo.ModuleCode
                                                                                                   : -1,
                                                                                               e.Pack.PackStatusCode));
-            PackReceived.Error += (o, e) => Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
+            PackReceived.Error += (o, e) => Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
             PackReceived.Import(path);
         }
 
@@ -78,21 +78,21 @@ namespace ZeroSales
         {
             BusinessContext.Instance.BeginOperation();
             var viewModel = new CreateSaleViewModel(new CreateSaleView(), 0);
-            Terminal.Instance.CurrentClient.ShowView(viewModel.View);
+            Terminal.Instance.Client.ShowView(viewModel.View);
         }
 
         private void OpenCurrentSalesView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             SaleReportViewModel viewModel = new SaleReportViewModel();
-            Terminal.Instance.CurrentClient.ShowView(viewModel.View);
+            Terminal.Instance.Client.ShowView(viewModel.View);
         }
 
         private void OpenSaleStatictics(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var viewModel = new SaleStatisticsViewModel();
-            Terminal.Instance.CurrentClient.ShowView(viewModel.View);
+            Terminal.Instance.Client.ShowView(viewModel.View);
         }
 
         private void TryExportSaleDataPack()
@@ -103,7 +103,7 @@ namespace ZeroSales
             }
             catch (Exception ex)
             {
-                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
+                Terminal.Instance.Client.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
 

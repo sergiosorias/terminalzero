@@ -21,8 +21,8 @@ namespace ZeroSales
         {
             var info = new ExportEntitiesPackInfo(ZeroSalesModule.Code);
             info.TerminalToCodes.AddRange(
-                modelManager.GetExportTerminal(Terminal.Instance.TerminalCode).Where(
-                    t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
+                modelManager.GetExportTerminal(Terminal.Instance.Code).Where(
+                    t => t.IsTerminalZero && t.Code != Terminal.Instance.Code).Select(t => t.Code));
 
             info.AddTable(modelManager.SaleHeaders);
             info.AddTable(modelManager.SaleItems);

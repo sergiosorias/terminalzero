@@ -60,7 +60,7 @@ namespace ZeroConfiguration.Presentantion
                 if (View.ControlMode == ControlMode.ReadOnly)
                 {
                     AreControlsEnable = false;
-                    result = dataProvider.Terminals.Where(t => t.Code == ZeroCommonClasses.Terminal.Instance.TerminalCode);
+                    result = dataProvider.Terminals.Where(t => t.Code == ZeroCommonClasses.Terminal.Instance.Code);
                     
                 }
                 else

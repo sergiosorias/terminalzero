@@ -25,10 +25,10 @@ namespace ZeroStock.Pages.Controls
             // Do not load your data at design time.
             if (!IsInDesignMode)
             {
-                CurrentDocumentDelivery = new DeliveryDocumentHeader(Terminal.Instance.TerminalCode);
+                CurrentDocumentDelivery = new DeliveryDocumentHeader(Terminal.Instance.Code);
                 DataContext = CurrentDocumentDelivery;
                 supplierBox.ItemsSource = BusinessContext.Instance.Model.Suppliers;
-                cbTerminals.ItemsSource = BusinessContext.Instance.Model.GetExportTerminal(Terminal.Instance.TerminalCode);
+                cbTerminals.ItemsSource = BusinessContext.Instance.Model.GetExportTerminal(Terminal.Instance.Code);
             }
         }
 

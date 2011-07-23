@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.Pack;
 using ZeroUpdateManager.Database;
 using ZeroUpdateManager.Properties;

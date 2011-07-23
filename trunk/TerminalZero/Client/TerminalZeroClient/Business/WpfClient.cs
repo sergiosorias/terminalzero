@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Windows;
 using TerminalZeroClient.Properties;
 using ZeroBusiness;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
@@ -188,34 +189,43 @@ namespace TerminalZeroClient.Business
             Notifier.SetProcess("Buscando Módulos");
             try
             {
-                Notifier.SetProgress(5);
-                string[] Modules = Directory.GetFiles(ConfigurationContext.Directories.ModulesFolder, "*.dll");
-                Notifier.SetProgress(10);
-                canContinue = Modules.Length != 0;
-                if (!canContinue)
+                if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
                 {
-                    Notifier.SetProgress(20);
-                    Notifier.SetUserMessage(false, "No se encontraron modulos para ejecutar!");
-                    Notifier.SetUserMessage(false, "Finalizando proceso...");
+                    canContinue = false;
+                    Notifier.SetUserMessage(true, "Este sistema ya esta en ejecución actualmente.");
+                    Notifier.SetUserMessage(false, "Cierre este sistema y use el otro.");
                 }
                 else
                 {
-                    if (!GetModules(Modules))
+                    Notifier.SetProgress(5);
+                    string[] Modules = Directory.GetFiles(ConfigurationContext.Directories.ModulesFolder, "*.dll");
+                    Notifier.SetProgress(10);
+                    canContinue = Modules.Length != 0;
+                    if (!canContinue)
                     {
-                        canContinue = false;
-                        Notifier.SetUserMessage(true, "No se encontró inicializador, el sistema no puede ser utilizado sin el mismo.");
+                        Notifier.SetProgress(20);
+                        Notifier.SetUserMessage(false, "No se encontraron modulos para ejecutar!");
+                        Notifier.SetUserMessage(false, "Finalizando proceso...");
                     }
                     else
                     {
-
-                        Notifier.SetProgress(50);
-                        canContinue = InitializeTerminal();
-
-                        Notifier.SetProgress(60);
-                        if (!canContinue)
-                            Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación con algunos problemas encontrados.");
+                        if (!GetModules(Modules))
+                        {
+                            canContinue = false;
+                            Notifier.SetUserMessage(true, "No se encontró inicializador, el sistema no puede ser utilizado sin el mismo.");
+                        }
                         else
-                            Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación correctamente!.");
+                        {
+
+                            Notifier.SetProgress(50);
+                            canContinue = InitializeTerminal();
+
+                            Notifier.SetProgress(60);
+                            if (!canContinue)
+                                Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación con algunos problemas encontrados.");
+                            else
+                                Notifier.SetUserMessage(false, "Se ha finalizado la carga de la aplicación correctamente!.");
+                        }
                     }
                 }
             }

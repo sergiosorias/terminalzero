@@ -31,7 +31,7 @@ namespace ZeroSales.Presentation
             private void OpenDetailView(object obj)
             {
                 var vm = new SaleReportItemViewModel(SaleHeader);
-                Terminal.Instance.CurrentClient.ShowDialog(vm.View, null);
+                Terminal.Instance.Client.ShowDialog(vm.View, null);
             }
         }
 
