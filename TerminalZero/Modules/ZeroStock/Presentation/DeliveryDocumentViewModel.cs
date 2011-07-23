@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -15,12 +16,17 @@ namespace ZeroStock.Presentation
 {
     public class DeliveryDocumentViewModel : ViewModelGui
     {
+        public class DeliveryDocumentHeaderExtended
+        {
+            public DeliveryDocumentHeader Header { get; set; }
+            public TerminalTo TerminalDestination { get; set; }
+        }
         #region Properties
-        public DeliveryDocumentHeader SelectedDeliveryDocumentHeader { get; set; }
+        public DeliveryDocumentHeaderExtended SelectedDeliveryDocumentHeader { get; set; }
 
-        private ObservableCollection<DeliveryDocumentHeader> deliveryDocumentCollection;
+        private ObservableCollection<DeliveryDocumentHeaderExtended> deliveryDocumentCollection;
 
-        public ObservableCollection<DeliveryDocumentHeader> DeliveryDocumentCollection
+        public ObservableCollection<DeliveryDocumentHeaderExtended> DeliveryDocumentCollection
         {
             get { return deliveryDocumentCollection ?? (deliveryDocumentCollection = LoadCollection()); }
             set
@@ -33,12 +39,23 @@ namespace ZeroStock.Presentation
             }
         }
 
-        private ObservableCollection<DeliveryDocumentHeader> LoadCollection()
+        private List<TerminalTo> terminals;
+
+        private ObservableCollection<DeliveryDocumentHeaderExtended> LoadCollection()
         {
-            if(View.ControlMode== ControlMode.Selection)
-                return new ObservableCollection<DeliveryDocumentHeader>(BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false));
-            
-            return new ObservableCollection<DeliveryDocumentHeader>(BusinessContext.Instance.Model.DeliveryDocumentHeaders);
+            terminals = new List<TerminalTo>(BusinessContext.Instance.Model.TerminalToes);
+            IEnumerable<DeliveryDocumentHeader> quer;
+            if (View.ControlMode == ControlMode.Selection)
+                quer = BusinessContext.Instance.Model.DeliveryDocumentHeaders.Where(d => d.Used == null || d.Used.Value == false);
+            else
+                quer = BusinessContext.Instance.Model.DeliveryDocumentHeaders;
+
+            return new ObservableCollection<DeliveryDocumentHeaderExtended>(quer.Select(BuildItem));
+        }
+
+        private DeliveryDocumentHeaderExtended BuildItem(DeliveryDocumentHeader h)
+        {
+            return new DeliveryDocumentHeaderExtended { Header = h, TerminalDestination = terminals.FirstOrDefault(t => t.Code == h.TerminalToCode) };
         }
 
         #endregion
@@ -56,7 +73,7 @@ namespace ZeroStock.Presentation
             bool? res = ZeroMessageBox.Show(det, Resources.NewDeliveryNote);
             if (res.HasValue && res.Value)
             {
-                DeliveryDocumentCollection.Add(det.CurrentDocumentDelivery);
+                DeliveryDocumentCollection.Add(BuildItem(det.CurrentDocumentDelivery));
             }
         }
         #endregion
@@ -76,7 +93,7 @@ namespace ZeroStock.Presentation
                 ret = (SelectedDeliveryDocumentHeader != null);
                 if (!ret)
                 {
-                    Terminal.Instance.CurrentClient.ShowDialog("¡Por favor seleccione un documento!",(o)=> { }, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
+                    Terminal.Instance.CurrentClient.ShowDialog("¡Por favor seleccione un documento!","Atención",(o)=> { }, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
                 }
             }
             return ret;

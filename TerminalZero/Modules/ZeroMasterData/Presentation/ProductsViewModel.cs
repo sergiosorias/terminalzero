@@ -29,7 +29,7 @@ namespace ZeroMasterData.Presentation
         private void NewProductCommandExecute(object sender)
         {
             var detail = new ProductDetailViewModel();
-            Terminal.Instance.CurrentClient.ShowDialog(detail.View, canAdd =>
+            Terminal.Instance.CurrentClient.ShowDialog(detail.View,null, canAdd =>
             {
                 if (canAdd && detail.View.ControlMode == ControlMode.New)
                 {
@@ -57,7 +57,7 @@ namespace ZeroMasterData.Presentation
         private void OpenIncreaseProductMessage(object parameter)
         {
             var viewModel = new ProductsUpdateViewModel();
-            Terminal.Instance.CurrentClient.ShowDialog(viewModel.View,
+            Terminal.Instance.CurrentClient.ShowDialog(viewModel.View,null,
             result =>
             {
                 if (result)

@@ -98,7 +98,7 @@ namespace ZeroSales.Presentation
             try
             {
                 var salePaymentviewModel = new SalePaymentViewModel(SaleHeader);
-                Terminal.Instance.CurrentClient.ShowDialog(salePaymentviewModel.View,
+                Terminal.Instance.CurrentClient.ShowDialog(salePaymentviewModel.View,null,
                 canSave =>
                 {
                     if (canSave)

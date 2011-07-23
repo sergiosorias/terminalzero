@@ -6,7 +6,7 @@ namespace ZeroPrinters.Printers
     public abstract class TextOnlyPrinterBase : General
     {
         private const string kColumns = "Columns";
-        protected string newLineSeparator = "\r\n";
+        protected string newLineSeparator = "\n\r\n";
 
         protected StringBuilder Data;
 

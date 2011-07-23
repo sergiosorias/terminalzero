@@ -62,12 +62,14 @@ namespace ZeroGUI
             }
             set
             {
+                Control control;
                 if (value is string)
                 {
                     NavigationBasePage nvp = new NavigationBasePage();
                     var label = new TextBox();
                     label.BorderBrush = Brushes.Transparent;
                     label.Background = Brushes.Transparent;
+                    label.TextAlignment = TextAlignment.Center;
                     label.IsReadOnly = true;
                     nvp.MaxWidth = 500;
                     nvp.Header = Title;
@@ -76,17 +78,24 @@ namespace ZeroGUI
                     label.FontSize = 18;
                     label.FontWeight = FontWeights.Bold;
                     label.Text = (string)value;
-                    Content = nvp;
+                    control = nvp;
+                    
                 }
                 else
                 {
-                    if (value is Control)
-                    {
-                        ((Control)value).PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
-                        ((Control)value).MouseLeftButtonDown += CurrentMouseLeftButtonDown;
-                    }
-                    contentpress.Content = value;
+                    control = value as Control;
                 }
+
+                if (control != null)
+                {
+                    control.PreviewKeyDown += ZeroMessageBox_PreviewKeyDown;
+                    control.MouseLeftButtonDown += CurrentMouseLeftButtonDown;
+                    contentpress.Content = control;
+                }
+                else
+                    contentpress.Content = value;
+
+                
             }
         }
 
@@ -176,10 +185,9 @@ namespace ZeroGUI
         {
             if (Content is NavigationBasePage)
             {
-                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 KeyboardNavigation.SetControlTabNavigation((NavigationBasePage)Content, KeyboardNavigationMode.Continue);
-                KeyboardNavigation.SetTabNavigation((NavigationBasePage)Content, KeyboardNavigationMode.Continue);    
-
+                KeyboardNavigation.SetTabNavigation((NavigationBasePage)Content, KeyboardNavigationMode.Continue);
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }
             else
             {
@@ -222,6 +230,7 @@ namespace ZeroGUI
         public static bool? Show(object content, string caption, SizeToContent sizeToContent, ResizeMode resizeMode, MessageBoxButton mboxButtons)
         {
             var MB = new ZeroMessageBox(true);
+            if (caption != null) MB.Title = caption;
             MB.Content = content;
             MB.ResizeMode = resizeMode;
             switch (mboxButtons)
@@ -234,7 +243,6 @@ namespace ZeroGUI
                     MB.btnAccept.Content = "Si";
                     break;
             }
-            MB.Title = caption;
             MB.SizeToContent = sizeToContent;
             object obj = Application.Current.Windows[0].Content;
 

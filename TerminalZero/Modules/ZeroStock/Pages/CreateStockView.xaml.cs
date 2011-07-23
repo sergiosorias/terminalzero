@@ -41,20 +41,21 @@ namespace ZeroStock.Pages
                 
                 if (BusinessContext.Rules.IsDeliveryDocumentMandatory(_stockType))
                 {
-                    DeliveryDocumentViewModel viewModel =
+                    var viewModel =
                         new DeliveryDocumentViewModel(new DeliveryDocumentView {ControlMode = ControlMode.Selection});
 
-                    bool? res = ZeroMessageBox.Show(viewModel.View, Properties.Resources.DeliveryNoteSelection);
-                    if (res.HasValue && res.Value)
+                    Terminal.Instance.CurrentClient.ShowDialog(viewModel.View, Properties.Resources.DeliveryNoteSelection, (res) =>
                     {
-                        StockHeader.DeliveryDocumentHeader = viewModel.SelectedDeliveryDocumentHeader;
-                        StockHeader.TerminalToCode = StockHeader.DeliveryDocumentHeader.TerminalToCode;
-                    }
-                    else
-                    {
-                        ZeroMessageBox.Show(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail);
-                        GoHomeOrDisable();
-                    }
+                        if (res)
+                        {
+                            StockHeader.DeliveryDocumentHeader = viewModel.SelectedDeliveryDocumentHeader.Header;
+                            StockHeader.TerminalToCode = StockHeader.DeliveryDocumentHeader.TerminalToCode;
+                        }
+                        else
+                        {
+                            Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.MsgDeliveryNoteMandatory, Properties.Resources.Fail, (o) => GoHomeOrDisable());
+                        }
+                    });
                 }
             }
         }
@@ -65,6 +66,7 @@ namespace ZeroStock.Pages
             
             if (ret && StockHeader != null && StockHeader.HasChanges)
             {
+
                 if (ZeroMessageBox.Show(Properties.Resources.QuestionSaveCurrentData, Properties.Resources.Important,
                                         MessageBoxButton.YesNo).GetValueOrDefault())
                 {

@@ -46,7 +46,7 @@ namespace ZeroUpdateManager
 
         private void ImportApplication(object parameter)
         {
-            Terminal.Instance.CurrentClient.ShowDialog("Desea cerrar la app para actualizar?", (dialogResult) =>
+            Terminal.Instance.CurrentClient.ShowDialog("Desea cerrar la app para actualizar?","Atención", (dialogResult) =>
             {
                 if(dialogResult)
                 {

@@ -27,7 +27,7 @@ namespace ZeroSales.Printer
             TerminalPrinters.Instance.TextOnlyPrinter.AppendLine();
             TerminalPrinters.Instance.TextOnlyPrinter.AppendLine(string.Format("Total: ${0}", header.PriceSumValue));
             TerminalPrinters.Instance.TextOnlyPrinter.AppendLine();
-            TerminalPrinters.Instance.TextOnlyPrinter.AppendLine("Gracias por su visita");
+            TerminalPrinters.Instance.TextOnlyPrinter.AppendLine("Gracias por su compra");
             TerminalPrinters.Instance.TextOnlyPrinter.Print();
             //TerminalPrinters.Instance.DriverTextOnlyPrinter.Close();
 

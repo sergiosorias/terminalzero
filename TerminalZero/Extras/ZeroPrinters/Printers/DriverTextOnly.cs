@@ -37,7 +37,6 @@ namespace ZeroPrinters.Printers
 
         public override void Print()
         {
-            //PrintFixedDocument();
             PrintFlowDocument();
         }
 

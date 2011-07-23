@@ -28,7 +28,7 @@ namespace ZeroGUI.Converters
         {
             int? printMode = value as int?;
             Color result = Colors.Transparent;
-            if (printMode.HasValue && printMode.Value == (int)PrintMode.UseTax)
+            if (printMode.HasValue && printMode.Value != (int)PrintMode.NoTax)
                 result = Colors.Red;
 
             return result;

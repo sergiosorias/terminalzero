@@ -23,9 +23,9 @@ namespace ZeroBusiness.Entities.Data
             TerminalCode = terminalCode;
             Enable = true;
             UpdateStatus(EntityStatus.New);
+            
         }
         
-
         #region ISelectable Members
 
         public bool Contains(string data)
@@ -39,19 +39,6 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
-
-        partial void OnName1Changing(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                throw new BusinessValidationException("Nombre obligatorio");
-
-        }
-
-        partial void OnTaxPositionCodeChanging(int? value)
-        {
-            if (!value.HasValue)
-                throw new BusinessValidationException("Campo obligatorio");
-        }
 
         #region Implementation of IExportableEntity
 
@@ -72,7 +59,11 @@ namespace ZeroBusiness.Entities.Data
 
     public class CustomerMetadata
     {
-        [Required(AllowEmptyStrings=false)]
-        public object WebSite;
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Nombre es obligatorio")]
+        public string Name1 { get; set; }
+
+        [Required(ErrorMessage = "Posición frente al IVA es obligatoria")]
+        public int? TaxPositionCode { get; set; }
+
     }
 }
