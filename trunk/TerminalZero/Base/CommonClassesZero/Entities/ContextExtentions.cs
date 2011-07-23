@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
@@ -13,6 +16,16 @@ namespace ZeroCommonClasses.Entities
 {
     public static class  ContextExtentions
     {
+        public static EntityValidationResult ValidateEntity(object entity)
+        {
+            ValidationContext c = new ValidationContext(entity, null, null);
+            List<ValidationResult> validationResults = new List<ValidationResult>();
+                
+            bool isValid = Validator.TryValidateObject(entity, c, validationResults, true);
+
+            return new EntityValidationResult {IsValid = isValid, Errors = validationResults.Select(s=>s.ErrorMessage)};
+        }
+
         public static string GetEntitiesAsXMLObjectList<T>(IEnumerable<T> list)
         {
             var ser = new XmlSerializer(typeof(List<T>));
@@ -72,60 +85,6 @@ namespace ZeroCommonClasses.Entities
             return dtReturn;
         }
 
-        [Obsolete]
-        public static void Merge<T>(IEnumerable<T> targetList, T mergeItem, Action<T> insertMethod, MergeOption mergeOptions, 
-            params string[] PropertiesKey)
-            where T : EntityObject
-        {
-                       
-            Type entobj = typeof(EntityObject);
-            Type rela = typeof(EntityReference);
-            Type key = typeof(EntityKey);
-
-            Dictionary<string, PropertyInfo> baseProperties = entobj.GetProperties().ToDictionary(p=>p.Name);
-            Dictionary<string, PropertyInfo> columnProperties = typeof(T).GetProperties().ToList().Where(cp =>
-                    cp.CanWrite
-                    && cp.PropertyType != key
-                    && cp.PropertyType.BaseType != rela
-                    && cp.PropertyType.BaseType != entobj
-                    ).ToDictionary(p=>p.Name);
-
-            MergeItem(targetList, mergeItem, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
-
-        }
-        [Obsolete]
-        public static void Merge<T>(IEnumerable<T> targetList, IEnumerable<T> sourceList, Action<T> insertMethod, MergeOption mergeOptions, 
-            params string[] PropertiesKey)
-            where T : EntityObject
-        {
-                       
-            Type entobj = typeof(EntityObject);
-            Type rela = typeof(EntityReference);
-            Type baseEntColl = typeof(RelatedEnd);
-            Type key = typeof(EntityKey);
-
-            Dictionary<string, PropertyInfo> baseProperties = entobj.GetProperties().ToDictionary(p=>p.Name);
-            Dictionary<string, PropertyInfo> columnProperties = typeof(T).GetProperties().ToList().Where(cp =>
-                    cp.CanWrite
-                    && cp.PropertyType != key
-                    && cp.PropertyType.BaseType != rela
-                    && cp.PropertyType.BaseType != entobj
-                    && cp.PropertyType.BaseType != baseEntColl
-                    ).ToDictionary(p=>p.Name);
-
-            foreach (var item in sourceList)
-            {
-                if(item is IExportableEntity)
-                {
-                    IExportableEntity ent = item as IExportableEntity;
-                    ent.UpdateStatus(EntityStatus.Imported);
-                }
-                MergeItem(targetList, item, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
-            }
-            
-
-        }
-        
         private static void MergeItem<T>(IEnumerable<T> list, T mergeItem, Action<T> insertMethod, MergeOption mergeOptions, string[] PropertiesKey, Dictionary<string, PropertyInfo> baseProperties, Dictionary<string, PropertyInfo> columnProperties) 
             where T : EntityObject
         {
@@ -243,6 +202,63 @@ namespace ZeroCommonClasses.Entities
                         throw new ArgumentOutOfRangeException();
                 }
                 
+            }
+        }
+
+        private static class ObsoleteMethods
+        {
+            [Obsolete]
+            public static void Merge<T>(IEnumerable<T> targetList, T mergeItem, Action<T> insertMethod, MergeOption mergeOptions,
+                params string[] PropertiesKey)
+                where T : EntityObject
+            {
+
+                Type entobj = typeof(EntityObject);
+                Type rela = typeof(EntityReference);
+                Type key = typeof(EntityKey);
+
+                Dictionary<string, PropertyInfo> baseProperties = entobj.GetProperties().ToDictionary(p => p.Name);
+                Dictionary<string, PropertyInfo> columnProperties = typeof(T).GetProperties().ToList().Where(cp =>
+                        cp.CanWrite
+                        && cp.PropertyType != key
+                        && cp.PropertyType.BaseType != rela
+                        && cp.PropertyType.BaseType != entobj
+                        ).ToDictionary(p => p.Name);
+
+                MergeItem(targetList, mergeItem, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
+
+            }
+            [Obsolete]
+            public static void Merge<T>(IEnumerable<T> targetList, IEnumerable<T> sourceList, Action<T> insertMethod, MergeOption mergeOptions,
+                params string[] PropertiesKey)
+                where T : EntityObject
+            {
+
+                Type entobj = typeof(EntityObject);
+                Type rela = typeof(EntityReference);
+                Type baseEntColl = typeof(RelatedEnd);
+                Type key = typeof(EntityKey);
+
+                Dictionary<string, PropertyInfo> baseProperties = entobj.GetProperties().ToDictionary(p => p.Name);
+                Dictionary<string, PropertyInfo> columnProperties = typeof(T).GetProperties().ToList().Where(cp =>
+                        cp.CanWrite
+                        && cp.PropertyType != key
+                        && cp.PropertyType.BaseType != rela
+                        && cp.PropertyType.BaseType != entobj
+                        && cp.PropertyType.BaseType != baseEntColl
+                        ).ToDictionary(p => p.Name);
+
+                foreach (var item in sourceList)
+                {
+                    if (item is IExportableEntity)
+                    {
+                        IExportableEntity ent = item as IExportableEntity;
+                        ent.UpdateStatus(EntityStatus.Imported);
+                    }
+                    MergeItem(targetList, item, insertMethod, mergeOptions, PropertiesKey, baseProperties, columnProperties);
+                }
+
+
             }
         }
     }

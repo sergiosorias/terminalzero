@@ -3,9 +3,12 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using System.Linq;
 using ZeroMasterData.Pages.Controls;
 
 namespace ZeroMasterData.Presentation
@@ -85,16 +88,36 @@ namespace ZeroMasterData.Presentation
         private void OpenCustomerEdit(object parameter)
         {
             View = new CustomerDetail {ControlMode = ControlMode.Update};
-            
-            if(ZeroMessageBox.Show(View, string.Format("Editar cliente {0}", Customer.Name1)).GetValueOrDefault())
+
+            Terminal.Instance.CurrentClient.ShowDialog(View,null, res =>
             {
-                BusinessContext.Instance.Model.Customers.ApplyCurrentValues(Customer);
-            }
-            else
-            {
-                BusinessContext.Instance.Model.Refresh(System.Data.Objects.RefreshMode.StoreWins, Customer);
-            }
+                if (res)
+                {
+                    BusinessContext.Instance.Model.Customers.ApplyCurrentValues(Customer);
+                }
+                else
+                {
+                    BusinessContext.Instance.Model.Refresh(System.Data.Objects.RefreshMode.StoreWins, Customer);
+                }                                                         
+            });
             
+            
+        }
+
+        public override bool CanAccept(object parameter)
+        {
+            bool ret = base.CanAccept(parameter);
+            if(ret)
+            {
+                var valid = ContextExtentions.ValidateEntity(Customer);
+                if (!valid.IsValid)
+                {
+                    Terminal.Instance.CurrentClient.ShowDialog(String.Join("\n", valid.Errors),"Error", null, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
+                }
+                ret = valid.IsValid;
+            }
+
+            return ret;
         }
 
         protected override void PrintCommandExecution(object parameter)

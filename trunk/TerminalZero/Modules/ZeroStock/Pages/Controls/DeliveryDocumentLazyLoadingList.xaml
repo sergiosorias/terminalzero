@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <DataGrid.Columns>
-        <DataGridTextColumn x:Name="terminalNameColumn" Binding="{Binding Path=TerminalToCode}" Header="Terminal" Width="200" />
-        <DataGridTextColumn x:Name="dateColumn" Binding="{Binding Path=Date}" Header="Fecha" Width="140" />
-        <DataGridTextColumn x:Name="supplierName1Column" Binding="{Binding Path=Supplier.Name1}" Header="Proveedor" Width="200" />
-        <DataGridTextColumn x:Name="noteColumn" Binding="{Binding Path=Note}" Header="Nota" Width="*" MaxWidth="250" />
+        <DataGridTextColumn x:Name="terminalNameColumn" Binding="{Binding Path=TerminalDestination.Description}" Header="Sucursal" Width="200" />
+        <DataGridTextColumn x:Name="dateColumn" Binding="{Binding Path=Header.Date}" Header="Fecha" Width="140" />
+        <DataGridTextColumn x:Name="supplierName1Column" Binding="{Binding Path=Header.Supplier.Name1}" Header="Proveedor" Width="200" />
+        <DataGridTextColumn x:Name="noteColumn" Binding="{Binding Path=Header.Note}" Header="Nota" Width="*" MaxWidth="250" />
     </DataGrid.Columns>
 </base:LazyLoadingListControlUpgrade>

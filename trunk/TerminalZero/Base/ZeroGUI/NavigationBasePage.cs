@@ -91,7 +91,7 @@ namespace ZeroGUI
             bool ret = Validate();
             if(!ret)
             {
-                ZeroMessageBox.Show("Por favor, complete los campos obligatorios.", "Importante", MessageBoxButton.OK);
+                ZeroMessageBox.Show("Por favor, complete los campos con error.", "Importante", MessageBoxButton.OK);
                 if (_focusOnError)
                 {
                     DependencyObject obj = Validator.GetFirstChildWithError(this);

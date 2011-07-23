@@ -24,5 +24,6 @@
 	[TaxPositionCode] int NULL,
 	[PaymentInstrumentCode] int NULL,
 	[LegalCode] varchar(15) NULL,
+	[DiscountPercentage] float NOT NULL CONSTRAINT DF_Customer_DiscountPercentage DEFAULT (0)
 
 )

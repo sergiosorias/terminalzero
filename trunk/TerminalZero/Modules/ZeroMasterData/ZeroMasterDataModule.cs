@@ -113,7 +113,7 @@ namespace ZeroMasterData
             {
                 view.View.ControlMode |= ControlMode.Update;
             }
-            Terminal.Instance.CurrentClient.ShowDialog(view.View, (res) =>
+            Terminal.Instance.CurrentClient.ShowDialog(view.View,null, (res) =>
             {
                 if (res)
                 {

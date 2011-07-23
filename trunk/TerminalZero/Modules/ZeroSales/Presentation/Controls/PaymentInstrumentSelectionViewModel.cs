@@ -73,12 +73,12 @@ namespace ZeroSales.Presentation.Controls
             bool ret = base.CanAccept(parameter);
             if (SelectedItem == null)
             {
-                Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.MandatoryPeymentInstrument, null, MessageBoxButtonEnum.OK);
+                Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.MandatoryPeymentInstrument,null, null, MessageBoxButtonEnum.OK);
                 ret = false;
             }
             else if(ret && SelectedQuantity == 0 || (!SelectedItem.ChangeEnable.GetValueOrDefault() && SelectedQuantity > currentSale.SalePaymentHeader.RestToPay))
             {
-                Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.InvalidAmount, null, MessageBoxButtonEnum.OK);
+                Terminal.Instance.CurrentClient.ShowDialog(Properties.Resources.InvalidAmount,null, null, MessageBoxButtonEnum.OK);
                 ret = false;
             }
 

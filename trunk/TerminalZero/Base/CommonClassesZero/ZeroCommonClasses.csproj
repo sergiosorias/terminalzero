@@ -35,6 +35,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -50,6 +51,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EntityValidationResult.cs" />
     <Compile Include="GlobalObjects\ActionCollection.cs" />
     <Compile Include="Context\ConfigurationContext.cs" />
     <Compile Include="Entities\CommonEntitiesManager.cs" />

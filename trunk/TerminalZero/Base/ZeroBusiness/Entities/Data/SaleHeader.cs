@@ -85,8 +85,8 @@ namespace ZeroBusiness.Entities.Data
 
         public void UpdatePrintMode()
         {
-            Data.PrintMode mode = SalePaymentHeader != null && SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == (int)Data.PrintMode.UseTax) ? Data.PrintMode.UseTax : Data.PrintMode.NoTax;
-            if (mode != Data.PrintMode.UseTax && Customer!=null && Customer.TaxPosition!=null )
+            Data.PrintMode mode = SalePaymentHeader != null && SalePaymentHeader.SalePaymentItems.Any(item => item.PaymentInstrument.PrintModeDefault == (int)Data.PrintMode.LegalTicket) ? Data.PrintMode.LegalTicket : Data.PrintMode.NoTax;
+            if (mode != Data.PrintMode.LegalTicket && Customer!=null && Customer.TaxPosition!=null )
             {
                 mode = customer.TaxPosition.ResolvePrintMode();
             }
@@ -137,7 +137,7 @@ namespace ZeroBusiness.Entities.Data
 
         public void AlternatePrintMode()
         {
-            PrintModeEnum = PrintModeEnum == Data.PrintMode.NoTax? Data.PrintMode.UseTax: Data.PrintMode.NoTax;
+            PrintModeEnum = PrintModeEnum == Data.PrintMode.NoTax? Data.PrintMode.LegalTicket: Data.PrintMode.NoTax;
         }
 
         #region Implementation of IExportableEntity

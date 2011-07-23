@@ -105,7 +105,7 @@ namespace ZeroMasterData.Pages.Controls
             var t = (int)((Button)sender).DataContext;
             ProductGroup pgroup = BusinessContext.Instance.Model.ProductGroups.First(pg => pg.Code == t);
             var pgd = new ProductGroupDetailViewModel(pgroup);
-            Terminal.Instance.CurrentClient.ShowDialog(pgd.View, (o) => { if(o)ProductDetailViewModel.Product.ProductGroup = pgd.CurrentProductGroup; });
+            Terminal.Instance.CurrentClient.ShowDialog(pgd.View,null, (o) => { if(o)ProductDetailViewModel.Product.ProductGroup = pgd.CurrentProductGroup; });
         }
 
         private void weightBoxItemButton_Click(object sender, RoutedEventArgs e)

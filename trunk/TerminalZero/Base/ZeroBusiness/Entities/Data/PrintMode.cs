@@ -8,6 +8,7 @@ namespace ZeroBusiness.Entities.Data
     public enum PrintMode
     {
         NoTax = 0,
-        UseTax = 1
+        LegalTicket = 1,
+        LegalInvoice = 2
     }
 }

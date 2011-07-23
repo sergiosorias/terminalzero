@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
@@ -117,7 +118,7 @@ namespace ZeroMasterData.Presentation
         {
             var viewmodel = new CustomerDetailViewModel(new CustomerDetail());
             viewmodel.Customer = new Customer(Terminal.Instance.TerminalCode);
-            Terminal.Instance.CurrentClient.ShowDialog(viewmodel.View, result =>
+            Terminal.Instance.CurrentClient.ShowDialog(viewmodel.View,null, result =>
             {
                 if (result)
                 {

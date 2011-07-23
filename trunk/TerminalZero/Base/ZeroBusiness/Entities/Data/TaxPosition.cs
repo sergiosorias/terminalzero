@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZeroCommonClasses.Entities;
 
 namespace ZeroBusiness.Entities.Data
@@ -11,7 +8,7 @@ namespace ZeroBusiness.Entities.Data
         public PrintMode ResolvePrintMode()
         {
             if (Code == 0 || Code == 2)
-                return PrintMode.UseTax;
+                return PrintMode.LegalTicket;
 
             return PrintMode.NoTax;
         }

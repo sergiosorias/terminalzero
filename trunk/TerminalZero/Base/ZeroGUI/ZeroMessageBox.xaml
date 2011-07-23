@@ -102,12 +102,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Storyboard Duration="00:00:00.4" x:Key="leaveStoryboard">
+        <Storyboard Duration="00:00:00.3" x:Key="leaveStoryboard">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="allWindow" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="allWindow" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.4" Value="-500">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3" Value="-500">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <ExponentialEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
@@ -130,7 +130,17 @@
         <ContentControl Grid.Row="0" Margin="4,0,4,0" x:Name="contentpress" HorizontalAlignment="Stretch" Focusable="False" VerticalAlignment="Stretch">
 
         </ContentControl>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="2,-1.5,12,1">
+        <StackPanel x:Name="buttonsPanel" Orientation="Horizontal" Opacity="0" Grid.Row="2" HorizontalAlignment="Right" Margin="2,-1.5,12,1">
+                        <StackPanel.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard Duration="00:00:00.4">
+                            <DoubleAnimation From="0" To="1" BeginTime="00:00:00.2" Duration="00:00:00.2"  Storyboard.TargetName="buttonsPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </StackPanel.Triggers>
             <Button x:Name="btnAccept" Content="Aceptar" Command="{Binding AcceptAction,RelativeSource={RelativeSource AncestorType=ZeroGUI:ZeroMessageBox}}" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FF727C49" Foreground="Black" FontSize="15" FontWeight="Bold" />
             <Button x:Name="btnCancel" Content="Cancelar" Command="{Binding CancelAction,RelativeSource={RelativeSource AncestorType=ZeroGUI:ZeroMessageBox}}" Style="{DynamicResource ButtonStyle1}" BorderBrush="#FFB46161" Foreground="Black" FontSize="15" FontWeight="Bold"/>
         </StackPanel>

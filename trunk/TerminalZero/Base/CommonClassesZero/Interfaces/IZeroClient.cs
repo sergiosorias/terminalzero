@@ -13,7 +13,7 @@ namespace ZeroCommonClasses.Interfaces
         bool Initialize();
         void Load();
         void ShowView(object view);
-        void ShowDialog(object view, Action<bool> result, MessageBoxButtonEnum buttons = MessageBoxButtonEnum.OkCancel);
+        void ShowDialog(object view,string title = null, Action<bool> result = null, MessageBoxButtonEnum buttons = MessageBoxButtonEnum.OkCancel);
         void ShowWindow(object view, Action closed = null);
         void ShowEnable(bool enable);
     }

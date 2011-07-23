@@ -96,7 +96,7 @@ namespace ZeroConfiguration
             Terminal.Instance.Session[userpParam.Name] = userpParam;
 #else
             var view = new UserLogIn();
-            Terminal.Instance.CurrentClient.ShowDialog(view, dialogResult =>
+            Terminal.Instance.CurrentClient.ShowDialog(view,null, dialogResult =>
             {
                 if (dialogResult)
                 {
@@ -108,12 +108,12 @@ namespace ZeroConfiguration
                     }
                     else
                     {
-                        Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgIncorrectUserPassTryAgain, (res) => { OpenLogInDialog(); }, MessageBoxButtonEnum.OK);
+                        Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgIncorrectUserPassTryAgain,Resources.Fail, (res) => { OpenLogInDialog(); }, MessageBoxButtonEnum.OK);
                     }
                 }
                 else
                 {
-                    Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgLogInPlease + "\nEl sistema se cerrara.",(res)=>
+                    Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgLogInPlease + "\nEl sistema se cerrara.", Resources.Fail, (res) =>
                     {
                         if (Terminal.Instance.Session.Actions[Actions.AppExit] != null)
                         {
