@@ -64,10 +64,10 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             }
             catch (Exception ex)
             {
-                Terminal.Instance.CurrentClient.Notifier.Log(System.Diagnostics.TraceLevel.Error, string.Format("Ocurrio un error en la ejecución del comando {0}, ERROR - {1}",Name,ex));
-                Terminal.Instance.CurrentClient.Notifier.SendNotification("Ocurrio un error en la ejecución, por favor\n contacte al administrador del sistema.");
+                System.Diagnostics.Trace.TraceError("Ocurrio un error en la ejecución del comando {0}, ERROR - {1}", Name, ex);
+                if (Terminal.Instance.Client != null && Terminal.Instance.Client.Notifier != null) 
+                    Terminal.Instance.Client.Notifier.SendNotification("Ocurrio un error en la ejecución, por favor\n contacte al administrador del sistema.");
             }
-            
         }
 
         public bool TryExecute()

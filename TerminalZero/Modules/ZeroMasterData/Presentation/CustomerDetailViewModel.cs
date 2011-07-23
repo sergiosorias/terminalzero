@@ -89,7 +89,7 @@ namespace ZeroMasterData.Presentation
         {
             View = new CustomerDetail {ControlMode = ControlMode.Update};
 
-            Terminal.Instance.CurrentClient.ShowDialog(View,null, res =>
+            Terminal.Instance.Client.ShowDialog(View,null, res =>
             {
                 if (res)
                 {
@@ -112,7 +112,7 @@ namespace ZeroMasterData.Presentation
                 var valid = ContextExtentions.ValidateEntity(Customer);
                 if (!valid.IsValid)
                 {
-                    Terminal.Instance.CurrentClient.ShowDialog(String.Join("\n", valid.Errors),"Error", null, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
+                    Terminal.Instance.Client.ShowDialog(String.Join("\n", valid.Errors),"Error", null, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
                 }
                 ret = valid.IsValid;
             }

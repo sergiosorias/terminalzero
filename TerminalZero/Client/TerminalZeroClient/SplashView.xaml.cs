@@ -12,7 +12,7 @@ using System.Windows.Input;
 using TerminalZeroClient.Business;
 using TerminalZeroClient.Properties;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.Interfaces;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -29,7 +29,7 @@ namespace TerminalZeroClient
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             appName.Content = Settings.Default.ApplicationName;
-            Terminal.Instance.CurrentClient.Notifier = this;
+            Terminal.Instance.Client.Notifier = this;
             var work = new BackgroundWorker();
             work.DoWork += (o, ea) => Run();
             work.RunWorkerAsync();
@@ -38,7 +38,7 @@ namespace TerminalZeroClient
         private void Run()
         {
             Action action;
-            if (Terminal.Instance.CurrentClient.Initialize())
+            if (Terminal.Instance.Client.Initialize())
             {
                 if (!ConfigurationContext.LogLevel.TraceVerbose)
                 {
@@ -95,7 +95,7 @@ namespace TerminalZeroClient
 
         private void btnState_Click(object sender, RoutedEventArgs e)
         {
-            Terminal.Instance.CurrentClient.Load();
+            Terminal.Instance.Client.Load();
             Close();
         }
 

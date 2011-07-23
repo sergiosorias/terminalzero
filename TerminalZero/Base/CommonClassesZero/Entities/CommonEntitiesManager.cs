@@ -1,5 +1,5 @@
 ﻿
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 
 namespace ZeroCommonClasses.Entities
 {

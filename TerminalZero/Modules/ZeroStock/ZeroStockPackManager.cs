@@ -24,7 +24,7 @@ namespace ZeroStock
         protected override PackInfoBase BuildPackInfo()
         {
             var info = new ExportEntitiesPackInfo(ZeroStockModule.Code);
-            info.TerminalToCodes.AddRange(modelManager.GetExportTerminal(Terminal.Instance.TerminalCode).Where(t => t.IsTerminalZero && t.Code != Terminal.Instance.TerminalCode).Select(t => t.Code));
+            info.TerminalToCodes.AddRange(modelManager.GetExportTerminal(Terminal.Instance.Code).Where(t => t.IsTerminalZero && t.Code != Terminal.Instance.Code).Select(t => t.Code));
             info.AddTable(modelManager.StockHeaders);
             info.AddTable(modelManager.StockItems);
             info.AddTable(modelManager.DeliveryDocumentHeaders);

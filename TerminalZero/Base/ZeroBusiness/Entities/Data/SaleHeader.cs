@@ -22,8 +22,8 @@ namespace ZeroBusiness.Entities.Data
 
         public SaleHeader(SaleType type)
         {
-            Code = GetNextSaleHeaderCode(ZeroCommonClasses.Terminal.Instance.TerminalCode);
-            TerminalToCode = TerminalCode = ZeroCommonClasses.Terminal.Instance.TerminalCode;
+            Code = GetNextSaleHeaderCode(ZeroCommonClasses.Terminal.Instance.Code);
+            TerminalToCode = TerminalCode = ZeroCommonClasses.Terminal.Instance.Code;
             Enable = true;
             SaleType = type;
             Date = DateTime.Now;

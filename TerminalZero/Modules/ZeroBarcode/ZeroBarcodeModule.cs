@@ -27,7 +27,7 @@ namespace ZeroBarcode
         #region Handlers
         private void OpenCodebarView(object parameter)
         {
-            Terminal.Instance.CurrentClient.ShowView(new BarcodePrintView());
+            Terminal.Instance.Client.ShowView(new BarcodePrintView());
         }
         #endregion
     }

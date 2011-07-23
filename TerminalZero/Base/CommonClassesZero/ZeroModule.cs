@@ -93,8 +93,8 @@ namespace ZeroCommonClasses
 
         public virtual void NewPackReceived(string path)
         {
-            if (Terminal.Instance.Session != null && Terminal.Instance.CurrentClient.Notifier != null)
-                Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
+            if (Terminal.Instance.Session != null && Terminal.Instance.Client.Notifier != null)
+                Terminal.Instance.Client.Notifier.Log(TraceLevel.Verbose, string.Format("Module {0}-{1}, Pack Received {2}", ModuleCode, Description, path));
         }
                 
     }

@@ -144,7 +144,7 @@ namespace ZeroCommonClasses.Pack
             {
                 workingPackPath = workingDir;
                 PackInfo = BuildPackInfo();
-                PackInfo.TerminalCode = Terminal.Instance.TerminalCode;
+                PackInfo.TerminalCode = Terminal.Instance.Code;
                 PackInfo.WorkingDirectory = Path.Combine(workingPackPath, Guid.NewGuid().ToString());
                 if (!Directory.Exists(PackInfo.WorkingDirectory))
                     Directory.CreateDirectory(PackInfo.WorkingDirectory);

@@ -47,7 +47,7 @@ namespace ZeroConfiguration.Presentantion
             var ret = new string[] { };
             using (var conf = new ConfigurationModelManager())
             {
-                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == Terminal.Instance.TerminalCode && tp.Code == SystemProperty.HomeShortcut.Code);
+                TerminalProperty prop = conf.TerminalProperties.FirstOrDefault(tp => tp.TerminalCode == Terminal.Instance.Code && tp.Code == SystemProperty.HomeShortcut.Code);
                 if (prop != null)
                 {
                     if (prop.LargeValue != null)

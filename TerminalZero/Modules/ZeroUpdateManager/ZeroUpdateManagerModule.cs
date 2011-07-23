@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using ZeroBusiness;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroUpdateManager.Properties;
 
@@ -46,7 +46,7 @@ namespace ZeroUpdateManager
 
         private void ImportApplication(object parameter)
         {
-            Terminal.Instance.CurrentClient.ShowDialog("Desea cerrar la app para actualizar?","Atención", (dialogResult) =>
+            Terminal.Instance.Client.ShowDialog("Desea cerrar la app para actualizar?","Atención", (dialogResult) =>
             {
                 if(dialogResult)
                 {
@@ -75,21 +75,21 @@ namespace ZeroUpdateManager
         {
             base.NewPackReceived(path);
             var packManager = new UpdateManagerPackManager();
-            packManager.Imported += (o, e) => { try { File.Delete(path); } catch { Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
+            packManager.Imported += (o, e) => { try { File.Delete(path); } catch { Terminal.Instance.Client.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
             packManager.Error += PackReceived_Error;
             if (packManager.Import(path))
             {
-                Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
+                Terminal.Instance.Client.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
             }
             else
             {
-                Terminal.Instance.CurrentClient.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
+                Terminal.Instance.Client.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
             }
         }
 
         private void PackReceived_Error(object sender, ErrorEventArgs e)
         {
-            Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
+            Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
         }
 
     }

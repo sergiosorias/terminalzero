@@ -57,20 +57,20 @@ namespace ZeroStock
                 }
                 catch
                 {
-                    Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Verbose, string.Format(
+                    Terminal.Instance.Client.Notifier.Log(TraceLevel.Verbose, string.Format(
                                                     "Error deleting pack imported. Module = {0}, Path = {1}",
                                                     ModuleCode, path));
                 }
             };
             PackReceived.Imported += PackReceived_Imported;
-            PackReceived.Error += (o, e) => Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
+            PackReceived.Error += (o, e) => Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
             PackReceived.Import(path);
 
         }
 
         private void PackReceived_Imported(object sender, PackProcessEventArgs e)
         {
-            Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Info,
+            Terminal.Instance.Client.Notifier.Log(TraceLevel.Info,
                                           string.Format(
                                               "Import Finished: Status = {3}, ConnID = {0}, DB Pack = {1}, Pack Module = {2}",
                                               e.ConnectionID, e.Pack.Code,
@@ -89,7 +89,7 @@ namespace ZeroStock
             }
             catch (Exception ex)
             {
-                Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, ex.ToString());
+                Terminal.Instance.Client.Notifier.SetUserMessage(true, ex.ToString());
             }
         }
 
@@ -99,35 +99,35 @@ namespace ZeroStock
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CurrentStockView();
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.Client.ShowView(view);
         }
 
         private void OpenNewStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(StockType.Types.New);
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.Client.ShowView(view);
         }
 
         private void OpenModifyStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new CreateStockView(StockType.Types.Modify);
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.Client.ShowView(view);
         }
 
         private void OpenDeliveryNoteView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
             var view = new DeliveryDocumentView();
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.Client.ShowView(view);
         }
 
         private void CreateStockFromSale(object parameter)
         {
             SaleHeader header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;
 
-            StockHeader stockNew = new StockHeader(StockType.Types.Modify,Terminal.Instance.TerminalCode);
+            StockHeader stockNew = new StockHeader(StockType.Types.Modify,Terminal.Instance.Code);
 
             foreach (SaleItem item in header.SaleItems)
             {

@@ -60,7 +60,7 @@ namespace ZeroConfiguration
         {
             StartSyncronizer();
             ValidateAdminUser();
-            Terminal.Instance.CurrentClient.Loaded += (o, e) => { OpenLogInDialog(); };
+            Terminal.Instance.Client.Loaded += (o, e) => { OpenLogInDialog(); };
         }
 
         private void LoadPrintersConfig(ConfigurationModelManager manager)
@@ -96,7 +96,7 @@ namespace ZeroConfiguration
             Terminal.Instance.Session[userpParam.Name] = userpParam;
 #else
             var view = new UserLogIn();
-            Terminal.Instance.CurrentClient.ShowDialog(view,null, dialogResult =>
+            Terminal.Instance.Client.ShowDialog(view,null, dialogResult =>
             {
                 if (dialogResult)
                 {
@@ -108,12 +108,12 @@ namespace ZeroConfiguration
                     }
                     else
                     {
-                        Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgIncorrectUserPassTryAgain,Resources.Fail, (res) => { OpenLogInDialog(); }, MessageBoxButtonEnum.OK);
+                        Terminal.Instance.Client.ShowDialog(Resources.MsgIncorrectUserPassTryAgain,Resources.Fail, (res) => { OpenLogInDialog(); }, MessageBoxButtonEnum.OK);
                     }
                 }
                 else
                 {
-                    Terminal.Instance.CurrentClient.ShowDialog(Resources.MsgLogInPlease + "\nEl sistema se cerrara.", Resources.Fail, (res) =>
+                    Terminal.Instance.Client.ShowDialog(Resources.MsgLogInPlease + "\nEl sistema se cerrara.", Resources.Fail, (res) =>
                     {
                         if (Terminal.Instance.Session.Actions[Actions.AppExit] != null)
                         {
@@ -134,7 +134,7 @@ namespace ZeroConfiguration
                 milsec = _sync.LoadConfiguration(conf, Terminal.Instance.Session);
             }
 
-            Terminal.Instance.CurrentClient.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
+            Terminal.Instance.Client.Notifier.SetUserMessage(false, string.Format(Resources.SyncEveryFormat, (milsec / 1000) / 60));
             _sync.SyncStarting += SyncSyncStarting;
             _sync.SyncFinished += _sync_SyncFinished;
 
@@ -145,17 +145,17 @@ namespace ZeroConfiguration
         {
             using (var conf = new ConfigurationModelManager())
             {
-                _isTerminalZero = ConfigurationModelManager.IsTerminalZero(conf, Terminal.Instance.TerminalCode);
+                _isTerminalZero = ConfigurationModelManager.IsTerminalZero(conf, Terminal.Instance.Code);
             }
             OnConfigurationRequired();
         }
 
         private void SyncSyncStarting(object sender, Synchronizer.SyncStartingEventArgs e)
         {
-            e.Notifier = Terminal.Instance.CurrentClient.Notifier;
+            e.Notifier = Terminal.Instance.Client.Notifier;
             e.SyncService = (ISyncService)Terminal.Instance.Session[typeof(ISyncService)].Value;
             e.FileTransferService = (IFileTransfer)Terminal.Instance.Session[typeof(IFileTransfer)].Value;
-            e.Modules = Terminal.Instance.CurrentClient.ModuleList;
+            e.Modules = Terminal.Instance.Client.ModuleList;
         }
 
         private void StartSync(object parameter)
@@ -165,12 +165,12 @@ namespace ZeroConfiguration
 
         private void OpenHomePage(object obj)
         {
-            Terminal.Instance.CurrentClient.ShowView(new HomePage());
+            Terminal.Instance.Client.ShowView(new HomePage());
         }
 
         private void OpenUsers(object parameter)
         {
-            Terminal.Instance.CurrentClient.ShowView(new Users());
+            Terminal.Instance.Client.ShowView(new Users());
         }
 
         private void OpenChangePassword(object parameter)
@@ -191,7 +191,7 @@ namespace ZeroConfiguration
             else
                 view.ControlMode = ControlMode.ReadOnly;
 
-            Terminal.Instance.CurrentClient.ShowView(view);
+            Terminal.Instance.Client.ShowView(view);
         }
 
         private bool CanOpenConfiguration(object param)
@@ -220,7 +220,7 @@ namespace ZeroConfiguration
 
         private ModuleStatus GetModuleStatus(ZeroModule module)
         {
-            return ConfigurationModelManager.GetTerminalModuleStatus(new ConfigurationModelManager(), Terminal.Instance.TerminalCode, module);
+            return ConfigurationModelManager.GetTerminalModuleStatus(new ConfigurationModelManager(), Terminal.Instance.Code, module);
         }
 
         public object GetMainViewModel()
@@ -233,30 +233,30 @@ namespace ZeroConfiguration
             bool initialized = false;
             using (var conf = new ConfigurationModelManager())
             {
-                ZeroBusiness.Entities.Configuration.Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == Terminal.Instance.TerminalCode);
+                ZeroBusiness.Entities.Configuration.Terminal T = conf.Terminals.FirstOrDefault(t => t.Code == Terminal.Instance.Code);
                 if (T == null)
                 {
-                    ZeroBusiness.Entities.Configuration.Terminal.AddNewTerminal(conf, Terminal.Instance.TerminalCode, Terminal.Instance.TerminalName);
+                    ZeroBusiness.Entities.Configuration.Terminal.AddNewTerminal(conf, Terminal.Instance.Code, Terminal.Instance.TerminalName);
                 }
                 else
                 {
                     _isTerminalZero = T.IsTerminalZero;
-                    if (Terminal.Instance.TerminalCode == 0 && !T.IsTerminalZero)
+                    if (Terminal.Instance.Code == 0 && !T.IsTerminalZero)
                     {
                         T.IsTerminalZero = true;
                         conf.SaveChanges();
                     }
                 }
-                ConfigurationModelManager.CreateTerminalProperties(conf, Terminal.Instance.TerminalCode);
+                ConfigurationModelManager.CreateTerminalProperties(conf, Terminal.Instance.Code);
 
-                Terminal.Instance.CurrentClient.ModuleList.ForEach(c =>
+                Terminal.Instance.Client.ModuleList.ForEach(c =>
                 {
                     c.TerminalStatus = GetModuleStatus(c);
                     c.Initialize();
                 });
-                if (Terminal.Instance.CurrentClient.ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
+                if (Terminal.Instance.Client.ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
                 {
-                    Terminal.Instance.CurrentClient.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
+                    Terminal.Instance.Client.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
                                                     + "por favor conectese con la central lo antes posible!");
                 }
                 else

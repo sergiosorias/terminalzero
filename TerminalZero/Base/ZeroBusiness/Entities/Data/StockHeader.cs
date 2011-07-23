@@ -18,7 +18,7 @@ namespace ZeroBusiness.Entities.Data
 
         public StockHeader(StockType.Types type, int terminalDestination)
         {
-            TerminalCode= Terminal.Instance.TerminalCode;
+            TerminalCode= Terminal.Instance.Code;
             TerminalToCode = terminalDestination;
             Date = DateTime.Now.Date;
             Code = GetNextStockHeaderCode();

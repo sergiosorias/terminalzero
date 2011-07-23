@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="Entities\EntityValidationResult.cs" />
     <Compile Include="GlobalObjects\ActionCollection.cs" />
-    <Compile Include="Context\ConfigurationContext.cs" />
+    <Compile Include="Environment\ConfigurationContext.cs" />
     <Compile Include="Entities\CommonEntitiesManager.cs" />
     <Compile Include="Entities\CommonModel.Designer.cs">
       <DependentUpon>CommonModel.edmx</DependentUpon>

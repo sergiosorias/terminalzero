@@ -117,8 +117,8 @@ namespace ZeroMasterData.Presentation
         private void CreateCustomer(object parameter)
         {
             var viewmodel = new CustomerDetailViewModel(new CustomerDetail());
-            viewmodel.Customer = new Customer(Terminal.Instance.TerminalCode);
-            Terminal.Instance.CurrentClient.ShowDialog(viewmodel.View,null, result =>
+            viewmodel.Customer = new Customer(Terminal.Instance.Code);
+            Terminal.Instance.Client.ShowDialog(viewmodel.View,null, result =>
             {
                 if (result)
                 {

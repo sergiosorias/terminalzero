@@ -247,12 +247,12 @@ namespace ZeroGUI
             object obj = Application.Current.Windows[0].Content;
 
             if (obj is Panel)
-                Terminal.Instance.CurrentClient.ShowEnable(false);
+                Terminal.Instance.Client.ShowEnable(false);
 
             bool? res = MB.ShowDialog();
 
             if (obj is Panel)
-                Terminal.Instance.CurrentClient.ShowEnable(true);
+                Terminal.Instance.Client.ShowEnable(true);
 
             return res;
         }

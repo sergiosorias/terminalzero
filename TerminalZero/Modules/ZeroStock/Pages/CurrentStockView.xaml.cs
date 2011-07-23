@@ -28,12 +28,12 @@ namespace ZeroStock.Pages
                 if (Terminal.Instance.Session.Rules.IsValid(Rules.IsTerminalZero))
                 {
                     terminalFilterContent.Visibility = Visibility.Visible;
-                    var expter = BusinessContext.Instance.Model.GetExportTerminal(Terminal.Instance.TerminalCode).ToList();
+                    var expter = BusinessContext.Instance.Model.GetExportTerminal(Terminal.Instance.Code).ToList();
                     cbTerminals.ItemsSource = expter;
-                    cbTerminals.SelectedItem = expter.First(t => t.Code == Terminal.Instance.TerminalCode);
+                    cbTerminals.SelectedItem = expter.First(t => t.Code == Terminal.Instance.Code);
                     cbTerminals.SelectionChanged += cbTerminals_SelectionChanged;
                 }
-                FilterPerTerminal(Terminal.Instance.TerminalCode);
+                FilterPerTerminal(Terminal.Instance.Code);
             }
         }
 
@@ -41,7 +41,7 @@ namespace ZeroStock.Pages
         {
             string newCriteria = e.Criteria ?? "";
             
-            int tCode = Terminal.Instance.TerminalCode;
+            int tCode = Terminal.Instance.Code;
             if (cbTerminals.SelectedValue != null) tCode = ((int)cbTerminals.SelectedValue);
             var cvs1 = Resources["cvs1"] as CollectionViewSource;
             cvs1.Source = BusinessContext.Instance.Model.StockSummaries.Where(s => s.TerminalToCode == tCode && s.Name.Contains(newCriteria));

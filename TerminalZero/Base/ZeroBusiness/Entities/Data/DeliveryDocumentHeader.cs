@@ -18,7 +18,7 @@ namespace ZeroBusiness.Entities.Data
         {
             Code = GetNextDocumentHeaderCode();
             Date = DateTime.Now.Date;
-            TerminalCode = Terminal.Instance.TerminalCode;
+            TerminalCode = Terminal.Instance.Code;
             TerminalToCode = terminalToCode;
             UpdateStatus(EntityStatus.New);
         }

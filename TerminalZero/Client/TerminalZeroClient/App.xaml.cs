@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using TerminalZeroClient.Business;
 using ZeroCommonClasses;
-using ZeroCommonClasses.Context;
+using ZeroCommonClasses.Environment;
 
 namespace TerminalZeroClient
 {
@@ -16,7 +16,7 @@ namespace TerminalZeroClient
         public App()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Terminal.Instance.CurrentClient = new WpfClient();
+            Terminal.Instance.Client = new WpfClient();
         }
 
         public static string Name
@@ -32,8 +32,8 @@ namespace TerminalZeroClient
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            Terminal.Instance.CurrentClient.Dispose();
-            Terminal.Instance.CurrentClient = null;
+            Terminal.Instance.Client.Dispose();
+            Terminal.Instance.Client = null;
         }
 
         

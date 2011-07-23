@@ -98,7 +98,7 @@ namespace ZeroSales.Presentation
             try
             {
                 var salePaymentviewModel = new SalePaymentViewModel(SaleHeader);
-                Terminal.Instance.CurrentClient.ShowDialog(salePaymentviewModel.View,null,
+                Terminal.Instance.Client.ShowDialog(salePaymentviewModel.View,null,
                 canSave =>
                 {
                     if (canSave)
@@ -119,7 +119,7 @@ namespace ZeroSales.Presentation
             catch (Exception ex)
             {
                 ZeroMessageBox.Show(ex.Message, Resources.SaveError, MessageBoxButton.OK);
-                Terminal.Instance.CurrentClient.Notifier.Log(TraceLevel.Error, ex.ToString());
+                Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, ex.ToString());
                 View.GoHomeOrDisable();
             }
 
