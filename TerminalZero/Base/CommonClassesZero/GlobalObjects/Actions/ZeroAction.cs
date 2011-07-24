@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
-using System.Windows.Input;
 
 namespace ZeroCommonClasses.GlobalObjects.Actions
 {
@@ -29,11 +29,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
 
         public override bool CanExecute(object parameter)
         {
-            StringBuilder sb;
-            if (parameter is StringBuilder)
-                sb = parameter as StringBuilder;
-            else
-                sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             _canExecute = ValidateActionParams(sb);
 
@@ -48,7 +44,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             
             if(!_canExecute)
             {
-                System.Diagnostics.Trace.TraceWarning("Action {0} cannot execute - message {1}",Action.Method,sb);
+                Trace.TraceWarning("Action {0} cannot execute - message {1}",Action.Method,sb);
             }
             return _canExecute;
         }
@@ -64,7 +60,7 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.TraceError("Ocurrio un error en la ejecución del comando {0}, ERROR - {1}", Name, ex);
+                Trace.TraceError("Ocurrio un error en la ejecución del comando {0}, ERROR - {1}", Name, ex);
                 if (Terminal.Instance.Client != null && Terminal.Instance.Client.Notifier != null) 
                     Terminal.Instance.Client.Notifier.SendNotification("Ocurrio un error en la ejecución, por favor\n contacte al administrador del sistema.");
             }
@@ -137,16 +133,9 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             }
         }
 
-        public void AddParam(string name, bool isMandatory)
+        public void AddParam(object key, bool isMandatory)
         {
-            Parameters.Add(new ActionParameterBase(name,isMandatory,false));
+            Parameters.Add(new ActionParameterBase(key.ToString(),isMandatory,false));
         }
-
-        public void AddParam(Type type, bool isMandatory)
-        {
-            Parameters.Add(new ActionParameterBase(type, isMandatory,false));
-        }
-
-        
     }
 }

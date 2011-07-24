@@ -24,8 +24,8 @@ namespace TerminalZeroClient.Business
         public WpfClient()
         {
             ModuleList = new List<ZeroModule>();
-            var param1 = new ActionParameter<ISyncService>(false, ConfigurationContext.CreateSyncConnection(), false);
-            var param2 = new ActionParameter<IFileTransfer>(false, ConfigurationContext.CreateFileTranferConnection(), false);
+            var param1 = new ActionParameter<ISyncService>(false, Config.CreateSyncConnection(), false);
+            var param2 = new ActionParameter<IFileTransfer>(false, Config.CreateFileTranferConnection(), false);
             Terminal.Instance.Session[param1.Name] = param1;
             Terminal.Instance.Session[param2.Name] = param2;
         }
@@ -198,7 +198,7 @@ namespace TerminalZeroClient.Business
                 else
                 {
                     Notifier.SetProgress(5);
-                    string[] Modules = Directory.GetFiles(ConfigurationContext.Directories.ModulesFolder, "*.dll");
+                    string[] Modules = Directory.GetFiles(Directories.ModulesFolder, "*.dll");
                     Notifier.SetProgress(10);
                     canContinue = Modules.Length != 0;
                     if (!canContinue)
@@ -339,24 +339,18 @@ namespace TerminalZeroClient.Business
                 }
             }
             Notifier.SetProgress(30);
-            if (Terminal.Instance.Manager == null)
-            {
-                return false;
-            }
-
-            return true;
+            return Terminal.Instance.Manager != null;
         }
 
         private void TryAddModule(object obj, string path)
         {
-            if (obj is ZeroModule)
+            var mod = obj as ZeroModule;
+            if (mod != null)
             {
-                var mod = obj as ZeroModule;
                 mod.TerminalStatus = ModuleStatus.Unknown;
-                mod.WorkingDirectory = path + ConfigurationContext.Directories.WorkingDirSubfix;
+                mod.WorkingDirectory = path + Directories.WorkingDirSubfix;
                 ModuleList.Add(mod);
                 Notifier.SetUserMessage(false, "Módulo ensamblado --> ''" + mod.Description + "''");
-
             }
             else
             {

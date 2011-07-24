@@ -6,7 +6,7 @@ namespace ZeroCommonClasses.Entities
     public class CommonEntitiesManager : Entities
     {
         public CommonEntitiesManager()
-            : base(ConfigurationContext.GetConnectionForCurrentEnvironment("CommonModel"))
+            : base(Config.GetConnectionForCurrentEnvironment("CommonModel"))
         {
             
         }

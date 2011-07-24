@@ -234,7 +234,7 @@ namespace TerminalZeroClient
 
         public void Log(TraceLevel level, string message)
         {
-            if (ConfigurationContext.LogLevel.Level >= level)
+            if (Config.LogLevel.Level >= level)
             {
                 switch (level)
                 {

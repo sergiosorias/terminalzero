@@ -8,8 +8,8 @@
     <ProjectGuid>{4C14B2DC-6FFD-4FB1-BE00-3655A65CAA89}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZeroUpdateManager</RootNamespace>
-    <AssemblyName>ZeroUpdateManager</AssemblyName>
+    <RootNamespace>ZeroUpdate</RootNamespace>
+    <AssemblyName>ZeroUpdate</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -55,7 +55,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UpdateManagerPackManager.cs" />
-    <Compile Include="ZeroUpdateManagerModule.cs" />
+    <Compile Include="ZeroUpdateModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

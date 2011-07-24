@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using ZeroBusiness;
 using ZeroBusiness.Manager.Data;
 using ZeroCommonClasses;
@@ -9,7 +9,6 @@ using ZeroCommonClasses.Pack;
 using ZeroSales.Pages;
 using ZeroSales.Presentation;
 using ZeroSales.Properties;
-using System.IO;
 
 namespace ZeroSales
 {
@@ -20,7 +19,7 @@ namespace ZeroSales
         public ZeroSalesModule()
             : base(Code, Resources.SalesModuleDescription)
         {
-            BuildPosibleActions();
+            
         }
 
         #region Overrides
@@ -67,13 +66,7 @@ namespace ZeroSales
 
         #region Private Methods
 
-        private void BuildPosibleActions()
-        {
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCurrentSalesView, OpenCurrentSalesView));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewSaleView, OpenSaleView));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenSaleStatictics, OpenSaleStatictics));
-        }
-
+        [ZeroAction(Actions.OpenNewSaleView)]
         private void OpenSaleView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
@@ -81,13 +74,15 @@ namespace ZeroSales
             Terminal.Instance.Client.ShowView(viewModel.View);
         }
 
+        [ZeroAction(Actions.OpenCurrentSalesView)]
         private void OpenCurrentSalesView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
-            SaleReportViewModel viewModel = new SaleReportViewModel();
+            var viewModel = new SaleReportViewModel();
             Terminal.Instance.Client.ShowView(viewModel.View);
         }
-
+        
+        [ZeroAction(Actions.OpenSaleStatictics,Rules.IsTerminalZero)]
         private void OpenSaleStatictics(object parameter)
         {
             BusinessContext.Instance.BeginOperation();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace ZeroUpdateManager.Database.ScriptLines
+namespace ZeroUpdate.Database.ScriptLines
 {
     public class ScriptLineCollection: Collection<ScriptLine>
     {

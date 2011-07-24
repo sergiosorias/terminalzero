@@ -9,7 +9,7 @@
         }
 
         public ActionParameter(bool isMandatory)
-            : base(typeof(T), isMandatory,false)
+            : base(typeof(T).ToString(), isMandatory,false)
         {
 
         }

@@ -52,8 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\EntityValidationResult.cs" />
+    <Compile Include="Environment\Directories.cs" />
     <Compile Include="GlobalObjects\ActionCollection.cs" />
-    <Compile Include="Environment\ConfigurationContext.cs" />
+    <Compile Include="Environment\Config.cs" />
     <Compile Include="Entities\CommonEntitiesManager.cs" />
     <Compile Include="Entities\CommonModel.Designer.cs">
       <DependentUpon>CommonModel.edmx</DependentUpon>
@@ -64,6 +65,7 @@
     <Compile Include="Entities\PackStatusEnum.cs" />
     <Compile Include="GlobalObjects\Actions\ActionParameterBase.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroActionDelegate.cs" />
+    <Compile Include="GlobalObjects\Actions\ZeroActionAttribute.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroBackgroundAction.cs" />
     <Compile Include="GlobalObjects\Actions\ZeroTriggerAction.cs" />
     <Compile Include="GlobalObjects\Barcode\BarcodePart.cs" />
