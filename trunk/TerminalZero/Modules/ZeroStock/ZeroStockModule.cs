@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
@@ -20,17 +19,13 @@ namespace ZeroStock
         public ZeroStockModule()
             : base(Code, Resources.StockModuleDescription)
         {
-            BuildPosibleActions();
+            BuildActions();
         }
 
-        private void BuildPosibleActions()
+        private void BuildActions()
         {
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenCurrentStockView, OpenStockView));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenNewStockView, OpenNewStockView, Rules.IsTerminalZero));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenModifyStockView, OpenModifyStockView, Rules.IsTerminalZero));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenDeliveryNoteView, OpenDeliveryNoteView, Rules.IsTerminalZero));
             var createStockFromSale = new ZeroTriggerAction(Actions.ExecCreateStockFromLastSale, CreateStockFromSale);
-            createStockFromSale.AddParam(typeof(SaleHeader),true);
+            createStockFromSale.AddParam(typeof(SaleHeader), true);
             Terminal.Instance.Session.Actions.Add(createStockFromSale);
         }
 
@@ -95,6 +90,7 @@ namespace ZeroStock
 
         #region Handlers
 
+        [ZeroAction(Actions.OpenCurrentStockView)]
         private void OpenStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
@@ -102,6 +98,7 @@ namespace ZeroStock
             Terminal.Instance.Client.ShowView(view);
         }
 
+        [ZeroAction(Actions.OpenNewStockView, Rules.IsTerminalZero)]
         private void OpenNewStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
@@ -109,6 +106,7 @@ namespace ZeroStock
             Terminal.Instance.Client.ShowView(view);
         }
 
+        [ZeroAction(Actions.OpenModifyStockView, Rules.IsTerminalZero)]
         private void OpenModifyStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
@@ -116,6 +114,7 @@ namespace ZeroStock
             Terminal.Instance.Client.ShowView(view);
         }
 
+        [ZeroAction(Actions.OpenDeliveryNoteView, Rules.IsTerminalZero)]
         private void OpenDeliveryNoteView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
@@ -123,11 +122,12 @@ namespace ZeroStock
             Terminal.Instance.Client.ShowView(view);
         }
 
+
         private void CreateStockFromSale(object parameter)
         {
-            SaleHeader header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;
+            var header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;
 
-            StockHeader stockNew = new StockHeader(StockType.Types.Modify,Terminal.Instance.Code);
+            var stockNew = new StockHeader(StockType.Types.Modify,Terminal.Instance.Code);
 
             foreach (SaleItem item in header.SaleItems)
             {

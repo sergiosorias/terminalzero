@@ -5,22 +5,18 @@ using ZeroBusiness;
 using ZeroCommonClasses;
 using ZeroCommonClasses.Environment;
 using ZeroCommonClasses.GlobalObjects.Actions;
-using ZeroUpdateManager.Properties;
+using ZeroUpdate.Properties;
 
-namespace ZeroUpdateManager
+namespace ZeroUpdate
 {
-    public class ZeroUpdateManagerModule : ZeroModule
+    
+    
+    public class ZeroUpdateModule : ZeroModule
     {
-        public ZeroUpdateManagerModule()
+        public ZeroUpdateModule()
             : base(5, "Maneja las actualizaciones del sistema")
         {
-            BuildPosibleActions();
-        }
-
-        public void BuildPosibleActions()
-        {
-            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.ExecUpgradeProcess, ImportScriptFile, null, false, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.ExecUpgradeAppProcess, ImportApplication, null, true, true));
+            
         }
 
         public override string[] GetFilesToSend()
@@ -33,6 +29,7 @@ namespace ZeroUpdateManager
             
         }
 
+        [ZeroAction(Actions.ExecUpgradeProcess, null, false, true, true)]
         private void ImportScriptFile(object parameter)
         {
             var filesToProcess = new List<string>();
@@ -44,9 +41,10 @@ namespace ZeroUpdateManager
             }
         }
 
+        [ZeroAction(Actions.ExecUpgradeAppProcess, null, true, true, true)]
         private void ImportApplication(object parameter)
         {
-            Terminal.Instance.Client.ShowDialog("Desea cerrar la app para actualizar?","Atención", (dialogResult) =>
+            Terminal.Instance.Client.ShowDialog("Desea cerrar la aplicación para actualizar?","Atención", (dialogResult) =>
             {
                 if(dialogResult)
                 {
@@ -60,14 +58,14 @@ namespace ZeroUpdateManager
 
         private void UpdateApp()
         {
-            if (File.Exists(ConfigurationContext.Directories.ApplicationUpdaterPath))
-                File.Delete(ConfigurationContext.Directories.ApplicationUpdaterPath);
+            if (File.Exists(Directories.ApplicationUpdaterPath))
+                File.Delete(Directories.ApplicationUpdaterPath);
 
-            var file = File.Create(ConfigurationContext.Directories.ApplicationUpdaterPath);
+            var file = File.Create(Directories.ApplicationUpdaterPath);
             file.Write(Resources.UpdatesManager, 0, Resources.UpdatesManager.Length);
             file.Close();
             Process proc = new Process();
-            proc.StartInfo = new ProcessStartInfo(ConfigurationContext.Directories.ApplicationUpdaterPath);
+            proc.StartInfo = new ProcessStartInfo(Directories.ApplicationUpdaterPath);
             proc.Start();
         }
         
@@ -76,7 +74,7 @@ namespace ZeroUpdateManager
             base.NewPackReceived(path);
             var packManager = new UpdateManagerPackManager();
             packManager.Imported += (o, e) => { try { File.Delete(path); } catch { Terminal.Instance.Client.Notifier.Log(TraceLevel.Verbose, string.Format("Error deleting pack imported. Module = {0}, Path = {1}", ModuleCode, path)); } };
-            packManager.Error += PackReceived_Error;
+            packManager.Error += (o, e) => Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
             if (packManager.Import(path))
             {
                 Terminal.Instance.Client.Notifier.SendNotification(Resources.SuccessfullyUpgrade);
@@ -86,11 +84,5 @@ namespace ZeroUpdateManager
                 Terminal.Instance.Client.Notifier.SendNotification(Resources.UnsuccessfullyUpgrade);
             }
         }
-
-        private void PackReceived_Error(object sender, ErrorEventArgs e)
-        {
-            Terminal.Instance.Client.Notifier.Log(TraceLevel.Error, e.GetException().ToString());
-        }
-
     }
 }

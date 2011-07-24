@@ -5,7 +5,6 @@ using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses;
-using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;
@@ -25,35 +24,11 @@ namespace ZeroConfiguration
         private const string K_password = "admin";
 
         private Synchronizer _sync;
-        public ZeroAction SyncAction;
         private bool _isTerminalZero;
         public ZeroConfigurationModule()
             : base(2, Resources.ConfigurationModuleDescription)
         {
-            BuildPosibleActions();
-            BuildRulesActions();
             Terminal.Instance.Manager = this;
-        }
-
-        private void BuildPosibleActions()
-        {
-            //actions.Add(new ZeroAction(ActionType.MenuItem, "Reload", (rule) => { OnConfigurationRequired(); }));
-
-            SyncAction = new ZeroBackgroundAction(Actions.ExecSync, StartSync, null, false, false);
-            SyncAction.AddParam(typeof(ISyncService), true);
-            Terminal.Instance.Session.Actions.Add(SyncAction);
-            Terminal.Instance.Session.Actions.Add(new ZeroBackgroundAction(Actions.AppHome, OpenHomePage, null, false));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenPropertiesView, OpenConfiguration, null, true));
-            Terminal.Instance.Session.Actions.Add(new ZeroAction(Actions.OpenUserListView, OpenUsers, Rules.IsValidUser, true));
-            var changePassAction = new ZeroAction(Actions.OpenUserPasswordChangeMessage, OpenChangePassword, null, true);
-            changePassAction.AddParam(typeof(User), true);
-            Terminal.Instance.Session.Actions.Add(changePassAction);
-        }
-
-        private void BuildRulesActions()
-        {
-            Terminal.Instance.Session.Rules.Add(Rules.IsValidUser, CanOpenConfiguration);
-            Terminal.Instance.Session.Rules.Add(Rules.IsTerminalZero, IsTerminalZero);
         }
 
         public override void Initialize()
@@ -138,7 +113,7 @@ namespace ZeroConfiguration
             _sync.SyncStarting += SyncSyncStarting;
             _sync.SyncFinished += _sync_SyncFinished;
 
-            SyncAction.TryExecute();
+            Terminal.Instance.Session.Actions[Actions.ExecSync].TryExecute();
         }
 
         private void _sync_SyncFinished(object sender, EventArgs e)
@@ -158,21 +133,27 @@ namespace ZeroConfiguration
             e.Modules = Terminal.Instance.Client.ModuleList;
         }
 
+        [ZeroAction(Actions.ExecSync, null, true, false, false)]
+        [ZeroActionParameter(typeof(ISyncService), true)]
         private void StartSync(object parameter)
         {
             _sync.Start();
         }
 
+        [ZeroAction(Actions.AppHome, null, false, true, false)]
         private void OpenHomePage(object obj)
         {
             Terminal.Instance.Client.ShowView(new HomePage());
         }
 
+        [ZeroAction(Actions.OpenUserListView, Rules.IsValidUser, true)]
         private void OpenUsers(object parameter)
         {
             Terminal.Instance.Client.ShowView(new Users());
         }
 
+        [ZeroAction(Actions.OpenUserPasswordChangeMessage, null, true)]
+        [ZeroActionParameter(typeof(User), true)]
         private void OpenChangePassword(object parameter)
         {
             var pswChange = new UserChangePassword();
@@ -180,6 +161,7 @@ namespace ZeroConfiguration
             ZeroMessageBox.Show(pswChange, Resources.ChangePassword, ResizeMode.NoResize, MessageBoxButton.OKCancel);
         }
 
+        [ZeroAction(Actions.OpenPropertiesView, null, true)]
         private void OpenConfiguration(object parameter)
         {
             // ReSharper disable RedundantNameQualifier
@@ -194,11 +176,13 @@ namespace ZeroConfiguration
             Terminal.Instance.Client.ShowView(view);
         }
 
+        [ZeroRule(Rules.IsValidUser)]
         private bool CanOpenConfiguration(object param)
         {
             return true;
         }
 
+        [ZeroRule(Rules.IsTerminalZero)]
         private bool IsTerminalZero(object param)
         {
             bool ret = false;

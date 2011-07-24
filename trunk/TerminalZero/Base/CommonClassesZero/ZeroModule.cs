@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
+using ZeroCommonClasses.GlobalObjects.Actions;
+using System.Linq;
 
 namespace ZeroCommonClasses
 {
@@ -22,6 +25,29 @@ namespace ZeroCommonClasses
         {
             ModuleCode = code;
             Description = description;
+            BuildActions(GetType());
+        }
+
+        private void BuildActions(Type type)
+        {
+            bool lookForRules = true;
+            foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance).Union(type.GetMethods(BindingFlags.Public | BindingFlags.Instance)))
+            {
+                foreach (var attribute in method.GetCustomAttributes(typeof(ZeroActionAttribute), true).Cast<ZeroActionAttribute>())
+                {
+                    Terminal.Instance.Session.Actions.Add(attribute.GetAction(this,method));
+                    lookForRules = false;
+                }
+
+                if (lookForRules)
+                {
+                    foreach (var attribute in method.GetCustomAttributes(typeof (ZeroRuleAttribute), true).Cast<ZeroRuleAttribute>())
+                    {
+                        Terminal.Instance.Session.Rules.Add(attribute.RuleName, attribute.GetPredicate(this, method));
+                    }
+                }
+                lookForRules = true;
+            }
         }
 
         [DataMember]

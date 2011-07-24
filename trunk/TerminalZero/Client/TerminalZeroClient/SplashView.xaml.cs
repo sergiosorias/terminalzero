@@ -40,7 +40,7 @@ namespace TerminalZeroClient
             Action action;
             if (Terminal.Instance.Client.Initialize())
             {
-                if (!ConfigurationContext.LogLevel.TraceVerbose)
+                if (!Config.LogLevel.TraceVerbose)
                 {
                     action = delegate() { btnState_Click(null, null); };
                 }

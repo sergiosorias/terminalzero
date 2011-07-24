@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZeroUpdateManager.Database.ScriptLines
+namespace ZeroUpdate.Database.ScriptLines
 {
     public class OnScriptLine: ScriptLine        
     {

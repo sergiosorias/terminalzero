@@ -177,9 +177,6 @@
     <None Include="Resources\ZeroAppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="XMLFile.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace ZeroUpdateManager.Database.ScriptLines
+namespace ZeroUpdate.Database.ScriptLines
 {
     public class SetVarScriptLine: ScriptLine
     {

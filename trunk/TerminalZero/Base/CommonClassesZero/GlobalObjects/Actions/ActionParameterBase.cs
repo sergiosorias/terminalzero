@@ -17,11 +17,5 @@ namespace ZeroCommonClasses.GlobalObjects.Actions
             IsMandatory = isMandatory;
             IsVolatile = isVolatile;
         }
-
-        internal ActionParameterBase(Type type, bool isMandatory, bool isVolatile) 
-            : this(type.FullName,isMandatory,isVolatile)
-        {
-            
-        }
     }
 }

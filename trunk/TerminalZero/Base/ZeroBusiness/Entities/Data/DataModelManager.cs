@@ -19,7 +19,7 @@ namespace ZeroBusiness.Entities.Data
         /// Must be public because of the data service
         /// </summary>
         public DataModelManager()
-            : base(ConfigurationContext.GetConnectionForCurrentEnvironment("Data.DataModel"))
+            : base(Config.GetConnectionForCurrentEnvironment("Data.DataModel"))
         {
             MetadataTypesRegister.InstallForThisAssembly();
         }

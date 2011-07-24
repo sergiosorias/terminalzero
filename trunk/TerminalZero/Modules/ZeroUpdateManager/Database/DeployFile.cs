@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using ZeroUpdateManager.Database.ScriptLines;
+using ZeroUpdate.Database.ScriptLines;
 
-namespace ZeroUpdateManager.Database
+namespace ZeroUpdate.Database
 {
     /// <summary>
     /// DeployFile levanta la definicion de un archivo generado por el VSTeam Suit for databases
