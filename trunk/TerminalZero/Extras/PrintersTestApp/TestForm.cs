@@ -42,7 +42,8 @@ namespace PrintersTest
         private void Log(string log)
         {
 
-            this.log.Text += string.Format("{0}\r\n", log);
+            this.log.Text += string.Format("{0}{1}", log,Environment.NewLine);
+            this.log.ScrollToCaret();
         }
     }
 }
