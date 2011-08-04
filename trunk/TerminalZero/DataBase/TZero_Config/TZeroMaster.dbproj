@@ -570,6 +570,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PrinterParameter.FK_PrinterParameter_Printer.fkey.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\data\Tables\Keys\StockHeader.FK_StockHeader_ReturnReason.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Scripts\Post-Deployment\InitData\status\Type.sql">

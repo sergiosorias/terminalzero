@@ -68,7 +68,12 @@
     <Compile Include="Pages\CreateStockView.xaml.cs">
       <DependentUpon>CreateStockView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ReturnReasonSelectionView.xaml.cs">
+      <DependentUpon>ReturnReasonSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\CreateStockViewModel.cs" />
     <Compile Include="Presentation\DeliveryDocumentViewModel.cs" />
+    <Compile Include="Presentation\ReturnReasonSelectionViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -121,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CreateStockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ReturnReasonSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

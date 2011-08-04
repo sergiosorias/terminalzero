@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -9,6 +10,7 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroGUI;
+using ZeroStock.Pages;
 using ZeroStock.Pages.Controls;
 using ZeroStock.Properties;
 
@@ -78,8 +80,8 @@ namespace ZeroStock.Presentation
         }
         #endregion
 
-        public DeliveryDocumentViewModel(NavigationBasePage view)
-            : base(view)
+        public DeliveryDocumentViewModel(ControlMode mode)
+            : base(new DeliveryDocumentView(){ControlMode = mode})
         {
             
         }

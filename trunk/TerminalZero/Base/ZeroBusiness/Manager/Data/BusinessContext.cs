@@ -35,14 +35,5 @@ namespace ZeroBusiness.Manager.Data
         {
             get { return model; }
         }
-
-        public static class Rules
-        {
-            public static bool IsDeliveryDocumentMandatory(StockType.Types stockType)
-            {
-                return stockType == StockType.Types.New;
-            }    
-        }
-        
     }
 }

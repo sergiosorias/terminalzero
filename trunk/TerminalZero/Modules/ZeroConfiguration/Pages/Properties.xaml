@@ -61,7 +61,7 @@
 						<Label Grid.Column="5" Grid.Row="1" x:Name="lblNectSynclabel" HorizontalAlignment="Right" VerticalAlignment="Center">Siguiente:</Label>
 						<Label Grid.Column="6" Grid.Row="1" x:Name="lblNextSync" Margin="2,0,2,0" HorizontalAlignment="Right" VerticalAlignment="Center" />
 					</Grid>
-                    <DataGrid DataContext="{Binding SelectedTerminal}" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding TerminalProperties}" Name="terminalPropertiesDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected">
+                    <DataGrid DataContext="{Binding SelectedTerminal}" Style="{DynamicResource dataGridStyle}" Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding TerminalProperties}" Name="terminalPropertiesDataGrid" CanUserAddRows="False" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected">
 						<DataGrid.Columns>
 							<DataGridTextColumn x:Name="descriptionColumn" Binding="{Binding Path=Description}" Header="Descripción" IsReadOnly="True" />
 							<DataGridTextColumn x:Name="valueColumn" Binding="{Binding Path=Value}" Header="Valor" Width="SizeToHeader" />

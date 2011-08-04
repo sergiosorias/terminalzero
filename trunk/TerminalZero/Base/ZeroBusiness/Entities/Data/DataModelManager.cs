@@ -43,6 +43,11 @@ namespace ZeroBusiness.Entities.Data
             return ret;
         }
 
+        public int GetNextReturnReasonCode()
+        {
+            return ReturnReasons.Count() > 0 ? ReturnReasons.Max(s => s.Code) + 1 : 1;
+        }
+
         public IEnumerable<Terminal> GetExportTerminal(int terminal)
         {
             if (confModel == null)
@@ -74,6 +79,7 @@ namespace ZeroBusiness.Entities.Data
             }
         }
 
+        
     }
 
     public static class MetadataTypesRegister
