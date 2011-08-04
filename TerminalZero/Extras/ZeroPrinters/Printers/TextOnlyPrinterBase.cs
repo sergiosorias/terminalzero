@@ -35,7 +35,7 @@ namespace ZeroPrinters.Printers
 
         public void AppendLine(string line, char fillChar = ' ')
         {
-            LineCount++;
+            LineCount+=2;
             Data.Append(line.PadRight(MaxColumns, fillChar) + newLineSeparator);
         }
 

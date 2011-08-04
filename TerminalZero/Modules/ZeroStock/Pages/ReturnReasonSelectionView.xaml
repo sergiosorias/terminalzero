@@ -1,0 +1,55 @@
+﻿<ZeroGUI:NavigationBasePage x:Class="ZeroStock.Pages.ReturnReasonSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                            Header="Devolución"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ZeroGUI="clr-namespace:ZeroGUI;assembly=ZeroGUI" xmlns:r="clr-namespace:ZeroGUI.Classes;assembly=ZeroGUI" mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="280" Width="280">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Sucursal:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
+        <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding TerminalCollection}" SelectedItem="{Binding SelectedTerminal}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" SelectedValuePath="Code"
+                      Margin="3" Name="cbTerminals">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=Code}" Height="20"/>
+                        <TextBlock Text=" - " Height="20"/>
+                        <TextBlock Text="{Binding Path=Description}" Height="20"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Text="Razón:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Top" />
+        <TextBox Tag="Razón de devolución" Grid.Column="1" Height="80" Grid.Row="1" HorizontalAlignment="Stretch" Margin="3,3,0,3" x:Name="returnReasonNameBox" AcceptsReturn="True" VerticalAlignment="Center">
+            <TextBox.Text>
+                <Binding Path="ReturnReasonName" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
+                    <Binding.ValidationRules>
+                        <r:MandatoryRule ErrorMessage="Ingrese una Razón"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock Text="Opciones:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Top" />
+        <ListBox Grid.Row="2" Focusable="False" IsTabStop="False" x:Name="list" ZeroGUI:UIElementExtentions.ListCommander="{Binding ElementName=returnReasonNameBox}" Grid.Column="1" MaxHeight="100" Background="Transparent" BorderBrush="Transparent" ItemsSource="{Binding ReturnReasonCollection}" SelectedItem="{Binding ReturnReason}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock Text="{Binding Name}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <!--<TextBlock Text="Notas:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Top" />
+        <TextBox Grid.Column="1" Grid.Row="2" Height="80" HorizontalAlignment="Stretch" Margin="3,3,0,3" AcceptsReturn="True" Text="{Binding Path=ReturnReason.Description, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}" VerticalAlignment="Center"/>-->
+    </Grid>
+</ZeroGUI:NavigationBasePage>

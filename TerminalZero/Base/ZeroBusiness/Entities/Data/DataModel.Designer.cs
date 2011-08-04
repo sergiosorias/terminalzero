@@ -42,6 +42,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("TZeroDataModel", "FK_StockHeader_StockType", "StockType", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroBusiness.Entities.Data.StockType), "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Data.StockHeader), true)]
 [assembly: EdmRelationshipAttribute("TZeroDataModel", "FK_StockItem_StockHeader", "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ZeroBusiness.Entities.Data.StockHeader), "StockItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Data.StockItem), true)]
 [assembly: EdmRelationshipAttribute("TZeroDataModel", "FK_TaxPositionCode_Supplier_TaxPosition", "TaxPosition", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroBusiness.Entities.Data.TaxPosition), "Supplier", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Data.Supplier), true)]
+[assembly: EdmRelationshipAttribute("TZeroDataModel", "FK_StockHeader_ReturnReason", "ReturnReason", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(ZeroBusiness.Entities.Data.ReturnReason), "StockHeader", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ZeroBusiness.Entities.Data.StockHeader), true)]
 
 #endregion
 
@@ -743,11 +744,13 @@ namespace ZeroBusiness.Entities.Data
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="terminalCode">Initial value of the TerminalCode property.</param>
-        public static Customer CreateCustomer(global::System.Int32 code, global::System.Int32 terminalCode)
+        /// <param name="discountPercentage">Initial value of the DiscountPercentage property.</param>
+        public static Customer CreateCustomer(global::System.Int32 code, global::System.Int32 terminalCode, global::System.Double discountPercentage)
         {
             Customer customer = new Customer();
             customer.Code = code;
             customer.TerminalCode = terminalCode;
+            customer.DiscountPercentage = discountPercentage;
             return customer;
         }
 
@@ -1335,6 +1338,30 @@ namespace ZeroBusiness.Entities.Data
         private global::System.Int16 _Status = 0;
         partial void OnStatusChanging(global::System.Int16 value);
         partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double DiscountPercentage
+        {
+            get
+            {
+                return _DiscountPercentage;
+            }
+            set
+            {
+                OnDiscountPercentageChanging(value);
+                ReportPropertyChanging("DiscountPercentage");
+                _DiscountPercentage = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscountPercentage");
+                OnDiscountPercentageChanged();
+            }
+        }
+        private global::System.Double _DiscountPercentage;
+        partial void OnDiscountPercentageChanging(global::System.Double value);
+        partial void OnDiscountPercentageChanged();
 
         #endregion
     
@@ -4638,6 +4665,31 @@ namespace ZeroBusiness.Entities.Data
 
         #endregion
     
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroDataModel", "FK_StockHeader_ReturnReason", "StockHeader")]
+        public EntityCollection<StockHeader> StockHeaders
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<StockHeader>("TZeroDataModel.FK_StockHeader_ReturnReason", "StockHeader");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockHeader>("TZeroDataModel.FK_StockHeader_ReturnReason", "StockHeader", value);
+                }
+            }
+        }
+
+        #endregion
     }
     
     /// <summary>
@@ -7051,6 +7103,30 @@ namespace ZeroBusiness.Entities.Data
         private Nullable<global::System.Int32> _DeliveryDocumentHeaderCode;
         partial void OnDeliveryDocumentHeaderCodeChanging(Nullable<global::System.Int32> value);
         partial void OnDeliveryDocumentHeaderCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ReturnReasonCode
+        {
+            get
+            {
+                return _ReturnReasonCode;
+            }
+            set
+            {
+                OnReturnReasonCodeChanging(value);
+                ReportPropertyChanging("ReturnReasonCode");
+                _ReturnReasonCode = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReturnReasonCode");
+                OnReturnReasonCodeChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ReturnReasonCode;
+        partial void OnReturnReasonCodeChanging(Nullable<global::System.Int32> value);
+        partial void OnReturnReasonCodeChanged();
 
         #endregion
     
@@ -7150,6 +7226,44 @@ namespace ZeroBusiness.Entities.Data
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<StockItem>("TZeroDataModel.FK_StockItem_StockHeader", "StockItem", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TZeroDataModel", "FK_StockHeader_ReturnReason", "ReturnReason")]
+        public ReturnReason ReturnReason
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ReturnReason>("TZeroDataModel.FK_StockHeader_ReturnReason", "ReturnReason").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ReturnReason>("TZeroDataModel.FK_StockHeader_ReturnReason", "ReturnReason").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ReturnReason> ReturnReasonReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ReturnReason>("TZeroDataModel.FK_StockHeader_ReturnReason", "ReturnReason");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ReturnReason>("TZeroDataModel.FK_StockHeader_ReturnReason", "ReturnReason", value);
                 }
             }
         }

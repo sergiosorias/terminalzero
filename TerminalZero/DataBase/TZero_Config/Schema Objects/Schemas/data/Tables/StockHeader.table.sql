@@ -11,4 +11,5 @@
 	[StockTypeCode] int NULL,
 	[DeliveryDocumentHeaderTerminalCode] int NULL,
 	[DeliveryDocumentHeaderCode] int NULL,
+	[ReturnReasonCode] int NULL,
 )

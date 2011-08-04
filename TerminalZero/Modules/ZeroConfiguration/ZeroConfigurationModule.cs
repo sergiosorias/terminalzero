@@ -5,6 +5,7 @@ using System.Windows;
 using ZeroBusiness;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses;
+using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Interfaces;
 using ZeroCommonClasses.Interfaces.Services;

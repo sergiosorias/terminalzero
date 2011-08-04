@@ -8,6 +8,7 @@ using ZeroCommonClasses;
 using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroCommonClasses.Pack;
 using ZeroStock.Pages;
+using ZeroStock.Presentation;
 using ZeroStock.Properties;
 
 namespace ZeroStock
@@ -102,16 +103,16 @@ namespace ZeroStock
         private void OpenNewStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new CreateStockView(StockType.Types.New);
-            Terminal.Instance.Client.ShowView(view);
+            var view = new CreateStockViewModel(StockType.Types.New);
+            Terminal.Instance.Client.ShowView(view.View);
         }
 
         [ZeroAction(Actions.OpenModifyStockView, Rules.IsTerminalZero)]
         private void OpenModifyStockView(object parameter)
         {
             BusinessContext.Instance.BeginOperation();
-            var view = new CreateStockView(StockType.Types.Modify);
-            Terminal.Instance.Client.ShowView(view);
+            var view = new CreateStockViewModel(StockType.Types.Modify);
+            Terminal.Instance.Client.ShowView(view.View);
         }
 
         [ZeroAction(Actions.OpenDeliveryNoteView, Rules.IsTerminalZero)]
@@ -121,8 +122,7 @@ namespace ZeroStock
             var view = new DeliveryDocumentView();
             Terminal.Instance.Client.ShowView(view);
         }
-
-
+        
         private void CreateStockFromSale(object parameter)
         {
             var header =  Terminal.Instance.Session[typeof (SaleHeader)].Value as SaleHeader;

@@ -140,4 +140,7 @@
 	<data name="StockModuleDescription">
 		<value xml:space="preserve">Operaciones referentes al stock de productos</value>
 	</data>
+	<data name="MandatoryReturnReazon">
+		<value xml:space="preserve">Tiene que seleccionar una terminal y una razón de devolución para poder continuar!</value>
+	</data>
 </root>

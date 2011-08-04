@@ -2,12 +2,13 @@
                    x:Class="ZeroStock.Pages.CreateStockView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Header="{Binding ViewTitle, Mode=OneWay, FallbackValue=Stock}"
+             Header="{Binding ViewHeader, Mode=OneWay, FallbackValue=Stock}"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" xmlns:myControls="clr-namespace:ZeroStock.Pages.Controls" 
              xmlns:baseControls="clr-namespace:ZeroGUI;assembly=ZeroGUI" IsTabStop="False"
-             Loaded="UserControl_Loaded">
+             base:ZeroToolBar.SaveCommand="{Binding SaveCommand}"
+             base:ZeroToolBar.CancelCommand="{Binding CancelCommand}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -29,17 +30,17 @@
             
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <Label Content="Lote:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode" BarcodeValidating="lotBarcode_BarcodeValidating" 
-                                            BarcodeReceived="lotBarcode_BarcodeReceived" Composition="NNNYYYYMMDDNN"/>
+                <baseControls:BarCodeTextBox Width="200" FontSize="16" Name="lotBarcode" 
+                                            BarcodeReceivedCommand="{Binding BarcodeLotCommand}" Composition="NNNYYYYMMDDNN" NextControl="{Binding ElementName=mainBarcode}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Label Content="Código:" FontSize="16" FontWeight="Heavy" HorizontalAlignment="Left" Width="110" VerticalAlignment="Center"/>
-                <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16" BarcodeValidating="BarCodeTextBox_BarcodeValidating" 
-                                            BarcodeReceived="BarCodeTextBox_BarcodeReceived" Composition="NPPPPPPQQQQQN"/>
+                <baseControls:BarCodeTextBox Name="mainBarcode" Width="200" FontSize="16"  
+                                            BarcodeReceivedCommand="{Binding BarcodeProductCommand}" Composition="NPPPPPPQQQQQN" NextControl="{Binding ElementName=lotBarcode}"/>
             </StackPanel>
        </Grid>
 
-        <myControls:StockLazyLoadingList Grid.Row="2" x:Name="stockGrid">
+        <myControls:StockLazyLoadingList Grid.Row="2" x:Name="stockGrid" ItemsSource="{Binding StockItemsCollection}">
 
         </myControls:StockLazyLoadingList>
         <Grid Grid.Row="3">
@@ -50,6 +51,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" MinWidth="200"/>
             </Grid.ColumnDefinitions>
+            <base:AutoCleanTextBlock Text="{Binding Message}" FontSize="28" FontWeight="Heavy" Margin="5,0,0,0"/>
             <TextBlock Grid.Column="1" Text="Articulos:" FontSize="20" FontWeight="Heavy" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Heavy" Text="{Binding Path=Items.Count,ElementName=stockGrid}"/>
         </Grid>

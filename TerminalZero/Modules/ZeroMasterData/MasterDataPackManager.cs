@@ -25,7 +25,7 @@ namespace ZeroMasterData
             info.AddTable(modelManager.Suppliers);
             info.AddTable(modelManager.Products);
             info.AddTable(modelManager.Customers);
-
+            info.AddTable(modelManager.ReturnReasons);
             return info;
         }
 

@@ -55,7 +55,14 @@ namespace ZeroGUI
             View = view;
         }
 
-        
+        protected void Exit()
+        {
+            if (!ZeroCommonClasses.Terminal.Instance.Session.Actions.Exists(ZeroBusiness.Actions.AppHome)
+                || !ZeroCommonClasses.Terminal.Instance.Session.Actions[ZeroBusiness.Actions.AppHome].TryExecute())
+            {
+                View.IsEnabled = false;
+            }
+        }
 
         
     }

@@ -125,6 +125,10 @@
             <End Role="PaymentInstrument" EntitySet="PaymentInstrument" />
             <End Role="SalePaymentItem" EntitySet="SalePaymentItem" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_ReturnReason" Association="TZeroDataModel.Store.FK_StockHeader_ReturnReason">
+            <End Role="ReturnReason" EntitySet="ReturnReason" />
+            <End Role="StockHeader" EntitySet="StockHeader" />
+          </AssociationSet>
           <AssociationSet Name="FK_StockHeader_StockType" Association="TZeroDataModel.Store.FK_StockHeader_StockType">
             <End Role="StockType" EntitySet="StockType" />
             <End Role="StockHeader" EntitySet="StockHeader" />
@@ -191,6 +195,7 @@
           <Property Name="TaxPositionCode" Type="int" />
           <Property Name="PaymentInstrumentCode" Type="int" />
           <Property Name="LegalCode" Type="varchar" MaxLength="15" />
+          <Property Name="DiscountPercentage" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="DeliveryDocumentHeader">
           <Key>
@@ -440,6 +445,7 @@
           <Property Name="StockTypeCode" Type="int" />
           <Property Name="DeliveryDocumentHeaderTerminalCode" Type="int" />
           <Property Name="DeliveryDocumentHeaderCode" Type="int" />
+          <Property Name="ReturnReasonCode" Type="int" />
         </EntityType>
         <EntityType Name="StockItem">
           <Key>
@@ -781,6 +787,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StockHeader_ReturnReason">
+          <End Role="ReturnReason" Type="TZeroDataModel.Store.ReturnReason" Multiplicity="0..1" />
+          <End Role="StockHeader" Type="TZeroDataModel.Store.StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReturnReason">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="ReturnReasonCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_StockHeader_StockType">
           <End Role="StockType" Type="TZeroDataModel.Store.StockType" Multiplicity="0..1" />
           <End Role="StockHeader" Type="TZeroDataModel.Store.StockHeader" Multiplicity="*" />
@@ -1024,6 +1042,10 @@
             <End Role="TaxPosition" EntitySet="TaxPositions" />
             <End Role="Supplier" EntitySet="Suppliers" />
           </AssociationSet>
+          <AssociationSet Name="FK_StockHeader_ReturnReason" Association="TZeroDataModel.FK_StockHeader_ReturnReason">
+            <End Role="ReturnReason" EntitySet="ReturnReasons" />
+            <End Role="StockHeader" EntitySet="StockHeaders" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Customer">
           <Key>
@@ -1056,6 +1078,7 @@
           <NavigationProperty Name="TaxPosition" Relationship="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" FromRole="Customer" ToRole="TaxPosition" />
           <NavigationProperty Name="PaymentInstrument" Relationship="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" FromRole="Customer" ToRole="PaymentInstrument" />
           <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
+          <Property Type="Double" Name="DiscountPercentage" Nullable="false" />
         </EntityType>
         <EntityType Name="DeliveryDocumentHeader">
           <Key>
@@ -1221,6 +1244,7 @@
           <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" MaxLength="300" Unicode="true" FixedLength="false" />
           <Property Type="Int16" Name="Status" Nullable="false" DefaultValue="0" />
+          <NavigationProperty Name="StockHeaders" Relationship="TZeroDataModel.FK_StockHeader_ReturnReason" FromRole="ReturnReason" ToRole="StockHeader" />
         </EntityType>
         <EntityType Name="SaleHeader">
           <Key>
@@ -1339,6 +1363,8 @@
           <NavigationProperty Name="DeliveryDocumentHeader" Relationship="TZeroDataModel.FK_StockHeader_DeliveryDocumentHeader" FromRole="StockHeader" ToRole="DeliveryDocumentHeader" />
           <NavigationProperty Name="StockType" Relationship="TZeroDataModel.FK_StockHeader_StockType" FromRole="StockHeader" ToRole="StockType" />
           <NavigationProperty Name="StockItems" Relationship="TZeroDataModel.FK_StockItem_StockHeader" FromRole="StockHeader" ToRole="StockItem" />
+          <Property Type="Int32" Name="ReturnReasonCode" />
+          <NavigationProperty Name="ReturnReason" Relationship="TZeroDataModel.FK_StockHeader_ReturnReason" FromRole="StockHeader" ToRole="ReturnReason" />
         </EntityType>
         <EntityType Name="StockItem">
           <Key>
@@ -1790,6 +1816,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_StockHeader_ReturnReason">
+          <End Type="TZeroDataModel.ReturnReason" Role="ReturnReason" Multiplicity="0..1" />
+          <End Type="TZeroDataModel.StockHeader" Role="StockHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReturnReason">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="StockHeader">
+              <PropertyRef Name="ReturnReasonCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1797,7 +1835,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TZeroDataModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="Customers"><EntityTypeMapping TypeName="TZeroDataModel.Customer"><MappingFragment StoreEntitySet="Customer">
-            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="DiscountPercentage" ColumnName="DiscountPercentage" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
@@ -2002,7 +2041,8 @@
             <ScalarProperty Name="Description" ColumnName="Description" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="StockHeaders"><EntityTypeMapping TypeName="TZeroDataModel.StockHeader"><MappingFragment StoreEntitySet="StockHeader">
-            <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
+            <ScalarProperty Name="ReturnReasonCode" ColumnName="ReturnReasonCode" />
+                <ScalarProperty Name="TerminalCode" ColumnName="TerminalCode" />
             <ScalarProperty Name="Code" ColumnName="Code" />
             <ScalarProperty Name="Stamp" ColumnName="Stamp" />
             <ScalarProperty Name="Enable" ColumnName="Enable" />
@@ -2164,15 +2204,15 @@
         <EntityTypeShape EntityType="TZeroDataModel.StockSummary" Width="1.5" PointX="12.75" PointY="5.75" Height="2.1725878906250102" IsExpanded="true" />
         <EntityTypeShape EntityType="TZeroDataModel.TerminalTo" Width="1.5" PointX="5.75" PointY="9.75" Height="1.5956835937500102" IsExpanded="true" />
         <AssociationConnector Association="TZeroDataModel.FK_TaxPositionCode_Customer_TaxPosition" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="25.739889322916667" />
-          <ConnectorPoint PointX="2.25" PointY="29.788157552083334" />
-          <ConnectorPoint PointX="3.75" PointY="29.788157552083334" />
+          <ConnectorPoint PointX="2.25" PointY="25.932190755208335" />
+          <ConnectorPoint PointX="2.25" PointY="30.895325898437502" />
+          <ConnectorPoint PointX="3.75" PointY="30.895325898437502" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.PK_PaymentInstrumentCode_Customer_PaymentInstrument" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.9999999999999996" PointY="22.624492187499996" />
-          <ConnectorPoint PointX="3.375" PointY="22.999492187499996" />
-          <ConnectorPoint PointX="3.375" PointY="28.300326776041665" />
-          <ConnectorPoint PointX="3.75" PointY="28.300326776041665" />
+          <ConnectorPoint PointX="2.999999999999996" PointY="23.009095052083335" />
+          <ConnectorPoint PointX="3.375" PointY="23.384095052083339" />
+          <ConnectorPoint PointX="3.375" PointY="28.853910949218751" />
+          <ConnectorPoint PointX="3.75" PointY="28.853910949218751" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_DeliveryDocumentHeader_Supplier" ManuallyRouted="false">
           <ConnectorPoint PointX="5.25" PointY="22.855499674479166" />
@@ -2181,6 +2221,8 @@
         <AssociationConnector Association="TZeroDataModel.FK_DeliveryDocumentItem_DeliveryDocumentHeader" ManuallyRouted="false">
           <ConnectorPoint PointX="7.15625" PointY="21" />
           <ConnectorPoint PointX="7.15625" PointY="19.857605794270835" />
+          <ConnectorPoint PointX="7.916666666666667" PointY="19.857605794270835" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="19.857605794270835" />
           <ConnectorPoint PointX="8.25" PointY="19.857605794270835" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_StockHeader_DeliveryDocumentHeader" ManuallyRouted="false">
@@ -2194,8 +2236,8 @@
         <AssociationConnector Association="TZeroDataModel.FK_StockHeader_PaymentInstrument" ManuallyRouted="false">
           <ConnectorPoint PointX="2.21875" PointY="19.875" />
           <ConnectorPoint PointX="2.21875" PointY="12.90625" />
-          <ConnectorPoint PointX="7.760416666666667" PointY="12.90625" />
-          <ConnectorPoint PointX="7.927083333333333" PointY="12.90625" />
+          <ConnectorPoint PointX="7.760416666666667" PointY="12.906249999999998" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="12.90625" />
           <ConnectorPoint PointX="8.25" PointY="12.90625" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_PriceCost_Product_Price" ManuallyRouted="false">
@@ -2231,13 +2273,15 @@
           <ConnectorPoint PointX="7.5" PointY="6.3074039713541659" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_StockItem_Product" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="8.8720100911458317" />
-          <ConnectorPoint PointX="7.760416666666667" PointY="8.8720100911458317" />
-          <ConnectorPoint PointX="7.927083333333333" PointY="8.8720100911458317" />
-          <ConnectorPoint PointX="10.510416666666666" PointY="8.8720100911458317" />
-          <ConnectorPoint PointX="10.677083333333334" PointY="8.8720100911458317" />
-          <ConnectorPoint PointX="11.25" PointY="8.8720100911458317" />
-          <ConnectorPoint PointX="11.25" PointY="8.4129036458333388" />
+          <ConnectorPoint PointX="6.75" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="7.760416666666667" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="7.927083333333333" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="9.1666666666666661" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="9.3333333333333339" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="10.510416666666666" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="10.677083333333334" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="11.3281275" PointY="8.9681608072916656" />
+          <ConnectorPoint PointX="11.3281275" PointY="8.4129036458333388" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_Tax1_Product_Tax" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="11.828837890625003" />
@@ -2264,25 +2308,36 @@
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_SalePaymentItem_SalePaymentHeader" ManuallyRouted="false">
           <ConnectorPoint PointX="4.5" PointY="13.53125" />
-          <ConnectorPoint PointX="7.760416666666667" PointY="13.53125" />
-          <ConnectorPoint PointX="7.927083333333333" PointY="13.53125" />
+          <ConnectorPoint PointX="7.760416666666667" PointY="13.531249999999998" />
+          <ConnectorPoint PointX="8.0833333333333339" PointY="13.53125" />
           <ConnectorPoint PointX="8.25" PointY="13.53125" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_StockHeader_StockType" ManuallyRouted="false">
           <ConnectorPoint PointX="7.5" PointY="27.5862939453125" />
           <ConnectorPoint PointX="9" PointY="27.5862939453125" />
-          <ConnectorPoint PointX="9" PointY="26.085999348958339" />
+          <ConnectorPoint PointX="9" PointY="26.470602213541671" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_StockItem_StockHeader" ManuallyRouted="false">
-          <ConnectorPoint PointX="9.75" PointY="24.230499674479169" />
-          <ConnectorPoint PointX="10.59375" PointY="24.230499674479169" />
+          <ConnectorPoint PointX="9.75" PointY="24.422801106770834" />
+          <ConnectorPoint PointX="10.59375" PointY="24.422801106770834" />
           <ConnectorPoint PointX="10.59375" PointY="8.4129036458333388" />
         </AssociationConnector>
         <AssociationConnector Association="TZeroDataModel.FK_TaxPositionCode_Supplier_TaxPosition" ManuallyRouted="false">
-          <ConnectorPoint PointX="3" PointY="24.374705403645834" />
-          <ConnectorPoint PointX="3.2916666666666665" PointY="24.374705403645834" />
-          <ConnectorPoint PointX="3.4583333333333335" PointY="24.374705403645834" />
-          <ConnectorPoint PointX="3.75" PointY="24.374705403645834" />
+          <ConnectorPoint PointX="3" PointY="24.470856119791669" />
+          <ConnectorPoint PointX="3.2916666666666665" PointY="24.470856119791669" />
+          <ConnectorPoint PointX="3.4583333333333335" PointY="24.470856119791669" />
+          <ConnectorPoint PointX="3.75" PointY="24.470856119791669" />
+        </AssociationConnector>
+        <AssociationConnector Association="TZeroDataModel.FK_StockHeader_ReturnReason" >
+          <ConnectorPoint PointX="7.25" PointY="1.9324446614583337" />
+          <ConnectorPoint PointX="7.5" PointY="1.9324446614583337" />
+          <ConnectorPoint PointX="7.5" PointY="3.625" />
+          <ConnectorPoint PointX="9.25" PointY="3.625" />
+          <ConnectorPoint PointX="9.25" PointY="12.25" />
+          <ConnectorPoint PointX="8" PointY="12.25" />
+          <ConnectorPoint PointX="8" PointY="22" />
+          <ConnectorPoint PointX="9" PointY="22" />
+          <ConnectorPoint PointX="9" PointY="22.375" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

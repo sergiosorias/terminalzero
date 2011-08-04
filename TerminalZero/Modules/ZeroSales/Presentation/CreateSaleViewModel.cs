@@ -98,12 +98,12 @@ namespace ZeroSales.Presentation
             try
             {
                 var salePaymentviewModel = new SalePaymentViewModel(SaleHeader);
-                Terminal.Instance.Client.ShowDialog(salePaymentviewModel.View,null,
+                Terminal.Instance.Client.ShowDialog(salePaymentviewModel.View, null,
                 canSave =>
                 {
                     if (canSave)
                     {
-                        Terminal.Instance.Session[typeof (SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
+                        Terminal.Instance.Session[typeof(SaleHeader)] = new ActionParameter<SaleHeader>(true, SaleHeader, true);
                         PrintManager.PrintSale(SaleHeader);
                         BusinessContext.Instance.Model.SaveChanges();
                         CreateSale();
@@ -113,7 +113,7 @@ namespace ZeroSales.Presentation
                     }
                     salePaymentviewModel.Dispose();
                 });
-                
+
 
             }
             catch (Exception ex)
@@ -177,6 +177,7 @@ namespace ZeroSales.Presentation
             }
         }
 
+        private string _lot = string.Empty;
         private bool LotBarcodeValidate(object parameter)
         {
             var e = parameter as BarCodeValidationEventArgs;
@@ -192,7 +193,7 @@ namespace ZeroSales.Presentation
         private void LotBarcodeReceived(object parameter)
         {
             var e = parameter as BarCodeEventArgs;
-            string lot = string.Format("{0:0000}{1:00}{2:00}", e.Parts[1].Code, e.Parts[2].Code, e.Parts[3].Code);
+            _lot = string.Format("{0:0000}{1:00}{2:00}", e.Parts[1].Code, e.Parts[2].Code, e.Parts[3].Code);
         }
 
         #endregion
@@ -228,14 +229,21 @@ namespace ZeroSales.Presentation
                     e.Parts[1].IsValid = false;
                     Message = string.Format(Resources.UnexistentProduct + " - {0}", e.Parts[1].Code);
                 }
+                else if (validProd.ByWeight && string.IsNullOrEmpty(_lot))
+                {
+                    e.Parts[1].IsValid = false;
+                    e.Error = "Ingrese un Código de lote para este producto";
+                }
             }
+            Message = e.Error;
             return true;
         }
 
         private void BarcodeReceived(object parameter)
         {
             var a = parameter as BarCodeEventArgs;
-            AddItem(validProd, a.Parts[2].Code, "");
+            AddItem(validProd, a.Parts[2].Code, _lot);
+            _lot = string.Empty;
         }
 
         #endregion
@@ -286,13 +294,18 @@ namespace ZeroSales.Presentation
 
         private void DeleteItem(object parameter)
         {
-            if (ZeroMessageBox.Show(Resources.ItemDeletingQuestion, Resources.Delete, MessageBoxButton.YesNo).GetValueOrDefault())
-            {
-                SaleHeader.RemoveSaleItem(parameter as SaleItem);
-                SaleProductList.Remove(SaleProductList.FirstOrDefault(si => si.SaleItem == parameter));
-                saveCommand.RaiseCanExecuteChanged();
-                CancelCommand.RaiseCanExecuteChanged();
-            }
+
+            Terminal.Instance.Client.ShowDialog(Resources.ItemDeletingQuestion, Resources.Delete,
+                (ret) =>
+                {
+                    if (ret)
+                    {
+                        SaleHeader.RemoveSaleItem(parameter as SaleItem);
+                        SaleProductList.Remove(SaleProductList.FirstOrDefault(si => si.SaleItem == parameter));
+                        saveCommand.RaiseCanExecuteChanged();
+                        CancelCommand.RaiseCanExecuteChanged();
+                    }
+                }, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.YesNo);
         }
     }
 }

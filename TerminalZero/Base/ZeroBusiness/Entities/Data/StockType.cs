@@ -9,7 +9,6 @@ namespace ZeroBusiness.Entities.Data
     {
         public enum Types
         {
-            NotSet = -1,
             New = 0,
             Modify = 1,
         }
