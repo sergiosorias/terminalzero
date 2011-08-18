@@ -18,7 +18,6 @@ namespace ZeroPrinters.Printers
         public DriverTextOnly(PrinterInfo info)
             :base(info)
         {
-            Data = new StringBuilder();
             InitializeQueue();
         }
 

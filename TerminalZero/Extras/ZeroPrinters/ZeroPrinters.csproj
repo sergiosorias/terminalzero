@@ -49,6 +49,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extras\CustomerInfo.cs" />
+    <Compile Include="Extras\ZReport.cs" />
+    <Compile Include="PrinterInfo.cs" />
     <Compile Include="Printers\General.cs" />
     <Compile Include="Printers\Legal.cs" />
     <Compile Include="Printers\TextOnlyPrinterBase.cs" />

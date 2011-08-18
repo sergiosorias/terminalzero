@@ -39,22 +39,22 @@ namespace ZeroConfiguration
             Terminal.Instance.Client.Loaded += (o, e) => { OpenLogInDialog(); };
         }
 
-        private void LoadPrintersConfig(ConfigurationModelManager manager)
+        private List<PrinterInfo> LoadPrintersConfig(ConfigurationModelManager manager)
         {
-            var algo = new List<PrinterInfo>();
+            var infos = new List<PrinterInfo>();
             foreach (Printer printer in manager.Printers.ToList())
             {
                 var aprinter = new PrinterInfo();
                 aprinter.Name = printer.Name;
                 aprinter.Type = printer.Type.HasValue ? printer.Type.Value : 1;
-                aprinter.InitializeParameters = new Dictionary<string, string>();
+                aprinter.Parameters = new Dictionary<string, string>();
                 foreach (var VARIABLE in printer.PrinterParameters)
                 {
-                    aprinter.InitializeParameters.Add(VARIABLE.Name, VARIABLE.Value);
+                    aprinter.Parameters.Add(VARIABLE.Name, VARIABLE.Value);
                 }
-                algo.Add(aprinter);
+                infos.Add(aprinter);
             }
-            TerminalPrinters.Instance.Load(algo);    
+            return infos;
         }
 
         private void ValidateAdminUser()
@@ -248,7 +248,11 @@ namespace ZeroConfiguration
                 {
                     initialized = true;
                 }
-                LoadPrintersConfig(conf);
+
+                if (!TerminalPrinters.Instance.Load(LoadPrintersConfig(conf)))
+                {
+                    Terminal.Instance.Client.Notifier.SendNotification(TerminalPrinters.Instance.Error);
+                }
             }
 
             return initialized;

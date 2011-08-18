@@ -19,10 +19,11 @@ namespace ZeroPrinters.Printers
         protected TextOnlyPrinterBase(PrinterInfo info)
             : base(info)
         {
-            if (info.InitializeParameters != null)
+            if (info.Parameters != null)
             {
-                MaxColumns = info.InitializeParameters.ContainsKey(kColumns) ? int.Parse(info.InitializeParameters[kColumns]) : 44;
+                MaxColumns = info.Parameters.ContainsKey(kColumns) ? int.Parse(info.Parameters[kColumns]) : 44;
             }
+            Data = new StringBuilder();
         }
 
         protected void InitializeQueue()
@@ -65,7 +66,7 @@ namespace ZeroPrinters.Printers
 
         public new abstract void Print();
         
-        public override void CancelPrint()
+        public override void Clear()
         {
             InitializeQueue();
         }

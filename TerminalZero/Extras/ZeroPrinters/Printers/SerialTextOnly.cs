@@ -31,7 +31,7 @@ namespace ZeroPrinters.Printers
         {
             try
             {
-                commPort = new SerialPort(Name, int.Parse(info.InitializeParameters[kBouds]), Parity.None, int.Parse(info.InitializeParameters[kDatabits]), StopBits.One);
+                commPort = new SerialPort(Name, int.Parse(info.Parameters[kBouds]), Parity.None, int.Parse(info.Parameters[kDatabits]), StopBits.One);
                 IsOnLine = true;
                 LastError = null;
                 PaperCut = CutMode.Partial;
@@ -42,15 +42,14 @@ namespace ZeroPrinters.Printers
             {
                 IsOnLine = false;
                 LastErrorDesc = "Configuración de puerto no válida";
-                LastError = ex;
+                LastError = ex.ToString();
             }
             catch (Exception ex)
             {
                 IsOnLine = false;
                 LastErrorDesc = "Error no contemplado";
-                LastError = ex;
+                LastError = ex.ToString();
             }
-            this.Data = new StringBuilder();
         }
 
         #region Enums
@@ -78,8 +77,6 @@ namespace ZeroPrinters.Printers
         #region Public Properties
 
         public override bool IsOnLine { get; protected set; }
-
-        public Exception LastError { get; protected set; }
 
         public string LastErrorDesc { get; protected set; }
         /// <summary>Indica si para salto de línea se envía Cr + Lf
@@ -112,12 +109,12 @@ namespace ZeroPrinters.Printers
                 }
                 catch (IOException ex)
                 {
-                    LastError = ex;
+                    LastError = ex.ToString();
                     LastErrorDesc = "Error de acceso al puerto";
                 }
                 catch (UnauthorizedAccessException ex)
                 {
-                    LastError = ex;
+                    LastError = ex.ToString();
                     LastErrorDesc = "No hay permisos de acceso al puerto";
                 }
             }
@@ -160,12 +157,12 @@ namespace ZeroPrinters.Printers
                 }
                 catch (ArgumentNullException ex)
                 {
-                    LastError = ex;
+                    LastError = ex.ToString();
                     LastErrorDesc = "Error en datos enviados";
                 }
                 catch (Exception ex)
                 {
-                    LastError = ex;
+                    LastError = ex.ToString();
                     LastErrorDesc = "Error no contemplado";
                 }
 
@@ -214,12 +211,12 @@ namespace ZeroPrinters.Printers
                 }
                 catch (ArgumentNullException ex)
                 {
-                    LastError = ex;
+                    LastError = ex.ToString();
                     LastErrorDesc = "Error en datos enviados";
                 }
                 catch (Exception ex)
                 {
-                    LastError = ex;
+                    LastError = ex.ToString();
                     LastErrorDesc = "Error no contemplado";
                 }
 

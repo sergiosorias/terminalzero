@@ -59,11 +59,8 @@ namespace ZeroStock.Presentation
             get { return message; }
             set
             {
-                if (message != value)
-                {
-                    message = value;
-                    OnPropertyChanged("Message");
-                }
+                message = value;
+                OnPropertyChanged("Message");
             }
         }
 

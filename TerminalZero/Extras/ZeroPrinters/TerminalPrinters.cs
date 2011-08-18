@@ -39,12 +39,16 @@ namespace ZeroPrinters
         /// </summary>
         public TextOnlyPrinterBase TextOnlyPrinter { get; private set; }
 
+        public string Error { get; private set; }
+
         /// <summary>
         /// Try to load printer configurations from given configs
         /// </summary>
         /// <param name="printersConfig"></param>
-        public void Load(List<PrinterInfo> printersConfig)
+        public bool Load(List<PrinterInfo> printersConfig)
         {
+            bool ret = true;
+
             foreach (PrinterInfo printerInfo in printersConfig)
             {
                 switch (printerInfo.Type)
@@ -53,25 +57,55 @@ namespace ZeroPrinters
                         GeneralPrinter = new General(printerInfo);
                         break;
                     case (int)PrinterType.Legal:
+                        LegalPrinter = new Legal(printerInfo); 
                         break;
                     case (int)PrinterType.TextOnly:
                         TextOnlyPrinter = new DriverTextOnly(printerInfo);
-                        //DriverTextOnlyPrinter = new SerialTextOnly(printerInfo.Name, int.Parse(printerInfo.InitializeParameters["Bouds"]), System.IO.Ports.Parity.None, int.Parse(printerInfo.InitializeParameters["DataBits"]), System.IO.Ports.StopBits.One);
+                        //DriverTextOnlyPrinter = new SerialTextOnly(printerInfo.Name, int.Parse(printerInfo.Parameters["Bouds"]), System.IO.Ports.Parity.None, int.Parse(printerInfo.Parameters["DataBits"]), System.IO.Ports.StopBits.One);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            ret = ValidateConfiguration();
+            return ret;
         }
 
-        
-    }
+        public bool IsNeeded<T>(T printer) 
+            where T : SystemPrinter
+        {
+            bool ret = false;
 
-    public struct PrinterInfo
-    {
-        public string Name;
-        public int Type;
-        public Dictionary<string, string> InitializeParameters;
+            if (printer is Legal)
+                ret = true;
+
+            return ret;
+        }
+        
+        private bool ValidateConfiguration()
+        {
+            bool ret = true;
+            ret = ValidateLegalPrinter();
+            return ret;
+        }
+
+        private bool ValidateLegalPrinter()
+        {
+            bool ret = true;
+            if(LegalPrinter == null)
+            {
+                Error = "Impresora fiscal no configurada";
+                ret = false;
+            }
+            else
+            {
+                if(!LegalPrinter.IsOnLine)
+                {
+                    Error = "Error de conexión con Impresora fiscal";
+                    ret = false;
+                }
+            }
+            return ret;
+        }
     }
-    
 }

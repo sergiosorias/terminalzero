@@ -13,13 +13,15 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="2">
+        <Grid Grid.ColumnSpan="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Margin="2" Width="130">
                 <RadioButton FontSize="14" GroupName="selectionMode" Content="Por Fercha" Name="dateFilter" IsChecked="{Binding IsByDate, Mode=TwoWay}"/>
@@ -35,10 +37,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-       
-        
-        
-        <Grid Grid.Row="1" Margin="2">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -64,7 +63,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -72,15 +71,7 @@
             <TextBlock Text="Detalle:" FontSize="20" FontWeight="Heavy" Margin="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Controls:SaleLazyLoadingList Grid.Row="1" Margin="2" ControlMode="ReadOnly" ItemsSource="{Binding Path=SelectedSaleItems}"/>
         </Grid>
-        <!--<Grid Grid.Column="2" Grid.Row="1" Margin="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Detalle de pago:" FontSize="20" FontWeight="Heavy" Margin="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Controls:SalePaymentItemLazyLoadingList Grid.Row="1" ControlMode="ReadOnly" ItemsSource="{Binding Path=SalesPaymentSummary}" Margin="-1,0,1,0" />
-        </Grid>-->
-        <Grid Grid.Row="2" Grid.ColumnSpan="3">
+        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -117,6 +108,106 @@
                         <DataGridTextColumn IsReadOnly="True" CanUserResize="False" Binding="{Binding Path=TotalAmount,StringFormat='C'}" Header="Total" Width="120" />
                     </DataGrid.Columns>
                 </DataGrid>-->
+            </Grid>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Grid.RowSpan="3" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.RowSpan="2" x:Name="expanderContentPresenter" Width="5" d:DesignWidth="100">
+                    <Grid.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsChecked, ElementName=buttonOpen}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                        Storyboard.Target="{Binding TemplatedParent}"
+                                                        Storyboard.TargetProperty="Width"
+                                                        To="200"
+                                                        Duration="0:0:0.8">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <PowerEase/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                        Storyboard.Target="{Binding TemplatedParent}"
+                                                        Storyboard.TargetProperty="Width"
+                                                        To="5"
+                                                        Duration="0:0:0.6">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <PowerEase/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Border CornerRadius="0,4,4,0" Background="DarkGray" BorderThickness="2" BorderBrush="White">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock TextWrapping="NoWrap" HorizontalAlignment="Center" Margin="2" Text="Haga Click en el reporte a generar"/>
+                            <ListBox Grid.Row="1" Margin="2" Background="Transparent" HorizontalContentAlignment="Stretch" BorderBrush="Transparent" ItemsSource="{Binding ReportList}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="Transparent" Margin="1">
+                                            <Button Content="{Binding ReportName, FallbackValue='Empty Report'}" FontWeight="Bold" Command="{Binding GenerateReportCommand}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <ToggleButton Grid.Row="1" Height="25" FontSize="15" Cursor="Hand" Margin="-25,13,-22,0" 
+                              VerticalAlignment="Top" Grid.Column="1" 
+                              RenderTransformOrigin="0.5,0.5" Content="Reportes" x:Name="buttonOpen">
+                    <ToggleButton.RenderTransform>
+                        <RotateTransform Angle="-90"/>
+                    </ToggleButton.RenderTransform>
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid>
+                                            <Border Background="DarkGray" CornerRadius="0,0,4,4" BorderBrush="White" BorderThickness="2,0,2,2">
+                                                <ContentPresenter Margin="2"/>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
             </Grid>
         </Grid>
     </Grid>

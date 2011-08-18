@@ -227,7 +227,7 @@ namespace ZeroSales.Presentation
                 if (validProd == null)
                 {
                     e.Parts[1].IsValid = false;
-                    Message = string.Format(Resources.UnexistentProduct + " - {0}", e.Parts[1].Code);
+                    e.Error = string.Format(Resources.UnexistentProduct + " - {0}", e.Parts[1].Code);
                 }
                 else if (validProd.ByWeight && string.IsNullOrEmpty(_lot))
                 {
