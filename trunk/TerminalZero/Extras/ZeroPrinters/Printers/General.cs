@@ -11,7 +11,6 @@ namespace ZeroPrinters.Printers
         public General(PrinterInfo info)
             :base(info)
         {
-            IsExistanceMandatory = false;
             IsOnLine = true;
         }
 

@@ -12,6 +12,7 @@ using ZeroCommonClasses.GlobalObjects.Actions;
 using ZeroGUI;
 using ZeroSales.Pages;
 using ZeroSales.Presentation.Controls;
+using ZeroSales.Printer;
 using Terminal = ZeroCommonClasses.Terminal;
 
 namespace ZeroSales.Presentation
@@ -54,13 +55,58 @@ namespace ZeroSales.Presentation
             public int TotalCount { get; set; }
         }
 
+        public class CreateReportItem
+        {
+            private ZeroActionDelegate generateReportCommand;
+
+            public ZeroActionDelegate GenerateReportCommand
+            {
+                get { return generateReportCommand; }
+                private set
+                {
+                    if (generateReportCommand != value)
+                    {
+                        generateReportCommand = value;
+                    }
+                }
+            }
+            
+            private string reportName;
+
+            public string ReportName
+            {
+                get { return reportName; }
+                private set
+                {
+                    if (reportName != value)
+                    {
+                        reportName = value;
+                        
+                    }
+                }
+            }
+
+            public CreateReportItem(string reportName, Action<object> generateReportAction)
+            {
+                ReportName = reportName;
+                GenerateReportCommand = new ZeroActionDelegate(generateReportAction);
+            }
+        }
+
         public SaleReportViewModel()
             :base(new SaleReportView())
         {
             SelectedDate = DateTime.Now.Date;
             IsByDate = true;
             LoadSalesForCurrentUser();
+            LoadReports();
             CustomerSelectionCommand.Executed += CustomerSelectionCommandFinished;
+        }
+
+        private void LoadReports()
+        {
+            ReportList = new ObservableCollection<CreateReportItem>();
+            ReportList.Add(new CreateReportItem("Imprimir Z", (o) => { PrintManager.PrintZReport(SelectedDate); }));
         }
 
         #region Properties
@@ -227,8 +273,22 @@ namespace ZeroSales.Presentation
                 }
             }
         }
-        
 
+        private ObservableCollection<CreateReportItem> reportList;
+
+        public ObservableCollection<CreateReportItem> ReportList
+        {
+            get { return reportList; }
+            set
+            {
+                if (reportList != value)
+                {
+                    reportList = value;
+                    OnPropertyChanged("ReportList");
+                }
+            }
+        }
+        
         #endregion
 
         private void LoadCurrentSaleItems()

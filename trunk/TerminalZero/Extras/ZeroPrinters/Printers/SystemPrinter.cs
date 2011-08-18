@@ -12,25 +12,40 @@ namespace ZeroPrinters.Printers
 
     public abstract class SystemPrinter : IDisposable
     {
+        public string Name { get; protected set; }
+        public abstract bool IsOnLine { get; protected set; }
+        
+        private string lastError;
+        public string LastError
+        {
+            get
+            {
+                return lastError;
+            }
+            protected set
+            {
+                lastError = value;
+            }
+        }
+
+        public bool HasError 
+        { 
+            get { return !string.IsNullOrWhiteSpace(LastError); } 
+        }
+
         protected SystemPrinter(PrinterInfo info)
         {
             Name = info.Name;
-            Parameters = new Dictionary<string, string>();
         }
-
-        public string Name { get; internal set; }
-        public abstract bool IsOnLine { get; protected set; }
-        public bool IsExistanceMandatory { get; protected set; }
-        public Dictionary<string,string> Parameters { get; private set; }
 
         public virtual void Print()
         {
             
         }
 
-        public virtual void CancelPrint()
+        public virtual void Clear()
         {
-            
+            LastError = string.Empty;
         }
         
         #region IDisposable Members

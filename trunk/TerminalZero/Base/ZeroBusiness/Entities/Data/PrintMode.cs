@@ -9,6 +9,5 @@ namespace ZeroBusiness.Entities.Data
     {
         NoTax = 0,
         LegalTicket = 1,
-        LegalInvoice = 2
     }
 }

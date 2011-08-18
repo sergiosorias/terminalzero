@@ -27,6 +27,7 @@ namespace ZeroPrinters
         private Action<string> Log;
         private Predicate<string> CanExecute;
         private PrinterCustomer customer;
+
         public PrinterTest(int port, Action<string> log, Predicate<string> canExecute)
         {
             printer = new HASAR();
@@ -36,11 +37,10 @@ namespace ZeroPrinters
             printer.Transporte = TiposDeTransporte.PUERTO_SERIE;
             printer.Puerto = port;
             Log(string.Format("Puerto {0}", printer.Puerto));
-            printer.Modelo = ModelosDeImpresoras.MODELO_715;
             LoadDummyData();
             LoadEvents();
             LoadActions();
-            LoadInitializationData();
+            LoadPrinterParametersData();
         }
 
         private void LoadDummyData()
@@ -82,12 +82,12 @@ namespace ZeroPrinters
             ActionCommands = new Dictionary<int, KeyValuePair<string, Action>>();
             
             //Información
-            AddCommand("Ver Configuración", LoadInfo);
+            AddCommand("Ver Configuración", PrintPrinterParametersData);
             AddCommand("Autodetectar Controlador", () => printer.AutodetectarControlador(printer.Puerto));
             AddCommand("Autodetectar Modelo", () => printer.AutodetectarModelo());
             AddCommand("Verificar Modelo", () => printer.VerificarModelo());
-            AddCommand("Obtener Datos De Inicializacion", ObtenerDatosDeInicializacion);
-            AddCommand("Obtener Configuracion", ObtenerConfiguracion);
+            AddCommand("Obtener Datos De Inicializacion", LoadInitializationData);
+            AddCommand("Obtener Configuracion", LoadConfiguration);
             AddCommand("Pedido De Status", () => printer.PedidoDeStatus());
 
             //Deprecated
@@ -100,11 +100,11 @@ namespace ZeroPrinters
             AddCommand("Cancelar Comprobante Fiscal", () => printer.CancelarComprobanteFiscal());
             AddCommand("Cancelar Comprobante", () => printer.CancelarComprobante());
             AddCommand("Cerrar Comprobante Fiscal", () =>
-                                                                                {
-                                                                                    object intout;
-                                                                                    printer.CerrarComprobanteFiscal(1, out intout);
-                                                                                    Log("-->" + intout);
-                                                                                });
+            {
+                object intout;
+                printer.CerrarComprobanteFiscal(1, out intout);
+                Log("-->" + intout);
+            });
             AddCommand("Cerrar Comprobante No Fiscal", () => printer.CerrarComprobanteNoFiscal(1));
 
             //Nuevo / agregar
@@ -148,23 +148,23 @@ namespace ZeroPrinters
             Log(string.Format("Cantidad de items: {0}{6} Monto Ventas: {1}{6} Monto IVA: {2}{6} Monto Pagado: {3}{6} Monto IVA No Inscripto: {4}{6} Monto Impuestos internos: {5}", o1, o2, o3, o4, o5, o6,Environment.NewLine));
         }
 
-        private void ObtenerConfiguracion()
+        private void LoadConfiguration()
         {
             object o1, o2, o3, o4, o5, o6,o7, o8,o9,o10,o11,o12,o13,o14,o15,o16, o17;
             printer.ObtenerConfiguracion(out o1,out o2,out o3,out o4,out o5,out o6,out o7,out o8,out o9,out o10,out o11,out o12,out o13, out o14,out o15, out o16,out o17);
-            Log(string.Format("Limite consumidor final: {0} - Limite Factura {1} -ProcentajeIvaNoInscripto: {2} -Numero de copias Maximo: {3} -Imprimer Cambio: {4} -"+
-            "Imprimer leyendas opcionales: {5} -Tipo de corte: {6} -Imprimer Marco: {7} -Re imprimer documentos: {8} -"+
-            "Descripción del medio de pago: {9} -Sonido: {10} -Alto hoja: {11} -Ancho hoja: {12} - Estación impresion reportes XZ: {13} -Modo impresion: {14} - Chequeo desborde cmpleto: {15} - Chequeo tapa abierta: {16} - {17}", o1, o2, o3, o4, o5, o6, o7, o8,o9,o10,o11,o12,o12,o13,o14,o15,o16,o17));
-        }
-
-        private void ObtenerDatosDeInicializacion()
-        {
-            object o1, o2, o3, o4, o5, o6,o7, o8;
-            printer.ObtenerDatosDeInicializacion(out o1, out o2, out o3, out o4, out o5, out o6, out o7, out o8);
-            Log(string.Format("Nro CUIT: {0} - Razon Social: {1} -Numero de Serie: {2} -Fecha Init: {3} -Nro De Pos: {4} -Fecha Ini Act: {5} -Ing Brut: {6} -Resp IVA: {7} ", o1, o2, o3, o4, o5, o6, o7, o8));
+            Log(string.Format("Limite consumidor final: {0}{18}Limite Factura {1}{18}ProcentajeIvaNoInscripto: {2}{18}Numero de copias Maximo: {3}{18}Imprimer Cambio: {4}{18}" +
+            "Imprimer leyendas opcionales: {5}{18}Tipo de corte: {6}{18}Imprimer Marco: {7}{18}Re imprimer documentos: {8}{18}" +
+            "Descripción del medio de pago: {9}{18}Sonido: {10}{18}Alto hoja: {11}{18}Ancho hoja: {12}{18}Estación impresion reportes XZ: {13}{18}Modo impresion: {14}{18}Chequeo desborde completo: {15}{18}Chequeo tapa abierta: {16}{18}Unknown: {17}", o1, o2, o3, o4, o5, o6, o7, o8, o9, o10, o11, o12, o12, o13, o14, o15, o16, o17, Environment.NewLine));
         }
 
         private void LoadInitializationData()
+        {
+            object o1, o2, o3, o4, o5, o6,o7, o8;
+            printer.ObtenerDatosDeInicializacion(out o1, out o2, out o3, out o4, out o5, out o6, out o7, out o8);
+            Log(string.Format("Nro CUIT: {0}{8}Razon Social: {1}{8}Numero de Serie: {2}{8}Fecha Init: {3}{8}Nro De Pos: {4}{8}Fecha Ini Act: {5}{8}Ing Brut: {6}{8}Resp IVA: {7} ", o1, o2, o3, o4, o5, o6, o7, o8, Environment.NewLine));
+        }
+
+        private void LoadPrinterParametersData()
         {
             Log("Cargando datos de inicialización");
             initializationList = new List<Action>
@@ -219,7 +219,7 @@ namespace ZeroPrinters
             };
         }
 
-        private void LoadInfo()
+        private void PrintPrinterParametersData()
         {
             foreach (Action action in initializationList)
             {

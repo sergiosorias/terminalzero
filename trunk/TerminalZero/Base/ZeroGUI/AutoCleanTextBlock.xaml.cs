@@ -27,6 +27,7 @@ namespace ZeroGUI
             TextChanged += (o, e) => { 
                 CreateCleanTimer();
                 Opacity = 1;
+                
             };
         }
 
@@ -39,7 +40,12 @@ namespace ZeroGUI
 
         private void cleanResTimer_Elapsed(object o)
         {
-            Dispatcher.BeginInvoke(new Action(() => Opacity = 0), null);
+            Dispatcher.BeginInvoke(new Action(() 
+                =>
+                {
+                    Opacity = 0;
+                    Text = "";
+                }), null);
         }
 
         

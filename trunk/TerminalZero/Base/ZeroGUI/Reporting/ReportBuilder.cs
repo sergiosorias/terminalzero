@@ -30,7 +30,7 @@ namespace ZeroGUI.Reporting
             {
                 PrintDialog dialog = null;
                 if ((TerminalPrinters.Instance.GeneralPrinter.IsOnLine && TerminalPrinters.Instance.GeneralPrinter.LoadPrintDialog(out dialog))
-                    || (!TerminalPrinters.Instance.GeneralPrinter.IsExistanceMandatory && dialog.ShowDialog().GetValueOrDefault()))
+                    || (!TerminalPrinters.Instance.IsNeeded(TerminalPrinters.Instance.GeneralPrinter) && dialog.ShowDialog().GetValueOrDefault()))
                 {
                     view.SetPageSize(dialog.PrintableAreaHeight, dialog.PrintableAreaWidth);
                     dialog.PrintDocument(view.PaginatorSource.DocumentPaginator, "");

@@ -192,8 +192,8 @@ namespace TerminalZeroClient.Business
                 if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
                 {
                     canContinue = false;
-                    Notifier.SetUserMessage(true, "Este sistema ya esta en ejecución actualmente.");
-                    Notifier.SetUserMessage(false, "Cierre este sistema y use el otro.");
+                    Notifier.SetUserMessage(true, "Este aplicación ya esta en ejecución actualmente.");
+                    Notifier.SetUserMessage(false, "Cierre esta aplicación y use la otra.");
                 }
                 else
                 {
@@ -302,7 +302,7 @@ namespace TerminalZeroClient.Business
             bool ret = true;
             try
             {
-                Terminal.Instance.Manager.InitializeTerminal();
+                ret = Terminal.Instance.Manager.InitializeTerminal();
             }
             catch (Exception ex)
             {
