@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-using ZeroCommonClasses.Context;
 
 namespace TZeroHost.Helpers
 {
@@ -38,7 +37,8 @@ namespace TZeroHost.Helpers
                 action.Invoke();
                 IsValid = true;
                 Trace.Unindent();
-                Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceInfo, string.Format("Terminal: {0}, Service Method -> {1}, Duration: {2}", TerminalCode, Method, DateTime.Now - stamp), "Information");
+
+                Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceInfo, string.Format("Terminal: {0}, Service Method -> {1}, Duration: {2}", TerminalCode, Method, DateTime.Now - stamp), "Information");
             }
             catch (Exception ex)
             {
@@ -54,7 +54,7 @@ namespace TZeroHost.Helpers
                     }
                 }
 
-                Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceError, string.Format("Terminal: {0}, Service Method -> {1}, Parameters: {2}, throw {3}", TerminalCode, Method, messageFormat, ex), "Error");
+                Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceError, string.Format("Terminal: {0}, Service Method -> {1}, Parameters: {2}, throw {3}", TerminalCode, Method, messageFormat, ex), "Error");
             }
 
             Trace.Unindent();

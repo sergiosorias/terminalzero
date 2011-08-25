@@ -124,7 +124,7 @@ namespace ZeroPrinters
 
             AddCommand("Hacer una venta", PrintCompleteSale);
             AddCommand("Hacer una venta con descuento", PrintDiscountSale);
-
+            
         }
 
         private void PrintDiscountSale()

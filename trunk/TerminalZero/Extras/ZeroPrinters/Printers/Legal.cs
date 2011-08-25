@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using FiscalPrinterLib;
 using ZeroPrinters.Extras;
 
@@ -24,10 +25,11 @@ namespace ZeroPrinters.Printers
             {
                 printer.Puerto = int.Parse(info.Parameters["Port"]);
                 printer.AutodetectarControlador(printer.Puerto);
+                IsOnLine = true;
             }
             else
             {
-#if RELEASE
+#if !DEBUG
                 var names = System.IO.Ports.SerialPort.GetPortNames();
                 foreach (string name in names)
                 {
@@ -35,21 +37,25 @@ namespace ZeroPrinters.Printers
                     try
                     {
                         printer.AutodetectarControlador(port);
+                        IsOnLine = true;
                     }
                     catch (IOException ex)
                     {
                         LastError = "Error de acceso al puerto";
                         LogError(ex);
+                        IsOnLine = false;
                     }
                     catch (UnauthorizedAccessException ex)
                     {
                         LastError = "No hay permisos de acceso al puerto";
                         LogError(ex);
+                        IsOnLine = false;
                     }
                     catch(Exception ex)
                     {
                         LastError = "Error no identificado";
                         LogError(ex);
+                        IsOnLine = false;
                     }
                 }
 #endif
@@ -220,12 +226,12 @@ namespace ZeroPrinters.Printers
 
         private void Log(string message)
         {
-
+            System.Diagnostics.Trace.TraceInformation(message);
         }
 
         private void LogError(Exception exception)
         {
-            Log(string.Format("{0} - Descripción: {1}", LastError, exception));
+            System.Diagnostics.Trace.TraceError("{0} - Description: {1}", LastError, exception);
         }
 
         private void LoadEvents()
@@ -256,8 +262,8 @@ namespace ZeroPrinters.Printers
 
         private void ImpresoraNoResponde(int CantidadReintentos)
         {
-            Log(string.Format("{0} - CantidadReintentos: {1}", MethodBase.GetCurrentMethod().Name, CantidadReintentos));
             LastError = "Impresora No Responde";
+            Log(string.Format("{0} - Cantidad Reintentos: {1}", LastError, CantidadReintentos));
         }
 
         private void FaltaPapel()
@@ -268,39 +274,49 @@ namespace ZeroPrinters.Printers
 
         private void EventoImpresora(int Flags)
         {
-            Log("----------------------------");
-            Log(string.Format("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags));
-            Log(string.Format("Descripción {0}", printer.DescripcionStatusImpresor(Flags)));
-            Log("----------------------------");
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----------------------------");
+            sb.AppendFormat("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags).AppendLine();
+            sb.AppendFormat("Descripción {0}", printer.DescripcionStatusImpresor(Flags)).AppendLine();
+            sb.AppendLine("----------------------------");
+            Log(sb.ToString());
         }
 
         private void ErrorImpresora(int Flags)
         {
             LastError = printer.DescripcionStatusImpresor(Flags);
+            
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----------------------------");
+            sb.AppendFormat("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags).AppendLine();
+            sb.AppendFormat("Descripción {0}", LastError).AppendLine();
+            sb.AppendLine("----------------------------");
 
-            Log("----------------------------");
-            Log(string.Format("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags));
-            Log(string.Format("Descripción {0}", LastError));
-            Log("----------------------------");
-
+            Log(sb.ToString());
         }
 
         private void EventoFiscal(int Flags)
         {
-            Log("----------------------------");
-            Log(string.Format("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags));
-            Log(string.Format("Descripción {0}", printer.DescripcionStatusFiscal(Flags)));
-            Log("----------------------------");
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----------------------------")
+            .AppendFormat("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags).AppendLine()
+            .AppendFormat("Descripción {0}", printer.DescripcionStatusFiscal(Flags)).AppendLine()
+            .AppendLine("----------------------------");
+            
+            Log(sb.ToString());
         }
 
         private void ErrorFiscal(int Flags)
         {
             LastError = printer.DescripcionStatusFiscal(Flags);
 
-            Log("----------------------------");
-            Log(string.Format("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags));
-            Log(string.Format("Descripción {0}", LastError));
-            Log("----------------------------");
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----------------------------")
+            .AppendFormat("{0} - {1}", MethodBase.GetCurrentMethod().Name, Flags).AppendLine()
+            .AppendFormat("Descripción {0}", LastError).AppendLine()
+            .AppendLine("----------------------------");
+
+            Log(sb.ToString());
         }
 
         private void ImpresoraOK()
@@ -346,7 +362,6 @@ namespace ZeroPrinters.Printers
             }
             catch (Exception ex)
             {
-                LastError = "Error al imprimir el reporte";
                 LogError(ex);
             }
             
@@ -362,14 +377,27 @@ namespace ZeroPrinters.Printers
             }
             catch (Exception ex)
             {
-                LastError = "Error al imprimir el reporte del dia " + date.ToShortDateString();
                 LogError(ex);
             }
             
             return res;
         }
 
-        private ZReport InternalPrintZReport(DateTime? date = null)
+        public void PrintZReportsBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                InternalPrintZReport(startDate, endDate);
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+            }
+
+            
+        }
+
+        private ZReport InternalPrintZReport(DateTime? date = null, DateTime? endDate = null)
         {
             ZReport res = null;
             if (!HasError)

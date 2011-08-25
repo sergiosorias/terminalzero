@@ -239,18 +239,21 @@ namespace ZeroConfiguration
                     c.TerminalStatus = GetModuleStatus(c);
                     c.Initialize();
                 });
-                if (Terminal.Instance.Client.ModuleList.Exists(c => c.TerminalStatus == ModuleStatus.NeedsSync))
+                
+                if (Terminal.Instance.Client.ModuleList.Any(c => c.TerminalStatus == ModuleStatus.NeedsSync))
                 {
-                    Terminal.Instance.Client.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar sincronizadas con el servidor,\n"
-                                                    + "por favor conectese con la central lo antes posible!");
+                    Terminal.Instance.Client.Notifier.SetUserMessage(true, "Algunas configuraciones pueden no estar actualizadas,\n"
+                                                    + "por favor conectese con el servidor lo antes posible!");
                 }
                 else
                 {
                     initialized = true;
                 }
 
+                Terminal.Instance.Client.Notifier.SetUserMessage(false, "Registrando impresoras");
                 if (!TerminalPrinters.Instance.Load(LoadPrintersConfig(conf)))
                 {
+                    System.Diagnostics.Trace.Fail(TerminalPrinters.Instance.Error);
                     Terminal.Instance.Client.Notifier.SendNotification(TerminalPrinters.Instance.Error);
                 }
             }
