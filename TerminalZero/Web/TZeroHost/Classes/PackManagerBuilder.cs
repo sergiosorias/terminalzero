@@ -29,7 +29,7 @@ namespace TZeroHost.Classes
 
             private ZeroSession _session;
 
-            public int TerminalCode
+            public int Code
             {
                 get { return _terminalCode; }
             }
@@ -45,6 +45,12 @@ namespace TZeroHost.Classes
             }
 
             public ITerminalManager Manager { get; private set; }
+
+            public IZeroClient Client
+            {
+                get { throw new NotImplementedException(); }
+                set { throw new NotImplementedException(); }
+            }
 
             #endregion
 

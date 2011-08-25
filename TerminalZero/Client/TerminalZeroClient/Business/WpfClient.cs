@@ -331,11 +331,10 @@ namespace TerminalZeroClient.Business
                         null, null, CultureInfo.CurrentCulture, null);
 
                     TryAddModule(obj, item);
-
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    Notifier.SetUserMessage(false, "Assembly '" + item + "' no es un modulo válido, error: " + ex);
+                    Notifier.SetUserMessage(false, "Assembly '" + item + "' no es un modulo válido");
                 }
             }
             Notifier.SetProgress(30);

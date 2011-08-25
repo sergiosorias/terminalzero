@@ -18,7 +18,15 @@ namespace ZeroSales.Presentation.Controls
 
         public ObservableCollection<PaymentInstrument> Payments
         {
-            get { return payments ?? (payments = new ObservableCollection<PaymentInstrument>(BusinessContext.Instance.Model.PaymentInstruments.Where(p => p.Enable))); }
+            get
+            {
+                if(payments==null)
+                {
+                    payments = LoadPaymentInstrument();
+                    SelectedItem = payments.FirstOrDefault();
+                }
+                return payments;
+            }
             set
             {
                 if (payments != value)
@@ -27,6 +35,11 @@ namespace ZeroSales.Presentation.Controls
                     OnPropertyChanged("Payments");
                 }
             }
+        }
+
+        private ObservableCollection<PaymentInstrument> LoadPaymentInstrument()
+        {
+            return payments = new ObservableCollection<PaymentInstrument>(BusinessContext.Instance.Model.PaymentInstruments.Where(p => p.Enable));
         }
 
         private PaymentInstrument selectedItem;

@@ -59,7 +59,7 @@ namespace ZeroSales.Printer
 
         public static void PrintZReport(DateTime selectedDate)
         {
-            if(selectedDate!=null)
+            if(selectedDate.Date != DateTime.Now.Date)
             {
                 if (TerminalPrinters.Instance.LegalPrinter != null && TerminalPrinters.Instance.LegalPrinter.IsOnLine) 
                     TerminalPrinters.Instance.LegalPrinter.PrintZReport(selectedDate);

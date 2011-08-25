@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using TZeroHost.Handlers;
 using TZeroHost.Helpers;
-using ZeroCommonClasses.Context;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Files;
 using ZeroCommonClasses.Interfaces.Services;
@@ -39,13 +38,13 @@ namespace TZeroHost.Services
                 var fileInfo = new FileInfo(filePath);
                 length = fileInfo.Length;
                 // report start
-                Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Sending stream " + request.FileName + " to client");
-                Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose,"Size " + fileInfo.Length);
+                Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Sending stream " + request.FileName + " to client");
+                Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose,"Size " + fileInfo.Length);
 
                 // check if exists
                 if (!fileInfo.Exists)
                 {
-                    Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceError, "File not found");
+                    Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceError, "File not found");
                     throw new FileNotFoundException("File not found", request.FileName);
                 }
 
@@ -60,12 +59,12 @@ namespace TZeroHost.Services
                     Pack P = ent.Packs.FirstOrDefault(p => p.Code == request.Code);
                     if (P != null)
                     {
-                        Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client","Verbose");
+                        Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Sending pack " + request.Code + " to client","Verbose");
                         stream = new MemoryStream(P.Data);
                     }
                     else
                     {
-                        Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceWarning, "Pack " + request.Code + " Not found", "Verbose");
+                        Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceWarning, "Pack " + request.Code + " Not found", "Verbose");
                     }
                 }
             }
@@ -83,8 +82,8 @@ namespace TZeroHost.Services
         {
             // report start
 
-            Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose,"Start uploading " + request.FileName, "Verbose");
-            Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Size " + request.Length, "Verbose");
+            Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose,"Start uploading " + request.FileName, "Verbose");
+            Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Size " + request.Length, "Verbose");
 
             string filePath = Path.Combine(AppDirectories.UploadFolder, Path.GetFileName(request.FileName));
             if (File.Exists(filePath)) File.Delete(filePath);
@@ -109,7 +108,7 @@ namespace TZeroHost.Services
                     } while (true);
 
                     // report end
-                    Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Done!", "Verbose");
+                    Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Done!", "Verbose");
                     ret = new ServerFileInfo {FileName = filePath};
 
                     OnPackReceived(filePath, request.ConnectionID);
@@ -118,7 +117,7 @@ namespace TZeroHost.Services
                 }
                 catch (Exception exe)
                 {
-                    Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceError, exe);
+                    Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceError, exe);
                     throw;
                 }
                 finally
@@ -130,8 +129,8 @@ namespace TZeroHost.Services
 
         public string UploadFileSilverlight(string fileName, byte[] fileByteStream)
         {
-            Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Start web uploading " + fileName, "Verbose");
-            Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Size " + fileByteStream.Length, "Verbose");
+            Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Start web uploading " + fileName, "Verbose");
+            Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Size " + fileByteStream.Length, "Verbose");
             string destFileName = Path.GetFileNameWithoutExtension(fileName)+"_"+DateTime.Now.ToString("yyyyMMddhhmmss")+Path.GetExtension(fileName);
             string filePath = Path.Combine(AppDirectories.UploadFolder, destFileName);
             if (File.Exists(filePath)) File.Delete(filePath);
@@ -143,13 +142,13 @@ namespace TZeroHost.Services
                     writeStream.Write(fileByteStream, 0, fileByteStream.Length);
 
                     // report end
-                    Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceVerbose, "Done!", "Verbose");
+                    Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceVerbose, "Done!", "Verbose");
                     OnPackReceived(filePath, null);
                     return destFileName;
                 }
                 catch (Exception exe)
                 {
-                    Trace.WriteLineIf(ConfigurationContext.LogLevel.TraceError, exe);
+                    Trace.WriteLineIf(ZeroCommonClasses.Environment.Config.LogLevel.TraceError, exe);
                 }
                 finally
                 {
