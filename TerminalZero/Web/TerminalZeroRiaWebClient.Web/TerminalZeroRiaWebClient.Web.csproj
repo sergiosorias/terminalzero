@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E785C9F5-44EB-4EB1-A3ED-B1AB0EAC8AF2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TerminalZeroRiaWebClient.Web</RootNamespace>
+    <AssemblyName>TerminalZeroRiaWebClient.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <SilverlightApplicationList>{A44BDBD4-7DD8-435D-AB71-77D742AB156C}|..\TerminalZeroRiaWebClient\TerminalZeroRiaWebClient.csproj|ClientBin|False</SilverlightApplicationList>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpZipLib">
+      <HintPath>..\..\..\Deploy_Release\SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.DomainServices.EntityFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ServiceModel.DomainServices.Server" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.DomainServices.Hosting" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="ZeroBusiness, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Deploy_Release\ZeroBusiness.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroCommonClasses">
+      <HintPath>..\..\..\Deploy_Release\ZeroCommonClasses.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroConfiguration">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroLogHandle">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroLogHandle.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroMasterData">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroMasterData.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroSales">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroSales.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroStock">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroStock.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroUpdate">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroUpdate.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroUpdateManager">
+      <HintPath>..\..\..\Deploy_Release\Modules\ZeroUpdateManager.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ASPNET\Images\background_icons.jpg" />
+    <Content Include="ASPNET\Images\background_icons_begin.jpg" />
+    <Content Include="ASPNET\Images\background_icons_end.jpg" />
+    <Content Include="ASPNET\Images\btnNormal.png" />
+    <Content Include="ASPNET\Images\Button1.png" />
+    <Content Include="ASPNET\Images\Button2.png" />
+    <Content Include="ASPNET\Images\Button3.png" />
+    <Content Include="ASPNET\Images\FiltersBack.png" />
+    <Content Include="ASPNET\Images\header_background.jpg" />
+    <Content Include="ASPNET\Images\header_firstPart.jpg" />
+    <Content Include="ASPNET\Images\header_infoBakground.png" />
+    <Content Include="ASPNET\Images\header_lastPart.jpg" />
+    <Content Include="ASPNET\Images\icon_addUser_act.jpg" />
+    <Content Include="ASPNET\Images\icon_addUser_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_close_active.jpg" />
+    <Content Include="ASPNET\Images\icon_close_active.png" />
+    <Content Include="ASPNET\Images\icon_close_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_close_inac.png" />
+    <Content Include="ASPNET\Images\icon_coding_act.jpg" />
+    <Content Include="ASPNET\Images\icon_coding_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_deleteUser_act.jpg" />
+    <Content Include="ASPNET\Images\icon_deleteUser_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_delete_active.jpg" />
+    <Content Include="ASPNET\Images\icon_delete_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_export_active.jpg" />
+    <Content Include="ASPNET\Images\icon_export_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_import_active.jpg" />
+    <Content Include="ASPNET\Images\icon_import_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_noOk_active.png" />
+    <Content Include="ASPNET\Images\icon_noOk_inac.png" />
+    <Content Include="ASPNET\Images\icon_ok_active.png" />
+    <Content Include="ASPNET\Images\icon_ok_inac.png" />
+    <Content Include="ASPNET\Images\icon_refresh_active.jpg" />
+    <Content Include="ASPNET\Images\icon_refresh_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_searchUser_act.jpg" />
+    <Content Include="ASPNET\Images\icon_searchUser_inac.jpg" />
+    <Content Include="ASPNET\Images\icon_search_active.png" />
+    <Content Include="ASPNET\Images\icon_search_inac.png" />
+    <Content Include="ASPNET\Images\icon_template_active.png" />
+    <Content Include="ASPNET\Images\icon_template_inac.png" />
+    <Content Include="ASPNET\Images\icon_user_active.jpg" />
+    <Content Include="ASPNET\Images\icon_user_inac.jpg" />
+    <Content Include="ASPNET\Images\logo.png" />
+    <Content Include="ASPNET\Images\logoLogIn.png" />
+    <Content Include="ASPNET\Images\MenuBack.png" />
+    <Content Include="ASPNET\Images\OpacityColor.png" />
+    <Content Include="ASPNET\Images\popUp2_background.jpg" />
+    <Content Include="ASPNET\Images\popUp2_enter_search.jpg" />
+    <Content Include="ASPNET\Images\popUp_background.jpg" />
+    <Content Include="ASPNET\Images\scroll.jpg" />
+    <Content Include="ASPNET\Images\scroll_arrow_1.jpg" />
+    <Content Include="ASPNET\Images\scroll_arrow_2.jpg" />
+    <Content Include="ASPNET\Images\semaforo_amarillo.png" />
+    <Content Include="ASPNET\Images\semaforo_blanco.png" />
+    <Content Include="ASPNET\Images\semaforo_rojo.png" />
+    <Content Include="ASPNET\Images\semaforo_verde.png" />
+    <Content Include="ASPNET\Images\solapa_bottom_background.jpg" />
+    <Content Include="ASPNET\Images\solapa_bottom_begin.jpg" />
+    <Content Include="ASPNET\Images\solapa_top_background.jpg" />
+    <Content Include="ASPNET\Images\solapa_top_begin.jpg" />
+    <Content Include="ASPNET\Images\table_header_background.jpg" />
+    <Content Include="ASPNET\Images\table_header_background_begin.jpg" />
+    <Content Include="ASPNET\Images\table_header_background_ending.jpg" />
+    <Content Include="ASPNET\Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="ASPNET\Scripts\jquery-1.4.1.js" />
+    <Content Include="ASPNET\Scripts\jquery-1.5.1.min.js" />
+    <Content Include="ASPNET\Scripts\JScripts.js" />
+    <Content Include="ASPNET\Styles\CSS-Styles.css" />
+    <Content Include="ASPNET\Users\Login.aspx" />
+    <Content Include="ClientBin\TerminalZeroRiaWebClient.xap" />
+    <Content Include="Default.aspx" />
+    <Content Include="TerminalZeroClient.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Services\FileTransfer.svc" />
+    <Content Include="Services\Sync.svc" />
+    <Content Include="Silverlight.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ASPNET\Users\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Classes\IncomingPackManager.cs" />
+    <Compile Include="Classes\PackManagerBuilder.cs" />
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helpers\AppDirectories.cs" />
+    <Compile Include="Helpers\ServiceLogHelper.cs" />
+    <Compile Include="Classes\Security.cs" />
+    <Compile Include="Models\TerminalStatus.cs" />
+    <Compile Include="Resources\ValidationErrorResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ValidationErrorResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\RegistrationDataResources.Designer.cs">
+      <DependentUpon>RegistrationDataResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\RegistrationData.cs" />
+    <Compile Include="Services\FileTransfer.svc.cs">
+      <DependentUpon>FileTransfer.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sync.svc.cs">
+      <DependentUpon>Sync.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Services\TerminalZeroConfigDomainService.cs" />
+    <Compile Include="Services\TerminalZeroDataDomainService.cs" />
+    <Compile Include="Services\UserRegistrationService.cs" />
+    <Compile Include="Models\Shared\User.shared.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ValidationErrorResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ValidationErrorResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\RegistrationDataResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegistrationDataResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ASPNET\Images\Button1.design" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1536</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/TerminalZeroRiaWebClient.Web</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

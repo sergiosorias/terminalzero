@@ -1,0 +1,241 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="MoreButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused"/>
+                                <VisualState x:Name="Unfocused"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="00:00:00.2000000"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)">
+                                            <EasingColorKeyFrame KeyTime="00:00:00" Value="#FF424E55"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Offset)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[2].(GradientStop.Offset)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.894"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Offset)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.766"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.9"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value=".9"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                                            <EasingColorKeyFrame KeyTime="00:00:00" Value="#FF5A6870"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Ellipse x:Name="ellipseBack" Fill="{TemplateBinding Background}"  StrokeThickness="0.5" />
+                        <Ellipse x:Name="ellipse" StrokeThickness="0.5" >
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,1">
+                                    <GradientStop Color="#FF695B5B" Offset="0" />
+                                    <GradientStop Color="#FF695B5B" Offset="1" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                            <Ellipse.Fill>
+                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,1">
+                                    <GradientStop Color="#FF7E847B" Offset="0.329" />
+                                    <GradientStop Color="#FF7D8A79" Offset="0.711" />
+                                    <GradientStop Color="Transparent" Offset="0.532" />
+                                    <GradientStop Color="#FFBABFB9" Offset="1" />
+                                    <GradientStop Color="#FFAFB1AE" Offset="0.01"/>
+                                </LinearGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <Path x:Name="path" Stroke="Black" StrokeThickness="0.2" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" Data="M9.7787676,11.850201 L13.346521,11.850201 L13.346521,18.725288 L20.286713,18.725288 L20.286713,22.214914 L13.346521,22.214914 L13.346521,29.09 L9.7787676,29.09 L9.7787676,22.214914 L2.838577,22.214914 L2.838577,18.725288 L9.7787676,18.725288 z">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                            <Path.Fill>
+                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0.5">
+                                    <GradientStop Color="#FF4A95BE" Offset="0.008" />
+                                    <GradientStop Color="White" Offset="1" />
+                                    <GradientStop Color="#FFA8CCDF" Offset="0.287" />
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="DownloadButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused"/>
+                                <VisualState x:Name="Unfocused"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="00:00:00.2000000"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)">
+                                            <EasingColorKeyFrame KeyTime="00:00:00" Value="#FF424E55"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Offset)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[2].(GradientStop.Offset)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.894"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="ellipse" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Offset)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.766"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                            <EasingDoubleKeyFrame KeyTime="00:00:00" Value="1.1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="path" Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                                            <EasingColorKeyFrame KeyTime="00:00:00" Value="#FF5A6870"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Ellipse x:Name="ellipseBack" Fill="{TemplateBinding Background}"  StrokeThickness="0.5" />
+                        <Ellipse x:Name="ellipse" StrokeThickness="0.5" >
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,1">
+                                    <GradientStop Color="#FF695B5B" Offset="0" />
+                                    <GradientStop Color="#FF695B5B" Offset="1" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                            <Ellipse.Fill>
+                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,1">
+                                    <GradientStop Color="#FF7E847B" Offset="0.329" />
+                                    <GradientStop Color="#FF7D8A79" Offset="0.711" />
+                                    <GradientStop Color="Transparent" Offset="0.532" />
+
+                                    <GradientStop Color="#FFBABFB9" Offset="1" />
+                                    <GradientStop Color="#FFAFB1AE" Offset="0.01"/>
+                                </LinearGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <Path Stretch="Fill" Name="path" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" UseLayoutRounding="False" Data="M6.9460006,8.6676235 L12.946001,8.6676235 L12.945999,22.530293 L12.999459,22.494394 C14.074512,21.77747 14.965617,21.233469 15.672773,20.862392 C16.804222,20.268669 18.210632,19.690573 19.892002,19.128098 L19.892002,20.37804 C18.071571,21.596733 16.225857,23.112286 14.354856,24.9247 C12.483858,26.737116 11.181746,28.174547 10.448516,29.236998 L9.3865976,29.236998 C8.4384565,27.851646 7.0952559,26.338697 5.3569975,24.698149 C3.6187389,23.057602 1.8330731,21.617565 0,20.37804 L0,19.128098 C1.7066541,19.721821 3.1541498,20.331167 4.3424864,20.956137 C5.0109258,21.307684 5.7973642,21.779524 6.7018023,22.371658 L6.9459991,22.532808 z" StrokeThickness="0.3">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="0.7" ScaleY="0.8"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                            <Path.Fill>
+                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0.5">
+                                    <GradientStop Color="#FF4A95BE" Offset="0.008" />
+                                    <GradientStop Color="White" Offset="1" />
+                                    <GradientStop Color="#FFA8CCDF" Offset="0.287" />
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                            <Path.Stroke>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="0.508"/>
+                                    <GradientStop Color="#FF706B6B" Offset="0.038"/>
+                                </LinearGradientBrush>
+                            </Path.Stroke>
+                        </Path>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="RefreshButtonStyle" TargetType="Button">
+        <Setter Property="Content" Value=""/>
+        <Setter Property="Width" Value="35"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="BorderBrush" Value="#FF4B7623"/>
+        <Setter Property="BorderThickness" Value="6"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.2"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0" To="#FF7BB248" Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="path"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="6" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="path" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid Background="Transparent" Margin="1">
+                            <Path x:Name="path" Data="M0.50055003,5.2766562 C0.41720587,12.110393 9.8340559,9.7352886 9.6668186,3.860014 M12.230502,4.6613722 C12.313847,-2.1723905 2.8969963,0.20272726 3.0642338,6.0780182 M3.5718899,6.2594991 L3.2552707,7.0043907 L2.7630122,6.2307172 z M10.092159,4.1123261 L9.2839499,4.1560249 L9.7618523,3.3734021 z" Stretch="Fill" 
+                                  Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2.4" UseLayoutRounding="False" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <CompositeTransform/>
+                                </Path.RenderTransform>
+                                <Path.Fill>
+                                    <LinearGradientBrush EndPoint="0.136,0.902" StartPoint="0.909,0.073">
+                                        <GradientStop Color="Transparent"/>
+                                        <GradientStop Color="Black" Offset="0"/>
+                                        <GradientStop Color="Transparent" Offset=".5"/>
+                                    </LinearGradientBrush>
+                                </Path.Fill>
+                            </Path>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

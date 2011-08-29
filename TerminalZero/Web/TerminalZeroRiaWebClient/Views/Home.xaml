@@ -1,0 +1,38 @@
+﻿<navigation:Page
+  x:Class="TerminalZeroRiaWebClient.Home" 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation" 
+  xmlns:Controls="clr-namespace:TerminalZeroRiaWebClient.Controls" 
+  mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"  
+  Style="{StaticResource PageStyle}">
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel x:Name="ContentStackPanel" Style="{StaticResource ContentStackPanelStyle}">
+
+            <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" 
+                           Text="{Binding Path=Strings.HomePageTitle, Source={StaticResource ApplicationResources}}"/>
+
+        </StackPanel>
+        
+
+        <ListBox Name="terminalList" Grid.Row="1" ItemsSource="{Binding Statuses}" Width="Auto">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Controls:TerminalStatus Width="320"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+
+</navigation:Page>
