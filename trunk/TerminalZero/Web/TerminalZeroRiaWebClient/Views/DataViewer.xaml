@@ -1,0 +1,39 @@
+﻿<navigation:Page x:Class="TerminalZeroRiaWebClient.Views.DataViewer" 
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           mc:Ignorable="d"
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation" xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data" xmlns:ViewModels="clr-namespace:TerminalZeroRiaWebClient.ViewModels" xmlns:ZeroGUI="clr-namespace:ZeroGUI" d:DesignWidth="640" d:DesignHeight="480"
+           Title="DataViewer Page">
+    <navigation:Page.Resources>
+        <ViewModels:DataViewerViewModel x:Key="DataViewerViewModel"/>
+    </navigation:Page.Resources>
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource DataViewerViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ZeroGUI:SearchBox Search="SearchBox_Search" Grid.ColumnSpan="2"/>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListBox ItemsSource="{Binding TableCollection}" SelectedItem="{Binding SelectedTable, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" FontSize="14"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Grid.Row="1" Style="{StaticResource RefreshButtonStyle}" HorizontalAlignment="Center" Command="{Binding Refresh}"/>
+        </Grid>
+        <Controls:DataGrid Name="dataGrid1" IsReadOnly="True" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="True" ItemsSource="{Binding ItemCollection}">
+        </Controls:DataGrid>
+    </Grid>
+</navigation:Page>

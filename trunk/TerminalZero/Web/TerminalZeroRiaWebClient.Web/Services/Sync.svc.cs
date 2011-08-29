@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceModel;
+using System.ServiceModel.Activation;
 using System.ServiceModel.Channels;
-using TZeroHost.Helpers;
+using TerminalZeroRiaWebClient.Web.Helpers;
 using ZeroBusiness.Entities.Configuration;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.GlobalObjects;
 using ZeroCommonClasses.Interfaces.Services;
 using ZeroConfiguration;
 
-namespace TZeroHost.Services
+namespace TerminalZeroRiaWebClient.Web.Services
 {
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class Sync : ISyncService
     {
         #region ISyncService Members

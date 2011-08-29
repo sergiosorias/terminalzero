@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="TerminalZeroRiaWebClient.Web.Services.FileTransfer" CodeBehind="FileTransfer.svc.cs" %>

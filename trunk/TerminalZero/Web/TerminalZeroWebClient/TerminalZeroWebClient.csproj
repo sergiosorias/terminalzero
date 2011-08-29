@@ -66,6 +66,7 @@
     <Reference Include="System.Data.Services.Client, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.DomainServices.Client, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -99,14 +100,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Converters.cs" />
+    <Compile Include="Classes\StatusFormatter.cs" />
     <Compile Include="Classes\DataServiceEntity.cs" />
+    <Compile Include="Classes\DoubleFormatter.cs" />
     <Compile Include="Classes\FileStreamProgress.cs" />
     <Compile Include="Classes\IQueryableEntity.cs" />
     <Compile Include="Controls\TerminalStatus.xaml.cs">
       <DependentUpon>TerminalStatus.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Presentation\ImportPageViewModel.cs" />
     <Compile Include="Service References\DataService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -289,10 +290,6 @@
     <ProjectReference Include="..\SLFramework\SLFramework.csproj">
       <Project>{9F59EFD4-BD4B-4A78-981A-CEC839A47034}</Project>
       <Name>SLFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TerminalZeroWebClientPresentation\TerminalZeroWebClientPresentation.csproj">
-      <Project>{21FAF410-9312-4A05-8E9E-D64BD0CC1B6C}</Project>
-      <Name>TerminalZeroWebClientPresentation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
