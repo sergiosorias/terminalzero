@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ZeroBusiness.Exceptions;
 using ZeroBusiness.Manager.Data;
@@ -10,9 +11,9 @@ using ZeroCommonClasses.Interfaces;
 namespace ZeroBusiness.Entities.Data
 {
     [MetadataType(typeof(CustomerMetadata))]
-    public partial class Customer : ISelectable, IExportableEntity
+    public partial class Customer : ISelectable, IExportableEntity, IDataErrorInfo
     {
-        internal Customer()
+        public Customer()
         {
             
         }
@@ -54,7 +55,21 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
+
+        #region IDataErrorInfo
         
+        public string this[string columnName]
+        {
+            get { return ContextExtentions.ValidateProperty(this, columnName); }
+        }
+
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
+
     }
 
     public class CustomerMetadata

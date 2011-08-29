@@ -9,7 +9,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SaleItem : IExportableEntity
     {
-        internal SaleItem()
+        public SaleItem()
         {
             
         }

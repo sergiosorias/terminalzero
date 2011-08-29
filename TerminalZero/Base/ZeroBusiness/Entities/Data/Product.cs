@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Entities;
 using ZeroCommonClasses.Helpers;
@@ -6,6 +7,7 @@ using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
+    [MetadataType(typeof(ProductMetadata))]
     public partial class Product : ISelectable, IExportableEntity
     {
         #region ISelectable Members
@@ -22,30 +24,6 @@ namespace ZeroBusiness.Entities.Data
 
         #endregion
 
-        partial void OnMasterCodeChanged()
-        {
-            if (string.IsNullOrWhiteSpace(MasterCode))
-            {
-                throw new BusinessValidationException("Código obligatorio");
-            }
-        }
-
-        partial void OnNameChanged()
-        {
-            if (string.IsNullOrEmpty(Name))
-            {
-                throw new BusinessValidationException("Nombre obligatorio");
-            }
-        }
-
-        partial void OnGroup1Changed()
-        {
-            if (!Group1.HasValue)
-            {
-                throw new BusinessValidationException("Grupo obligatorio");
-            }
-        }
-
         #region Implementation of IExportableEntity
 
         public int TerminalDestination
@@ -60,7 +38,17 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
+    }
 
-       
+    public class ProductMetadata
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Código es obligatorio")]
+        public string MasterCode { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Nombre es obligatorio")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "El Grupo es obligatorio")]
+        public int? Group1 { get; set; }
     }
 }

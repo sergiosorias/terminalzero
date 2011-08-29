@@ -18,7 +18,7 @@ namespace ZeroBusiness.Entities.Data
             return 1;
         }
 
-        internal SaleHeader()
+        public SaleHeader()
         {
                 
         }

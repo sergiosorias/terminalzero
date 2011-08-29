@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Entities;
@@ -7,15 +8,22 @@ using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Price : IExportableEntity
+    [MetadataType(typeof(PriceMetadata))]
+    public partial class Price : IExportableEntity, IDataErrorInfo
     {
-        partial void OnValueChanging(double value)
+        #region IDataErrorInfo
+
+        public string this[string columnName]
         {
-            if (value < 0)
-            {
-                throw new BusinessValidationException("Número inválido");
-            }
+            get { return ContextExtentions.ValidateProperty(this, columnName); }
         }
+
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
 
         #region Implementation of IExportableEntity
 
@@ -31,5 +39,11 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
+    }
+
+    public class PriceMetadata
+    {
+        [Range(0,double.MaxValue,ErrorMessage="Tiene que ser un valor mayor a cero")]
+        public double Value { get; set; }
     }
 }

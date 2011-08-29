@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using ZeroBusiness.Exceptions;
 using ZeroBusiness.Manager.Data;
@@ -7,11 +9,11 @@ using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Weight : IExportableEntity
+    [MetadataType(typeof(WeightMetadata))]
+    public partial class Weight : IExportableEntity, IDataErrorInfo
     {
-        internal Weight()
+        public Weight()
         {
-            
             Enable = true;
         }
 
@@ -25,23 +27,6 @@ namespace ZeroBusiness.Entities.Data
         private static int GetNextCode()
         {
             return BusinessContext.Instance.Model.Weights.Count();
-        }
-
-        partial void OnNameChanging(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new BusinessValidationException("Nombre Obligatorio");
-
-            }
-        }
-
-        partial void OnQuantityChanging(double value)
-        {
-            if (value <= 0)
-            {
-                throw new BusinessValidationException("La cantidad tiene que ser mayor a cero");
-            }
         }
 
         #region Implementation of IExportableEntity
@@ -59,5 +44,28 @@ namespace ZeroBusiness.Entities.Data
 
         #endregion
 
+        #region IDataErrorInfo
+
+        public string this[string columnName]
+        {
+            get { return ContextExtentions.ValidateProperty(this, columnName); }
+        }
+
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
+
+    }
+
+    public class WeightMetadata
+    {
+        [Required(AllowEmptyStrings=false, ErrorMessage="Nombre Obligatorio")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "La cantidad tiene que ser mayor a cero")]
+        public double Quantity { get; set; }
     }
 }

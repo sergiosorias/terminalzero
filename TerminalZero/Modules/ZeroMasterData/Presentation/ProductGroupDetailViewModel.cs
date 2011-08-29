@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using ZeroBusiness.Entities.Data;
 using ZeroBusiness.Manager.Data;
+using ZeroCommonClasses;
+using ZeroCommonClasses.Entities;
 using ZeroGUI;
 using ZeroMasterData.Pages.Controls;
 
@@ -44,11 +46,24 @@ namespace ZeroMasterData.Presentation
 
         public override bool CanAccept(object parameter)
         {
-            if(View.ControlMode!= ZeroCommonClasses.Interfaces.ControlMode.Update)
-                BusinessContext.Instance.Model.ProductGroups.AddObject(CurrentProductGroup);
+            bool ret = base.CanAccept(parameter);
+            if (ret)
+            {
+                var valid = ContextExtentions.ValidateEntity(CurrentProductGroup);
+                if (!valid.IsValid)
+                {
+                    Terminal.Instance.Client.ShowDialog(String.Join("\n", valid.Errors), "Error", null, ZeroCommonClasses.GlobalObjects.MessageBoxButtonEnum.OK);
+                }
+                ret = valid.IsValid;
+                if(ret)
+                {
+                    if(View.ControlMode != ZeroCommonClasses.Interfaces.ControlMode.Update)
+                        BusinessContext.Instance.Model.ProductGroups.AddObject(CurrentProductGroup);
             
-            BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
-            return base.CanAccept(parameter);
+                    BusinessContext.Instance.Model.SaveChanges(SaveOptions.AcceptAllChangesAfterSave, true);
+                }
+            }
+            return ret;
         }
 
         public override bool CanCancel(object parameter)

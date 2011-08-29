@@ -18,7 +18,7 @@
                 </Image.Effect>
             </Image>
         </StackPanel>
-        <Popup Name="quantityPopup"  HorizontalAlignment="Right" VerticalOffset="-3" HorizontalOffset="10">
+        <Popup Name="quantityPopup"   HorizontalAlignment="Right" VerticalOffset="-3" HorizontalOffset="10">
             <Grid Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="8"/>

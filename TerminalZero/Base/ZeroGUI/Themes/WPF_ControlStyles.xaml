@@ -70,7 +70,7 @@
                             </DataTrigger>
                         </ControlTemplate.Triggers>-->
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border BorderBrush="OrangeRed" Name="errorBorder" BorderThickness="1.5" CornerRadius="6">
+                        <Border BorderBrush="OrangeRed" Name="errorBorder" BorderThickness="0" CornerRadius="6">
                             <AdornedElementPlaceholder Name="MyAdorner">
                             </AdornedElementPlaceholder>
                         </Border>
