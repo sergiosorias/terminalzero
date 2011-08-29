@@ -10,7 +10,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class ReturnReason : IExportableEntity
     {
-        internal ReturnReason()
+        public ReturnReason()
         {
             
         }

@@ -11,7 +11,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class StockHeader : IExportableEntity
     {
-        internal StockHeader()
+        public StockHeader()
         {
             
         }

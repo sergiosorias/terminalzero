@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Entities;
@@ -7,16 +8,9 @@ using ZeroCommonClasses.Interfaces;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class ProductGroup : IExportableEntity
+    [MetadataType(typeof(ProductGroupMetadata))]
+    public partial class ProductGroup : IExportableEntity, IDataErrorInfo
     {
-        partial void OnNameChanging(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new BusinessValidationException("Nombre Obligatorio");
-            }
-        }
-
         #region Implementation of IExportableEntity
 
         public int TerminalDestination
@@ -31,5 +25,21 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
+
+        public string this[string columnName]
+        {
+            get { return ContextExtentions.ValidateProperty(this, columnName); }
+        }
+
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+    }
+
+    public class ProductGroupMetadata
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Nombre es obligatorio")]
+        public string Name { get; set; }
     }
 }

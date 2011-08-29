@@ -9,14 +9,15 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class SalePaymentItem : IExportableEntity
     {
-        internal SalePaymentItem()
+        public SalePaymentItem()
         {
             Code = 0;
             UpdateStatus(EntityStatus.New);
             Enable = true;
         }
 
-        public SalePaymentItem(SalePaymentHeader header, PaymentInstrument inst, double quantity):this()
+        public SalePaymentItem(SalePaymentHeader header, PaymentInstrument inst, double quantity)
+            :this()
         {
             Code = header.SalePaymentItems.Count();
             TerminalCode = header.TerminalCode;

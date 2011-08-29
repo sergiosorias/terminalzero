@@ -6,7 +6,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class StockItem :  IExportableEntity
     {
-        internal StockItem()
+        public StockItem()
         {
             
         }

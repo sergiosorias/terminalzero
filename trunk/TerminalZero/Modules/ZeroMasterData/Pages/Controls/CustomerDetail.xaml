@@ -39,7 +39,7 @@
                     <Label Content="Nombre:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
                     <TextBox Grid.Column="1" Grid.Row="0" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="name1TextBox" VerticalAlignment="Center">
                         <TextBox.Text>
-                            <Binding Path="Customer.Name1" Mode="TwoWay" ValidatesOnExceptions="True">
+                            <Binding Path="Customer.Name1" Mode="TwoWay" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                                 <Binding.ValidationRules>
                                     <ExceptionValidationRule/>
                                 </Binding.ValidationRules>
@@ -67,7 +67,7 @@
                 <Label Content="Posición IVA:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Grid.Row="4" Height="23" Focusable="False" IsEnabled="True" HorizontalAlignment="Stretch" Margin="3" Name="taxPositionCodeTextBox" VerticalAlignment="Center">
                     <TextBox.Text>
-                        <Binding Path="Customer.TaxPositionCode" Mode="TwoWay" ValidatesOnExceptions="True">
+                        <Binding Path="Customer.TaxPositionCode" Mode="TwoWay" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
                                 <ExceptionValidationRule/>
                             </Binding.ValidationRules>

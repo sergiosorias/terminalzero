@@ -26,6 +26,18 @@ namespace ZeroCommonClasses.Entities
             return new EntityValidationResult {IsValid = isValid, Errors = validationResults.Select(s=>s.ErrorMessage)};
         }
 
+        public static string ValidateProperty(object entity, string propertyName)
+        {
+            ValidationContext c = new ValidationContext(entity, null, null);
+            List<ValidationResult> validationResults = new List<ValidationResult>();
+
+            bool isValid = Validator.TryValidateObject(entity, c, validationResults, true);
+
+            var res = validationResults.FirstOrDefault(f => f.MemberNames.Contains(propertyName));
+            if (res != null) return res.ErrorMessage;
+            return null;
+        }
+
         public static string GetEntitiesAsXMLObjectList<T>(IEnumerable<T> list)
         {
             var ser = new XmlSerializer(typeof(List<T>));

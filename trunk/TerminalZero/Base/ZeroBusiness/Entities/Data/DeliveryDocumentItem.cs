@@ -6,6 +6,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class DeliveryDocumentItem : IExportableEntity
     {
+        #region IExportableEntity
         public int TerminalDestination
         {
             get { return TerminalToCode; }
@@ -16,5 +17,6 @@ namespace ZeroBusiness.Entities.Data
             Stamp = DateTime.Now;
             Status = (short)status;
         }
+        #endregion
     }
 }

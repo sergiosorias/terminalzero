@@ -9,7 +9,7 @@ namespace ZeroBusiness.Entities.Data
 {
     public partial class DeliveryDocumentHeader : IExportableEntity, ISelectable
     {
-        internal DeliveryDocumentHeader()
+        public DeliveryDocumentHeader()
         {
             
         }

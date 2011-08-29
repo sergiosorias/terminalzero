@@ -13,7 +13,7 @@ namespace UpdatesManager
         {
             if(UpdatesManager.ExistsNewVersions)
             {
-                Console.WriteLine("Hay versiones nuevas..");
+                Console.WriteLine("Existen versiones nuevas..");
                 Console.WriteLine("Actualizando..");
                 UpdatesManager.RunUpdateProcess(Console.WriteLine,null);
             }

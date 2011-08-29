@@ -53,7 +53,9 @@ namespace ZeroGUI
             InitializeComponent();
             cleanResTimer = new Timer(cleanResTimer_Elapsed, null, 5000, 5000);
             searchTimer = new Timer(searchTimer_Elapsed, null, Timeout.Infinite, Timeout.Infinite);
-
+#if !SILVERLIGHT
+            
+#endif
         }
 
         private string previousSearchCriteria;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using ZeroBusiness.Exceptions;
 using ZeroCommonClasses.Entities;
@@ -9,7 +10,8 @@ using System.Linq;
 
 namespace ZeroBusiness.Entities.Data
 {
-    public partial class Supplier : ISelectable, IExportableEntity
+    [MetadataType(typeof(SupplierMetadata))]
+    public partial class Supplier : ISelectable, IExportableEntity, IDataErrorInfo
     {
         #region ISelectable
         public bool Contains(string data)
@@ -22,31 +24,7 @@ namespace ZeroBusiness.Entities.Data
             throw new NotImplementedException();
         }
         #endregion
-        partial void OnName1Changing(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new BusinessValidationException("Nombre Obligatorio");
-
-            }
-        }
-
-        partial void OnTaxPositionCodeChanging(int? value)
-        {
-            if (!value.HasValue)
-            {
-                throw new BusinessValidationException("Campo obligatorio");
-            }
-        }
-
-        partial void OnPaymentInstrumentCodeChanging(int? value)
-        {
-            if (!value.HasValue)
-            {
-                throw new BusinessValidationException("Campo obligatorio");
-            }
-        }
-
+        
         #region Implementation of IExportableEntity
 
         public int TerminalDestination
@@ -61,6 +39,32 @@ namespace ZeroBusiness.Entities.Data
         }
 
         #endregion
+
+        #region IDataErrorInfo
+
+        public string this[string columnName]
+        {
+            get { return ContextExtentions.ValidateProperty(this, columnName); }
+        }
+
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
        
+    }
+
+    public class SupplierMetadata
+    {
+        [Required(AllowEmptyStrings=false,ErrorMessage="Nombre Obligatorio")]
+        public string Name1 { get; set; }
+
+        [Required(ErrorMessage="Forma de pago obligatoria")]
+        public int? PaymentInstrumentCode { get; set; }
+
+        [Required(ErrorMessage = "Campo obligatoria")]
+        public int? TaxPositionCode { get; set; }
     }
 }

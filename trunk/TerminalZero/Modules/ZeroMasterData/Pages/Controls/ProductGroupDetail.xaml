@@ -19,7 +19,7 @@
         <Label Content="Nombre:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" />
         <TextBox Tag="Nombre" Grid.Column="1" Grid.Row="1" Height="23" HorizontalAlignment="Stretch" Margin="3" Name="nameTextBox" VerticalAlignment="Center" >
             <TextBox.Text>
-                <Binding Path="CurrentProductGroup.Name" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="True">
+                <Binding Path="CurrentProductGroup.Name" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnDataErrors="True" ValidatesOnExceptions="True">
                     <Binding.ValidationRules>
                         <ExceptionValidationRule/>
                     </Binding.ValidationRules>
